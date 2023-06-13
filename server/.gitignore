@@ -1,0 +1,20 @@
+# Dependencias instaladas con npm
+node_modules/
+
+# Archivos de registro
+logs/
+*.log
+
+# Archivos generados por el sistema
+*.swp
+.DS_Store
+
+
+
+# Archivos de configuración
+
+
+# Archivos de compilación
+build/
+dist/
+public/
