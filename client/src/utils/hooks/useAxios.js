@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-export default function useAxios(url) {
+import { httpRequests } from "../helpers/httpRequests";
+export default function useAxios(url,method,options = {}) {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(true);
@@ -9,7 +8,7 @@ export default function useAxios(url) {
   useEffect(() => {
     const getData = async (url) => {
       try {
-        let response = await axios.get(url);
+        let response = await httpRequests()[method](url,options);
         if (response.status !== 200) {
           throw {
             err: true,

@@ -1,35 +1,35 @@
-export const helpHttp = () => {
+import axios from "axios";
+export const httpRequests = () => {
   const customFetch = (endpoint, options) => {
     const defaultHeader = {
-      accept: "applicaction/json",
+      accept: "application/json",
     };
+    
 
-    const controller = new AbortController();
-    options.signal = controller.signal;
+    const source = axios.CancelToken.source();
+    options.cancelToken = source.token;
 
     options.method = options.method || "GET";
     options.headers = options.headers
       ? { ...defaultHeader, ...options.headers }
       : defaultHeader;
-    options.body = JSON.stringify(options.body) || false;
+    options.data = options.body || undefined;
 
-    if (!options.body) delete options.body;
+    if (!options.data) delete options.data;
 
     setTimeout(() => {
-      controller.abort(), 3000;
-    });
+      source.cancel();
+    }, 3000);
 
-    return fetch(endpoint, options)
-      .then((res) =>
-        res.ok
-          ? res.json()
-          : Promise.reject({
-              err: true,
-              status: res.status || "00",
-              statusText: res.statusText || "Ocurrion un error",
-            })
-      )
-      .catch((err) => err);
+    return axios(endpoint, options)
+      .then((res) => res)
+      .catch((error) => {
+        if (axios.isCancel(error)) {
+          throw new Error("Request canceled");
+        } else {
+          throw error;
+        }
+      });
   };
 
   const get = (url, options) => customFetch(url, options);

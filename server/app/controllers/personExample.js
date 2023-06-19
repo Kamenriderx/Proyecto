@@ -14,6 +14,7 @@ const addPerson = async (req, res, next) => {
     ID_Person_: req.body.ID_Person_,
     P_NAME: req.body.P_NAME,
   };
+  console.log(req.body);
   Person_.create(newPerson)
     .then((person) => {
       res.status(200).json({ message: "Persona creada correctamente" });

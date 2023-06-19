@@ -1,18 +1,36 @@
-import { createContext,useState } from "react";
-const ProductContext = createContext();
-
-function ProductContextProvider(props) {
-
-    const [products, setProducts] = useState([]);
-    const [searchQuery,setSearchQuery] = useState({});
+import { createContext,useReducer } from "react";
 
 
-    return(
-        <ProductContext.Provider value={{products, searchQuery, setSearchQuery,setProducts}}>
-            {props.children}
-        </ProductContext.Provider>
+const StoreContext = createContext();
+
+const initialState = {
+    login:false
+};
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'LOGIN':
+          return {
+            ...state,
+            login: true,
+          };
+        case 'LOGOUT':
+          return {
+            ...state,
+            login: false,
+          };
+        default:
+          return state;
+      }
+};
+
+const StoreProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    return (
+      <StoreContext.Provider value={{ state, dispatch }}>
+        {children}
+      </StoreContext.Provider>
     );
+  };
 
-}
-
-export {ProductContextProvider,ProductContext} ;
+export {StoreProvider,StoreContext};

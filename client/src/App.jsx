@@ -1,11 +1,11 @@
-import { ProductContextProvider } from "./store/ContextExample";
-import {ExampleView} from "./views/ExampleView/ExampleView"
+import { StoreProvider } from "./store/ContextExample";
+import { AppRouter } from "./router/AppRouter";
 function App() {
  
   return(
-    <ProductContextProvider>
-      <ExampleView/>
-    </ProductContextProvider>
+    <StoreProvider>
+      <AppRouter/>
+    </StoreProvider>
 
   );
 }
