@@ -16,7 +16,7 @@ const authToken = async (req, res,next) => {
                 }
             });
         }else{
-            return res.status(401).json({ message: 'No se proporcionó un token de autenticación' });
+            return res.status(404).json({ message: 'No se proporcionó un token de autenticación' });
         }
 
     } catch (err) {

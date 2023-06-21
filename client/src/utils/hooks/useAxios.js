@@ -6,7 +6,7 @@ export default function useAxios(url,method,options = {}) {
   const [isPending, setIsPending] = useState(true);
 
   useEffect(() => {
-    const getData = async (url) => {
+    const getData = async (url,) => {
       try {
         let response = await httpRequests()[method](url,options);
         if (response.status !== 200) {
