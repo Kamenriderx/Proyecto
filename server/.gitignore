@@ -17,4 +17,3 @@ logs/
 # Archivos de compilación
 build/
 dist/
-public/
