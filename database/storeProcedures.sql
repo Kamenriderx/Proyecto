@@ -1,11 +1,11 @@
 DELIMITER //
 CREATE PROCEDURE sp_createStudent(
     IN role INT,
-    IN name VARCHAR(50),
-    IN dni VARCHAR(20),
+    IN name VARCHAR(100),
+    IN dni VARCHAR(50),
     IN center VARCHAR(20),
-    IN email VARCHAR(20),
-    IN career VARCHAR(20)
+    IN email VARCHAR(50),
+    IN career VARCHAR(50)
     )
 BEGIN
     CALL sp_createUser(role,name,dni,center,email);
@@ -14,7 +14,7 @@ END//
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE sp_createUser(IN role INT,IN name VARCHAR(50),IN dni VARCHAR(20),IN center VARCHAR(20),IN email VARCHAR(20))
+CREATE PROCEDURE sp_createUser(IN role INT,IN name VARCHAR(50),IN dni VARCHAR(50),IN center VARCHAR(20),IN email VARCHAR(50))
 BEGIN
 
     DECLARE accountNumber VARCHAR(20);
