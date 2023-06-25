@@ -3,10 +3,9 @@ require("dotenv").config();
 
 const authToken = async (req, res,next) => {
     try {
-
-        if(req.headers.authorization){
+        const  token  = req.headers.authorization?.split(' ').pop()|| req.params.token; 
+        if(token){
             
-            token = req.headers.authorization.split(' ').pop();
             jwt.verify(token, process.env.HASHPASS, async function (err, decoded) {
                 if(err){
                     next(err);
