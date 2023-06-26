@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import Alert from "../../components/Alert";
+import { httpRequests } from "../../utils/helpers/httpRequests";
 
 const TableStudents = ({ body }) => {
   const [data, setData] = useState([]);
@@ -82,6 +83,14 @@ const TableStudents = ({ body }) => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setMessage(true);
+    setbuttonDisabled(true);
+    const res = await httpRequests()['post']('http://localhost:3000/registro/registerStudents', {body:data})
+    console.log(res)
+  }
 
   return (
     <>
@@ -213,10 +222,7 @@ const TableStudents = ({ body }) => {
               type="button"
               className="text-white bg-gradient-to-r from-cyan-400 to-blue-700 hover:outline outline-offset-1 outline-blue-800 font-bold rounded-full text-xl px-8 py-2 text-center"
               disabled={buttonDisabled}
-              onClick={() => {
-                setMessage(true);
-                setbuttonDisabled(true);
-              }}
+              onClick={handleSubmit}
             >
               Enviar
             </button>

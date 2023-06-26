@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Alert from "../../components/Alert";
+import Alert from "./Alert";
 import { DotSpinner } from "@uiball/loaders";
-import TableStudents from "../../views/TableStudents/TableStudents.jsx";
+import TableStudents from "../views/TableStudents/TableStudents.jsx";
 
 const ReadCSV = () => {
   const [data, setData] = useState([]);

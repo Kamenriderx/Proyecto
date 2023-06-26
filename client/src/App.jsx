@@ -1,5 +1,5 @@
 import { StoreProvider } from "./store/ContextExample";
-import ReadCSV from "./utils/helpers/ReadCSV";
+import ReadCSV from "./components/ReadCSV";
 
 //import { AppRouter } from "./router/AppRouter";
 function App() {

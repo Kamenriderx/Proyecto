@@ -11,7 +11,7 @@ const Student = connection.define(
         },
         ID_USER:{
             type:DataTypes.INTEGER
-          
+        
         },
         YEAR_OF_INCOME:{
             type: DataTypes.DATE
@@ -47,6 +47,7 @@ Student.belongsTo(User,{
 })
 
 Student.inserStudent = async function(student){
+    console.log('student: ', student)
     return await connection.query('CALL sp_createstudent(:ROLE, :NAME, :DNI, :CENTER, :EMAIL, :CAREER,:INSTITUTIONAL_EMAIL,:USER_PASSWORD)', {
         replacements: {
           ROLE: student.ROLE, // Valor para el parámetro "role"
