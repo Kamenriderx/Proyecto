@@ -32,17 +32,16 @@ const ReadCSV = () => {
     const headers = lines[0].split(",");
     const result = [];
 
-    for (let i = 1; i < lines.length; i++) {
+    for (let i = 1; i < (lines.length - 1); i++) {
       const obj = {};
       const currentline = lines[i].split(",");
 
-      for (let j = 0; j < headers.length; j++) {
+      for (let j = 0; j < (headers.length - 1); j++) {
         obj[headers[j]] = currentline[j];
       }
 
       result.push(obj);
     }
-    result.pop();
     console.log("result: ", result);
     setData(result);
     setError(false);
