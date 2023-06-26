@@ -13,4 +13,4 @@ const GetRoutesExample = () => {
     );
  }
 
- export default GetRoutesExample;
+export default GetRoutesExample;
