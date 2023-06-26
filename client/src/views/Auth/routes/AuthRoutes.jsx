@@ -8,9 +8,9 @@ const AuthRoutes = () => {
         <Routes>
             <Route path="/" element={<Auth>Login</Auth>}>
             </Route>
-            <Route path="RecuperarContraseña" element={<RequestPasswordForm>Recuperar Contraseña</RequestPasswordForm>}>
+            <Route path="RecuperarContrasena" element={<RequestPasswordForm>Recuperar Contraseña</RequestPasswordForm>}>
             </Route>
-            <Route path="SolicitarContraseña" element={<ConfirmAccountForm>Recuperar Solicitar contraseña</ConfirmAccountForm>}>
+            <Route path="SolicitarContrasena" element={<ConfirmAccountForm>Recuperar Solicitar contraseña</ConfirmAccountForm>}>
             </Route>
         </Routes>
     );
