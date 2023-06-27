@@ -4,7 +4,7 @@ const {deletePerson,getPersons,addPerson,updatePerson} = require('../controllers
 const authToken = require('../middlewares/authToken');
 
 router.get('/getPersons',getPersons);
-router.post('/addPerson', addPerson);
+router.post('/addPerson',authToken,addPerson);
 router.delete('/deletePerson', deletePerson);
 router.put('/updatePerson', updatePerson);
 
