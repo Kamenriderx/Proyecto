@@ -6,6 +6,6 @@ const {validatorRegisterProfessor} = require("../middlewares/validations");
 
 
 
-router.post("/",upload.single("File"),validatorRegisterProfessor,registerProfessorCtrl)
+router.post("/",upload.single("file"),validatorRegisterProfessor,registerProfessorCtrl)
 
 module.exports = router
