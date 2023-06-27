@@ -1,21 +1,21 @@
 const {Student,User} = require("../models");
-const {verifyDataArray} = require("../handlers/handleData");
+const {verifyData} = require("../handlers/handleData");
 const {generateEmail} = require("../handlers/handleGenerate");
 const {encrypt,generatePassword} = require("../../utils/handlePassword");
 const sendMail = require("../../utils/sendMail");
 const fechaActual = new Date().toLocaleDateString();
 
 const registerStudentsCtrl = async (req,res)=>{
-
     try {
+        // console.log(req.body)
        
-        let {dataError,dataValidate} = verifyDataArray(req.body.data1);
+        let {dataError,dataValidate} = verifyData(req.body);
         dataValidate = mailAssignment(dataValidate);
         save(dataValidate);
         
         
         if(dataError.length>0){
-            res.json({messagge:"DATA_CON_ERRORES",error:dataError})
+            res.status(406).json({messagge:"DATA_CON_ERRORES",error:dataError})
             return 
         }
 
@@ -30,12 +30,11 @@ const registerStudentsCtrl = async (req,res)=>{
 
 function mailAssignment(dataValidate){
     return dataValidate.map((student)=>{
-        let name = student[0]
+        let name = student.NAME
         let institutionalEmail = generateEmail(name);
         
-
-        student.push(institutionalEmail)
-        student.push(generatePassword())
+        student.INSTITUTIONAL_EMAIL = institutionalEmail
+        student.USER_PASSWORD_PLAIN = generatePassword()
         return student
 
     })
@@ -46,14 +45,14 @@ async function save(data){
     data.map(async (studentArray)=>{
         
         const student={
-            NAME:studentArray[0],
-            DNI:studentArray[1],
-            CAREER:studentArray[2],
-            INSTITUTIONAL_EMAIL:studentArray[6],
-            CENTER: studentArray[5],
+            NAME:studentArray.NAME,
+            DNI:studentArray.DNI,
+            CAREER:studentArray.CARRER,
+            INSTITUTIONAL_EMAIL:studentArray.INSTITUTIONAL_EMAIL,
+            CENTER: studentArray.CENTER,
             ROLE: 1,
-            EMAIL:studentArray[4],
-            USER_PASSWORD_PLAIN:studentArray[7]
+            EMAIL:studentArray.EMAIL,
+            USER_PASSWORD_PLAIN:studentArray.USER_PASSWORD_PLAIN
 
         };
         student.USER_PASSWORD=await encrypt(student.USER_PASSWORD_PLAIN);
@@ -67,18 +66,11 @@ async function save(data){
 
         sendMail(student.EMAIL, {subject: "Nuevo usuario creado"},"sendMailStudent", {
             name: student.NAME,
-            email: student. INSTITUTIONAL_EMAIL,
+            email: student.INSTITUTIONAL_EMAIL,
             password: student.USER_PASSWORD_PLAIN,
             account_number:ACCOUNT_NUMBER,
             fecha: fechaActual,
         });
-
-
-
-          
-
-
-        
 
         return student
 

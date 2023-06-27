@@ -19,11 +19,11 @@ export const AppRouter = () => {
 
         </li>
         <li>
-          <NavLink to="iniciar/RecuperarContraseña">Recuperar Contraseña</NavLink>
+          <NavLink to="iniciar/RecuperarContrasena">Recuperar Contraseña</NavLink>
 
         </li>
         <li>
-          <NavLink to="iniciar/SolicitarContraseña">SolicitarContraseña</NavLink>
+          <NavLink to="iniciar/SolicitarContrasena">SolicitarContraseña</NavLink>
         </li>
       </ul>
 

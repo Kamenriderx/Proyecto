@@ -1,36 +1,38 @@
 
-
-const verifyDataArray = (data)=>{
+const verifyData = (data)=>{
+    // console.log(data)
     const dataError=[];
     const dataValidate =[];
 
     data.map((student)=>{
         try {
-            if ( typeof student[0] !== 'string' || student[0].split(" ").length < 3 || student[0].trim()==="") {
-                throw new Error(`Campo invalido: ${student[0]}`);
+            if (!student.hasOwnProperty('NAME') || typeof student.NAME !== 'string' || student.NAME.trim()==="") {
+                throw new Error(`Campo invalido: ${student.NAME}`);
             }
-            if (typeof student[1] !== 'number' || !Number.isInteger(student[1])) {
-                throw new Error(`Campo invalido: ${student[1]}`);
+            if (!student.hasOwnProperty('DNI') || typeof student.DNI !== 'string') {
+                throw new Error(`Campo invalido: ${student.DNI}`);
             }
-            if (typeof student[2] !== 'string' || student[2].trim()==="") {
-                throw new Error(`Campo invalido: ${student[2]}`);
+            if (!student.hasOwnProperty('CARRER') || typeof student.CARRER !== 'string' || student.CARRER.trim()==="") {
+                throw new Error(`Campo invalido: ${student.CARRER}`);
             }
-            if ( typeof student[3] !== 'string'  || student[3].trim()==="") {
-                throw new Error(`Campo invalido: ${student[3]}`);
+            // if (!student.hasOwnProperty('direccion') || typeof student.direccion !== 'string'  || student.direccion.trim()==="") {
+            //     throw new Error(`Campo invalido: ${student.direccion}`);
+            // }
+            if (!student.hasOwnProperty('CENTER') || typeof student.CENTER !== 'string'|| student.CENTER.trim()==="") {
+                throw new Error(`Campo invalido: ${student.CENTER}`);
             }
-            if (  typeof student[4] !== 'string'  || student[4].trim()==="" || !/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(student[4]) ) {
-                throw new Error(`Campo invalido: ${student[4]}`);
+        
+            if ( !student.hasOwnProperty('EMAIL')|| typeof student.EMAIL !== 'string'  || student.EMAIL.trim()==="" || !/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(student.EMAIL) ) {
+                throw new Error(`Campo invalido: ${student.EMAIL}`);
             }
-            if ( typeof student[5] !== 'string'|| student[5].trim()==="") {
-                throw new Error(`Campo invalido: ${student[5]}`);
-            }
-           
+
+
 
             dataValidate.push(student);
             return student;
             
         } catch (err) {
-            student[6] = err.message;
+            student.error = err.message;
             dataError.push(student);
             return student
         }
@@ -43,8 +45,53 @@ const verifyDataArray = (data)=>{
 }
 
 
+module.exports = {verifyData}
+
+// const verifyDataArray = (data)=>{
+//     const dataError=[];
+//     const dataValidate =[];
+
+//     data.map((student)=>{
+//         try {
+//             if ( typeof student[0] !== 'string' || student[0].split(" ").length < 3 || student[0].trim()==="") {
+//                 throw new Error(`Campo invalido: ${student[0]}`);
+//             }
+//             if (typeof student[1] !== 'number' || !Number.isInteger(student[1])) {
+//                 throw new Error(`Campo invalido: ${student[1]}`);
+//             }
+//             if (typeof student[2] !== 'string' || student[2].trim()==="") {
+//                 throw new Error(`Campo invalido: ${student[2]}`);
+//             }
+//             if ( typeof student[3] !== 'string'  || student[3].trim()==="") {
+//                 throw new Error(`Campo invalido: ${student[3]}`);
+//             }
+//             if (  typeof student[4] !== 'string'  || student[4].trim()==="" || !/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(student[4]) ) {
+//                 throw new Error(`Campo invalido: ${student[4]}`);
+//             }
+//             if ( typeof student[5] !== 'string'|| student[5].trim()==="") {
+//                 throw new Error(`Campo invalido: ${student[5]}`);
+//             }
+           
+
+//             dataValidate.push(student);
+//             return student;
+            
+//         } catch (err) {
+//             student[6] = err.message;
+//             dataError.push(student);
+//             return student
+//         }
 
 
-module.exports = {
-    verifyDataArray
-};
+//     })
+
+//     return {dataError,dataValidate}
+
+// }
+
+
+
+
+// module.exports = {
+//     verifyDataArray
+// };

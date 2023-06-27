@@ -5,7 +5,7 @@ const transporter = require('../config/mailTransporter');
 const sendMail = async (email,options, view, params = {}) => {
   const html = await ejs.renderFile(`views/${view}.ejs`, params);
   let mailOptions = {
-    from: "kiritojeiger@gmail.com",
+    from: "info.univhn@gmail.com",
     to: email,
     subject: options.subject,
     html: html,

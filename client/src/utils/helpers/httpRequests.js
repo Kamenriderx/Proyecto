@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const httpRequests = () => {
   const customFetch = (endpoint, options) => {
     const defaultHeader = {
@@ -19,7 +20,7 @@ export const httpRequests = () => {
 
     setTimeout(() => {
       source.cancel();
-    }, 3000);
+    }, 20000);
 
     return axios(endpoint, options)
       .then((res) => res)

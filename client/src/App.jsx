@@ -1,13 +1,13 @@
 import { StoreProvider } from "./store/ContextExample";
-import { AppRouter } from "./router/AppRouter";
-function App() {
- 
-  return(
-    <StoreProvider>
-      <AppRouter/>
-    </StoreProvider>
+import ReadCSV from "./components/ReadCSV";
 
+//import { AppRouter } from "./router/AppRouter";
+function App() {
+  return (
+    <StoreProvider>
+      <ReadCSV/>
+    </StoreProvider>
   );
 }
 
-export default App
+export default App;
