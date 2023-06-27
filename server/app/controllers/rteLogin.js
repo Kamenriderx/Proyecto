@@ -1,29 +1,42 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { Sequelize } = require('sequelize');
 
-const Role = require('../models/Role'); //! Crear modelo
+//!Importando modelos
+const ROLE = require('../models/role'); 
+const USER_ = require('../models/user')
 
 //! Controlador para el inicio de sesión
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
+    const { identifier, password } = req.body;
   
     try {
-      //! Busca el usuario por su EMAIL
-      const user = await USER_.findOne({ where: { EMAIL: email } });
+
+      //! Busca el usuario por su EMAIL o Numero de Cuenta
+      const user = await USER_.findOne({
+        where: Sequelize.or(
+          { EMAIL: identifier },
+          { ACCOUNT_NUMBER: identifier }
+        )
+      });
   
       //! Verifica si el usuario existe
       if (!user) {
-        return res.status(404).json({ error: 'Correo electrónico no válido.' });
+        return res.status(404).json({ error: 'N° de cuenta o email incorrecto. Vuelva a intentaro.' });
       }
+      
   
       //! Verifica la contraseña
-      const passwordMatch = await bcrypt.compare(password, USER_.USER_PASSWORD);
-      if (!passwordMatch) {
-        return res.status(401).json({ error: 'Contraseña incorrecta.' });
+      const passwordMatch = await bcrypt.compare(password, user.USER_PASSWORD);
+        if (!passwordMatch) {
+         return res.status(401).json({ error: 'Contraseña incorrecta. Vuelve a intentarlo o selecciona "¿Restablecer contraseña?" para cambiarla.' });
       }
-  
+
+      //! Enviar la respuesta con el token de acceso y redirigir al perfil del usuario
+      res.redirect('/perfil'); // Cambia '/perfil' con la ruta de tu perfil de usuario
+      
       //! Obtiene el rol del usuario
-      const role = await Role.findByPk(USER_.ID_ROLE);
+      const role = await ROLE.findByPk(USER_.ID_ROLE);
   
       //! Genera un token de acceso utilizando JWT
       const token = jwt.sign({ userId: USER_.ID_USER, role: ROLE.ROLE_NAME }, 'secretKey', {
