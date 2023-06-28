@@ -7,43 +7,87 @@ const fechaActual = new Date().toLocaleDateString();
 
 const registerStudentsCtrl = async (req,res)=>{
     try {
-        // console.log(req.body)
        
         let {dataError,dataValidate} = verifyData(req.body);
-        dataValidate = mailAssignment(dataValidate);
-        save(dataValidate);
-        
         
         if(dataError.length>0){
+            dataValidate = mailAssignment(dataValidate);
+            dataValidate = passwordAssignment(dataValidate);
+            dataValidate= save(dataValidate);
+            sendEmail(dataValidate);
             res.status(406).json({messagge:"DATA_CON_ERRORES",error:dataError})
             return 
         }
-
-
+        
+        dataValidate = mailAssignment(dataValidate);
+        dataValidate = passwordAssignment(dataValidate);
+        dataValidate= save(dataValidate);
+        sendEmail(dataValidate);
         res.status(200).json({messagge:"TODO_CORRECTO"})
+        
+            
+        
     } catch (error) {
         console.log(error);
         res.status(403).send({msj:"ERROR_UPLOAD_DATA"})
         
     }
 }
+function sendEmail(data){
+    data.map(async (element)=>{
+        const student = await element
+        const result = await User.findOne({where:{
+            EMAIL:student.EMAIL
+        }});
+
+        const ACCOUNT_NUMBER= result.dataValues.ACCOUNT_NUMBER
+        sendMail(student.EMAIL, {subject: "Nuevo usuario creado"},"sendMailStudent", {
+            name: student.NAME,
+            email: student.INSTITUTIONAL_EMAIL,
+            password: student.USER_PASSWORD_PLAIN,
+            account_number:ACCOUNT_NUMBER,
+            fecha: fechaActual,
+        });
+
+    })
+}
 
 function mailAssignment(dataValidate){
-    return dataValidate.map((student)=>{
+    return dataValidate.map( (student)=>{
         let name = student.NAME
-        let institutionalEmail = generateEmail(name);
-        
-        student.INSTITUTIONAL_EMAIL = institutionalEmail
-        student.USER_PASSWORD_PLAIN = generatePassword()
-        return student
+        var institutionalEmail = generateEmail(name);
+        const student_ = Student.findOne({
+            where:{INSTITUTIONAL_EMAIL:institutionalEmail}
+        }).then((result)=>{
+            return result
+        }).catch((error)=>{console.log(error)})
+        if(student_){
+            institutionalEmail = generateEmail(name,4);
+            student.INSTITUTIONAL_EMAIL = institutionalEmail
+            return student
+        }else{
+            student.INSTITUTIONAL_EMAIL = institutionalEmail
+            return student
+
+        }
 
     })
 }
 
 
-async function save(data){
-    data.map(async (studentArray)=>{
+
+function passwordAssignment(data){
+    return data.map((student)=>{
         
+        
+        student.USER_PASSWORD_PLAIN=generatePassword();
+        return student
+
+    })
+}
+
+function save(data){
+    return data.map(async (studentArray)=>{
         const student={
             NAME:studentArray.NAME,
             DNI:studentArray.DNI,
@@ -55,29 +99,13 @@ async function save(data){
             USER_PASSWORD_PLAIN:studentArray.USER_PASSWORD_PLAIN
 
         };
-        student.USER_PASSWORD=await encrypt(student.USER_PASSWORD_PLAIN);
+        student.USER_PASSWORD= await encrypt(studentArray.USER_PASSWORD_PLAIN);
         await Student.inserStudent(student);
 
-        const result = await User.findOne({where:{
-            EMAIL:student.EMAIL
-        }});
-
-        const ACCOUNT_NUMBER= result.dataValues.ACCOUNT_NUMBER
-
-        sendMail(student.EMAIL, {subject: "Nuevo usuario creado"},"sendMailStudent", {
-            name: student.NAME,
-            email: student.INSTITUTIONAL_EMAIL,
-            password: student.USER_PASSWORD_PLAIN,
-            account_number:ACCOUNT_NUMBER,
-            fecha: fechaActual,
-        });
 
         return student
 
     });
-
-    return data
-
 }
 
 module.exports = {

@@ -3,7 +3,7 @@ const connection = require("../../config/database");
 const User = require("./user");
 
 const Professor = connection.define(
-    "PROFESSORS",
+    "PROFESSOR",
     {
         ID_PROFFERSSOR:{
             type:DataTypes.INTEGER,
@@ -23,27 +23,47 @@ const Professor = connection.define(
             type:DataTypes.TEXT,
 
         },
+        CAREER:{
+            type:DataTypes.STRING
+        }
         
 
 
     },
     {
-        tableName:'PROFESSORS',
+        tableName:'PROFESSOR',
         timestamps: false,
 
     }
 );
 
-User.hasMany(Professor,{
-    foreignKey:"ID_USER"
-});
-Professor.belongsTo(User,{
-    foreignKey:"ID_USER"
-})
+
+
+Professor.add = function(professor){
+    const user = {
+        ID_ROLE: professor.ROLE, // Valor para el parámetro "role"
+        NAME: professor.NAME, // Valor para el parámetro "dni"
+        CENTER: professor.CENTER, // Valor para el parámetro "center"
+        EMAIL: professor.EMAIL, // Valor para el parámetro "email"
+        USER_PASSWORD: professor.USER_PASSWORD,
+        ACCOUNT_NUMBER : professor.ACCOUNT_NUMBER
+
+    }
 
 
 
-Professor.sync({ force: true })
+    return Professor.create({
+        PROFILE_PHOTO:professor.URL,
+        CAREER:professor.CAREER,
+        user
+        
+
+    },{include:[Professor.User]})
+}
+
+
+
+Professor.sync({ force: false })
   .then(() => {
     console.log("Tabla de PROFESSORS sincronizada");
   })

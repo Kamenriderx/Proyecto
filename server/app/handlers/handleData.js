@@ -5,31 +5,38 @@ const verifyData = (data)=>{
     const dataValidate =[];
 
     data.map((student)=>{
+        let error = ""
         try {
-            if (!student.hasOwnProperty('NAME') || typeof student.NAME !== 'string' || student.NAME.trim()==="") {
-                throw new Error(`Campo invalido: ${student.NAME}`);
+            if (!student.hasOwnProperty('NAME')|| student.NAME.length <2 || typeof student.NAME !== 'string' || student.NAME.trim()==="") {
+                error+=`Campo NAME invalido: ${student.NAME}, `;
             }
             if (!student.hasOwnProperty('DNI') || typeof student.DNI !== 'string') {
-                throw new Error(`Campo invalido: ${student.DNI}`);
+                error+=`Campo DNI invalido: ${student.DNI}, `;
             }
             if (!student.hasOwnProperty('CARRER') || typeof student.CARRER !== 'string' || student.CARRER.trim()==="") {
-                throw new Error(`Campo invalido: ${student.CARRER}`);
+                error+=`Campo CARRER invalido: ${student.CARRER}, `;
             }
             // if (!student.hasOwnProperty('direccion') || typeof student.direccion !== 'string'  || student.direccion.trim()==="") {
             //     throw new Error(`Campo invalido: ${student.direccion}`);
             // }
             if (!student.hasOwnProperty('CENTER') || typeof student.CENTER !== 'string'|| student.CENTER.trim()==="") {
-                throw new Error(`Campo invalido: ${student.CENTER}`);
+                error+=`Campo invalido: ${student.CENTER}, `;
             }
         
             if ( !student.hasOwnProperty('EMAIL')|| typeof student.EMAIL !== 'string'  || student.EMAIL.trim()==="" || !/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(student.EMAIL) ) {
-                throw new Error(`Campo invalido: ${student.EMAIL}`);
+                error+=`Campo invalido: ${student.EMAIL}`;
             }
 
 
+            if (error.length>0) {
+                throw new Error(error)
+            } else {
+    
+                dataValidate.push(student);
+                return student;
+                
+            }
 
-            dataValidate.push(student);
-            return student;
             
         } catch (err) {
             student.error = err.message;

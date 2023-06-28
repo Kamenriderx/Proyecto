@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 
 
-const generateEmail = function (name) {
+const generateEmail = function (name,n=2) {
     let longitud = 2;
     let email = '';
 
@@ -24,7 +24,7 @@ const generateEmail = function (name) {
         }
 }
 
-    email+=generateRandomCaracters(2)
+    email+=generateRandomCaracters(n)
     email +='@unah.hn'
 
     return email; // Elimina el espacio en blanco al final de la cadena
