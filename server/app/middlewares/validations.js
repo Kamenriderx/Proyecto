@@ -10,17 +10,19 @@ const validatorRegisterProfessor = [
     .exists()
     .notEmpty()
     .isNumeric(),
+    check("ROLE")
+    .exists()
+    .notEmpty()
+    .isNumeric(),
     check("CENTER")
     .exists()
-    .isAlpha()
-    .notEmpty(),
-    check("DNI")
-    .exists()
-    .isNumeric()
     .notEmpty(),
     check("EMAIL")
     .exists()
     .isEmail()
+    .notEmpty(),
+    check("CAREER")
+    .exists()
     .notEmpty(),
     (req,res,next) => {
         return validateResults(req,res,next)

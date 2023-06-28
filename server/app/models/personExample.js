@@ -11,6 +11,9 @@ const Person_ = connection.define(
     P_NAME: {
       type: DataTypes.STRING,
     },
+    P_MAIL: {
+      type: DataTypes.STRING,
+    }
   },
   {
     tableName:'Person_',
