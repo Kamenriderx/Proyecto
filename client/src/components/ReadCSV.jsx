@@ -1,12 +1,15 @@
 import { useState } from "react";
-import Alert from "./Alert";
+// import Alert from "./Alert";
 import { DotSpinner } from "@uiball/loaders";
 import TableStudents from "../views/TableStudents/TableStudents.jsx";
+import AlertTwo from "./AlertTwo.jsx";
 
 const ReadCSV = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [mostrarTable, setMostrarTable] = useState(false);
+  const [alerta, setAlerta] = useState({});
+
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -16,6 +19,12 @@ const ReadCSV = () => {
       setError(true);
       setMostrarTable(false);
       console.log("Error de archivo");
+
+      setAlerta({
+        text: 'El Archivo no es un CSV, favor intentar con otro archivo.',
+        icon: 'error',
+        title: 'Error'
+      });
       return;
     }
 
@@ -62,10 +71,7 @@ const ReadCSV = () => {
 
       {error ? (
         <>
-          <Alert
-            title="El Archivo no es un CSV, intentar de nuevo"
-            icon="error"
-          />
+          <AlertTwo alerta = {alerta}/>
           <div className="flex justify-center my-10">
             <DotSpinner size={50} speed={0.9} color="white" />
           </div>

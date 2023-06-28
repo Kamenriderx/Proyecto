@@ -10,13 +10,15 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import Alert from "../../components/Alert";
+// import Alert from "../../components/Alert";
 import { httpRequests } from "../../utils/helpers/httpRequests";
+import AlertTwo from "../../components/AlertTwo";
 
 const TableStudents = ({ body }) => {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState(false);
   const [buttonDisabled, setbuttonDisabled] = useState(false);
+  const [alerta, setAlerta] = useState({});
 
   useEffect(() => {
     setData(body);
@@ -72,9 +74,6 @@ const TableStudents = ({ body }) => {
     {
       accessorKey: "CENTER",
     },
-    {
-      accessorKey: "YEAR_OF_INCOME",
-    },
   ];
 
   const table = useReactTable({
@@ -85,12 +84,31 @@ const TableStudents = ({ body }) => {
   });
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setMessage(true);
     setbuttonDisabled(true);
-    const res = await httpRequests()['post']('http://localhost:3000/registro/registerStudents', {body:data})
-    console.log(res)
-  }
+
+    try {
+      const res = await httpRequests()["post"]("http://localhost:3000/registro/registerStudents",{ body: data });
+      console.log(res)
+      
+    setAlerta({
+      text: 'Archivo enviado exitosamente.',
+      icon: 'success',
+      title: 'Éxito'
+    });
+      
+    } catch (error) {
+      setAlerta({
+        text: 'Archivo enviado con errores.',
+        icon: 'warning',
+        title: 'Advertencia'
+      });
+    }
+ 
+    //res.data.messagge y res.status == 200
+    //res.respnse.data.messagge y res.respnse.status == 406
+  };
 
   return (
     <>
@@ -166,8 +184,10 @@ const TableStudents = ({ body }) => {
               <button
                 className="text-gray-600 bg-gray-200 p-1 rounded border border-gray-300
     disabled:hover:bg-white disabled:hover:text-gray-300"
-                onClick={() => {setMessage(false)
-                  table.setPageIndex(0)}}
+                onClick={() => {
+                  setMessage(false);
+                  table.setPageIndex(0);
+                }}
                 disabled={!table.getCanPreviousPage()}
               >
                 {"<<"}
@@ -176,8 +196,10 @@ const TableStudents = ({ body }) => {
               <button
                 className="text-gray-600 bg-gray-200 p-1 rounded border border-gray-300
     disabled:hover:bg-white disabled:hover:text-gray-300"
-                onClick={() => {setMessage(false)
-                  table.previousPage()}}
+                onClick={() => {
+                  setMessage(false);
+                  table.previousPage();
+                }}
                 disabled={!table.getCanPreviousPage()}
               >
                 {"<"}
@@ -191,8 +213,10 @@ const TableStudents = ({ body }) => {
                     "bg-indigo-300 text-indigo-700":
                       value === table.getState().pagination.pageIndex,
                   })}
-                  onClick={() => {setMessage(false)
-                    table.setPageIndex(value)}}
+                  onClick={() => {
+                    setMessage(false);
+                    table.setPageIndex(value);
+                  }}
                 >
                   {value + 1}
                 </button>
@@ -201,8 +225,10 @@ const TableStudents = ({ body }) => {
               <button
                 className="text-gray-600 bg-gray-200 p-1 rounded border border-gray-300
                     disabled:hover:bg-white disabled:hover:text-gray-300"
-                onClick={() => {setMessage(false)
-                  table.nextPage()}}
+                onClick={() => {
+                  setMessage(false);
+                  table.nextPage();
+                }}
                 disabled={!table.getCanNextPage()}
               >
                 {">"}
@@ -211,8 +237,10 @@ const TableStudents = ({ body }) => {
               <button
                 className="text-gray-600 bg-gray-200 p-1 rounded border border-gray-300
                     disabled:hover:bg-white disabled:hover:text-gray-300"
-                onClick={() => {setMessage(false)
-                  table.setPageIndex(table.getPageCount() - 1)}}
+                onClick={() => {
+                  setMessage(false);
+                  table.setPageIndex(table.getPageCount() - 1);
+                }}
                 disabled={!table.getCanNextPage()}
               >
                 {">>"}
@@ -232,7 +260,7 @@ const TableStudents = ({ body }) => {
 
       {message && (
         <>
-          <Alert title="Archivo enviado correctamente" icon="success" />{" "}
+          <AlertTwo alerta={alerta} />
         </>
       )}
 
