@@ -2,7 +2,7 @@ import axios from 'axios'
 import {useState} from 'react'
 import { AiOutlineFileImage } from 'react-icons/ai'
 import {FaUserTie} from 'react-icons/fa'
-import AlertTwo from '../AlertTwo'
+import AlertTwo from '../../../components/AlertTwo'
 
 const FormularioDocente = () => {
     const [NAME, setNAME] = useState('')
