@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { login, verifyLoginStatus, loginAccess } = require('../controllers/login');
+const { loginAccess, verifyToken } = require('../controllers/authenticateUsers');
 
 // Ruta para iniciar sesión de los Usuarios
 router.post('/students', loginAccess);
@@ -19,6 +19,8 @@ router.get('/students', (req, res) => {
 })
 
 // Ruta para verificar el estado de inicio de sesión
-router.get('/verify-login-status', verifyLoginStatus);
+router.get('/profileStudents', verifyToken, (req, res) => {
+    res.render('profile')
+});
 
 module.exports = router;
