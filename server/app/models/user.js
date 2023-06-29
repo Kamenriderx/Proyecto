@@ -7,6 +7,7 @@ const USER = connection.define(
     ID_USER: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true
     },
     LAST_CONNECTION: {
       type: DataTypes.DATE,
@@ -18,7 +19,7 @@ const USER = connection.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [0, 10], 
+        len: [0, 500], 
       },
     },
 
@@ -26,7 +27,7 @@ const USER = connection.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [0, 11], 
+        len: [0, 30], 
       },
     },
     NAME: {
