@@ -4,7 +4,6 @@ const {registerStudentsCtrl} = require('../controllers/registerStudent');
 
 
 
-router.post("/",(req, res, next) => {console.log('Estoy pasando por aqui') 
-next()},registerStudentsCtrl);
+router.post("/",registerStudentsCtrl);
 
 module.exports = router
