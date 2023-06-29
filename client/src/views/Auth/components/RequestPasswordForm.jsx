@@ -67,7 +67,15 @@ const RequestPasswordForm = () => {
   return (
     <form
       action=""
-      className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex-col items-center space-x-4 animate__zoomIn animate__animated"
+      className="p-6 mx-auto bg-white rounded-xl shadow-lg items-center  space-x-4 animate__zoomIn animate__animated"
+      style={{
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center",
+        flexDirection:"column",
+        width:"70%"
+
+    }}
     >
       <div className="flex flex-row justify-center items-center mb-3">
         <GiLynxHead style={{ width: "40px", height: "40px" }} />
