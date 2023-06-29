@@ -1,10 +1,10 @@
-import axios from 'axios'
 import {useState} from 'react'
 import { AiOutlineFileImage } from 'react-icons/ai'
 import {FaUserTie} from 'react-icons/fa'
 import AlertTwo from '../../../components/AlertTwo'
+import { httpRequests } from '../../../utils/helpers/httpRequests'
 
-const FormularioDocente = () => {
+const FormularioDocente = ({check,setCheck}) => {
     const [NAME, setNAME] = useState('')
     const [ACCOUNT_NUMBER, setACCOUNT_NUMBER] = useState('')
     const [CENTER, setCENTER] = useState('')
@@ -51,7 +51,7 @@ const FormularioDocente = () => {
             setTimeout(() => {
                 setAlerta({})
             }, 4000);
-            return
+            return 
         }
         if(regexNumero.test(value)){
             setAlerta({
@@ -80,16 +80,18 @@ const FormularioDocente = () => {
             formData.append('NAME',NAME)
             formData.append('ACCOUNT_NUMBER',ACCOUNT_NUMBER)
             formData.append('CENTER',CENTER)
-            formData.append('CARRER',CARRER)
-            formData.append('ROL',ROL)
+            formData.append('CAREER',CARRER)
+            formData.append('ROLE',ROL)
             formData.append('EMAIL',EMAIL)
-            formData.append('IMAGE',IMAGE)
+            formData.append('file',IMAGE)
 
-            await axios.post('URL',formData,config)
+            const res =  await httpRequests()["post"]('http://localhost:3000/registro/registerProfessor',{body:formData,...config});
+            console.log(res);
             setAlerta({
                 message:'Docente Creado Correctament',
                 error:false
             })
+            setCheck(!check);
             setNAME('')
             setACCOUNT_NUMBER('')
             setCENTER('')
@@ -149,13 +151,13 @@ const FormularioDocente = () => {
         <label className="uppercase text-gray-800 block text-sm font-bold">Rol del Docente</label>
         <select value={ROL} onChange={e => setROL(e.target.value)} className="w-full mt-2 p-2 border rounded-xl bg-gray-50 text-center">
             <option value="">-- Seleccione el Rol --</option>
-            <option value="1">Docente</option>
-            <option value="2">Coordinador de Carrera</option>
+            <option value="2">Docente</option>
+            <option value="4">Coordinador de Carrera</option>
             <option value="3">Jefe de Carrera</option>
         </select>
     </div>
     <div className="my-3">
-        <label className="uppercase text-gray-800 block text-sm font-bold">Rol del Docente</label>
+        <label className="uppercase text-gray-800 block text-sm font-bold">Carrera del Docente</label>
         <select value={CARRER} onChange={e => setCARRER(e.target.value)} className="overflow-y-scroll w-full mt-2 p-2 border rounded-xl bg-gray-50 text-center">
             <option value="">-- Seleccione Carrera del Docente --</option>
             <option value="I_sistemas">Ingenieria en Sistemas</option>

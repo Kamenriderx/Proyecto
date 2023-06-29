@@ -12,7 +12,7 @@ const ConfirmAccountForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const regularExpression = /^\d{11}$/;
+    const regularExpression = /^\d+/;
     if(!regularExpression.test(accountNumber)){
       alert("El numero de cuenta ingresado no es valido");
       return;

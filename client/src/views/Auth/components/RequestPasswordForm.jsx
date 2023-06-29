@@ -58,7 +58,7 @@ const RequestPasswordForm = () => {
 
     if(response.status === 200){
         alert(response.data.message);
-        navigate("/iniciar");
+        navigate("/login");
     }else{
         alert("Algo salio mal");
     }

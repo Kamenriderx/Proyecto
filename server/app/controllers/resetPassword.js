@@ -2,8 +2,10 @@ const sendMail = require("../../utils/sendMail");
 const {generateAuthToken} = require("../../utils/authToken");
 const generateCode = require("../../utils/generateCode");
 const USER = require("../models/user");
+const { encrypt } = require("../../utils/handlePassword");
 
 const getUsers = async (req, res, next) => {
+  
   try {
     const users = await USER.findAll();
     res.status(200).json(users);
@@ -19,8 +21,10 @@ const restorePassword = async (req, res, next) => {
         {where:{ ACCOUNT_NUMBER }}
 
     );
+    console.log(encrypt(USER_PASSWORD));
     if(user.VERIFICATION_CODE == VERIFICATION_CODE){
-        user.USER_PASSWORD =  USER_PASSWORD;
+
+        user.USER_PASSWORD = await encrypt(USER_PASSWORD);
         await user.save();
         res.status(200).json({message:"Contraseña cambiada correctamente"});
     }else{

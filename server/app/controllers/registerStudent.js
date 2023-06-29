@@ -5,6 +5,15 @@ const {encrypt,generatePassword} = require("../../utils/handlePassword");
 const sendMail = require("../../utils/sendMail");
 const fechaActual = new Date().toLocaleDateString();
 
+const getStudents = async (req,res) =>{
+    try{
+        const students = await Student.findAll();
+        res.status(200).json(students)
+    }catch(err){
+        res.status(500).json({messagge:"Error al cargar estudiantes"});
+    }
+}
+
 const registerStudentsCtrl = async (req,res)=>{
     try {
        
@@ -109,5 +118,6 @@ function save(data){
 }
 
 module.exports = {
-    registerStudentsCtrl
+    registerStudentsCtrl,
+    getStudents
 };

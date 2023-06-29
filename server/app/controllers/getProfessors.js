@@ -1,7 +1,7 @@
 const {Rol, User, Professor} = require('../models');
 const getProfessorsCtrl = async(req,res)=>{
+
     try {
-        
         const professors = await Professor.findAll({include:{
         model:User ,as:"user" ,include:[{model:Rol,as:"rol"}]}})
         res.status(200).json({professors})
