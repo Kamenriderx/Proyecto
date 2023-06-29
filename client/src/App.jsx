@@ -8,8 +8,8 @@ function App() {
     <>
    
     <StoreProvider>
-       <ContentNavbar/>
-      {/* <ReadCSV/> */}
+       {/* <ContentNavbar/> */}
+      <ReadCSV/>
     </StoreProvider>
     </>
     
