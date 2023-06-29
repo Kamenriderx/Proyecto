@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import Alert from "./Alert";
 import { DotSpinner } from "@uiball/loaders";
 import TableStudents from "../views/TableStudents/TableStudents.jsx";
 import AlertTwo from "./AlertTwo.jsx";

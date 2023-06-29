@@ -10,7 +10,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-// import Alert from "../../components/Alert";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import AlertTwo from "../../components/AlertTwo";
 
