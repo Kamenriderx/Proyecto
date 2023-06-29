@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MdDeleteForever } from "react-icons/Md";
 import { BiEdit } from "react-icons/Bi";
 import "animate.css";
+import AlertThree from '../../components/AlertThree.jsx'
 
 import {
   flexRender,
@@ -259,7 +260,7 @@ const TableStudents = ({ body }) => {
 
       {message && (
         <>
-          <AlertTwo alerta={alerta} />
+          <AlertThree alerta={alerta} />
         </>
       )}
 

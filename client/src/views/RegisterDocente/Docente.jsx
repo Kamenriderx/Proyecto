@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {Link} from 'react-router-dom'
-import FormularioDocente from '../../components/Docente/FormularioDocente'
+import FormularioDocente from './components/FormularioDocente'
 import Modal from '../../components/Modal'
 import Spinner from '../../components/Spinner'
 

@@ -1,14 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+// import Alert from "./Alert";
 import { DotSpinner } from "@uiball/loaders";
 import TableStudents from "../views/TableStudents/TableStudents.jsx";
-import AlertTwo from "./AlertTwo.jsx";
+import AlertThree from './AlertThree.jsx'
+import PreviewDocente from "../views/RegisterDocente/components/PreviewDocente.jsx";
 
 const ReadCSV = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [mostrarTable, setMostrarTable] = useState(false);
   const [alerta, setAlerta] = useState({});
-
+  const [students, setStudents] = useState();
+  const [check,setCheck] = useState(false); 
+  useEffect(() => {
+    const callAxios = async () => {
+      const {data} = await axios("http://localhost:3000/registro/registerStudents/getStudents");
+      setStudents(data);
+      console.log(data );
+    }
+    callAxios();
+  }, [check]);
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -24,6 +36,7 @@ const ReadCSV = () => {
         icon: 'error',
         title: 'Error'
       });
+
       return;
     }
 
@@ -70,7 +83,7 @@ const ReadCSV = () => {
 
       {error ? (
         <>
-          <AlertTwo alerta = {alerta}/>
+          <AlertThree alerta = {alerta}/>
           <div className="flex justify-center my-10">
             <DotSpinner size={50} speed={0.9} color="white" />
           </div>
@@ -82,6 +95,11 @@ const ReadCSV = () => {
           <DotSpinner size={50} speed={0.9} color="white" />
         </div>
       )}
+      {
+        students?.length>0? students?.map(docente=><PreviewDocente docente={docente} key={docente.ID_USER}/>):
+        <h2>Cargando</h2>
+      }
+
     </>
   );
 };

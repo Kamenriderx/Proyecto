@@ -25,6 +25,7 @@ const validatorRegisterProfessor = [
     .exists()
     .notEmpty(),
     (req,res,next) => {
+        console.log(req.body);
         return validateResults(req,res,next)
 
     }

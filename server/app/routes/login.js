@@ -8,14 +8,14 @@ router.get('/students', (req, res) => {
     res.send('Bienvenidos al login de estudiantes')
 })
 
-router.post('/proffesors', loginAccess);
-router.get('/proffesors', (req, res) => {
+router.post('/professors', loginAccess);
+router.get('/professors', (req, res) => {
     res.send('Bienvenidos al login de profesores')
 })
 
 router.post('/admins', loginAccess);
-router.get('/students', (req, res) => {
-    res.send('Bienvenidos al login de estudiantes')
+router.get('/admins', (req, res) => {
+    res.send('Bienvenidos al login de administradores')
 })
 
 // Ruta para verificar el estado de inicio de sesión

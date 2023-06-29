@@ -1,18 +1,12 @@
-import { StoreProvider } from "./store/ContextExample";
-import ReadCSV from "./components/ReadCSV";
 import ContentNavbar from "./components/Navbar";
-
+import { StoreProvider } from "./store/ContextExample";
 //import { AppRouter } from "./router/AppRouter";
 function App() {
   return (
-    <>
-   
     <StoreProvider>
-       {/* <ContentNavbar/> */}
-      <ReadCSV/>
+       <ContentNavbar/>
+      {/* <ReadCSV/> */}
     </StoreProvider>
-    </>
-    
   );
 }
 

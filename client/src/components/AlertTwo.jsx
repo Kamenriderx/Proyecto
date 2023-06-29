@@ -1,20 +1,27 @@
+import {useEffect} from 'react'
 import Swal from 'sweetalert2'
-const AlertTwo = ({alerta}) => {
-  const {title, text, icon} = alerta
 
-    const mostrar = () => {
-      Swal.fire({
-        position:'center',
-        text: text,
-        title: title,
-        icon: icon,
-        confirmButtonText: 'Aceptar'
-      })
-    }
-  
-    return(
-      mostrar()
-    )
+const AlertTwo = ({alerta}) => {
+    useEffect(() => {
+        alerta.error ? 
+          Swal.fire({
+            position:'center',
+            title: 'Error',
+            text: alerta.message,
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+          })
+         : 
+          Swal.fire({
+            position:'center',
+            title: 'Éxito',
+            text: alerta.message,
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+          })
+      }, [alerta]);
+
+      return null;
 }
 
 export default AlertTwo
