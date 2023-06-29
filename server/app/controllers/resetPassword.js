@@ -13,7 +13,6 @@ const getUsers = async (req, res, next) => {
 };
 const restorePassword = async (req, res, next) => {
   try {
-    console.log()
     const {ACCOUNT_NUMBER,VERIFICATION_CODE} = req.token;
     const { USER_PASSWORD} = req.body;
     const user = await USER.findOne(
