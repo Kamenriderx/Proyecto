@@ -6,10 +6,6 @@ const validatorRegisterProfessor = [
     check("NAME")
     .exists()
     .notEmpty(),
-    check("ACCOUNT_NUMBER")
-    .exists()
-    .notEmpty()
-    .isNumeric(),
     check("ROLE")
     .exists()
     .notEmpty()
@@ -25,7 +21,6 @@ const validatorRegisterProfessor = [
     .exists()
     .notEmpty(),
     (req,res,next) => {
-        console.log(req.body);
         return validateResults(req,res,next)
 
     }

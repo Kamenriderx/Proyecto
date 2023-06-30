@@ -12,7 +12,7 @@ const Docentes = () => {
   const [check,setCheck] = useState(false);
   useEffect(() => {
     const axiosCall = async () => {
-      const res = await axios("http://localhost:3000/registro/getProfessors");
+      const res = await axios("http://localhost:3000/registro/admin/getProfessors");
       console.log(res);
       console.log(res.data.professors);
       setDocentes(res.data.professors);

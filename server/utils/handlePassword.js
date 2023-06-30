@@ -15,7 +15,8 @@ const generatePassword = ()=>{
     return password.generate({
         length:12,
         numbers:true,
-        uppercase:true
+        uppercase:true,
+        excludeSimilarCharacters: true
     })
 }
 module.exports = {
