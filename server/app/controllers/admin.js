@@ -111,7 +111,10 @@ const getStudents = async (req,res) =>{
 const registerStudentsCtrl = async (req,res)=>{
     try {
         
-       
+        if (req.body.length <= 0) {
+            res.status(400).json({error:"NO SE HA ENVIADO DATA"})
+            
+        }
         let {dataError,dataValidate} = verifyData(req.body);
         let {dataDuplicate,newDataValidate} =  await isDuplicate(dataValidate);
         
