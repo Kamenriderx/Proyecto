@@ -1,4 +1,4 @@
-import ContentNavbar from "./components/Navbar";
+import ContentNavbar from "./interfaces/Navbar";
 import { StoreProvider } from "./store/ContextExample";
 //import { AppRouter } from "./router/AppRouter";
 function App() {

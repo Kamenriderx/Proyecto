@@ -2,34 +2,19 @@ import "flowbite";
 import "animate.css";
 import { useContext, useState } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "../components/ProtectedRoute";
 import NotFound from "../views/NotFound";
 import Auth from "../views/Auth/Auth";
 import { StoreContext } from "../store/ContextExample";
 import ConfirmAccountForm from "../views/Auth/components/ConfirmAccountForm";
 import RequestPasswordForm from "../views/Auth/components/RequestPasswordForm";
 import Docentes from "../views/RegisterDocente/Docentes";
-import ReadCSV from "./ReadCSV";
+import ReadCSV from "../components/ReadCSV";
+import Principal from "../views/Principal";
 
 const ContentNavbar = () => {
-  const [user, setUser] = useState(null);
-  const [stateLogin, setStateLogin] = useState(false);
   const { state, dispatch } = useContext(StoreContext);
 
-  const login = () => {
-    //request done server
-    setStateLogin(true);
-    setUser({
-      id: 1,
-      name: "john",
-      roles: ["docente"],
-      permissions: ["jefe"],
-    });
-  };
-  const logout = () => {
-    setStateLogin(false);
-    setUser(null);
-  };
   const handleSession = () => {
     dispatch({ type: "USER", user: {} });
     dispatch({ type: "TOKEN", token: "" });
@@ -82,7 +67,7 @@ const ContentNavbar = () => {
                   <li>
                     <Link to="/login">
                       <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
-                        Login
+                        Inicio de sesión
                       </button>
                     </Link>
                   </li>
@@ -130,7 +115,6 @@ const ContentNavbar = () => {
                       </Link>
                     </li>
                   
-                  
                   </>)
                 }
               </ul>
@@ -141,10 +125,6 @@ const ContentNavbar = () => {
     );
   };
 
-  //Formularios
-  const FormStudent = () => {
-    return <Auth />;
-  };
 
   const Profile = () => {
     return (
@@ -159,70 +139,9 @@ const ContentNavbar = () => {
           <li>
             Centro {state.user.CENTER}
           </li>
-
         </ul>
       </div>
     );
-  };
-
-  const FormAdministrator = () => {
-    return (
-      <div className="bg-gray-100 text-2xl font-bold p-4">
-        <p>Form Administrator</p>
-        <Link to="administrador">
-          <button
-            type="button"
-            className="text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-500/50 rounded-lg text-xl px-4 py-2 text-center"
-            onClick={login}
-          >
-            Login
-          </button>
-        </Link>
-      </div>
-    );
-  };
-
-  const Principal = () => {
-    return (
-      <div className="bg-gray-100 text-2xl font-bold p-4">
-        <p>Page principal</p>
-      </div>
-    );
-  };
-
-  // Vistas
-  const Student = () => {
-    return (
-      <div className="bg-gray-100 text-2xl font-bold p-4">
-        <p>Page Student</p>
-        <button
-          type="button"
-          className="text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-500/50 rounded-lg text-xl px-4 py-2 text-center"
-          onClick={logout}
-        >
-          Logout
-        </button>
-      </div>
-    );
-  };
-
-  const Administrator = () => {
-    return (
-      <div className="bg-gray-100 text-2xl font-bold p-4">
-        <p>Page Administrator</p>
-        <button
-          type="button"
-          className="text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-500/50 rounded-lg text-xl px-4 py-2 text-center"
-          onClick={logout}
-        >
-          Logout
-        </button>
-      </div>
-    );
-  };
-
-  const Teacher = () => {
-    return <Auth />;
   };
 
   return (
@@ -233,7 +152,7 @@ const ContentNavbar = () => {
           {/* rutas publicas */}
           <Route path="*" element={<NotFound />} />
           <Route exact path="/" element={<Principal />} />
-          <Route exact path="/login" element={<FormStudent />} />
+          <Route exact path="/login" element={<Auth />} />
           <Route
             exact
             path="/proffessor"
@@ -259,18 +178,6 @@ const ContentNavbar = () => {
             element={<Docentes/>}
           />
 
-          <Route
-            exact
-            path="/formAdministrador/administrador"
-            element={
-              <ProtectedRoute
-                isAllowed={!!user && user.roles.includes("administrador")}
-                login={stateLogin}
-              >
-                <Administrator />
-              </ProtectedRoute>
-            }
-          />
         </Routes>
       </BrowserRouter>
     </>

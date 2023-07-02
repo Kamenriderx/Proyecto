@@ -51,6 +51,29 @@ const ReadCSV = () => {
   function csvToJson(csv) {
     const lines = csv.split("\n");
     const headers = lines[0].split(",");
+
+    function validarArrayExpresionRegular(arr) {
+      const expresionRegular = /^NOMBRE,CARRERA,DNI,CORREO,CENTRO,\r$/;
+
+      const cadena = arr.join(",");
+      return expresionRegular.test(cadena);
+    }
+
+    const arr1 = headers;
+    console.log(validarArrayExpresionRegular(arr1));
+
+    if (!validarArrayExpresionRegular(arr1)) {
+      setError(true);
+      setMostrarTable(false);
+      console.log("El archivo no tiene completo el encabezado.");
+      setAlerta({
+        text: "El archivo tiene uno o varios errores en el encabezado.",
+        title: "Error",
+        icon: "error"
+      })
+      return;
+    }
+
     const result = [];
 
     for (let i = 1; i < (lines.length - 1); i++) {

@@ -60,19 +60,19 @@ const TableStudents = ({ body }) => {
   //Configuraciones de la tabla columnas
   const columns = [
     {
-      accessorKey: "NAME",
+      accessorKey: "NOMBRE",
     },
     {
-      accessorKey: "CARRER",
+      accessorKey: "CARRERA",
     },
     {
       accessorKey: "DNI",
     },
     {
-      accessorKey: "EMAIL",
+      accessorKey: "CORREO",
     },
     {
-      accessorKey: "CENTER",
+      accessorKey: "CENTRO",
     },
   ];
 
@@ -276,9 +276,9 @@ const TableStudents = ({ body }) => {
                 id="floating_outlined"
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                value={selectedItem.NAME}
+                value={selectedItem.NOMBRE}
                 onChange={(e) =>
-                  setSelectedItem({ ...selectedItem, NAME: e.target.value })
+                  setSelectedItem({ ...selectedItem, NOMBRE: e.target.value })
                 }
               />
               <label
@@ -295,11 +295,11 @@ const TableStudents = ({ body }) => {
                 id="floating_outlined"
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                value={selectedItem.CENTER}
+                value={selectedItem.CENTRO}
                 onChange={(e) =>
                   setSelectedItem({
                     ...selectedItem,
-                    CENTER: e.target.value,
+                    CENTRO: e.target.value,
                   })
                 }
               />
@@ -318,11 +318,11 @@ const TableStudents = ({ body }) => {
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 required
                 placeholder=" "
-                value={selectedItem.EMAIL}
+                value={selectedItem.CORREO}
                 onChange={(e) =>
                   setSelectedItem({
                     ...selectedItem,
-                    EMAIL: e.target.value,
+                    CORREO: e.target.value,
                   })
                 }
               />
@@ -359,11 +359,11 @@ const TableStudents = ({ body }) => {
                 id="floating_outlined"
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                value={selectedItem.CARRER}
+                value={selectedItem.CARRERA}
                 onChange={(e) =>
                   setSelectedItem({
                     ...selectedItem,
-                    CARRER: e.target.value,
+                    CARRERA: e.target.value,
                   })
                 }
               />
@@ -372,28 +372,6 @@ const TableStudents = ({ body }) => {
                 className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
               >
                 CARRERA
-              </label>
-            </div>
-
-            <div className="relative my-4">
-              <input
-                type="number"
-                id="floating_outlined"
-                className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value={selectedItem.YEAR_OF_INCOME}
-                onChange={(e) =>
-                  setSelectedItem({
-                    ...selectedItem,
-                    YEAR_OF_INCOME: e.target.value,
-                  })
-                }
-              />
-              <label
-                htmlFor="floating_outlined"
-                className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-              >
-                ANIO DE INGRESO
               </label>
             </div>
 
