@@ -11,16 +11,24 @@ const sendMail = async (email,options, view, params = {}) => {
     html: html,
   };
 
-
-  return new Promise((resolve, reject) => {
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(info);
-      }
-    });
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+      return error
+    } else {
+      return new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(info);
+          }
+        });
+      });
+      
+    }
   });
+
   
 };
 

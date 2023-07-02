@@ -25,6 +25,9 @@ const Professor = connection.define(
         },
         CAREER:{
             type:DataTypes.STRING
+        },
+        INSTITUTIONAL_EMAIL:{
+            type:DataTypes.STRING
         }
         
 
@@ -47,7 +50,6 @@ Professor.add = function(professor){
         EMAIL: professor.EMAIL, // Valor para el parámetro "email"
         USER_PASSWORD: professor.USER_PASSWORD,
         ACCOUNT_NUMBER : professor.ACCOUNT_NUMBER
-
     }
 
 
@@ -55,6 +57,7 @@ Professor.add = function(professor){
     return Professor.create({
         PROFILE_PHOTO:professor.URL,
         CAREER:professor.CAREER,
+        INSTITUTIONAL_EMAIL: professor.INSTITUTIONAL_EMAIL,
         user
         
 

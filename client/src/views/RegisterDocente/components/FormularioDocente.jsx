@@ -85,7 +85,7 @@ const FormularioDocente = ({check,setCheck}) => {
             formData.append('EMAIL',EMAIL)
             formData.append('file',IMAGE)
 
-            const res =  await httpRequests()["post"]('http://localhost:3000/registro/registerProfessor',{body:formData,...config});
+            const res =  await httpRequests()["post"]('http://localhost:3000/registro/admin/registerProfessor',{body:formData,...config});
             console.log(res);
             setAlerta({
                 message:'Docente Creado Correctament',

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router()
-const {getRolesCtrl} = require("../controllers/getRoles.js");
+const {getRolesCtrl} = require("../controllers/role.js");
 
 
 
 
-router.get("/",getRolesCtrl);
+router.get("/getRoles",getRolesCtrl);
 
 module.exports = router
