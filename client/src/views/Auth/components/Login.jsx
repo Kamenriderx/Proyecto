@@ -97,9 +97,9 @@ const LoginForm = () => {
 /*     if(!passwordRe.test(login.password.trim())){
       alert("La contraseña no es valida");
       return;
-    }
+    } */
 
-    if(!accountRe.test(login.identifier.trim())){
+   /*  if(!accountRe.test(login.identifier.trim())){
       alert("El numero de cuenta no es valido");
       return;
     } */
