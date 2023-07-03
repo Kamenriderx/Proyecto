@@ -4,7 +4,6 @@ import axios from "axios";
 import { DotSpinner } from "@uiball/loaders";
 import TableStudents from "../views/TableStudents/TableStudents.jsx";
 import AlertThree from './AlertThree.jsx'
-import PreviewDocente from "../views/RegisterDocente/components/PreviewDocente.jsx";
 
 const ReadCSV = () => {
   const [data, setData] = useState([]);
@@ -26,34 +25,43 @@ const ReadCSV = () => {
     const file = event.target.files[0];
     const reader = new FileReader();
 
-    if (!file.name.includes("csv")) {
+    if (!file?.name.includes("csv")) {
       setError(true);
       setMostrarTable(false);
       console.log("Error de archivo");
+      if(!file){
+        setAlerta({
+          text: 'Debe seleccionar un archivo!',
+          icon: 'error',
+          title: 'Error'
+        });
 
-      setAlerta({
-        text: 'El Archivo no es un CSV, favor intentar con otro archivo.',
-        icon: 'error',
-        title: 'Error'
-      });
+      }else{
+        setAlerta({
+          text: 'El Archivo no es un CSV, favor intentar con otro archivo.',
+          icon: 'error',
+          title: 'Error'
+        });
+        
+      }
 
       return;
     }
 
     reader.onload = function (e) {
       const csv = e.target.result;
-      csvToJson(csv);
+      csvToJson(csv, event);
     };
 
     reader.readAsText(file);
   }
 
-  function csvToJson(csv) {
+  function csvToJson(csv, event) {
     const lines = csv.split("\n");
     const headers = lines[0].split(",");
 
     function validarArrayExpresionRegular(arr) {
-      const expresionRegular = /^NOMBRE,CARRERA,DNI,CORREO,CENTRO,\r$/;
+      const expresionRegular = /^NAME,DNI,CARRER,EMAIL,CENTER,\r$/;
 
       const cadena = arr.join(",");
       return expresionRegular.test(cadena);
@@ -63,6 +71,8 @@ const ReadCSV = () => {
     console.log(validarArrayExpresionRegular(arr1));
 
     if (!validarArrayExpresionRegular(arr1)) {
+      event.target.value = null
+
       setError(true);
       setMostrarTable(false);
       console.log("El archivo no tiene completo el encabezado.");
@@ -118,10 +128,6 @@ const ReadCSV = () => {
           <DotSpinner size={50} speed={0.9} color="white" />
         </div>
       )}
-      {
-        students?.length>0? students?.map(docente=><PreviewDocente docente={docente} key={docente.ID_USER}/>):
-        <h2>Cargando</h2>
-      }
 
     </>
   );

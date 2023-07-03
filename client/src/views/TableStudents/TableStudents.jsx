@@ -60,19 +60,24 @@ const TableStudents = ({ body }) => {
   //Configuraciones de la tabla columnas
   const columns = [
     {
-      accessorKey: "NOMBRE",
-    },
-    {
-      accessorKey: "CARRERA",
+      accessorKey: "NAME",
+      header: () => <span>NOMBRE</span>
     },
     {
       accessorKey: "DNI",
+      header: () => <span>CARRERA</span>      
     },
     {
-      accessorKey: "CORREO",
+      accessorKey: "CARRER",
+      header: () => <span>DNI</span>
     },
     {
-      accessorKey: "CENTRO",
+      accessorKey: "EMAIL",
+      header: () => <span>CORREO</span>
+    },
+    {
+      accessorKey: "CENTER",
+      header: () => <span>CENTRO</span>
     },
   ];
 
@@ -90,18 +95,26 @@ const TableStudents = ({ body }) => {
 
     try {
       const res = await httpRequests()["post"]("http://localhost:3000/registro/admin/registerStudents",{ body: data });
-      console.log(res)
-      
-    setAlerta({
-      text: 'Archivo enviado exitosamente.',
-      icon: 'success',
-      title: 'Éxito'
-    });
+      console.log('respuesta correcta')
+
+      if(res?.status===200){
+        setAlerta({
+          text: res.messagge,
+          icon: 'success',
+          title: 'Éxito'
+        });
+        return;
+      }
+      if(res?.response.status!==200 ){
+        throw new Error(res.response.data.messagge);
+      }
       
     } catch (error) {
-      console.log(error.response.data.messagge)
+      console.log('respuesta incorrecta')
+      console.log(error)
+      console.log(error.message)
       setAlerta({
-        text: error.response.data.messagge,
+        text: error.message,
         icon: 'warning',
         title: 'Advertencia'
       });
@@ -277,9 +290,9 @@ const TableStudents = ({ body }) => {
                 id="floating_outlined"
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                value={selectedItem.NOMBRE}
+                value={selectedItem.NAME}
                 onChange={(e) =>
-                  setSelectedItem({ ...selectedItem, NOMBRE: e.target.value })
+                  setSelectedItem({ ...selectedItem, NAME: e.target.value })
                 }
               />
               <label
@@ -296,11 +309,11 @@ const TableStudents = ({ body }) => {
                 id="floating_outlined"
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                value={selectedItem.CENTRO}
+                value={selectedItem.CENTER}
                 onChange={(e) =>
                   setSelectedItem({
                     ...selectedItem,
-                    CENTRO: e.target.value,
+                    CENTER: e.target.value,
                   })
                 }
               />
@@ -319,11 +332,11 @@ const TableStudents = ({ body }) => {
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 required
                 placeholder=" "
-                value={selectedItem.CORREO}
+                value={selectedItem.EMAIL}
                 onChange={(e) =>
                   setSelectedItem({
                     ...selectedItem,
-                    CORREO: e.target.value,
+                    EMAIL: e.target.value,
                   })
                 }
               />
@@ -337,7 +350,7 @@ const TableStudents = ({ body }) => {
 
             <div className="relative my-4">
               <input
-                type="number"
+                type="text"
                 id="floating_outlined"
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
@@ -360,11 +373,11 @@ const TableStudents = ({ body }) => {
                 id="floating_outlined"
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                value={selectedItem.CARRERA}
+                value={selectedItem.CARRER}
                 onChange={(e) =>
                   setSelectedItem({
                     ...selectedItem,
-                    CARRERA: e.target.value,
+                    CARRER: e.target.value,
                   })
                 }
               />

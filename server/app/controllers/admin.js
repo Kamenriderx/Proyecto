@@ -30,6 +30,7 @@ const getProfessorsCtrl = async(req,res)=>{
 
 const registerProfessorCtrl = async (req,res)=>{
     try {
+        
         const {file} = req;
         const url = `http://localhost:3000/images/${file.filename}`
         const body = matchedData(req);

@@ -6,7 +6,6 @@ import { httpRequests } from '../../../utils/helpers/httpRequests'
 
 const FormularioDocente = ({check,setCheck}) => {
     const [NAME, setNAME] = useState('')
-    const [ACCOUNT_NUMBER, setACCOUNT_NUMBER] = useState('')
     const [CENTER, setCENTER] = useState('')
     const [ROL, setROL] = useState('')
     const [CARRER, setCARRER] = useState('')
@@ -18,10 +17,9 @@ const FormularioDocente = ({check,setCheck}) => {
     const handleSubmit= async e => {
         e.preventDefault()
         let regexNombbre = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
-        let regexNumero = /^[0-9]+$/;
         let regexEmail = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
-        if([NAME,ACCOUNT_NUMBER,CENTER,ROL,CARRER,EMAIL,IMAGE].includes('')){
+        if([NAME,CENTER,ROL,CARRER,EMAIL].includes('')){
             setAlerta(
                 {message:'Todos los campos son obligatoios',
                 error:true    
@@ -53,16 +51,7 @@ const FormularioDocente = ({check,setCheck}) => {
             }, 4000);
             return
         }
-        if(!regexNumero.test(ACCOUNT_NUMBER.trim())){
-            setAlerta({
-                message:'El campo "numero de empleado" solo acepta Numeros',
-                error:true
-            })
-            setTimeout(() => {
-                setAlerta({})
-            }, 4000);
-            return
-        }
+ 
 
         try {
 
@@ -78,7 +67,6 @@ const FormularioDocente = ({check,setCheck}) => {
             
             const formData = new FormData()
             formData.append('NAME',NAME)
-            formData.append('ACCOUNT_NUMBER',ACCOUNT_NUMBER)
             formData.append('CENTER',CENTER)
             formData.append('CAREER',CARRER)
             formData.append('ROLE',ROL)
@@ -87,13 +75,16 @@ const FormularioDocente = ({check,setCheck}) => {
 
             const res =  await httpRequests()["post"]('http://localhost:3000/registro/admin/registerProfessor',{body:formData,...config});
             console.log(res);
+            
+            if(!res.status && res?.response?.status!==200){
+                throw new Error(res.response.data.messagge);
+            }
             setAlerta({
                 message:'Docente Creado Correctament',
                 error:false
             })
             setCheck(!check);
             setNAME('')
-            setACCOUNT_NUMBER('')
             setCENTER('')
             setCARRER('')
             setROL('')
@@ -102,7 +93,7 @@ const FormularioDocente = ({check,setCheck}) => {
         } catch (error) {
             console.log(error);
             setAlerta({
-                message:error.response.data.error,
+                message:error.message,
                 error:true
             })
             return
@@ -112,8 +103,23 @@ const FormularioDocente = ({check,setCheck}) => {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
+        const fileType= file.type;
+        const validationImage = ['image/jpeg', 'image/png']
+
+        if(!validationImage.includes(fileType)){
+            setAlerta(
+                {message:'El archivo seleccionado no es imagen de tipo "jpeg" o "png"',
+                error:true    
+            })
+            setTimeout(() => {
+                setAlerta({})
+            }, 4000);
+            return
+        }
+
         setIMAGE(file);
         console.log(file);
+
       };
 
     const {message} = alerta
@@ -129,10 +135,7 @@ const FormularioDocente = ({check,setCheck}) => {
         <label className="uppercase text-gray-800 block text-sm font-bold" htmlFor="nombre">Nombre Docente</label>
         <input onChange={e => setNAME(e.target.value)} value={NAME} type='text' placeholder='Escribe tu Nombre' className="w-full mt-2 p-2 border rounded-xl bg-gray-50" id="nombre"/>
     </div>
-    <div className="my-3">
-        <label className="uppercase text-gray-800 block text-sm font-bold" htmlFor="numero">Numero de Empleado</label>
-        <input value={ACCOUNT_NUMBER} onChange={e => setACCOUNT_NUMBER(e.target.value)} type='text' placeholder='Escribe numero de Empleadao' className="w-full mt-2 p-2 border rounded-xl bg-gray-50 " id="numero"/>
-    </div>
+
     <div className="my-3">
         <label className="uppercase text-gray-800 block text-sm font-bold" htmlFor="email">Correo Docente</label>
         <input value={EMAIL} onChange={e => setEMAIL(e.target.value)} type='text' placeholder='Escribe el Correo del Docente' className="w-full mt-2 p-2 border rounded-xl bg-gray-50 " id="email"/>
@@ -187,7 +190,7 @@ const FormularioDocente = ({check,setCheck}) => {
         <input
           id="file-upload"
           type="file"
-          accept="image/*"
+          accept=".jpeg, .png "
           className="sr-only"
           onChange={handleImageChange}
         />
