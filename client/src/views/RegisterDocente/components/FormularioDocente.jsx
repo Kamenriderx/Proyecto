@@ -13,17 +13,17 @@ const FormularioDocente = ({check,setCheck}) => {
     const [EMAIL, setEMAIL] = useState('')
     const [IMAGE, setIMAGE] = useState(null)
     const [alerta, setAlerta] = useState({})
+    
 
     const handleSubmit= async e => {
         e.preventDefault()
-        const value = e.target.value
         let regexNombbre = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
         let regexNumero = /^[0-9]+$/;
         let regexEmail = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
-        if([NAME,ACCOUNT_NUMBER,CENTER,ROL,CARRER,EMAIL].includes('')){
+        if([NAME,ACCOUNT_NUMBER,CENTER,ROL,CARRER,EMAIL,IMAGE].includes('')){
             setAlerta(
-                {message:'Todos los Campos son Obligatoios',
+                {message:'Todos los campos son obligatoios',
                 error:true    
             })
             setTimeout(() => {
@@ -34,7 +34,7 @@ const FormularioDocente = ({check,setCheck}) => {
 
         if(!regexEmail.test(EMAIL.trim())){
             setAlerta({
-                message:'El campo Email es invalido, Ejem:alguien@algunlugar.es',
+                message:'El campo "correo docente" es invalido, ejem: alguien@algunlugar.es',
                 error:true
             })
             setTimeout(() => {
@@ -45,17 +45,17 @@ const FormularioDocente = ({check,setCheck}) => {
 
         if(!regexNombbre.test(NAME.trim())){
             setAlerta({
-                message:'El campo Nombre solo Acepta letras y espacios en Blanco',
+                message:'El campo "nombre docente" solo acepta letras y espacios en blanco',
                 error:true
             })
             setTimeout(() => {
                 setAlerta({})
             }, 4000);
-            return 
+            return
         }
-        if(regexNumero.test(value)){
+        if(!regexNumero.test(ACCOUNT_NUMBER.trim())){
             setAlerta({
-                message:'El campo Numero de Empleado solo acepta Numeros',
+                message:'El campo "numero de empleado" solo acepta Numeros',
                 error:true
             })
             setTimeout(() => {
@@ -101,6 +101,11 @@ const FormularioDocente = ({check,setCheck}) => {
             setIMAGE(null)
         } catch (error) {
             console.log(error);
+            setAlerta({
+                message:error.response.data.error,
+                error:true
+            })
+            return
         }
 
     }
@@ -126,7 +131,7 @@ const FormularioDocente = ({check,setCheck}) => {
     </div>
     <div className="my-3">
         <label className="uppercase text-gray-800 block text-sm font-bold" htmlFor="numero">Numero de Empleado</label>
-        <input value={ACCOUNT_NUMBER} onChange={e => setACCOUNT_NUMBER(e.target.value)} type='number' placeholder='Escribe numero de Empleadao' className="w-full mt-2 p-2 border rounded-xl bg-gray-50 " id="numero"/>
+        <input value={ACCOUNT_NUMBER} onChange={e => setACCOUNT_NUMBER(e.target.value)} type='text' placeholder='Escribe numero de Empleadao' className="w-full mt-2 p-2 border rounded-xl bg-gray-50 " id="numero"/>
     </div>
     <div className="my-3">
         <label className="uppercase text-gray-800 block text-sm font-bold" htmlFor="email">Correo Docente</label>
@@ -160,20 +165,20 @@ const FormularioDocente = ({check,setCheck}) => {
         <label className="uppercase text-gray-800 block text-sm font-bold">Carrera del Docente</label>
         <select value={CARRER} onChange={e => setCARRER(e.target.value)} className="overflow-y-scroll w-full mt-2 p-2 border rounded-xl bg-gray-50 text-center">
             <option value="">-- Seleccione Carrera del Docente --</option>
-            <option value="I_sistemas">Ingenieria en Sistemas</option>
-            <option value="I_quimica">Ingenieria Quimica Industrial</option>
-            <option value="I_electrica">Ingenieria Electrica Industrial</option>
-            <option value="I_industrial">Ingenieria Industrial</option>
-            <option value="I_civil">Ingeniería Civil</option>
-            <option value="I_Mecanica">Ingenieria Mecanica Industrial</option>
-            <option value="derecho">Licenciatura en Derecho</option>
-            <option value="periodismo">Licenciatura en Periodismo</option>
-            <option value="lenguas">Licenciatura en Lenguas Extranjeras con Orientación en Inglés y Francés</option>
-            <option value="arquitectura">Arquitectura</option>
-            <option value="L_matematicas">Licenciatura en Matemáticas</option>
-            <option value="L_fisica">Licenciatura en Física</option>
-            <option value="L_astronomia">Licenciatura en Astronomía y Astrofísica</option>
-            <option value="medicina">Medicina</option>
+            <option value="Ingenieria en Sistemas">Ingenieria en Sistemas</option>
+            <option value="Ingenieria Quimica Industrial">Ingenieria Quimica Industrial</option>
+            <option value="Ingenieria Electrica Industrial">Ingenieria Electrica Industrial</option>
+            <option value="Ingenieria Industrial">Ingenieria Industrial</option>
+            <option value="Ingeniería Civil">Ingeniería Civil</option>
+            <option value="Ingenieria Mecanica Industrial">Ingenieria Mecanica Industrial</option>
+            <option value="Licenciatura en Derecho">Licenciatura en Derecho</option>
+            <option value="Licenciatura en Periodismo">Licenciatura en Periodismo</option>
+            <option value="Licenciatura en Lenguas Extranjeras con Orientación en Inglés y Francés">Licenciatura en Lenguas Extranjeras con Orientación en Inglés y Francés</option>
+            <option value="Arquitectura">Arquitectura</option>
+            <option value="Licenciatura en Matemáticas">Licenciatura en Matemáticas</option>
+            <option value="Licenciatura en Física">Licenciatura en Física</option>
+            <option value="Licenciatura en Astronomía y Astrofísica">Licenciatura en Astronomía y Astrofísica</option>
+            <option value="Medicina">Medicina</option>
         </select>
     </div>
     <div className="my-3">
