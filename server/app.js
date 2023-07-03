@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const sendMail = require('./utils/sendMail');
 const generatePDF = require('./utils/generatePDF');
 
-generatePDF();
 
 
 app.use(configCors);

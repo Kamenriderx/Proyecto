@@ -24,6 +24,7 @@ exports.loginAccess = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'N° de cuenta o email incorrecto. Vuelva a intentar.' });
     }
+    console.log(user);
 
     // Verifica la contraseña
     const passwordMatch = await bcrypt.compare(password, user.USER_PASSWORD);

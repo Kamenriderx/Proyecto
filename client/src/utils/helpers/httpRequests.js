@@ -28,7 +28,7 @@ export const httpRequests = () => {
         if (axios.isCancel(error)) {
           throw new Error("Request canceled");
         } else {
-          throw error;
+          return error;
         }
       });
   };
