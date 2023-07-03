@@ -19,12 +19,11 @@ exports.loginAccess = async (req, res) => {
         { ACCOUNT_NUMBER: identifier }
       )
     });
-
+    console.log(user.dataValues);
     // Verifica si el usuario existe
     if (!user) {
       return res.status(404).json({ error: 'N° de cuenta o email incorrecto. Vuelva a intentar.' });
     }
-    console.log(user);
 
     // Verifica la contraseña
     const passwordMatch = await bcrypt.compare(password, user.USER_PASSWORD);
@@ -38,69 +37,61 @@ exports.loginAccess = async (req, res) => {
     // Verifica la ruta a la que se está accediendo
     const route = req.route.path;
 
-    let token; // Variable token 
+    try {
+      switch (role.ROLE_NAME) {
+        case 'Estudiante':
+          if (route === '/admins' || route === '/professors' || route === '/departmentHeads' || route === '/coordinators') {
 
-    switch (role.ROLE_NAME) {
-      case 'Estudiante':
-        if (route === '/professors' || route === '/admins') {
+            return res.status(401).json({ error: 'Acceso no permitido' });
+          }
+          break;
+        case 'Docente':
+          if (route === '/students' || route === '/admins' || route === '/departmentHeads' || route === '/coordinators') {
 
-          // Si se intenta iniciar sesión como estudiante en la ruta de professors
-          // admins,  devuelve un error
-          return res.status(401).json({ error: 'Acceso no permitido' });
-        }
+            return res.status(401).json({ error: 'Acceso no permitido' });
+          }
+          break;
+        case 'Jefe de Departamento':
+          if (route === '/students' || route === '/professors' || route === '/admins' || route === '/coordinators') {
 
-        // Genera un token de acceso utilizando JWT
-        token = generateAuthToken({ userId: user.ID_USER, role: role.ROLE_NAME }, '24h');
+            return res.status(401).json({ error: 'Acceso no permitido' });
+          }
+          break;
+        case 'Coordinador':
+          if (route === '/students' || route === '/professors' || route === '/departmentHeads' || route === '/admins') {
 
-        // Actualiza la última conexión del usuario
-        await user.update({ LAST_CONNECTION: new Date() });
+            return res.status(401).json({ error: 'Acceso no permitido' });
+          }
+          break;
+        case 'Administrador':
+          if (route === '/students' || route === '/professors' || route === '/departmentHeads' || route === '/coordinators') {
 
-        // Envía la respuesta con el token de acceso como JSON
-        res.status(200).json({ token, user});
-        break;
-
-      case 'Docente':
-        if (route === '/students' || route === '/admins') {
-          // Si se intenta iniciar sesión como docente en la ruta de estudiantes
-          //admins, devuelve un error
-          return res.status(401).json({ error: 'Acceso no permitido' });
-        }
-
-        // Genera un token de acceso utilizando JWT
-        token = generateAuthToken({ userId: user.ID_USER, role: role.ROLE_NAME }, '24h');
-
-        // Actualiza la última conexión del usuario
-        await user.update({ LAST_CONNECTION: new Date() });
-
-        // Envía la respuesta con el token de acceso como JSON
-        res.status(200).json({ token , user});
-        break;
-
-      case 'Administrador':
-        if (route === '/students' || route === '/professors' ) {
-          // Si se intenta iniciar sesión como administrador en la ruta de estudiantes
-          //maestros o administradores, devuelve un error
-          return res.status(401).json({ error: 'Acceso no permitido' });
-        }
-
-        // Genera un token de acceso utilizando JWT
-        token = generateAuthToken({ userId: user.ID_USER, role: role.ROLE_NAME }, '24h');
-
-        // Actualiza la última conexión del usuario
-        await user.update({ LAST_CONNECTION: new Date() });
-
-        // Envía la respuesta con el token de acceso como JSON
-        res.status(200).json({ token ,user});
-        break;
-      default:
-        // Rol desconocido o no manejado
-        return res.status(401).json({ error: 'Tipo de usuario no válido.' });
+            return res.status(401).json({ error: 'Acceso no permitido' });
+          }
+          break;
+        default:
+          // Rol desconocido o no manejado
+          return res.status(401).json({ error: 'Tipo de usuario no válido.' });
+      }
+    
+      // Genera un token de acceso utilizando JWT
+      const authToken = generateAuthToken({ userId: user.ID_USER, role: role.ROLE_NAME }, '24h');
+    
+      // Actualiza la última conexión del usuario
+      await user.update({ LAST_CONNECTION: new Date() });
+    
+      // Envía la respuesta con el token de acceso como JSON
+      res.status(200).json({ token: authToken,user:user.dataValues });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error al iniciar sesión.' });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al iniciar sesión.' });
   }
 };
+
 
 //!Middleware para verificar el token
 exports.verifyToken = (req, res, next) => {

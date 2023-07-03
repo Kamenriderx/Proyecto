@@ -2,11 +2,9 @@ import "flowbite";
 import "animate.css";
 import { useContext, useState } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import ProtectedRoute from "../components/ProtectedRoute";
 import NotFound from "../views/NotFound";
 import Auth from "../views/Auth/Auth";
 import { StoreContext } from "../store/ContextExample";
-import ConfirmAccountForm from "../views/Auth/components/ConfirmAccountForm";
 import RequestPasswordForm from "../views/Auth/components/RequestPasswordForm";
 import Docentes from "../views/RegisterDocente/Docentes";
 import ReadCSV from "../components/ReadCSV";
@@ -19,9 +17,11 @@ const ContentNavbar = () => {
     dispatch({ type: "USER", user: {} });
     dispatch({ type: "TOKEN", token: "" });
     dispatch({ type: "LOGOUT" });
+    
   };
 
   const Navbar = () => {
+    const { state, dispatch } = useContext(StoreContext);
     return (
       <>
         <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
@@ -95,7 +95,7 @@ const ContentNavbar = () => {
                   </>
                 )}
                 {
-                  state.user.ID_ROLE ===5 &&(<>
+                  state?.user?.ID_ROLE ===5 &&(<>
                     <li>
                       <Link to="/Estudiantes">
                         <button
@@ -127,17 +127,19 @@ const ContentNavbar = () => {
 
 
   const Profile = () => {
+    const { state, dispatch } = useContext(StoreContext);
+    console.log(state);
     return (
       <div className="bg-gray-100 text-2xl font-bold p-4">
         <ul>
           <li>
-            Nombre {state.user.NAME}
+            Nombre {state?.user?.NAME}
           </li>
           <li>
-            Correo {state.user.EMAIL}
+            Correo {state?.user?.EMAIL}
           </li>
           <li>
-            Centro {state.user.CENTER}
+            Centro {state?.user?.CENTER}
           </li>
         </ul>
       </div>
@@ -156,7 +158,7 @@ const ContentNavbar = () => {
           <Route
             exact
             path="/proffessor"
-            element={<h3>{state.user.NAME}</h3>}
+       
           />
           <Route exact path="/iniciar/RecuperarContrasena" element={<RequestPasswordForm/>} />
           <Route

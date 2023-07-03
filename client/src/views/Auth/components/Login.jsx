@@ -84,8 +84,8 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const passwordRe = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,10}$/;
-    const accountRe = /^\d{11}$/;
+/*     const passwordRe = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,10}$/;
+    const accountRe = /^\d{11}$/; */
 
 
 
@@ -94,7 +94,7 @@ const LoginForm = () => {
       return;
     }
 
-    if(!passwordRe.test(login.password.trim())){
+/*     if(!passwordRe.test(login.password.trim())){
       alert("La contraseña no es valida");
       return;
     }
@@ -102,7 +102,7 @@ const LoginForm = () => {
     if(!accountRe.test(login.identifier.trim())){
       alert("El numero de cuenta no es valido");
       return;
-    }
+    } */
 
     const res = await httpRequests()["post"](`http://localhost:3000/registro/login/${login.loginType}`, { body: { ...login } });
 
