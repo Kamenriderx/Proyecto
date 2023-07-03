@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
   filename: function(req, filename, cb) {
       
       const ext = filename.originalname.split(".").pop();
-      const File = `file-${req.body.ACCOUNT_NUMBER}.${ext}`;
+      const File = `file-${req.body.EMAIL.split("@")[0]}.${ext}`;
     cb(null, File)
   }
 });

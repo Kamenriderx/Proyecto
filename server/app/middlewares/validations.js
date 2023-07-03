@@ -6,10 +6,6 @@ const validatorRegisterProfessor = [
     check("NAME")
     .exists()
     .notEmpty(),
-    check("ACCOUNT_NUMBER")
-    .exists()
-    .notEmpty()
-    .isNumeric(),
     check("ROLE")
     .exists()
     .notEmpty()

@@ -1,48 +1,48 @@
-
+const {faker } = require("@faker-js/faker");
 const crypto = require('crypto');
 
 
 
 
-const generateEmail = function (name,n=2) {
-    let longitud = 2;
+const generateEmail = function (name, n=1) {
     let email = '';
 
-    let words = fillArray(name);
+    let fullName = getName(name);
+    email = faker.internet.email({
+        firstName: fullName.firstName,
+        lastName: fullName.lastName,
+        provider: (n == 1) ? "unah.hn":"unah.edu.hn"
+    })    
 
 
-    for (let i = 0; i < longitud; i++) {
-      let index = crypto.randomInt(0, words.length);
-      
-        if(email.includes(words[index]) ){
-        index = crypto.randomInt(0, words.length);
-        longitud +=1
-        }else{
-        email += words[index];
-        
-        
-        }
-}
 
-    email+=generateRandomCaracters(n)
-    email +='@unah.hn'
+    
+    
 
     return email; // Elimina el espacio en blanco al final de la cadena
 }
   
-function fillArray(name){
-   
-    let words = []
-    for (let index = 0; index < name.split(" ").length; index++) {
-        words.push(name.split(" ")[index]);
-        words.push(name.split(" ")[index].split(" ")[0]);
+function getName(name){
+    let words = {}
+    const length = name.split(" ").length
+    if(length>2){
+        words.firstName= name.split(" ")[0].toLowerCase().replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u");
+        words.lastName =name.split(" ")[2].toLowerCase().replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u");
+        return words
+        
     }
-    return words
+
+    if (length == 2) {
+        words.firstName= name.split(" ")[0].toLowerCase().replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u");
+        words.lastName =name.split(" ")[1].toLowerCase().replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u");
+        return words
+        
+    }
 }
 
 
 function generateRandomCaracters(longitud) {
-    const caracteres = 'ABCDEFGHIJKLMÑOPQRSTUVWXYZ0123456789';
+    const caracteres = '0123456789';
     let word = '';
   
     for (let i = 0; i < longitud; i++) {
@@ -55,5 +55,6 @@ function generateRandomCaracters(longitud) {
 
   
 module.exports = {
-    generateEmail
+    generateEmail, 
+    generateRandomCaracters
 };

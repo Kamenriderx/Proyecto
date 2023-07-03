@@ -19,7 +19,7 @@ exports.loginAccess = async (req, res) => {
         { ACCOUNT_NUMBER: identifier }
       )
     });
-
+    console.log(user.dataValues);
     // Verifica si el usuario existe
     if (!user) {
       return res.status(404).json({ error: 'N° de cuenta o email incorrecto. Vuelva a intentar.' });
@@ -81,7 +81,7 @@ exports.loginAccess = async (req, res) => {
       await user.update({ LAST_CONNECTION: new Date() });
     
       // Envía la respuesta con el token de acceso como JSON
-      res.status(200).json({ token: authToken });
+      res.status(200).json({ token: authToken,user:user.dataValues });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Error al iniciar sesión.' });

@@ -66,10 +66,10 @@ Student.inserStudent = async function(student){
 
 Student.sync({ force: false })
   .then(() => {
-    console.log("Tabla de estuiantes sincronizada");
+    console.log("Tabla de ESTUDIANTES sincronizada");
 })
   .catch((error) => {
-    console.error("Error al sincronizar tabla de estudiantes:", error);
+    console.error("Error al sincronizar tabla de ESTUDIANTES:", error);
 });
 
 

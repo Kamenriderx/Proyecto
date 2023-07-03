@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MdDeleteForever } from "react-icons/Md";
 import { BiEdit } from "react-icons/Bi";
 import "animate.css";
+import AlertThree from '../../components/AlertThree.jsx'
 
 import {
   flexRender,
@@ -10,13 +11,14 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import Alert from "../../components/Alert";
 import { httpRequests } from "../../utils/helpers/httpRequests";
+import AlertTwo from "../../components/AlertTwo";
 
 const TableStudents = ({ body }) => {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState(false);
   const [buttonDisabled, setbuttonDisabled] = useState(false);
+  const [alerta, setAlerta] = useState({});
 
   useEffect(() => {
     setData(body);
@@ -59,21 +61,23 @@ const TableStudents = ({ body }) => {
   const columns = [
     {
       accessorKey: "NAME",
-    },
-    {
-      accessorKey: "CARRER",
+      header: () => <span>NOMBRE</span>
     },
     {
       accessorKey: "DNI",
+      header: () => <span>CARRERA</span>      
+    },
+    {
+      accessorKey: "CARRER",
+      header: () => <span>DNI</span>
     },
     {
       accessorKey: "EMAIL",
+      header: () => <span>CORREO</span>
     },
     {
       accessorKey: "CENTER",
-    },
-    {
-      accessorKey: "YEAR_OF_INCOME",
+      header: () => <span>CENTRO</span>
     },
   ];
 
@@ -85,12 +89,40 @@ const TableStudents = ({ body }) => {
   });
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setMessage(true);
     setbuttonDisabled(true);
-    const res = await httpRequests()['post']('http://localhost:3000/registro/registerStudents', {body:data})
-    console.log(res)
-  }
+
+    try {
+      const res = await httpRequests()["post"]("http://localhost:3000/registro/admin/registerStudents",{ body: data });
+      console.log('respuesta correcta')
+
+      if(res?.status===200){
+        setAlerta({
+          text: res.messagge,
+          icon: 'success',
+          title: 'Éxito'
+        });
+        return;
+      }
+      if(res?.response.status!==200 ){
+        throw new Error(res.response.data.messagge);
+      }
+      
+    } catch (error) {
+      console.log('respuesta incorrecta')
+      console.log(error)
+      console.log(error.message)
+      setAlerta({
+        text: error.message,
+        icon: 'warning',
+        title: 'Advertencia'
+      });
+    }
+ 
+    //res.data.messagge y res.status == 200
+    //res.respnse.data.messagge y res.respnse.status == 406
+  };
 
   return (
     <>
@@ -166,8 +198,10 @@ const TableStudents = ({ body }) => {
               <button
                 className="text-gray-600 bg-gray-200 p-1 rounded border border-gray-300
     disabled:hover:bg-white disabled:hover:text-gray-300"
-                onClick={() => {setMessage(false)
-                  table.setPageIndex(0)}}
+                onClick={() => {
+                  setMessage(false);
+                  table.setPageIndex(0);
+                }}
                 disabled={!table.getCanPreviousPage()}
               >
                 {"<<"}
@@ -176,8 +210,10 @@ const TableStudents = ({ body }) => {
               <button
                 className="text-gray-600 bg-gray-200 p-1 rounded border border-gray-300
     disabled:hover:bg-white disabled:hover:text-gray-300"
-                onClick={() => {setMessage(false)
-                  table.previousPage()}}
+                onClick={() => {
+                  setMessage(false);
+                  table.previousPage();
+                }}
                 disabled={!table.getCanPreviousPage()}
               >
                 {"<"}
@@ -191,8 +227,10 @@ const TableStudents = ({ body }) => {
                     "bg-indigo-300 text-indigo-700":
                       value === table.getState().pagination.pageIndex,
                   })}
-                  onClick={() => {setMessage(false)
-                    table.setPageIndex(value)}}
+                  onClick={() => {
+                    setMessage(false);
+                    table.setPageIndex(value);
+                  }}
                 >
                   {value + 1}
                 </button>
@@ -201,8 +239,10 @@ const TableStudents = ({ body }) => {
               <button
                 className="text-gray-600 bg-gray-200 p-1 rounded border border-gray-300
                     disabled:hover:bg-white disabled:hover:text-gray-300"
-                onClick={() => {setMessage(false)
-                  table.nextPage()}}
+                onClick={() => {
+                  setMessage(false);
+                  table.nextPage();
+                }}
                 disabled={!table.getCanNextPage()}
               >
                 {">"}
@@ -211,8 +251,10 @@ const TableStudents = ({ body }) => {
               <button
                 className="text-gray-600 bg-gray-200 p-1 rounded border border-gray-300
                     disabled:hover:bg-white disabled:hover:text-gray-300"
-                onClick={() => {setMessage(false)
-                  table.setPageIndex(table.getPageCount() - 1)}}
+                onClick={() => {
+                  setMessage(false);
+                  table.setPageIndex(table.getPageCount() - 1);
+                }}
                 disabled={!table.getCanNextPage()}
               >
                 {">>"}
@@ -232,7 +274,7 @@ const TableStudents = ({ body }) => {
 
       {message && (
         <>
-          <Alert title="Archivo enviado correctamente" icon="success" />{" "}
+          <AlertThree alerta={alerta} />
         </>
       )}
 
@@ -308,7 +350,7 @@ const TableStudents = ({ body }) => {
 
             <div className="relative my-4">
               <input
-                type="number"
+                type="text"
                 id="floating_outlined"
                 className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
@@ -344,28 +386,6 @@ const TableStudents = ({ body }) => {
                 className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
               >
                 CARRERA
-              </label>
-            </div>
-
-            <div className="relative my-4">
-              <input
-                type="number"
-                id="floating_outlined"
-                className="block px-2.5 pb-2.5 pt-4 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value={selectedItem.YEAR_OF_INCOME}
-                onChange={(e) =>
-                  setSelectedItem({
-                    ...selectedItem,
-                    YEAR_OF_INCOME: e.target.value,
-                  })
-                }
-              />
-              <label
-                htmlFor="floating_outlined"
-                className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-              >
-                ANIO DE INGRESO
               </label>
             </div>
 

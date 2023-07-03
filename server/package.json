@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js"
   },
   "author": "Aníbal Reyes",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.0",
+    "@faker-js/faker": "^8.0.2",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "csvdata": "^2.0.0",
@@ -22,9 +23,11 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.3.5",
     "nodemailer": "^6.9.3",
-    "nodemon": "^2.0.22",
     "path": "^0.12.7",
     "pdfkit": "^0.13.0",
     "sequelize": "^6.32.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.9"
   }
 }

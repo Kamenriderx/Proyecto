@@ -1,11 +1,11 @@
+import ContentNavbar from "./interfaces/Navbar";
 import { StoreProvider } from "./store/ContextExample";
-import ReadCSV from "./components/ReadCSV";
-
 //import { AppRouter } from "./router/AppRouter";
 function App() {
   return (
     <StoreProvider>
-      <ReadCSV/>
+       <ContentNavbar/>
+      {/* <ReadCSV/> */}
     </StoreProvider>
   );
 }

@@ -1,20 +1,21 @@
-DELIMITER //
-CREATE PROCEDURE sp_createStudent(
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createStudent`(
     IN role INT,
-    IN name VARCHAR(100),
-    IN dni VARCHAR(50),
+    IN name VARCHAR(50),
+    IN dni VARCHAR(20),
     IN center VARCHAR(20),
-    IN email VARCHAR(50),
-    IN career VARCHAR(50)
+    IN email VARCHAR(255),
+    IN career VARCHAR(100),
+    IN institutional_email text,
+	IN user_password VARCHAR(500)
     )
 BEGIN
-    CALL sp_createUser(role,name,dni,center,email);
-    INSERT INTO STUDENT(ID_USER,CAREER,YEAR_OF_INCOME) VALUES(LAST_INSERT_ID(),career,CURRENT_DATE());
-END//
+    CALL sp_createUser(role,name,dni,center,email,user_password);
+    INSERT INTO STUDENT(id_user,career,institutional_email,year_of_income) VALUES(LAST_INSERT_ID(),career,institutional_email,CURRENT_DATE());
+END$$
 DELIMITER ;
-
-DELIMITER //
-CREATE PROCEDURE sp_createUser(IN role INT,IN name VARCHAR(50),IN dni VARCHAR(50),IN center VARCHAR(20),IN email VARCHAR(50))
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createUser`(IN role INT,IN name VARCHAR(50),IN dni VARCHAR(20),IN center VARCHAR(20),IN email VARCHAR(255), IN user_password VARCHAR(500))
 BEGIN
 
     DECLARE accountNumber VARCHAR(20);
@@ -23,7 +24,6 @@ BEGIN
     DECLARE folder VARCHAR(4);
     DECLARE currentYear YEAR;
     DECLARE returnValue INT;
-    DECLARE pass VARCHAR(8);
 
     CALL sp_nextValue(@returnValue);
     
@@ -34,7 +34,7 @@ BEGIN
 
     SET @accountNumber = CONCAT(currentYear, register, other, folder);
 
-        SET @pass = CONCAT(
+       /* SET @pass = CONCAT(
         SUBSTRING('ABCDEFGHIJKLMNOPQRSTUVWXYZ', FLOOR(RAND() * 26) + 1, 1),
         SUBSTRING('abcdefghijklmnopqrstuvwxyz', FLOOR(RAND() * 26) + 1, 1),
         SUBSTRING('!@#$%^&*()', FLOOR(RAND() * 10) + 1, 1),
@@ -43,20 +43,19 @@ BEGIN
         SUBSTRING('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()', FLOOR(RAND() * 70) + 1, 1),
         SUBSTRING('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()', FLOOR(RAND() * 70) + 1, 1),
         SUBSTRING('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()', FLOOR(RAND() * 70) + 1, 1)
-    );
+    ); */
     
     INSERT INTO USER_(ID_ROLE,USER_PASSWORD,ACCOUNT_NUMBER,NAME,DNI,CENTER,EMAIL)
-    VALUES (role,@pass,@accountNumber,name,dni,center,email);
+    VALUES (role,user_password,@accountNumber,name,dni,center,email);
 
 
-END//
+END$$
 DELIMITER ;
-DELIMITER //
-
-CREATE PROCEDURE sp_nextValue(OUT nextValue INT)
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_nextValue`(OUT nextValue INT)
 BEGIN
     INSERT INTO `SEQUENCE` (next) VALUES (DEFAULT);
     
     SET nextValue = LAST_INSERT_ID();
-END//
+END$$
 DELIMITER ;

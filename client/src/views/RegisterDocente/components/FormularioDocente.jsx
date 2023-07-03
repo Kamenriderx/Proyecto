@@ -1,29 +1,27 @@
-import axios from 'axios'
 import {useState} from 'react'
 import { AiOutlineFileImage } from 'react-icons/ai'
 import {FaUserTie} from 'react-icons/fa'
-import AlertTwo from '../AlertTwo'
+import AlertTwo from '../../../components/AlertTwo'
+import { httpRequests } from '../../../utils/helpers/httpRequests'
 
-const FormularioDocente = () => {
+const FormularioDocente = ({check,setCheck}) => {
     const [NAME, setNAME] = useState('')
-    const [ACCOUNT_NUMBER, setACCOUNT_NUMBER] = useState('')
     const [CENTER, setCENTER] = useState('')
     const [ROL, setROL] = useState('')
     const [CARRER, setCARRER] = useState('')
     const [EMAIL, setEMAIL] = useState('')
     const [IMAGE, setIMAGE] = useState(null)
     const [alerta, setAlerta] = useState({})
+    
 
     const handleSubmit= async e => {
         e.preventDefault()
-        const value = e.target.value
         let regexNombbre = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
-        let regexNumero = /^[0-9]+$/;
         let regexEmail = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
-        if([NAME,ACCOUNT_NUMBER,CENTER,ROL,CARRER,EMAIL].includes('')){
+        if([NAME,CENTER,ROL,CARRER,EMAIL].includes('')){
             setAlerta(
-                {message:'Todos los Campos son Obligatoios',
+                {message:'Todos los campos son obligatoios',
                 error:true    
             })
             setTimeout(() => {
@@ -34,7 +32,7 @@ const FormularioDocente = () => {
 
         if(!regexEmail.test(EMAIL.trim())){
             setAlerta({
-                message:'El campo Email es invalido, Ejem:alguien@algunlugar.es',
+                message:'El campo "correo docente" es invalido, ejem: alguien@algunlugar.es',
                 error:true
             })
             setTimeout(() => {
@@ -45,7 +43,7 @@ const FormularioDocente = () => {
 
         if(!regexNombbre.test(NAME.trim())){
             setAlerta({
-                message:'El campo Nombre solo Acepta letras y espacios en Blanco',
+                message:'El campo "nombre docente" solo acepta letras y espacios en blanco',
                 error:true
             })
             setTimeout(() => {
@@ -53,16 +51,7 @@ const FormularioDocente = () => {
             }, 4000);
             return
         }
-        if(regexNumero.test(value)){
-            setAlerta({
-                message:'El campo Numero de Empleado solo acepta Numeros',
-                error:true
-            })
-            setTimeout(() => {
-                setAlerta({})
-            }, 4000);
-            return
-        }
+ 
 
         try {
 
@@ -78,20 +67,24 @@ const FormularioDocente = () => {
             
             const formData = new FormData()
             formData.append('NAME',NAME)
-            formData.append('ACCOUNT_NUMBER',ACCOUNT_NUMBER)
             formData.append('CENTER',CENTER)
-            formData.append('CARRER',CARRER)
-            formData.append('ROL',ROL)
+            formData.append('CAREER',CARRER)
+            formData.append('ROLE',ROL)
             formData.append('EMAIL',EMAIL)
-            formData.append('IMAGE',IMAGE)
+            formData.append('file',IMAGE)
 
-            await axios.post('URL',formData,config)
+            const res =  await httpRequests()["post"]('http://localhost:3000/registro/admin/registerProfessor',{body:formData,...config});
+            console.log(res);
+            
+            if(!res.status && res?.response?.status!==200){
+                throw new Error(res.response.data.messagge);
+            }
             setAlerta({
                 message:'Docente Creado Correctament',
                 error:false
             })
+            setCheck(!check);
             setNAME('')
-            setACCOUNT_NUMBER('')
             setCENTER('')
             setCARRER('')
             setROL('')
@@ -99,14 +92,34 @@ const FormularioDocente = () => {
             setIMAGE(null)
         } catch (error) {
             console.log(error);
+            setAlerta({
+                message:error.message,
+                error:true
+            })
+            return
         }
 
     }
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
+        const fileType= file.type;
+        const validationImage = ['image/jpeg', 'image/png']
+
+        if(!validationImage.includes(fileType)){
+            setAlerta(
+                {message:'El archivo seleccionado no es imagen de tipo "jpeg" o "png"',
+                error:true    
+            })
+            setTimeout(() => {
+                setAlerta({})
+            }, 4000);
+            return
+        }
+
         setIMAGE(file);
         console.log(file);
+
       };
 
     const {message} = alerta
@@ -122,10 +135,7 @@ const FormularioDocente = () => {
         <label className="uppercase text-gray-800 block text-sm font-bold" htmlFor="nombre">Nombre Docente</label>
         <input onChange={e => setNAME(e.target.value)} value={NAME} type='text' placeholder='Escribe tu Nombre' className="w-full mt-2 p-2 border rounded-xl bg-gray-50" id="nombre"/>
     </div>
-    <div className="my-3">
-        <label className="uppercase text-gray-800 block text-sm font-bold" htmlFor="numero">Numero de Empleado</label>
-        <input value={ACCOUNT_NUMBER} onChange={e => setACCOUNT_NUMBER(e.target.value)} type='number' placeholder='Escribe numero de Empleadao' className="w-full mt-2 p-2 border rounded-xl bg-gray-50 " id="numero"/>
-    </div>
+
     <div className="my-3">
         <label className="uppercase text-gray-800 block text-sm font-bold" htmlFor="email">Correo Docente</label>
         <input value={EMAIL} onChange={e => setEMAIL(e.target.value)} type='text' placeholder='Escribe el Correo del Docente' className="w-full mt-2 p-2 border rounded-xl bg-gray-50 " id="email"/>
@@ -149,29 +159,29 @@ const FormularioDocente = () => {
         <label className="uppercase text-gray-800 block text-sm font-bold">Rol del Docente</label>
         <select value={ROL} onChange={e => setROL(e.target.value)} className="w-full mt-2 p-2 border rounded-xl bg-gray-50 text-center">
             <option value="">-- Seleccione el Rol --</option>
-            <option value="1">Docente</option>
-            <option value="2">Coordinador de Carrera</option>
+            <option value="2">Docente</option>
+            <option value="4">Coordinador de Carrera</option>
             <option value="3">Jefe de Carrera</option>
         </select>
     </div>
     <div className="my-3">
-        <label className="uppercase text-gray-800 block text-sm font-bold">Rol del Docente</label>
+        <label className="uppercase text-gray-800 block text-sm font-bold">Carrera del Docente</label>
         <select value={CARRER} onChange={e => setCARRER(e.target.value)} className="overflow-y-scroll w-full mt-2 p-2 border rounded-xl bg-gray-50 text-center">
             <option value="">-- Seleccione Carrera del Docente --</option>
-            <option value="I_sistemas">Ingenieria en Sistemas</option>
-            <option value="I_quimica">Ingenieria Quimica Industrial</option>
-            <option value="I_electrica">Ingenieria Electrica Industrial</option>
-            <option value="I_industrial">Ingenieria Industrial</option>
-            <option value="I_civil">Ingeniería Civil</option>
-            <option value="I_Mecanica">Ingenieria Mecanica Industrial</option>
-            <option value="derecho">Licenciatura en Derecho</option>
-            <option value="periodismo">Licenciatura en Periodismo</option>
-            <option value="lenguas">Licenciatura en Lenguas Extranjeras con Orientación en Inglés y Francés</option>
-            <option value="arquitectura">Arquitectura</option>
-            <option value="L_matematicas">Licenciatura en Matemáticas</option>
-            <option value="L_fisica">Licenciatura en Física</option>
-            <option value="L_astronomia">Licenciatura en Astronomía y Astrofísica</option>
-            <option value="medicina">Medicina</option>
+            <option value="Ingenieria en Sistemas">Ingenieria en Sistemas</option>
+            <option value="Ingenieria Quimica Industrial">Ingenieria Quimica Industrial</option>
+            <option value="Ingenieria Electrica Industrial">Ingenieria Electrica Industrial</option>
+            <option value="Ingenieria Industrial">Ingenieria Industrial</option>
+            <option value="Ingeniería Civil">Ingeniería Civil</option>
+            <option value="Ingenieria Mecanica Industrial">Ingenieria Mecanica Industrial</option>
+            <option value="Licenciatura en Derecho">Licenciatura en Derecho</option>
+            <option value="Licenciatura en Periodismo">Licenciatura en Periodismo</option>
+            <option value="Licenciatura en Lenguas Extranjeras con Orientación en Inglés y Francés">Licenciatura en Lenguas Extranjeras con Orientación en Inglés y Francés</option>
+            <option value="Arquitectura">Arquitectura</option>
+            <option value="Licenciatura en Matemáticas">Licenciatura en Matemáticas</option>
+            <option value="Licenciatura en Física">Licenciatura en Física</option>
+            <option value="Licenciatura en Astronomía y Astrofísica">Licenciatura en Astronomía y Astrofísica</option>
+            <option value="Medicina">Medicina</option>
         </select>
     </div>
     <div className="my-3">
@@ -180,7 +190,7 @@ const FormularioDocente = () => {
         <input
           id="file-upload"
           type="file"
-          accept="image/*"
+          accept=".jpeg, .png "
           className="sr-only"
           onChange={handleImageChange}
         />

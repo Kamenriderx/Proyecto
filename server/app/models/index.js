@@ -1,7 +1,7 @@
 const models = {
     User: require("./user.js"),
     Admin: require("./admin"),
-    Student: require("./studen"),
+    Student: require("./student.js"),
     Professor: require("./professor"),
     Rol : require('./roles.js')
 }

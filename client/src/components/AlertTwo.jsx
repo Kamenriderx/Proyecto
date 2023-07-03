@@ -20,7 +20,7 @@ const AlertTwo = ({alerta}) => {
             confirmButtonText: 'Aceptar',
           })
       }, [alerta]);
-    
+
       return null;
 }
 
