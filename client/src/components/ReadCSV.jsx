@@ -15,7 +15,7 @@ const ReadCSV = () => {
   const [check,setCheck] = useState(false); 
   useEffect(() => {
     const callAxios = async () => {
-      const {data} = await axios("http://localhost:3000/registro/registerStudents/getStudents");
+      const {data} = await axios("http://localhost:3000/registro/admin/getStudents");
       setStudents(data);
       console.log(data );
     }

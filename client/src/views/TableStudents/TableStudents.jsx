@@ -89,7 +89,7 @@ const TableStudents = ({ body }) => {
     setbuttonDisabled(true);
 
     try {
-      const res = await httpRequests()["post"]("http://localhost:3000/registro/registerStudents",{ body: data });
+      const res = await httpRequests()["post"]("http://localhost:3000/registro/admin/registerStudents",{ body: data });
       console.log(res)
       
     setAlerta({
@@ -99,8 +99,9 @@ const TableStudents = ({ body }) => {
     });
       
     } catch (error) {
+      console.log(error.response.data.messagge)
       setAlerta({
-        text: 'Archivo enviado con errores.',
+        text: error.response.data.messagge,
         icon: 'warning',
         title: 'Advertencia'
       });

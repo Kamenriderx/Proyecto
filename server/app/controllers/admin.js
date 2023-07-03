@@ -34,6 +34,9 @@ const registerProfessorCtrl = async (req,res)=>{
         const url = `http://localhost:3000/images/${file.filename}`
         const body = matchedData(req);
         body.URL = url
+        if(body.NAME.split(" ").length == 1){
+            res.status(401).json({messagge:"EL NOMBRE ES INVALIDO"})
+        }
 
         let ACCOUNT_NUMBER = generateRandomCaracters(5)
 
@@ -55,10 +58,10 @@ const registerProfessorCtrl = async (req,res)=>{
             ACCOUNT_NUMBER = (profesor.ACCOUNT_NUMBER== ACCOUNT_NUMBER) ? parseInt(profesor.ACCOUNT_NUMBER) +1: ACCOUNT_NUMBER;
             
         }
+        body.INSTITUTIONAL_EMAIL = generateEmail(body.NAME,2 )
 
         
             
-        body.INSTITUTIONAL_EMAIL = generateEmail(body.NAME,2 )
         body.USER_PASSWORD_PLAIN = generatePassword();
         body.USER_PASSWORD = await encrypt(body.USER_PASSWORD_PLAIN);
         body.ACCOUNT_NUMBER = ACCOUNT_NUMBER
@@ -91,7 +94,7 @@ const registerProfessorCtrl = async (req,res)=>{
         
     } catch (error) {
         console.log(error)
-        res.status(403).json({error:"ALGO SALIO MAL"})
+        res.status(403).json({messagge:"ALGO SALIO MAL"})
         
     }
 
@@ -112,32 +115,33 @@ const registerStudentsCtrl = async (req,res)=>{
     try {
         
         if (req.body.length <= 0) {
-            res.status(400).json({error:"NO SE HA ENVIADO DATA"})
+            res.status(400).json({messagge:"NO SE HA ENVIADO DATA"})
             
         }
+        
+        
         let {dataError,dataValidate} = verifyData(req.body);
         let {dataDuplicate,newDataValidate} =  await isDuplicate(dataValidate);
         
-
+    
         if (dataDuplicate.length > 0 && newDataValidate.length >0 && dataError.length >0 ) {
             newDataValidate = mailAssignment(newDataValidate);
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({error:"AlGUNOS REGISTROS ESTAN DUPLICADOS Y OTROS TIENEN ERRORES",data:{duplicados:dataDuplicate,errores:dataError}})    
+            res.status(409).json({messagge:"AlGUNOS REGISTROS ESTAN DUPLICADOS Y OTROS TIENEN ERRORES",data:{duplicados:dataDuplicate,errores:dataError}})    
             return
         
         }
         if (dataDuplicate.length > 0 && newDataValidate.length == 0 && dataError.length >0 ) {
             
-            res.status(409).json({error:"AlGUNOS REGISTROS ESTAN DUPLICADOS Y OTROS TIENEN ERRORES",data:{duplicados:dataDuplicate,errores:dataError}})    
+            res.status(409).json({messagge:"AlGUNOS REGISTROS ESTAN DUPLICADOS Y OTROS TIENEN ERRORES",data:{duplicados:dataDuplicate,errores:dataError}})    
             return
         
         }
 
-        
         if (dataDuplicate.length > 0 && newDataValidate.length ==0 && dataError.length ==0) {
-            res.status(409).json({error:"TODOS LOS REGISTROS ESTAN DUPLICADOS",dataDuplicate})    
+            res.status(409).json({messagge:"TODOS LOS REGISTROS ESTAN DUPLICADOS",dataDuplicate})    
             return
         
         }
@@ -148,13 +152,13 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(406).json({error:"ALGUNOS REGISTROS TIENEN ERRORES",data:dataError})
+            res.status(406).json({messagge:"ALGUNOS REGISTROS TIENEN ERRORES",data:dataError})
             return 
         }
         
 
         if(dataError.length>0 && newDataValidate.length==0 && dataDuplicate.length ==0){            
-            res.status(406).json({error:"TODOS LOS REGISTROS TIENEN ERRORES",data:dataError})
+            res.status(406).json({messagge:"TODOS LOS REGISTROS TIENEN ERRORES",data:dataError})
             return 
         }
         
@@ -175,8 +179,8 @@ const registerStudentsCtrl = async (req,res)=>{
             
         
     } catch (error) {
-        console.log(error.messagge);
-        res.status(403).send({msj:"ERROR_UPLOAD_DATA"})
+        console.log(error);
+        res.status(403).send({messagge:"ERROR_UPLOAD_DATA"})
         
     }
 }
