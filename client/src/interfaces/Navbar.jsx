@@ -9,9 +9,17 @@ import RequestPasswordForm from "../views/Auth/components/RequestPasswordForm";
 import Docentes from "../views/RegisterDocente/Docentes";
 import ReadCSV from "../components/ReadCSV";
 import Principal from "../views/Principal";
+import useStudents from "../utils/hooks/useStudents";
+import Search from "./components/Search";
+import Solicitud from "./components/Solicitud";
+import ResultsSearch from "./ResultsSearch";
+/* import InitialSession from "./components/InitialSession"; */
+
 
 const ContentNavbar = () => {
   const { state, dispatch } = useContext(StoreContext);
+
+  const {docentes} = useStudents()
 
   const handleSession = () => {
     dispatch({ type: "USER", user: {} });
@@ -22,10 +30,11 @@ const ContentNavbar = () => {
 
   const Navbar = () => {
     const { state, dispatch } = useContext(StoreContext);
+    console.log('docentes',docentes);
     return (
       <>
         <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
-          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <div className="max-w-screen-xl flex flex-wrap items-center justify-normal mx-auto p-4">
             <div className="flex items-center">
               <Link to="/">
                 <img
@@ -35,7 +44,7 @@ const ContentNavbar = () => {
                 />
               </Link>
             </div>
-            <div className="flex md:order-2">
+            <div className="flex">
               <button
                 data-collapse-toggle="navbar-cta"
                 type="button"
@@ -66,7 +75,7 @@ const ContentNavbar = () => {
                 {!state.login ? (
                   <li>
                     <Link to="/login">
-                      <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
+                      <button className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                         Inicio de sesión
                       </button>
                     </Link>
@@ -77,7 +86,7 @@ const ContentNavbar = () => {
                       <Link to="/">
                         <button
                           onClick={handleSession}
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
+                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
                         >
                           Cerrar sesion
                         </button>
@@ -115,6 +124,20 @@ const ContentNavbar = () => {
                       </Link>
                     </li>
                   
+                  </>)
+                }
+                
+                {
+                  state?.user?.ID_ROLE ===1 &&(<>
+                    <li>
+                     <Search/>
+                    </li>
+                    <li>
+                      <Solicitud/>
+                    </li >
+                    {/* <li >
+                    <InitialSession/>
+                    </li> */}
                   </>)
                 }
               </ul>
@@ -180,6 +203,7 @@ const ContentNavbar = () => {
             element={<Docentes/>}
           />
 
+      <Route exact path="/resultados" element={<ResultsSearch/>}/>
         </Routes>
       </BrowserRouter>
     </>

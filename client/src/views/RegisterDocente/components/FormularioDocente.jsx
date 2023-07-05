@@ -144,15 +144,15 @@ const FormularioDocente = ({check,setCheck}) => {
         <label className="uppercase text-gray-800 block text-sm font-bold">Centro del Docente</label>
         <select value={CENTER} onChange={e => setCENTER(e.target.value)} className="w-full mt-2 p-2 border rounded-xl bg-gray-50 text-center">
             <option value="">-- Seleccione un Centro --</option>
-            <option value="unah-cu">UNAH-CU</option>
-            <option value="unah-vs">UNAH-VS</option>
-            <option value="unah-curc">UNAH-CURC</option>
-            <option value="unah-curla">UNAH-CURLA</option>
-            <option value="unah-curlp">UNAH-CURLP</option>
-            <option value="unah-curoc">UNAH-CUROC</option>
-            <option value="unah-curno">UNAH-CURNO</option>
-            <option value="unah-tec">UNAH-TEC Danli</option>
-            <option value="unah-tec-danli">UNAH-TEC Aguan</option>
+            <option value="UNAH-CU">UNAH-CU</option>
+            <option value="UNAH-VS">UNAH-VS</option>
+            <option value="UNAH-CURC">UNAH-CURC</option>
+            <option value="UNAH-CURLA">UNAH-CURLA</option>
+            <option value="UNAH-CURLP">UNAH-CURLP</option>
+            <option value="UNAH-CUROC">UNAH-CUROC</option>
+            <option value="UNAH-CURNO">UNAH-CURNO</option>
+            <option value="UNAH-TEC Danli">UNAH-TEC Danli</option>
+            <option value="UNAH-TEC Aguan">UNAH-TEC Aguan</option>
         </select>
     </div>
     <div className="my-3">
