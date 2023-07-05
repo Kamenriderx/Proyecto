@@ -3,7 +3,8 @@ const models = {
     Admin: require("./admin"),
     Student: require("./student.js"),
     Professor: require("./professor"),
-    Rol : require('./roles.js')
+    Rol : require('./roles.js'),
+    Multimedia: require('./multimedia.js')
 }
 models.User.Professor=models.User.hasMany(models.Professor,{
     foreignKey:"ID_USER"
@@ -13,6 +14,28 @@ models.Professor.User=models.Professor.belongsTo(models.User,{
     unique:true,
     as:"user"
 });
+
+models.User.Multimedia=models.User.hasMany(models.Multimedia,{
+    foreignKey:"ID_USER",
+    as:"multimedia"
+});
+models.Multimedia.User=models.Multimedia.belongsTo(models.User,{
+    foreignKey:"ID_USER",
+    unique:true,
+    as:"user"
+});
+
+
+models.User.Student=models.User.hasMany(models.Student,{
+    foreignKey:"ID_USER"
+});
+models.Student.User=models.Student.belongsTo(models.User,{
+    foreignKey:"ID_USER",
+    unique:true,
+    as:"user"
+});
+
+
 models.Rol.User=models.Rol.hasMany(models.User,{
     foreignKey:"ID_ROLE"
 });
