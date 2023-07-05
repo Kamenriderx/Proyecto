@@ -12,13 +12,15 @@ const ViewStudent = () => {
     EMAIL: "nguevara037@gmail.com",
   };
   const user = {
-    visitante: false,
+    visitante: true,
   };
 
   const [showModal, setshowModal] = useState(false);
-
   const [email, setEmail] = useState(correo);
   const [newEmail, setNewEmail] = useState(email);
+
+  const [buttonDisabled, setbuttonDisabled] = useState(false);
+
 
   const handleEmailChange = (e) => {
     setNewEmail({ EMAIL: e.target.value });
@@ -60,8 +62,10 @@ const ViewStudent = () => {
                     Ciudad Universitaria
                   </div>
                   {user.visitante && (
-                    <button className="bg-cyan-200 rounded-full font-semibold hover:bg-cyan-300 mt-2 w-20 h-8 border border-black text-center">
-                      Agregar
+                    <button className="bg-cyan-200 rounded-full font-semibold hover:bg-cyan-300 mt-2 w-24 h-8 border border-black text-center"
+                    disabled={buttonDisabled}
+                    onClick={() => setbuttonDisabled(true)}>
+                      {!buttonDisabled? `Agregar`: 'Enviada...'}
                     </button>
                   )}
                 </div>

@@ -8,8 +8,8 @@ function App() {
     <StoreProvider>
        <ContentNavbar/>
       {/* <ReadCSV/> */}
-      {/* <ViewStudent/> */}
-      <ViewTeacher/>
+      <ViewStudent/>
+      {/* <ViewTeacher/> */}
     </StoreProvider>
   );
 }
