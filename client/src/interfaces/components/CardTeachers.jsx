@@ -2,7 +2,7 @@ import {useState,useContext} from 'react'
 import {StoreContext} from '../../store/ContextExample'
 import axios from 'axios'
 
-const CardTeachers = ({docente}) => {
+const CardTeachers = ({student}) => {
 
 const { state, dispatch } = useContext(StoreContext);
   const [solicitudPendiente, setSolicitudPendiente] = useState(true);
@@ -10,7 +10,7 @@ const { state, dispatch } = useContext(StoreContext);
 
   const enviarSolicitudContacto= async () => {
     const senderId = `${state.user.ID_USER}`; 
-    const recipientId = `${docente.user.ID_USER}`
+    const recipientId = `${student.user.ID_USER}`
 
     console.log("SolicitudData",senderId,recipientId);
   
@@ -40,22 +40,22 @@ const { state, dispatch } = useContext(StoreContext);
   
 
   console.log("Quien envia la solicitud :" ,state.user.ID_USER);
-  console.log("Quien la recibe :",docente.user.ID_USER);
+  console.log("Quien la recibe :",student.user.ID_USER);
 
   return (
   <>
     <div className="mt-10 mx-10 bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
   <div className="md:flex">
     <div className="md:flex">
-      <img className="object-cover md:w-48" src={docente.PROFILE_PHOTO
-} alt="Imagen de perfil" />
+      <img className="object-cover md:w-48" /* src={student.PROFILE_PHOTO
+} */ alt="Imagen de perfil" />
     </div>
     <div className="p-8">
-      <div className="uppercase tracking-wide text-lg font-bold text-indigo-500">{docente.user.NAME}</div>
-      <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Carrera: </span>{docente.CAREER}</p>
-      <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Correo: </span>{docente.user.EMAIL}</p>
-      <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Centro de Estudio: </span>{docente.user.CENTER}</p>
-      <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Numero de Empleado: </span>{docente.user.ACCOUNT_NUMBER}</p>
+      <div className="uppercase tracking-wide text-lg font-bold text-indigo-500">{student.user.NAME}</div>
+      <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Carrera: </span>{student.CAREER}</p>
+      <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Correo: </span>{student.user.EMAIL}</p>
+      <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Centro de Estudio: </span>{student.user.CENTER}</p>
+      <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Numero de Cuenta: </span>{student.user.ACCOUNT_NUMBER}</p>
       <div className="mt-4">
         {solicitudPendiente ? (
           <input className={'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer'} value="Enviar Solicitud" type="submit" onClick={enviarSolicitudContacto}/>

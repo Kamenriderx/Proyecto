@@ -4,7 +4,7 @@ import axios from 'axios'
 const StudentContext = createContext()
 
 const StudentProvider=({children})=>{
-    const [docentes, setDocentes] = useState([]);
+    const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [check,setCheck] = useState(false);
 
@@ -20,17 +20,17 @@ const StudentProvider=({children})=>{
 
 
     useEffect(() => {
-        const fetchDocentes = async () =>{
+        const fetchStudents = async () =>{
             try {
-                const {data} = await axios('http://localhost:3000/registro/admin/getProfessors')
-                console.log(data.professors);
-                setDocentes(data.professors) 
+                const {data} = await axios('http://localhost:3000/registro/student/getStudents')
+                console.log(data);
+                setStudents(data) 
                 setLoading(false) 
             } catch (error) {
                 console.log(error);
             }
         }
-        fetchDocentes()
+        fetchStudents()
     }, [check])
 
 
@@ -40,7 +40,7 @@ const StudentProvider=({children})=>{
 
     return(
         <StudentContext.Provider value={{
-            docentes
+            students
         }}>
             {children}
         </StudentContext.Provider>

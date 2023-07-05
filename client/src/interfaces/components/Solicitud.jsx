@@ -1,7 +1,6 @@
 import { FiBell } from 'react-icons/fi';
 import {useState} from 'react'
 import Modal from '../../components/Modal';
-import {StoreContext} from '../../store/ContextExample'
 
 const Solicitud = ({numSolicitudes=12}) => {
 
@@ -11,7 +10,7 @@ const Solicitud = ({numSolicitudes=12}) => {
 
 
   return (
-    <div className=" relative">
+    <div className="relative flex justify-center items-center bg-gray-100 hover:bg-gray-200 w-12 h-12 rounded-full">
     <FiBell className="h-16 w-6 text-gray-500 cursor-pointer" onClick={() => setShowModal(true)}/>
     {numSolicitudes > 0 && (
       <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center w-5 h-5">

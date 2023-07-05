@@ -1,10 +1,29 @@
 import {useNavigate} from 'react-router-dom'
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
+import { BiSearch } from 'react-icons/bi'
+/* import axios from "axios";
+import Modal from '../../components/Modal' */
 
 const Search = () => {
 
 
   const [valueSearch, setValueSearch] = useState('')
+
+ /*  useEffect(() => {
+    // Lógica para obtener las solicitudes pendientes desde el servidor
+    // y actualizar el estado de solicitudesPendientes
+    const obtenerSolicitudesPendientes = async () => {
+      try {
+        const response = await axios('/api/solicitudes');
+        console.log(response.data);
+        setSolicitudesPendientes(response.data);
+      } catch (error) {
+        console.error('Error al obtener las solicitudes pendientes:', error);
+      }
+    };
+
+    obtenerSolicitudesPendientes();
+  }, []); */
 
   const navigate = useNavigate()
 
@@ -21,9 +40,8 @@ const Search = () => {
   }
 
   return (
-    <div >
-     <form className='' onSubmit={onSearchSubmit}>
-    <div >
+     <form onSubmit={onSearchSubmit}>
+    <div className='flex border rounded-full overflow-hidden'>
         <input
             type='text'
             name='valueSearch'
@@ -31,12 +49,11 @@ const Search = () => {
             value={valueSearch}
             onChange={(e)=>setValueSearch(e.target.value)}
             placeholder='Buscar estudiantes...'
-            className='border-none py-3 px-10 rounded-full bg-gray-100'
+            className='px-4 py-2 rounded-l-full focus:outline-none'
         />
-        <button className='bg-sky-600 hover:bg-sky-700 rounded-lg shadow px-3 py-2 text-white font-bold text-md mx-2' type="submit">Buscar </button>
+        <button className='px-4 py-2 bg-blue-500 text-white flex items-center rounded-r-full' type="submit"><BiSearch className='mr-2'/></button>
     </div>
 </form>
-    </div>
 
   )
 }

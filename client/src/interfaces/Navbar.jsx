@@ -19,7 +19,7 @@ import ResultsSearch from "./ResultsSearch";
 const ContentNavbar = () => {
   const { state, dispatch } = useContext(StoreContext);
 
-  const {docentes} = useStudents()
+  const {students} = useStudents()
 
   const handleSession = () => {
     dispatch({ type: "USER", user: {} });
@@ -30,7 +30,8 @@ const ContentNavbar = () => {
 
   const Navbar = () => {
     const { state, dispatch } = useContext(StoreContext);
-    console.log('docentes',docentes);
+    console.log('EstudiantesData',students);
+    console.log('Usuario Conectado',state);
     return (
       <>
         <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
