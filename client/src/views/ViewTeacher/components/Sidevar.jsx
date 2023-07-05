@@ -1,7 +1,7 @@
 import "flowbite";
 import { AiFillHome } from "react-icons/ai";
 import { IoMdContact } from "react-icons/io";
-import { BiSolidContact, BiSolidKey, BiNotepad } from "react-icons/bi";
+import { BiSolidContact, BiSolidKey, BiNotepad } from "react-icons/Bi";
 import { BsFillChatDotsFill, BsQuestionCircleFill } from "react-icons/bs";
 import {
   PiNotebookBold,
