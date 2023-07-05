@@ -8,6 +8,11 @@ exports.createContactRequest = async function(req, res) {
   try {
     const { senderId, recipientId } = req.body;
 
+    // Verifica si el remitente y el destinatario son el mismo usuario
+    if (senderId === recipientId) {
+      return res.status(400).json({ message: 'No puedes enviar una solicitud de contacto a ti mismo' });
+    }
+    
     // Verifica si la solicitud de contacto ya existe
     const existingRequest = await ContactRequest.findOne({
       where: {
@@ -23,39 +28,56 @@ exports.createContactRequest = async function(req, res) {
         RECIPIENT_ID: senderId,
       },
     });
-
     if (existingRequest || mutualRequest) {
       if (existingRequest && existingRequest.STATUS === 'rejected') {
         // Actualiza el estado de la solicitud existente a "pending"
         await existingRequest.update({ STATUS: 'pending' });
-        return res.status(200).json({ message: 'Se a enviado una nueva solicitud de contacto' });
+        // Envia un correo electrónico al destinatario
+        const recipient = await User.findByPk(recipientId);
+        const sender = await User.findByPk(senderId);
+        const emailOptions = {
+          subject: 'Nueva solicitud de contacto',
+        };
+        const emailParams = {
+          recipientName: recipient.NAME,
+          recipientId: recipient.ID_USER,
+          senderName: sender.NAME,
+          senderCenter: sender.CENTER,
+        };
+        await sendMail(recipient.EMAIL, emailOptions, 'contactRequest', emailParams);
+        return res.status(200).json({ message: 'Se ha enviado una nueva solicitud de contacto' });
+      } else if (mutualRequest && mutualRequest.STATUS === 'pending') {
+        return res.status(400).json({ message: 'Ya existe una solicitud de contacto mutua entre estos usuarios' });
+      } else if (mutualRequest && mutualRequest.STATUS !== 'pending') {
+        // Actualiza el estado de la solicitud mutua a "pending"
+        await mutualRequest.update({ STATUS: 'pending' });
+        // Envia un correo electrónico al destinatario
+        const recipient = await User.findByPk(recipientId);
+        const sender = await User.findByPk(senderId);
+        const emailOptions = {
+          subject: 'Nueva solicitud de contacto',
+        };
+        const emailParams = {
+          recipientName: recipient.NAME,
+          recipientId: recipient.ID_USER,
+          senderName: sender.NAME,
+          senderCenter: sender.CENTER,
+        };
+        await sendMail(recipient.EMAIL, emailOptions, 'contactRequest', emailParams);
+        return res.status(200).json({ message: 'Se ha enviado una nueva solicitud de contacto' });
       } else {
         return res.status(400).json({ message: 'Ya existe una solicitud de contacto entre estos usuarios' });
       }
     }
 
-    let requestId; // Variable para almacenar el ID_CREQUEST
+    // Crea la solicitud de contacto si no existe
+    const newContactRequest = await ContactRequest.create({
+      SENDER_ID: senderId,
+      RECIPIENT_ID: recipientId,
+      STATUS: 'pending', // Establece el estado como "pending" una vez la solicitud ha sido enviada
+    });
 
-    if (existingRequest) {
-      if (existingRequest.STATUS === 'rejected') {
-        // Actualiza el estado de la solicitud existente a "pending"
-        await existingRequest.update({ STATUS: 'pending' });
-        requestId = existingRequest.ID_CREQUEST; // Obtiene el ID_CREQUEST existente
-      } else if (existingRequest.STATUS === 'accepted') {
-        return res.status(400).json({ message: 'La solicitud de contacto ya ha sido aceptada' });
-      } else {
-        return res.status(400).json({ message: 'La solicitud de contacto ya existe' });
-      }
-    } else {
-      // Crea la solicitud de contacto si no existe
-      const newContactRequest = await ContactRequest.create({
-        SENDER_ID: senderId,
-        RECIPIENT_ID: recipientId,
-        STATUS: 'pending', // Establece el estado como "pending" una vez la solicitud ha sido enviada
-      });
-
-      requestId = newContactRequest.ID_CREQUEST; // Obtiene el ID_CREQUEST creado
-    }
+    const requestId = newContactRequest.ID_CREQUEST; // Obtiene el ID_CREQUEST creado
 
     // Obtiene datos de Sender y Recipient
     const recipient = await User.findByPk(recipientId);
@@ -65,14 +87,12 @@ exports.createContactRequest = async function(req, res) {
     const emailOptions = {
       subject: 'Nueva solicitud de contacto',
     };
-
     const emailParams = {
       recipientName: recipient.NAME,
       recipientId: recipient.ID_USER,
       senderName: sender.NAME,
       senderCenter: sender.CENTER,
     };
-
     await sendMail(recipient.EMAIL, emailOptions, 'contactRequest', emailParams);
 
     return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente', requestId });
@@ -238,3 +258,43 @@ exports.getUserContacts = async function(req, res) {
     return res.status(500).json({ message: 'Error al obtener los contactos del usuario' });
   }
 }
+
+//! Controlador para obtener las solicitudes pendientes del destinatario
+exports.getPendingContactRequests = async function (req, res) {
+  try {
+    const { recipientId } = req.params;
+
+    console.log(req.params)
+
+    // Busca todas las solicitudes pendientes del destinatario
+    const pendingRequests = await ContactRequest.findAll({
+      where: {
+        RECIPIENT_ID: recipientId,
+        STATUS: 'pending',
+      },
+      include: [
+        {
+          model: User,
+          as: 'sender',
+          attributes: ['NAME', 'ACCOUNT_NUMBER'],
+        },
+      ],
+      attributes: ['ID_CREQUEST', 'CREATED_AT'],
+    });
+
+    // Mapea los datos necesarios de cada solicitud
+    const requestData = pendingRequests.map((request) => {
+      return {
+        requestId: request.ID_CREQUEST,
+        senderName: request.sender.NAME,
+        senderAccountNumber: request.sender.ACCOUNT_NUMBER,
+        sentDate: request.CREATED_AT,
+      };
+    });
+
+    return res.status(200).json({ pendingRequests: requestData });
+  } catch (error) {
+    console.error('Error al obtener las solicitudes pendientes del destinatario:', error);
+    return res.status(500).json({ message: 'Error al obtener las solicitudes pendientes del destinatario' });
+  }
+};
