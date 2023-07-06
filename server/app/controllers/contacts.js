@@ -79,6 +79,7 @@ exports.createContactRequest = async function(req, res) {
     });
 
     const requestId = newContactRequest.ID_CREQUEST; // Obtiene el ID_CREQUEST creado
+    const status = newContactRequest.STATUS;   //Obtiene el estado de la solicitud
 
     // Obtiene datos de Sender y Recipient
     const recipient = await User.findByPk(recipientId);
@@ -96,7 +97,7 @@ exports.createContactRequest = async function(req, res) {
     };
     await sendMail(recipient.EMAIL, emailOptions, 'contactRequest', emailParams);
 
-    return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente', requestId});
+    return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente', requestId, status});
   } catch (error) {
     console.error('Error al crear la solicitud de contacto:', error);
     return res.status(500).json({ message: 'Error al crear la solicitud de contacto' });
