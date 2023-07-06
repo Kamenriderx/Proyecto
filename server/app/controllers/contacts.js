@@ -97,7 +97,7 @@ exports.createContactRequest = async function(req, res) {
     };
     await sendMail(recipient.EMAIL, emailOptions, 'contactRequest', emailParams);
 
-    return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente', requestId, status});
+    return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente'}, requestId, status);
   } catch (error) {
     console.error('Error al crear la solicitud de contacto:', error);
     return res.status(500).json({ message: 'Error al crear la solicitud de contacto' });
@@ -228,10 +228,11 @@ exports.cancelContactRequest = async function(req, res) {
 exports.getContacts = async function(req, res) {
   try {
     const { userId } = req.params;
-    let contacts;
+    let userContacts;
 
     if (userId) {
-      contacts = await connection.query(
+      // Consulta para obtener los contactos en CONTACT_ID de un USER_ID
+      userContacts = await connection.query(
         'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
         'FROM contacts ' +
         'INNER JOIN user_ ON contacts.CONTACT_ID = user_.ID_USER ' +
@@ -242,22 +243,23 @@ exports.getContacts = async function(req, res) {
         }
       );
 
-      // Verificar si los contactos se encontraron por USER_ID
-      if (contacts.length === 0) {
-        contacts = await connection.query(
-          'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
-          'FROM contacts ' +
-          'INNER JOIN user_ ON contacts.USER_ID = user_.ID_USER ' +
-          'WHERE contacts.CONTACT_ID = :userId',
-          {
-            type: connection.QueryTypes.SELECT,
-            replacements: { userId },
-          }
-        );
-      }
+      // Consulta para obtener los contactos en USER_ID de un CONTACT_ID
+      const contactContacts = await connection.query(
+        'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
+        'FROM contacts ' +
+        'INNER JOIN user_ ON contacts.USER_ID = user_.ID_USER ' +
+        'WHERE contacts.CONTACT_ID = :userId',
+        {
+          type: connection.QueryTypes.SELECT,
+          replacements: { userId },
+        }
+      );
+
+      // Asignar los contactos de CONTACT_ID a userContacts
+      userContacts = userContacts.concat(contactContacts);
     }
 
-    return res.status(200).json({ contacts });
+    return res.status(200).json({ contacts: userContacts });
   } catch (error) {
     console.error('Error al obtener los contactos:', error);
     return res.status(500).json({ message: 'Error al obtener los contactos' });
