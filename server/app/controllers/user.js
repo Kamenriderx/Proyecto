@@ -13,6 +13,7 @@ const getStudents = async (req,res) =>{
 const getPerfil = async (req,res)=>{
     try {
         const {id} = req.params;
+        console.log(id)
         let user ={}
         
 
@@ -82,6 +83,7 @@ async function getInfo(id,role){
                 user = await User.findOne({where:{
                     ID_USER : id
                 }});
+                console.log(user)
                 user = getInfo(id,user.ID_ROLE);
             break;
     }
@@ -106,6 +108,13 @@ const updateEmail = async (req,res)=>{
         const {id} = req.params
         const {body} = req
       
+        if(!body.EMAIL){
+            res.status(406).json({
+                messagge:"NO ESTA DEFINIDO"
+            })
+            return
+
+        }
         
         if (parseInt(id)!==req.user.ID_USER) {
             res.status(401).json({messagge:"NO TIENES PERMISO DE EDTIAR ESTE PERFIL"})
@@ -208,6 +217,7 @@ const uploadPhotos =  async (req, res, next) => {
 
         if(!flag){
             res.status(400).json({messagge:"DEBES ELIMINAR UNA O MAS IMAGENES, SOLO PUEDES TENER 3 EN TU PERFIL"})
+            return
         }
         
     } catch (error) {
@@ -262,7 +272,7 @@ const uploadVideo = async (req, res) => {
 
 
     
-        const url = `http://localhost:3000/images/${file.filename}`;
+        const url = `http://localhost:3000/videos/${file.filename}`;
         await Professor.updateVideo(id,url);
         res.status(200).json({messagge:"VIDEO SUBIDO CORRECTAMENTE"})
         
@@ -354,9 +364,7 @@ async function validationImg(res,id,files){
     });
 
     if (multi.length == 3 ) {
-        res.status(406).json({messagge:"TIENES LA CANTIDAD MAXIMA DE IMAGENES, DEBERIAS BORRAR ALGUNA"})
-        return
-        
+        return flag
     }
 
     switch (files.length) {

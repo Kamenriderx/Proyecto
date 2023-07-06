@@ -9,6 +9,8 @@ import RequestPasswordForm from "../views/Auth/components/RequestPasswordForm";
 import Docentes from "../views/RegisterDocente/Docentes";
 import ReadCSV from "../components/ReadCSV";
 import Principal from "../views/Principal";
+import ViewStudent from "../views/ViewStudent/ViewStudent";
+import ViewTeacher from "../views/ViewTeacher/ViewTeacher";
 
 const ContentNavbar = () => {
   const { state, dispatch } = useContext(StoreContext);
@@ -17,7 +19,6 @@ const ContentNavbar = () => {
     dispatch({ type: "USER", user: {} });
     dispatch({ type: "TOKEN", token: "" });
     dispatch({ type: "LOGOUT" });
-    
   };
 
   const Navbar = () => {
@@ -85,38 +86,31 @@ const ContentNavbar = () => {
                     </li>
                     <li>
                       <Link to="perfil">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                           Perfil
                         </button>
                       </Link>
                     </li>
                   </>
                 )}
-                {
-                  state?.user?.ID_ROLE ===5 &&(<>
+                {state?.user?.ID_ROLE === 5 && (
+                  <>
                     <li>
                       <Link to="/Estudiantes">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                           Estudiantes
                         </button>
                       </Link>
                     </li>
                     <li>
                       <Link to="/Docentes">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                           Docentes
                         </button>
                       </Link>
                     </li>
-                  
-                  </>)
-                }
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -125,24 +119,14 @@ const ContentNavbar = () => {
     );
   };
 
-
   const Profile = () => {
-    const { state, dispatch } = useContext(StoreContext);
+    const { state } = useContext(StoreContext);
     console.log(state);
+
     return (
-      <div className="bg-gray-100 text-2xl font-bold p-4">
-        <ul>
-          <li>
-            Nombre {state?.user?.NAME}
-          </li>
-          <li>
-            Correo {state?.user?.EMAIL}
-          </li>
-          <li>
-            Centro {state?.user?.CENTER}
-          </li>
-        </ul>
-      </div>
+      <>
+        {state?.user?.ID_ROLE === 1 ? <ViewStudent /> : <ViewTeacher />}
+      </>
     );
   };
 
@@ -155,31 +139,18 @@ const ContentNavbar = () => {
           <Route path="*" element={<NotFound />} />
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/proffessor" />
           <Route
             exact
-            path="/proffessor"
-       
+            path="/iniciar/RecuperarContrasena"
+            element={<RequestPasswordForm />}
           />
-          <Route exact path="/iniciar/RecuperarContrasena" element={<RequestPasswordForm/>} />
-          <Route
-            exact
-            path="/Estudiantes"
-            element={<ReadCSV />}
-          />
+          <Route exact path="/Estudiantes" element={<ReadCSV />} />
 
           {/* rutas privadas */}
-          <Route
-            exact
-            path="/perfil"
-            element={<Profile/>}
-          />
+          <Route exact path="/perfil" element={<Profile />} />
 
-          <Route
-            exact
-            path="/Docentes"
-            element={<Docentes/>}
-          />
-
+          <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
       </BrowserRouter>
     </>

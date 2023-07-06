@@ -1,24 +1,34 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AlertThree from "../../../components/AlertThree.jsx";
 import ReactPlayer from "react-player";
+import { StoreContext } from "../../../store/ContextExample.jsx";
+import TeacherContext from "../context/TeacherContext.jsx";
 
 const Video = () => {
   const [videoUrl, setVideoUrl] = useState("");
-  const [nameVideo, setNameVideo] = useState("");
 
   const [propAlert, setPropAlert] = useState({});
   const [error, setError] = useState(false);
 
-  //este estado se enviara al server
-  console.log("nameVideo: ", nameVideo);
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+  //contexto de docente
+  const { stateTeacher, getTeacher, putVideo } = useContext(TeacherContext);
 
-  const handleFileChange = (event) => {
+  useEffect(() => {
+    getTeacher(state);
+  }, [state]);
+
+  console.log("steTeacherVide: ", stateTeacher);
+  // console.log("URL:", stateTeacher.user.user.multimedia[0].URL);
+
+
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    setError(false)
+    setError(false);
 
     if (!file?.name.includes("mp4")) {
       setError(true);
-      console.log("agua");
 
       if (!file) {
         setPropAlert({
@@ -33,43 +43,61 @@ const Video = () => {
           title: "Error",
         });
       }
-      return
+      return;
     }
-    setVideoUrl(URL.createObjectURL(event.target.files[0]))
-    setNameVideo(event.target.files[0])
+
+    if(stateTeacher.user.user.multimedia.length  == 1 ){
+      alert('Solo se puede subir un video.')
+    }
+
+    setVideoUrl(URL.createObjectURL(event.target.files[0]));
+
+    await putVideo(state,event.target.files[0])
+    await getTeacher(state)
+
   };
 
   return (
     <>
-      {error ? (
+      {stateTeacher && (
         <>
-          <AlertThree alerta={propAlert} />
-          <div className="flex flex-col">
-            <input
-              type="file"
-              accept=".mp4"
-              onChange={(e) => {
-                handleFileChange(e);
-              }}
-              className="rounded-full "
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="flex flex-col">
-            <input
-              type="file"
-              accept=".mp4"
-              onChange={(e) => {
-                handleFileChange(e);
-              }}
-              className="rounded-full "
-            />
-            <br />
-            {videoUrl && <ReactPlayer url={videoUrl} controls={true} width='100%'
-          height='100%'/>}
-          </div>
+          {error ? (
+            <>
+              <AlertThree alerta={propAlert} />
+              <div className="flex flex-col">
+                <input
+                  type="file"
+                  accept=".mp4"
+                  onChange={(e) => {
+                    handleFileChange(e);
+                  }}
+                  className="rounded-full "
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-col">
+                <input
+                  type="file"
+                  accept=".mp4"
+                  onChange={(e) => {
+                    handleFileChange(e);
+                  }}
+                  className="rounded-full "
+                />
+                <br />
+                {stateTeacher.user.user.multimedia.length  == 1 && (
+                  <ReactPlayer
+                    url={stateTeacher.user.user.multimedia[0].URL}
+                    controls={true}
+                    width="100%"
+                    height="100%"
+                  />
+                )}
+              </div>
+            </>
+          )}
         </>
       )}
     </>
