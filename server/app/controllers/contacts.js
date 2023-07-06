@@ -95,7 +95,7 @@ exports.createContactRequest = async function(req, res) {
     };
     await sendMail(recipient.EMAIL, emailOptions, 'contactRequest', emailParams);
 
-    return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente', requestId });
+    return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente', requestId});
   } catch (error) {
     console.error('Error al crear la solicitud de contacto:', error);
     return res.status(500).json({ message: 'Error al crear la solicitud de contacto' });
@@ -223,41 +223,42 @@ exports.cancelContactRequest = async function(req, res) {
 }
 
 //! Controlador para obtener los contactos de un usuario
-exports.getUserContacts = async function(req, res) {
+exports.getContacts = async function(req, res) {
   try {
     const { userId } = req.params;
 
-    // Obtiene los contactos del usuario
-    const contacts = await Contacts.findAll({
-      where: { USER_ID: userId },
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['NAME', 'ACCOUNT_NUMBER', 'CENTER', 'EMAIL'],
+    // Buscar los contactos del usuario por USER_ID
+    const userContacts = await Contacts.findAll({
+      where: {
+        USER_ID: userId,
+      },
+      attributes: ['CONTACT_ID'],
+    });
+
+    // Si no se encontraron contactos por USER_ID, buscar por CONTACT_ID
+    if (userContacts.length === 0) {
+      const contactContacts = await Contacts.findAll({
+        where: {
+          CONTACT_ID: userId,
         },
-      ],
-      attributes: ['CONTACT_ID', 'CREATED_AT'],
-    });
+        attributes: ['USER_ID'],
+      });
 
-    // Verifica los contactos del usuario
-    const userContacts = contacts.map(contact => contact.CONTACT_ID);
+      // Obtener los valores de USER_ID en un array
+      const userIds = contactContacts.map(contact => contact.USER_ID);
 
-    // Verifica si los contactos también son contactos del usuario
-    const mutualContacts = await Contacts.findAll({
-      where: { USER_ID: userContacts, CONTACT_ID: userId },
-    });
-
-    if (mutualContacts.length === userContacts.length) {
-      return res.status(200).json({ contacts });
-    } else {
-      return res.status(400).json({ message: 'No todos los contactos son mutuos' });
+      return res.status(200).json({ userIds });
     }
+
+    // Obtener los valores de CONTACT_ID en un array
+    const userIds = userContacts.map(contact => contact.CONTACT_ID);
+
+    return res.status(200).json({ userIds });
   } catch (error) {
-    console.error('Error al obtener los contactos del usuario:', error);
-    return res.status(500).json({ message: 'Error al obtener los contactos del usuario' });
+    console.error('Error al obtener los contactos:', error);
+    return res.status(500).json({ message: 'Error al obtener los contactos' });
   }
-}
+};
 
 //! Controlador para obtener las solicitudes pendientes del destinatario
 exports.getPendingContactRequests = async function (req, res) {
