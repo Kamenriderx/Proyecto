@@ -12,7 +12,7 @@ const verifyData = (data)=>{
             if (!student.hasOwnProperty('NAME')|| student.NAME.length <2 || typeof student.NAME !== 'string' || student.NAME.trim()==="") {
                 error+=`Campo NAME invalido: ${student.NAME}, `;
             }
-            if (!student.hasOwnProperty('DNI') || typeof student.DNI !== 'string') {
+            if (!student.hasOwnProperty('DNI') || typeof student.DNI !== 'string' || student.DNI.split("-").length <= 1) {
                 error+=`Campo DNI invalido: ${student.DNI}, `;
             }
             if (!student.hasOwnProperty('CARRER') || typeof student.CARRER !== 'string' || student.CARRER.trim()==="") {
