@@ -42,5 +42,4 @@ const Contact = connection.define('Contact', {
   Contact.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
   Contact.belongsTo(User, { foreignKey: 'contact_id', as: 'contact' });
   
-
   module.exports = Contact;
