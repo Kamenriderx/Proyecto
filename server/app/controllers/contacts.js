@@ -2,6 +2,7 @@ const ContactRequest = require('../models/contactRequests');
 const User = require('../models/user');
 const sendMail = require('../../utils/sendMail');
 const Contacts = require('../models/contacts')
+const connection = require("../../config/database");
 
 //! Controlador para enviar solicitudes
 exports.createContactRequest = async function(req, res) {
@@ -226,34 +227,36 @@ exports.cancelContactRequest = async function(req, res) {
 exports.getContacts = async function(req, res) {
   try {
     const { userId } = req.params;
+    let contacts;
 
-    // Buscar los contactos del usuario por USER_ID
-    const userContacts = await Contacts.findAll({
-      where: {
-        USER_ID: userId,
-      },
-      attributes: ['CONTACT_ID'],
-    });
+    if (userId) {
+      contacts = await connection.query(
+        'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
+        'FROM contacts ' +
+        'INNER JOIN user_ ON contacts.CONTACT_ID = user_.ID_USER ' +
+        'WHERE contacts.USER_ID = :userId',
+        {
+          type: connection.QueryTypes.SELECT,
+          replacements: { userId },
+        }
+      );
 
-    // Si no se encontraron contactos por USER_ID, buscar por CONTACT_ID
-    if (userContacts.length === 0) {
-      const contactContacts = await Contacts.findAll({
-        where: {
-          CONTACT_ID: userId,
-        },
-        attributes: ['USER_ID'],
-      });
-
-      // Obtener los valores de USER_ID en un array
-      const userIds = contactContacts.map(contact => contact.USER_ID);
-
-      return res.status(200).json({ userIds });
+      // Verificar si los contactos se encontraron por USER_ID
+      if (contacts.length === 0) {
+        contacts = await connection.query(
+          'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
+          'FROM contacts ' +
+          'INNER JOIN user_ ON contacts.USER_ID = user_.ID_USER ' +
+          'WHERE contacts.CONTACT_ID = :userId',
+          {
+            type: connection.QueryTypes.SELECT,
+            replacements: { userId },
+          }
+        );
+      }
     }
 
-    // Obtener los valores de CONTACT_ID en un array
-    const userIds = userContacts.map(contact => contact.CONTACT_ID);
-
-    return res.status(200).json({ userIds });
+    return res.status(200).json({ contacts });
   } catch (error) {
     console.error('Error al obtener los contactos:', error);
     return res.status(500).json({ message: 'Error al obtener los contactos' });
