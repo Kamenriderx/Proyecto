@@ -4,10 +4,15 @@ const http = require('http').createServer(app);
 const configCors = require('./config/cors');
 const path = require('path');
 const bodyParser = require('body-parser');
-const sendMail = require('./utils/sendMail');
-const generatePDF = require('./utils/generatePDF');
-
-
+const {generateAuthToken} = require("./utils/authToken");
+const io = require('socket.io')(http, {
+  cors: {
+    origin: 'http://localhost:5173', // Reemplaza con el origen permitido para tu cliente React
+    methods: ['GET', 'POST','PUT','DELETE']
+  }
+});
+const handlerSockets = require('./app/connection');
+handlerSockets(io);
 
 app.use(configCors);
 app.use(express.static('./public'));
