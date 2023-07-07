@@ -105,7 +105,7 @@ const LoginForm = () => {
     } */
 
     const res = await httpRequests()["post"](`http://localhost:3000/registro/login/${login.loginType}`, { body: { ...login } });
-
+    console.log(res);
     if (res.status === 200) {
 
       const token = res.data.token;

@@ -38,6 +38,10 @@ const Contacts = connection.define(
   }
 );
 
+Contact.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+Contact.belongsTo(User, { foreignKey: 'contact_id', as: 'contact' });
+
+
 Contacts.sync({ force: false })
   .then(() => {
     console.log("Tabla de Contactos sincronizada");
@@ -45,5 +49,7 @@ Contacts.sync({ force: false })
   .catch((error) => {
     console.error("Error al sincronizar tabla de personas:", error);
   });
+
+
 
 module.exports = Contacts;

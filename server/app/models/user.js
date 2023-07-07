@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const connection = require("../../config/database");
-const Contacts = require("./contacts");
+
 
 const USER = connection.define(
   "USER_",
@@ -70,6 +70,16 @@ const USER = connection.define(
   }
 );
 
+USER.updateEmail =async function(id,EMAIL){
+  connection.query("UPDATE user_ SET EMAIL = :EMAIL WHERE ID_USER= :ID_USER",{
+      replacements:{
+          EMAIL:EMAIL,
+          ID_USER:id
+      }
+  })
+}
+
+USER.connection = connection;
 
 USER.sync({ force: false })
   .then(() => {

@@ -281,6 +281,21 @@ END$$
 
 DELIMITER ;
 
+-----------------------------------------------------------
+--- multimedia table 
+-----------------------------------------------------------
+
+CREATE TABLE `multimedia` (
+  `ID_MULTIMEDIA` int NOT NULL AUTO_INCREMENT,
+  `ID_USER` int DEFAULT NULL,
+  `URL` text,
+  `IS_PROFILE` int DEFAULT '0',
+  PRIMARY KEY (`ID_MULTIMEDIA`),
+  KEY `ID_USER` (`ID_USER`),
+  CONSTRAINT `multimedia_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `user_` (`ID_USER`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
