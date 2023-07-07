@@ -9,23 +9,33 @@ import RequestPasswordForm from "../views/Auth/components/RequestPasswordForm";
 import Docentes from "../views/RegisterDocente/Docentes";
 import ReadCSV from "../components/ReadCSV";
 import Principal from "../views/Principal";
+import ViewStudent from "../views/ViewStudent/ViewStudent";
+import ViewTeacher from "../views/ViewTeacher/ViewTeacher";
+import useStudents from "../utils/hooks/useStudents";
+import Search from "./components/Search";
+import Solicitud from "./components/Solicitud";
+import ResultsSearch from "./ResultsSearch";
+/* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
   const { state, dispatch } = useContext(StoreContext);
+
+  const { students } = useStudents();
 
   const handleSession = () => {
     dispatch({ type: "USER", user: {} });
     dispatch({ type: "TOKEN", token: "" });
     dispatch({ type: "LOGOUT" });
-    
   };
 
   const Navbar = () => {
     const { state, dispatch } = useContext(StoreContext);
+    console.log("EstudiantesData", students);
+    console.log("Usuario Conectado", state);
     return (
       <>
         <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
-          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <div className="max-w-screen-xl flex flex-wrap items-center justify-normal mx-auto p-4">
             <div className="flex items-center">
               <Link to="/">
                 <img
@@ -35,7 +45,7 @@ const ContentNavbar = () => {
                 />
               </Link>
             </div>
-            <div className="flex md:order-2">
+            <div className="flex">
               <button
                 data-collapse-toggle="navbar-cta"
                 type="button"
@@ -66,7 +76,7 @@ const ContentNavbar = () => {
                 {!state.login ? (
                   <li>
                     <Link to="/login">
-                      <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
+                      <button className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                         Inicio de sesión
                       </button>
                     </Link>
@@ -74,10 +84,17 @@ const ContentNavbar = () => {
                 ) : (
                   <>
                     <li>
+                      <Search />
+                    </li>
+                    <li>
+                      <Solicitud />
+                    </li>
+
+                    <li>
                       <Link to="/">
                         <button
                           onClick={handleSession}
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
+                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
                         >
                           Cerrar sesion
                         </button>
@@ -85,38 +102,31 @@ const ContentNavbar = () => {
                     </li>
                     <li>
                       <Link to="perfil">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                           Perfil
                         </button>
                       </Link>
                     </li>
                   </>
                 )}
-                {
-                  state?.user?.ID_ROLE ===5 &&(<>
+                {state?.user?.ID_ROLE === 5 && (
+                  <>
                     <li>
                       <Link to="/Estudiantes">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                           Estudiantes
                         </button>
                       </Link>
                     </li>
                     <li>
                       <Link to="/Docentes">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                           Docentes
                         </button>
                       </Link>
                     </li>
-                  
-                  </>)
-                }
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -125,24 +135,20 @@ const ContentNavbar = () => {
     );
   };
 
-
   const Profile = () => {
-    const { state, dispatch } = useContext(StoreContext);
+    const { state } = useContext(StoreContext);
     console.log(state);
+
     return (
-      <div className="bg-gray-100 text-2xl font-bold p-4">
-        <ul>
-          <li>
-            Nombre {state?.user?.NAME}
-          </li>
-          <li>
-            Correo {state?.user?.EMAIL}
-          </li>
-          <li>
-            Centro {state?.user?.CENTER}
-          </li>
-        </ul>
-      </div>
+      <>
+        {state?.user?.ID_ROLE === 1 ? (
+          <ViewStudent />
+        ) : state?.user?.ID_ROLE === 2 ? (
+          <ViewTeacher />
+        ) : (
+          <h2>Admin</h2>
+        )}
+      </>
     );
   };
 
@@ -155,31 +161,19 @@ const ContentNavbar = () => {
           <Route path="*" element={<NotFound />} />
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/search" element={<ResultsSearch />} />
+          <Route exact path="/proffessor" />
           <Route
             exact
-            path="/proffessor"
-       
+            path="/iniciar/RecuperarContrasena"
+            element={<RequestPasswordForm />}
           />
-          <Route exact path="/iniciar/RecuperarContrasena" element={<RequestPasswordForm/>} />
-          <Route
-            exact
-            path="/Estudiantes"
-            element={<ReadCSV />}
-          />
+          <Route exact path="/Estudiantes" element={<ReadCSV />} />
 
           {/* rutas privadas */}
-          <Route
-            exact
-            path="/perfil"
-            element={<Profile/>}
-          />
+          <Route exact path="/perfil" element={<Profile />} />
 
-          <Route
-            exact
-            path="/Docentes"
-            element={<Docentes/>}
-          />
-
+          <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
       </BrowserRouter>
     </>

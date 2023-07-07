@@ -2,7 +2,7 @@ const multer = require('multer');
 
 const fileFilter = (req, file, cb) => {
   // Comprueba si el archivo cumple con los criterios deseados
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
     // Acepta el archivo
     req.messagge = "El archivo es válido";
     cb(null, true);
@@ -18,10 +18,14 @@ const storage = multer.diskStorage({
     cb(null, pathStorage)
   },
   filename: function(req, filename, cb) {
+      const EMAIL =(!req.body.EMAIL) ? req.user.EMAIL : req.body.EMAIL; 
+
       
       const ext = filename.originalname.split(".").pop();
-      const File = `file-${req.body.EMAIL.split("@")[0]}.${ext}`;
-    cb(null, File)
+      const File = `file-${EMAIL.split("@")[0]}-${Date.now()}.${ext}`;
+      cb(null, File)
+        
+     
   }
 });
 

@@ -1,42 +1,55 @@
 const { DataTypes } = require("sequelize");
 const connection = require("../../config/database");
-const User = require("./user");
-
-const Contact = connection.define('Contact', {
+const { Sequelize } = require('sequelize');
+const USER = require("./user");
+const Contacts = connection.define(
+  "Contacts",
+  {
     ID_CONTACT: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      allowNull: false
     },
-    USER_ID: {
+    USER_ID : {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: User,
-        key: 'ID_USER'
-      }
     },
     CONTACT_ID: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: User,
-        key: 'ID_USER'
-      }
     },
+
     CREATED_AT: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+      defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
     },
     UPDATED_AT: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+      defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      onUpdate: Sequelize.literal("CURRENT_TIMESTAMP"),
     },
-  }, {
-    tableName: 'contacts',
-    timestamps: false, 
+  },
+  {
+    tableName: "Contacts",
+    timestamps: false,
+  }
+);
+
+Contacts.belongsTo(USER, { foreignKey: 'user_id', as: 'user' });
+Contacts.belongsTo(USER, { foreignKey: 'contact_id', as: 'contact' });
+
+
+Contacts.sync({ force: false })
+  .then(() => {
+    console.log("Tabla de Contactos sincronizada");
+  })
+  .catch((error) => {
+    console.error("Error al sincronizar tabla de personas:", error);
   });
-  
-  module.exports = Contact;
+
+
+
+module.exports = Contacts;

@@ -4,6 +4,45 @@ const sendMail = require('../../utils/sendMail');
 const Contacts = require('../models/contacts')
 const connection = require("../../config/database");
 
+//! Controlador para enviar solicitudes pendientes con estado y cancelarlas por parte del que envia
+exports.getRequests = async function(req, res) {
+  try {
+    const { userId } = req.params;
+
+    // Busca todas las solicitudes en los estados 'pending', 'accept' y 'reject' del remitente
+    const pendingRequests = await ContactRequest.findAll({
+      where: {
+        SENDER_ID: userId,
+        STATUS: ['pending', 'accepted', 'rejected'],
+      },
+      include: [
+        {
+          model: User,
+          as: 'recipient',
+          attributes: ['ACCOUNT_NUMBER'],
+        },
+      ],
+      attributes: ['ID_CREQUEST', 'STATUS','SENDER_ID','RECIPIENT_ID'],
+    });
+
+    // Mapea los datos necesarios de cada solicitud
+    const requestData = pendingRequests.map((request) => {
+      return {
+        requestId: request.ID_CREQUEST,
+        recipientAccountNumber: request.recipient.ACCOUNT_NUMBER,
+        status: request.STATUS,
+        senderId: request.SENDER_ID,
+        recipientId: request.RECIPIENT_ID
+      };
+    });
+
+    return res.status(200).json({ pendingRequests: requestData });
+  } catch (error) {
+    console.error('Error al obtener las solicitudes pendientes del remitente:', error);
+    return res.status(500).json({ message: 'Error al obtener las solicitudes pendientes del remitente' });
+  }
+};
+
 //! Controlador para enviar solicitudes
 exports.createContactRequest = async function(req, res) {
   try {
