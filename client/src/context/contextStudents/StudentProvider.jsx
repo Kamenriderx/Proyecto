@@ -15,7 +15,7 @@ const StudentProvider=({children})=>{
       useEffect(() => {
         const getSolicitudes=async()=>{
             const res = await axios(`http://localhost:3000/registro/contacts/requestspendings/${state.user.ID_USER}`)
-            console.log("Solicitudes Pendientes : ",res.data);
+            console.log("Solicitudes Pendientes : ",res.data.pendingRequests);
             setSolicitudes(res.data.pendingRequests)
         }
         getSolicitudes()
@@ -60,7 +60,7 @@ const StudentProvider=({children})=>{
 
     return(
         <StudentContext.Provider value={{
-            students,solicitudes,setSolicitudes,pendings,setPendings
+            students,solicitudes,pendings,setPendings
         }}>
             {children}
         </StudentContext.Provider>

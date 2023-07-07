@@ -6,8 +6,7 @@ import useStudents from '../../utils/hooks/useStudents'
 const CardTeachers = ({student}) => {
 
 const { state, dispatch } = useContext(StoreContext);
-const {solicitudes,pendings} = useStudents()
-
+const {pendings} = useStudents()
 
   const enviarSolicitudContacto= async () => {
     const senderId = `${state.user.ID_USER}`; 
@@ -23,7 +22,7 @@ const {solicitudes,pendings} = useStudents()
 
   const eliminarSolicitud = async () => {
     try {
-      const response = await axios.put(`http://localhost:3000/registro/contacts/contact-requests/${solicitudes.requestId}/cancel`)
+      const response = await axios.put(`http://localhost:3000/registro/contacts/contact-requests/${state.user.ID_USER}/cancel`)
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -50,44 +49,64 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
       <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Centro de Estudio: </span>{student.user.CENTER}</p>
       <p className="mt-2 text-gray-500 text-lg"><span className='font-bold text-gray-700'>Numero de Cuenta: </span>{student.user.ACCOUNT_NUMBER}</p>
       <div className="mt-4">
-      {pendings.length > 0 ? (
+      {pendings.length && (
         pendings.map((pending)=>{
-          if(/* esDestinatario &&  */pending.status === 'pending'){
+          if(pending.status === 'pending' && (pending.senderId===state.user.ID_USER)){
             return(
-              <input
+              <div key={pending.requestId}>
+                <input
                       className='bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded cursor-pointer'
-                      value="Rechazar Solicitud"
+                      value="Cancelar Solicitud"
                       type="submit"
                       onClick={() => eliminarSolicitud(pending.requestId)}
                     />
+              </div>
             )
-          }else if (/* esRemitente &&  */pending.status === 'accepted') {
+          }else if (pending.status === 'accepted' ) {
             return (
-              <input
+              <div key={pending.recipientId}>
+                  <input
                 className='bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded cursor-pointer'
                 value="Ahora somos contacto"
                 type="submit"
               />
+              </div>
             );
-          }else if (/* esDestinatario && */ pending.status === 'rejected') {
+          }else if (pending.status === 'rejected' && (pending.senderId===state.user.ID_USER)) {
             return (
-              <input
+              <div key={pending.requestId}>
+                <input
                 className={'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer'}
                 value="Enviar Solicitud"
                 type="submit"
                 onClick={enviarSolicitudContacto}
               />
+              </div>  
+            );
+          }else if(pending.status === 'rejected' && (pending.recipientId===state.user.ID_USER)){
+            return (
+              <div key={pending.requestId}>
+                <input
+                className={'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer'}
+                value="Enviar Solicitud"
+                type="submit"
+                onClick={enviarSolicitudContacto}
+              />
+              </div>  
+            );
+          }else if(pending.status === null){
+            return (
+              <div key={pending.requestId}>
+                <input
+                className={'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer'}
+                value="Enviar Solicitud"
+                type="submit"
+                onClick={enviarSolicitudContacto}
+              />
+              </div>  
             );
           }
          })
-      ):(
-        <input
-        
-                className={'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer'}
-                value="Enviar Solicitud"
-                type="submit"
-                onClick={enviarSolicitudContacto}
-              />
       )
        }
       </div>
