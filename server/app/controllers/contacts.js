@@ -3,6 +3,47 @@ const User = require('../models/user');
 const sendMail = require('../../utils/sendMail');
 const Contacts = require('../models/contacts')
 
+
+//! Controlador para enviar solicitudes pendientes con estado y cancelarlas por parte del que envia
+exports.getRequests = async function(req, res) {
+  try {
+    const { userId } = req.params;
+
+    // Busca todas las solicitudes en los estados 'pending', 'accept' y 'reject' del remitente
+    const pendingRequests = await ContactRequest.findAll({
+      where: {
+        SENDER_ID: userId,
+        STATUS: ['pending', 'accepted', 'rejected'],
+      },
+      include: [
+        {
+          model: User,
+          as: 'recipient',
+          attributes: ['ACCOUNT_NUMBER'],
+        },
+      ],
+      attributes: ['ID_CREQUEST', 'STATUS','SENDER_ID','RECIPIENT_ID'],
+    });
+
+    // Mapea los datos necesarios de cada solicitud
+    const requestData = pendingRequests.map((request) => {
+      console.log(request);
+      return {
+        requestId: request.ID_CREQUEST,
+        recipientAccountNumber: request.recipient.ACCOUNT_NUMBER,
+        status: request.STATUS,
+        senderId: request.SENDER_ID,
+        recipientId: request.RECIPIENT_ID
+      };
+    });
+
+    return res.status(200).json({ pendingRequests: requestData });
+  } catch (error) {
+    console.error('Error al obtener las solicitudes pendientes del remitente:', error);
+    return res.status(500).json({ message: 'Error al obtener las solicitudes pendientes del remitente' });
+  }
+};
+
 //! Controlador para enviar solicitudes
 exports.createContactRequest = async function(req, res) {
   try {
@@ -78,6 +119,7 @@ exports.createContactRequest = async function(req, res) {
     });
 
     const requestId = newContactRequest.ID_CREQUEST; // Obtiene el ID_CREQUEST creado
+    const status = newContactRequest.STATUS;   //Obtiene el estado de la solicitud
 
     // Obtiene datos de Sender y Recipient
     const recipient = await User.findByPk(recipientId);
@@ -95,12 +137,13 @@ exports.createContactRequest = async function(req, res) {
     };
     await sendMail(recipient.EMAIL, emailOptions, 'contactRequest', emailParams);
 
-    return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente', requestId });
+    return res.status(201).json({ message: 'Solicitud de contacto creada exitosamente'}, requestId, status);
   } catch (error) {
     console.error('Error al crear la solicitud de contacto:', error);
     return res.status(500).json({ message: 'Error al crear la solicitud de contacto' });
   }
 }
+
 
 //! Controlador para aceptar solicitudes de contacto
 exports.acceptContactRequest = async function(req, res) {

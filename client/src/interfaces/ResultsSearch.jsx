@@ -13,9 +13,10 @@ const ResultsSearch = () => {
     navigate(-1); 
   };
 
-    const {students} = useStudents()
+    const {students,solicitudes} = useStudents()
     const { state, dispatch } = useContext(StoreContext);
     console.log("EstudiantesData: ",students);
+    console.log("Solicitudes de Usuario: ",solicitudes);
 
     const studentsFilteres = students.filter(({user})=>user.NAME.toLowerCase().includes(location.state.toLowerCase()) && user.ID_USER !==state.user.ID_USER || user.ACCOUNT_NUMBER.toString().includes(location.state.toLowerCase()) && user.ID_USER !==state.user.ID_USER)
 

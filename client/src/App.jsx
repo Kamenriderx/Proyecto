@@ -1,4 +1,4 @@
-import { StudentProvider } from "../context/contextStudents/StudentProvider";
+import { StudentProvider } from "../src/context/contextStudents/StudentProvider";
 import ContentNavbar from "./interfaces/Navbar";
 import { StoreProvider } from "./store/ContextExample";
 //import { AppRouter } from "./router/AppRouter";
