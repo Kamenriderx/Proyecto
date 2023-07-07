@@ -6,6 +6,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const sendMail = require('./utils/sendMail');
 const generatePDF = require('./utils/generatePDF');
+const { encrypt } = require('./utils/handlePassword');
 
 
 

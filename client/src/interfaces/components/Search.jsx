@@ -1,15 +1,13 @@
-import {useNavigate} from 'react-router-dom'
-import {useState,useEffect} from 'react'
-import { BiSearch } from 'react-icons/bi'
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { BiSearch } from "react-icons/Bi";
 /* import axios from "axios";
 import Modal from '../../components/Modal' */
 
 const Search = () => {
+  const [valueSearch, setValueSearch] = useState("");
 
-
-  const [valueSearch, setValueSearch] = useState('')
-
- /*  useEffect(() => {
+  /*  useEffect(() => {
     // Lógica para obtener las solicitudes pendientes desde el servidor
     // y actualizar el estado de solicitudesPendientes
     const obtenerSolicitudesPendientes = async () => {
@@ -25,37 +23,41 @@ const Search = () => {
     obtenerSolicitudesPendientes();
   }, []); */
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const onSearchSubmit=(e)=>{
-	e.preventDefault()
-  if (valueSearch.trim() === '') {
-    navigate('/perfil'); 
-  }else{
-    navigate('/resultados',{
-      state:valueSearch
-    })
-    setValueSearch('')
-  }
-  }
+  const onSearchSubmit = (e) => {
+    e.preventDefault();
+    if (valueSearch.trim() === "") {
+      navigate("/perfil");
+    } else {
+      navigate("/search", {
+        state: valueSearch,
+      });
+      setValueSearch("");
+    }
+  };
 
   return (
-     <form onSubmit={onSearchSubmit}>
-    <div className='flex border rounded-full overflow-hidden'>
+    <form onSubmit={onSearchSubmit}>
+      <div className="flex border rounded-full overflow-hidden">
         <input
-            type='text'
-            name='valueSearch'
-            id=''
-            value={valueSearch}
-            onChange={(e)=>setValueSearch(e.target.value)}
-            placeholder='Buscar estudiantes...'
-            className='px-4 py-2 rounded-l-full focus:outline-none'
+          type="text"
+          name="valueSearch"
+          id=""
+          value={valueSearch}
+          onChange={(e) => setValueSearch(e.target.value)}
+          placeholder="Buscar estudiantes..."
+          className="px-4 py-2 rounded-l-full focus:outline-none"
         />
-        <button className='px-4 py-2 bg-blue-500 text-white flex items-center rounded-r-full' type="submit"><BiSearch className='mr-2'/></button>
-    </div>
-</form>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white flex items-center rounded-r-full"
+          type="submit"
+        >
+          <BiSearch className="mr-2" />
+        </button>
+      </div>
+    </form>
+  );
+};
 
-  )
-}
-
-export default Search
+export default Search;

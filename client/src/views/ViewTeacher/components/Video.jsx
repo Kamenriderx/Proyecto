@@ -17,7 +17,7 @@ const Video = () => {
 
   useEffect(() => {
     getTeacher(state);
-  }, [state]);
+  }, []);
 
   console.log("steTeacherVide: ", stateTeacher);
   // console.log("URL:", stateTeacher.user.user.multimedia[0].URL);

@@ -21,13 +21,13 @@ const getPerfil = async (req,res)=>{
             user = await getInfo(id,req.user.ID_ROLE);   
         };
 
-        if(parseInt(id) !== req.user.ID_USER) {
+/*         if(parseInt(id) !== req.user.ID_USER) {
             user = await getInfo(id,5);
             // if ((req.user.ID_ROLE ==1 && user.dataValues.user.ID_ROLE == 1)) {
             //     res.status(402).json({messagge:"NO PUEDES VER ESTE PERFIL"})
             //     return
             // }
-        };
+        }; */
 
 
         if (!user) {
@@ -51,7 +51,7 @@ const getPerfil = async (req,res)=>{
 //  funciones getPerfil
 // ----------------------------------------------------------------------------------------
 
-async function getInfo(id,role){
+async function  getInfo(id,role){
     let user ={}
     
 
@@ -75,16 +75,15 @@ async function getInfo(id,role){
         
             },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia"}]}})
 
-
-            break;
             
+            break;
+         
             
             default:
                 user = await User.findOne({where:{
                     ID_USER : id
                 }});
-                console.log(user)
-                user = getInfo(id,user.ID_ROLE);
+                console.log("Usuario alksmlaksx",user)
             break;
     }
 

@@ -27,7 +27,6 @@ exports.getRequests = async function(req, res) {
 
     // Mapea los datos necesarios de cada solicitud
     const requestData = pendingRequests.map((request) => {
-      console.log(request);
       return {
         requestId: request.ID_CREQUEST,
         recipientAccountNumber: request.recipient.ACCOUNT_NUMBER,

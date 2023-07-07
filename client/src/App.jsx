@@ -10,15 +10,15 @@ import TeacherState from "./views/ViewTeacher/context/TeacherState";
 function App() {
   return (
     <StoreProvider>
-      <StudentState>
-        <TeacherState>
-       <StudentProvider>
-      <ContentNavbar />
-        {/* <ReadCSV/> */}
-        {/* <ViewStudent/> */}
-        {/* <ViewTeacher/> */}
-        </TeacherState>
-      </StudentState>
+      <StudentProvider>
+        <StudentState>
+          <TeacherState>
+            <ContentNavbar />
+            {/* <ReadCSV/> */}
+            {/* <ViewStudent/> */}
+            {/* <ViewTeacher/> */}
+          </TeacherState>
+        </StudentState>
       </StudentProvider>
     </StoreProvider>
   );

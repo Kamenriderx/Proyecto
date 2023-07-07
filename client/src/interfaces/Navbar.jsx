@@ -17,11 +17,10 @@ import Solicitud from "./components/Solicitud";
 import ResultsSearch from "./ResultsSearch";
 /* import InitialSession from "./components/InitialSession"; */
 
-
 const ContentNavbar = () => {
   const { state, dispatch } = useContext(StoreContext);
 
-  const {students} = useStudents()
+  const { students } = useStudents();
 
   const handleSession = () => {
     dispatch({ type: "USER", user: {} });
@@ -31,8 +30,8 @@ const ContentNavbar = () => {
 
   const Navbar = () => {
     const { state, dispatch } = useContext(StoreContext);
-    console.log('EstudiantesData',students);
-    console.log('Usuario Conectado',state);
+    console.log("EstudiantesData", students);
+    console.log("Usuario Conectado", state);
     return (
       <>
         <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
@@ -85,6 +84,13 @@ const ContentNavbar = () => {
                 ) : (
                   <>
                     <li>
+                      <Search />
+                    </li>
+                    <li>
+                      <Solicitud />
+                    </li>
+
+                    <li>
                       <Link to="/">
                         <button
                           onClick={handleSession}
@@ -135,7 +141,13 @@ const ContentNavbar = () => {
 
     return (
       <>
-        {state?.user?.ID_ROLE === 1 ? <ViewStudent /> : <ViewTeacher />}
+        {state?.user?.ID_ROLE === 1 ? (
+          <ViewStudent />
+        ) : state?.user?.ID_ROLE === 2 ? (
+          <ViewTeacher />
+        ) : (
+          <h2>Admin</h2>
+        )}
       </>
     );
   };
@@ -149,6 +161,7 @@ const ContentNavbar = () => {
           <Route path="*" element={<NotFound />} />
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/search" element={<ResultsSearch />} />
           <Route exact path="/proffessor" />
           <Route
             exact
