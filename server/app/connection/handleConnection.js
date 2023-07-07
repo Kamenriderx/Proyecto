@@ -22,7 +22,7 @@ const handleConnections = (io) => {
         activeConnections = {...connections};
         console.log("Se desconecto un usuario:",activeConnections);
         //console.log("Esta es la conexion: ",io.sockets.sockets);
-      });;
+      });
     });
   });
 };
