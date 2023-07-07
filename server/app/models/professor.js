@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const connection = require("../../config/database");
-const User = require("./user");
+
 
 const Professor = connection.define(
     "PROFESSOR",
@@ -64,7 +64,18 @@ Professor.add = function(professor){
     },{include:[Professor.User]})
 }
 
+Professor.updateVideo = async function(id,url,isProfile=1){
+    
+    connection.query("INSERT INTO multimedia(ID_USER,URL,IS_PROFILE) VALUES(:ID_USER,:URL,:IS_PROFILE)",{
+        replacements: {
+            ID_USER: id,
+            URL:url,
+            IS_PROFILE:isProfile
 
+        }
+    })
+
+}
 
 Professor.sync({ force: false })
   .then(() => {

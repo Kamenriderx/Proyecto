@@ -54,7 +54,6 @@ const FormularioDocente = ({check,setCheck}) => {
  
 
         try {
-
             const token = localStorage.getItem('token')
             if(!token) return
             

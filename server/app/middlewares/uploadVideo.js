@@ -2,7 +2,7 @@ const multer = require('multer');
 
 const fileFilter = (req, file, cb) => {
   // Comprueba si el archivo cumple con los criterios deseados
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
+  if (file.mimetype === 'video/mp4') {
     // Acepta el archivo
     req.messagge = "El archivo es válido";
     cb(null, true);
@@ -14,7 +14,7 @@ const fileFilter = (req, file, cb) => {
 };
 const storage = multer.diskStorage({
   destination: function(req, filename, cb) {
-    const pathStorage = `public/images`
+    const pathStorage = `public/videos`
     cb(null, pathStorage)
   },
   filename: function(req, filename, cb) {
@@ -29,6 +29,6 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage, fileFilter:fileFilter });
+const uploadVideo = multer({ storage: storage, fileFilter:fileFilter });
 
-module.exports = upload;
+module.exports = uploadVideo;
