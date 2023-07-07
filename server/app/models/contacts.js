@@ -38,8 +38,8 @@ const Contacts = connection.define(
   }
 );
 
-Contact.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-Contact.belongsTo(User, { foreignKey: 'contact_id', as: 'contact' });
+Contacts.belongsTo(USER, { foreignKey: 'user_id', as: 'user' });
+Contacts.belongsTo(USER, { foreignKey: 'contact_id', as: 'contact' });
 
 
 Contacts.sync({ force: false })
