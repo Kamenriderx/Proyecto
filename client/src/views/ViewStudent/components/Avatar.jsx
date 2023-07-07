@@ -50,8 +50,8 @@ const Avatar = ({ user }) => {
       return
     }
 
-    console.log('stateStudent.user.user.multimedia.length: ', stateStudent.user.user.multimedia.length)
-    if(stateStudent.user.user.multimedia.length === 3){
+    // console.log('stateStudent.user.user.multimedia.length: ', stateStudent.user.user.multimedia.length)
+    if(stateStudent?.user?.user?.multimedia?.length === 3){
 
       alert('Solo puede subir como máximo tres imágenes.')
 
