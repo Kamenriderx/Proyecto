@@ -2,7 +2,7 @@ const ContactRequest = require('../models/contactRequests');
 const User = require('../models/user');
 const sendMail = require('../../utils/sendMail');
 const Contacts = require('../models/contacts')
-
+const connection = require("../../config/database");
 
 //! Controlador para enviar solicitudes pendientes con estado y cancelarlas por parte del que envia
 exports.getRequests = async function(req, res) {
@@ -144,7 +144,6 @@ exports.createContactRequest = async function(req, res) {
   }
 }
 
-
 //! Controlador para aceptar solicitudes de contacto
 exports.acceptContactRequest = async function(req, res) {
   try {
@@ -266,41 +265,46 @@ exports.cancelContactRequest = async function(req, res) {
 }
 
 //! Controlador para obtener los contactos de un usuario
-exports.getUserContacts = async function(req, res) {
+exports.getContacts = async function(req, res) {
   try {
     const { userId } = req.params;
+    let userContacts;
 
-    // Obtiene los contactos del usuario
-    const contacts = await Contacts.findAll({
-      where: { USER_ID: userId },
-      include: [
+    if (userId) {
+      // Consulta para obtener los contactos en CONTACT_ID de un USER_ID
+      userContacts = await connection.query(
+        'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
+        'FROM contacts ' +
+        'INNER JOIN user_ ON contacts.CONTACT_ID = user_.ID_USER ' +
+        'WHERE contacts.USER_ID = :userId',
         {
-          model: User,
-          as: 'user',
-          attributes: ['NAME', 'ACCOUNT_NUMBER', 'CENTER', 'EMAIL'],
-        },
-      ],
-      attributes: ['CONTACT_ID', 'CREATED_AT'],
-    });
+          type: connection.QueryTypes.SELECT,
+          replacements: { userId },
+        }
+      );
 
-    // Verifica los contactos del usuario
-    const userContacts = contacts.map(contact => contact.CONTACT_ID);
+      // Consulta para obtener los contactos en USER_ID de un CONTACT_ID
+      const contactContacts = await connection.query(
+        'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
+        'FROM contacts ' +
+        'INNER JOIN user_ ON contacts.USER_ID = user_.ID_USER ' +
+        'WHERE contacts.CONTACT_ID = :userId',
+        {
+          type: connection.QueryTypes.SELECT,
+          replacements: { userId },
+        }
+      );
 
-    // Verifica si los contactos también son contactos del usuario
-    const mutualContacts = await Contacts.findAll({
-      where: { USER_ID: userContacts, CONTACT_ID: userId },
-    });
-
-    if (mutualContacts.length === userContacts.length) {
-      return res.status(200).json({ contacts });
-    } else {
-      return res.status(400).json({ message: 'No todos los contactos son mutuos' });
+      // Asignar los contactos de CONTACT_ID a userContacts
+      userContacts = userContacts.concat(contactContacts);
     }
+
+    return res.status(200).json({ contacts: userContacts });
   } catch (error) {
-    console.error('Error al obtener los contactos del usuario:', error);
-    return res.status(500).json({ message: 'Error al obtener los contactos del usuario' });
+    console.error('Error al obtener los contactos:', error);
+    return res.status(500).json({ message: 'Error al obtener los contactos' });
   }
-}
+};
 
 //! Controlador para obtener las solicitudes pendientes del destinatario
 exports.getPendingContactRequests = async function (req, res) {
