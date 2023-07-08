@@ -105,7 +105,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <div style="font-family: 'Raleway',sans-serif; font-size: 17px; font-weight: 700; color: #000000; line-height: 210%; text-align: right; word-wrap: break-word;">
-    <p style="line-height: 210%;">Solicitud de cambio de contraseña aprobada</p>
+    <p style="line-height: 210%;">Contraseña restablecida con exito</p>
   </div>
 
       </td>
@@ -156,7 +156,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <tr>
       <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
-  <h4 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-family: Bitter; font-size: 16px; font-weight: 400;"><strong>Hola <%= recipientName %>, </strong></h4>
+  <h4 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-family: Bitter; font-size: 16px; font-weight: 400;"><strong>Hola <%= approveName %>, </strong></h4>
 
       </td>
     </tr>
@@ -169,10 +169,10 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <div style="font-family: 'Montserrat',sans-serif; font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="line-height: 140%;"><%= approveName %> a aprobado tu solicitud de cambio de contraseña exitosamente.</p>
+    <p style="line-height: 140%;">Tu contraseña fue restablecida exitosamente.</p>
 <p style="line-height: 140%;"></p>
-<p style="line-height: 140%;">Has clic en el siguiente enlace para restablecerla.</p>
-<p style="line-height: 140%;"><a rel="noopener" href="<%= link %>" target="_blank">Restablecer contraseña</a></p>
+<p style="line-height: 140%;">Tu nueva contraseña es: <%= password %></p>
+<p style="line-height: 170%;"><strong><em>No compartas esta información con nadie </em></strong></p>
   </div>
 
       </td>

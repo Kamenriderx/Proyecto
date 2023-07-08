@@ -56,7 +56,7 @@ const USER = connection.define(
     VERIFICATION_CODE: {
       type: DataTypes.STRING,
       validate: {
-        len: [0, 10], 
+        len: [0, 100], 
       },
     },
     ONLINE_STATUS: {
