@@ -15,6 +15,8 @@ import useStudents from "../utils/hooks/useStudents";
 import Search from "./components/Search";
 import Solicitud from "./components/Solicitud";
 import ResultsSearch from "./ResultsSearch";
+import ListTeachers from "./ListTeachers";
+import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -127,6 +129,17 @@ const ContentNavbar = () => {
                     </li>
                   </>
                 )}
+                {state?.user?.ID_ROLE === 3 && (
+                  <>
+                    <li>
+                      <Link to="/list-teachers">
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
+                          Listado Docentes
+                        </button>
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -145,6 +158,8 @@ const ContentNavbar = () => {
           <ViewStudent />
         ) : state?.user?.ID_ROLE === 2 ? (
           <ViewTeacher />
+        ) : state?.user?.ID_ROLE === 3 ? (
+          <ViewTeacher />
         ) : (
           <h2>Admin</h2>
         )}
@@ -160,6 +175,7 @@ const ContentNavbar = () => {
           {/* rutas publicas */}
           <Route path="*" element={<NotFound />} />
           <Route exact path="/" element={<Principal />} />
+          <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
           <Route exact path="/search" element={<ResultsSearch />} />
           <Route exact path="/proffessor" />
@@ -169,9 +185,9 @@ const ContentNavbar = () => {
             element={<RequestPasswordForm />}
           />
           <Route exact path="/Estudiantes" element={<ReadCSV />} />
-
           {/* rutas privadas */}
           <Route exact path="/perfil" element={<Profile />} />
+          <Route exact path="/list-teachers" element={<ListTeachers />} />
 
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
