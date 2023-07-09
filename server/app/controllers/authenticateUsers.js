@@ -19,13 +19,14 @@ exports.loginAccess = async (req, res) => {
         { ACCOUNT_NUMBER: identifier }
       )
     });
-    console.log(user.dataValues);
+    //console.log(user.dataValues);
     // Verifica si el usuario existe
     if (!user) {
       return res.status(404).json({ error: 'N° de cuenta o email incorrecto. Vuelva a intentar.' });
     }
 
     // Verifica la contraseña
+    
     const passwordMatch = await bcrypt.compare(password, user.USER_PASSWORD);
     if (!passwordMatch) {
       return res.status(401).json({ error: 'Contraseña incorrecta. Vuelve a intentarlo o selecciona "¿Restablecer contraseña?" para cambiarla.' });

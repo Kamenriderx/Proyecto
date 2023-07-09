@@ -59,6 +59,10 @@ const USER = connection.define(
         len: [0, 10], 
       },
     },
+    ONLINE_STATUS: {
+      type: DataTypes.STRING,
+
+    },
   },
   {
     tableName: "USER_",
@@ -85,4 +89,6 @@ USER.sync({ force: false })
     console.error("Error al sincronizar tabla de USER:", error);
   });
 
+
+  
 module.exports = USER;
