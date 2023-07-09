@@ -46,7 +46,10 @@ const ListTeachers = () => {
         (docente.CAREER.toLowerCase().includes(valueSearch.toLowerCase()) &&
           docente.ID_USER !== state.user.ID_USER &&
           state.user.CENTER === docente.CENTER) ||
-        docente.ACCOUNT_NUMBER.toString().includes(valueSearch.toLowerCase())
+        (docente.ACCOUNT_NUMBER.toString().includes(
+          valueSearch.toLowerCase()
+        ) &&
+          state.user.CENTER === docente.CENTER)
     );
     setDocentesFiltrados(filtrados);
   };
