@@ -15,6 +15,7 @@ import useStudents from "../utils/hooks/useStudents";
 import Search from "./components/Search";
 import Solicitud from "./components/Solicitud";
 import ResultsSearch from "./ResultsSearch";
+import ViewChat from "../views/ViewChat/ViewChat";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -172,6 +173,7 @@ const ContentNavbar = () => {
 
           {/* rutas privadas */}
           <Route exact path="/perfil" element={<Profile />} />
+          <Route exact path="/chat" element={<ViewChat />} />
 
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>

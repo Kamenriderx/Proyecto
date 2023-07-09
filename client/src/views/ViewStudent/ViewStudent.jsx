@@ -10,21 +10,17 @@ import { StoreContext } from "../../store/ContextExample";
 import StudentContext from "./context/StudentContext";
 
 const ViewStudent = () => {
+    //contexto de usuario
+    const { state } = useContext(StoreContext);
+    //contexto de estudiante
+    const {stateStudent, getStudent, putCorreo} = useContext(StudentContext)
 
-  const correo = {
-    EMAIL: "ngueaa037@gmail.com",
-  };
   const user = {
     visitante: false,
   };
 
-  //contexto de usuario
-  const { state } = useContext(StoreContext);
-  //contexto de estudiante
-  const {stateStudent, getStudent, putCorreo} = useContext(StudentContext)
-
   const [showModal, setshowModal] = useState(false);
-  const [email, setEmail] = useState(correo);
+  const [email, setEmail] = useState('');
   const [newEmail, setNewEmail] = useState(email);
 
   //Guardar el perfil
@@ -34,7 +30,7 @@ const ViewStudent = () => {
     getStudent(state)
   },[state])
 
-  console.log('stateStudenViewStudent: ',stateStudent)
+  console.log('stateStudViewStudent: ',stateStudent)
 
   const handleEmailChange = (e) => {
     setNewEmail({ EMAIL: e.target.value });
