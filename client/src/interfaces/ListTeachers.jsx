@@ -44,7 +44,8 @@ const ListTeachers = () => {
     const filtrados = docentes.filter(
       (docente) =>
         (docente.CAREER.toLowerCase().includes(valueSearch.toLowerCase()) &&
-          docente.ID_USER !== state.user.ID_USER) ||
+          docente.ID_USER !== state.user.ID_USER &&
+          state.user.CENTER === docente.CENTER) ||
         docente.ACCOUNT_NUMBER.toString().includes(valueSearch.toLowerCase())
     );
     setDocentesFiltrados(filtrados);
