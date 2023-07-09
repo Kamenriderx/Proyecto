@@ -11,14 +11,15 @@ const handleConnection = async (socket, data) => {
       } else {
         try {
           const token = decoded;
-          const user = await USER.findOne({ ID_USER: token.ID_USER });
+          console.log({decoded})
+          const user = await USER.findOne({ where:{ ID_USER: token.userId} });
           user.ONLINE_STATUS = data.status;
           await user.save();
 
           if(data.status === "offline"){
-            delete data.activeConnections[token.ID_USER];
+            delete data.activeConnections[token.userId];
           }else{
-            data.activeConnections[token.ID_USER] = {
+            data.activeConnections[token.userId] = {
               socketId: socket.id,
               status: data.status,
               token: data.token,
