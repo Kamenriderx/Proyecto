@@ -176,11 +176,11 @@ const ViewChat = () => {
 
 
   console.log("ID DESDE EL COMPONENTE HIJO: ", idConversation);
-  console.log("CONVERSACION DESDE EL COMPONENTE HIJO: ", chatConversation.USER_.multimedia);
+  console.log("CONVERSACION DESDE EL COMPONENTE HIJO: ", chatConversation?.USER_.multimedia);
 
   return (
     <>
-      {stateStudent && (
+      {stateStudent &&(
         <>
           <div className="flex h-screen bg-gray-50">
             <div className="w-1/4 ">
