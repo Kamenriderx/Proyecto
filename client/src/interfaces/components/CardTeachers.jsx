@@ -75,9 +75,18 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
               {student.user.ACCOUNT_NUMBER}
             </p>
             <div className="mt-4">
+              <input
+                className={
+                  "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                }
+                value="Enviar Solicitud"
+                type="submit"
+                onClick={enviarSolicitudContacto}
+              />
               {pendings.map((pending) => {
                 if (
-                  state.user.ID_USER === pending.senderId &&
+                  pending.senderId.includes(requestId) ===
+                    pending.recipientId.includes(requestId) &&
                   pending.status === "pending"
                 ) {
                   return (
@@ -90,9 +99,13 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
                   );
                 } else if (
                   (state.user.ID_USER === pending.senderId &&
-                    pending.status === "accepted") ||
+                    pending.status === "accepted" &&
+                    pending.senderId.includes(requestId) ===
+                      pending.recipientId.includes(requestId)) ||
                   (state.user.ID_USER === pending.recipientId &&
-                    pending.status === "accepted")
+                    pending.status === "accepted" &&
+                    pending.recipientId.includes(requestId) ===
+                      pending.senderId.includes(requestId))
                 ) {
                   return (
                     <input
@@ -103,9 +116,26 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
                   );
                 } else if (
                   (state.user.ID_USER === pending.senderId &&
-                    pending.status === "rejected") ||
-                  pending.status === null
+                    pending.status === "rejected" &&
+                    pending.senderId.includes(requestId) ===
+                      pending.recipientId.includes(requestId)) ||
+                  (state.user.ID_USER === pending.recipientId &&
+                    pending.status === "rejected" &&
+                    pending.recipientId.includes(requestId) ===
+                      pending.senderId.includes(requestId))
                 ) {
+                  return (
+                    <input
+                      className={
+                        "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                      }
+                      value="Enviar Solicitud"
+                      type="submit"
+                      onClick={enviarSolicitudContacto}
+                    />
+                  );
+                }
+                {
                   return (
                     <input
                       className={
