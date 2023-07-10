@@ -274,7 +274,11 @@ const ViewChat = () => {
                 )}
               </div>
             </div>
-            <div className="w-1/4 bg-green-500 "></div>
+            <div className="w-1/4 bg-green-500 ">
+                  
+
+
+            </div>
           </div>
         </>
       )}
