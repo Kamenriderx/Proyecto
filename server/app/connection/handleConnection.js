@@ -23,17 +23,6 @@ const handleConnections = (io) => {
     });
 
     socket.on("disconnect", (data) => {
-    socket.on("sendMessage",(data)=>{
-
-      const user = getUser(data.ID_RECEIVER)
-      console.log({recibeMsj: user.socketId})
-      io.to(user.socketId).emit("getMessage",{
-        ID_SENDER:data.ID_SENDER,
-        CONTENT:data.TEXT
-      });      
-
-
-    })
       
       handleConnection(socket, { token, status: "offline" ,activeConnections}).then((connections)=>{
         activeConnections = {...connections};
@@ -46,6 +35,18 @@ const handleConnections = (io) => {
         });
       });
     });
+
+
+    socket.on("sendMessage",(data)=>{
+      const user = getUser(data.ID_RECEIVER)
+      console.log({recibeMsj: user.socketId})
+      io.to(user.socketId).emit("getMessage",{
+        ID_SENDER:data.ID_SENDER,
+        CONTENT:data.TEXT
+      });      
+
+    })
+  
   });
 };
 
