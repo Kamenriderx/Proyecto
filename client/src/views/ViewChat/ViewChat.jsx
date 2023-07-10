@@ -9,191 +9,92 @@ import StudentContext from "../ViewStudent/context/StudentContext";
 import MessagesContext from "./context/Messages/MessagesContext";
 import ConversationContext from "./context/Conversation/ConversationContext";
 import OnlineList from "../../components/OnlineList";
+import { httpRequests } from "../../utils/helpers/httpRequests";
 
 const ViewChat = () => {
-  let socket = "";
+  const [socket, setSocket] = useState(null);
+  const [check, setCheck] = useState(false);
+  const { state, dispatch } = useContext(StoreContext);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      socket = io(
-        `http://localhost:3000?token=${localStorage.getItem("token")}`
-      );
+      let s = io(`http://localhost:3000?token=${localStorage.getItem("token")}`);
+      setSocket(s);
+      dispatch({ type: "SOCKET", socket:s });
     }
   }, [localStorage.getItem("token")]);
 
+  useEffect(() => {
+    socket?.emit("sendMessage", {})
+  
+    
+  }, [])
+  
   //contexto de usuario
-  const { state } = useContext(StoreContext);
+
   //contexto de estudiante
   const { stateStudent, getStudent } = useContext(StudentContext);
-
-  //contexto de mensajes
   const { stateMessages, getMessages } = useContext(MessagesContext);
-
-  console.log("stateUsuario: ", state.user.ONLINE_STATUS);
-
-  useEffect(() => {
-    getStudent(state);
-  }, [state]);
-
-
-  const chats = [
-    {
-      id: 1,
-      lastMessage: "hola",
-      name: "nelson",
-      cantMessages: 3,
-      hour: "3:00 P.M",
-    },
-    {
-      id: 2,
-      lastMessage: "hola",
-      name: "javier",
-      cantMessages: 2,
-      hour: "5:00 P.M",
-    },
-    {
-      id: 3,
-      lastMessage: "hola",
-      name: "carlos",
-      cantMessages: 12,
-      hour: "8:00 P.M",
-    },
-    {
-      id: 4,
-      lastMessage: "hola",
-      name: "jose",
-      cantMessages: 25,
-      hour: "11:00 P.M",
-    },
-    {
-      id: 5,
-      lastMessage: "hola",
-      name: "miguel",
-      cantMessages: 78,
-      hour: "1:00 P.M",
-    },
-    {
-      id: 6,
-      lastMessage: "hola",
-      name: "nelson",
-      cantMessages: 3,
-      hour: "3:00 P.M",
-    },
-    {
-      id: 7,
-      lastMessage: "hola",
-      name: "javier",
-      cantMessages: 2,
-      hour: "5:00 P.M",
-    },
-    {
-      id: 8,
-      lastMessage: "hola",
-      name: "carlos",
-      cantMessages: 12,
-      hour: "8:00 P.M",
-    },
-    {
-      id: 9,
-      lastMessage: "hola",
-      name: "jose",
-      cantMessages: 25,
-      hour: "11:00 P.M",
-    },
-    {
-      id: 10,
-      lastMessage: "hola",
-      name: "miguel",
-      cantMessages: 78,
-      hour: "1:00 P.M",
-    },
-  ];
-
-  const messages = [
-    {
-      id: 1,
-      send: 1,
-      receive: 2,
-      message: "mensaje 1 enviado",
-    },
-    {
-      id: 2,
-      send: 1,
-      receive: 2,
-      message: "mensaje 2 enviado",
-    },
-    {
-      id: 3,
-      send: 2,
-      receive: 1,
-      message: "mensaje 1 recibido",
-    },
-  ];
-
-  console.log(
-    "Imagen: ",
-    stateStudent?.user?.user?.multimedia[
-      stateStudent.user.user.multimedia.length - 1
-    ].URL
-  );
-
-  console.log("ContextoUsuario: ", state.user.ID_USER);
-
-  const [allMessages, setAllMessages] = useState(messages);
-  const [getMessageInput, setGetMessageInput] = useState("");
-
-  const messageInput = (e) => {
-    console.log(e.target.value);
-    setGetMessageInput(e.target.value);
-  };
-
-  const sendMessage = () => {
-    console.log(getMessageInput);
-    setGetMessageInput("");
-    setAllMessages([
-      ...allMessages,
-      {
-        id: allMessages.length + 1,
-        send: 1,
-        receive: 2,
-        message: getMessageInput,
-      },
-    ]);
-  };
 
   const [showMessages, setShowMessages] = useState(false);
 
   //recibir datos del componente hijo
   const [idConversation, setIdConversation] = useState("");
+  const [getMessageInput, setGetMessageInput] = useState("");
   const [chatConversation, setChatConversation] = useState(null);
+  //contexto de mensajes
 
+  useEffect(() => {
+    getStudent(state);
+  }, [state]);
 
   const recibirDatoDelHijo = (id, chat) => {
     setIdConversation(id);
-    setChatConversation(chat)
-    getMessages(state, id)
+    setChatConversation(chat);
+    getMessages(state, id);
     setShowMessages(true);
   };
 
+  const messageInput = (e) => {
+    setGetMessageInput(e.target.value);
+  };
 
-  console.log("ID DESDE EL COMPONENTE HIJO: ", idConversation);
-  console.log("CONVERSACION DESDE EL COMPONENTE HIJO: ", chatConversation?.USER_.multimedia);
+  useEffect(() => {
+    socket?.on("getMessage",()=>{
+      stateMessages(getMessages(state, idConversation));
+    });
+  }, [socket])
+  
+
+  const sendMessage = () => {
+    httpRequests()["post"]("http://localhost:3000/registro/message/add", {
+      body: {
+        SENDER_ID: state.user.ID_USER,
+        ID_CONVERSATION: idConversation,
+        RECEIVER_ID: chatConversation.USER_.ID_USER,
+        CONTENT: getMessageInput,
+      },
+    });
+    setGetMessageInput("");
+    stateMessages(getMessages(state, idConversation));
+    socket.emit("sendMessage", {ID_RECEIVER: chatConversation.USER_.ID_USER})
+  };
 
   return (
     <>
-      {stateStudent &&(
+      {stateStudent && (
         <>
           <div className="flex h-screen bg-gray-50">
             <div className="w-1/4 ">
-              <Buscador chats={chats} enviarDatoAlPadre={recibirDatoDelHijo} />
+              <Buscador check={check} enviarDatoAlPadre={recibirDatoDelHijo} />
             </div>
             <div className="w-1/2">
               <div>
                 <div className="bg-gray-200 flex gap-4 border-b-2 border-gray-500 h-16 p-2">
-                  {showMessages && stateMessages &&  (
+                  {showMessages && stateMessages && (
                     <>
                       <img
-                         src={
+                        src={
                           chatConversation.USER_.hasOwnProperty("multimedia")
                             ? chatConversation.USER_.multimedia[
                                 chatConversation.USER_.multimedia.length - 1
@@ -207,31 +108,39 @@ const ViewChat = () => {
                         <p className="font-bold">
                           {chatConversation.USER_.NAME}
                         </p>
-                        <p className="text-sm">{chatConversation.USER_.ONLINE_STATUS}</p>
+                        <p className="text-sm">
+                          {chatConversation.USER_.ONLINE_STATUS}
+                        </p>
                       </div>
                     </>
                   )}
                 </div>
                 {showMessages && stateMessages && (
                   <>
-                    <div className="overflow-y-auto scrollbar-thin h-[450px]">
+                    <div className="overflow-y-auto scrollbar-thin h-[450px] flex flex-col-reverse  justify-end ">
                       {stateMessages.results.results.map((mess) => (
-                        <>
+                        <div key={mess.SENDER_ID+""+ state.user.ID_USER}>
                           {mess.SENDER_ID == state.user.ID_USER ? (
-                            <div className="m-4 flex gap-2" key={mess.ID_MESSAGE}>
-                              <img 
-                              src={
-                                mess.user.hasOwnProperty("multimedia")
-                                  ? mess.user.multimedia[
-                                      mess.user.multimedia.length - 1
-                                    ].URL
-                                  : fondoPerfil
-                              }
-                              alt="No hay imagen"
-                              className="bg-cyan-400 rounded-full h-12 w-12"/>
+                            <div
+                              className="m-4 flex gap-2"
+                              key={mess.ID_MESSAGE}
+                            >
+                              <img
+                                src={
+                                  mess.user.hasOwnProperty("multimedia")
+                                    ? mess.user.multimedia[
+                                        mess.user.multimedia.length - 1
+                                      ].URL
+                                    : fondoPerfil
+                                }
+                                alt="No hay imagen"
+                                className="bg-cyan-400 rounded-full h-12 w-12"
+                              />
                               <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
                                 <p className="break-words ">{mess.CONTENT}</p>
-                                <p className="text-xs float-right">{mess.createdAt}</p>
+                                <p className="text-xs float-right">
+                                  {mess.createdAt}
+                                </p>
                               </div>
                             </div>
                           ) : (
@@ -241,21 +150,24 @@ const ViewChat = () => {
                             >
                               <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
                                 <p className="break-words">{mess.CONTENT}</p>
-                                <p className="text-xs float-right">{mess.createdAt}</p>
+                                <p className="text-xs float-right">
+                                  {mess.createdAt}
+                                </p>
                               </div>
-                              <img 
-                              src={
-                                mess.user.hasOwnProperty("multimedia")
-                                  ? mess.user.multimedia[
-                                      mess.user.multimedia.length - 1
-                                    ].URL
-                                  : fondoPerfil
-                              }
-                              alt="No hay imagen"
-                              className="bg-cyan-400 rounded-full h-12 w-12"/>
+                              <img
+                                src={
+                                  mess.user.hasOwnProperty("multimedia")
+                                    ? mess.user.multimedia[
+                                        mess.user.multimedia.length - 1
+                                      ].URL
+                                    : fondoPerfil
+                                }
+                                alt="No hay imagen"
+                                className="bg-cyan-400 rounded-full h-12 w-12"
+                              />
                             </div>
                           )}
-                        </>
+                        </div>
                       ))}
                     </div>
 
@@ -276,9 +188,9 @@ const ViewChat = () => {
               </div>
             </div>
             <div className="w-1/4 bg-green-500 ">
-                  
-                  <OnlineList/>
-
+              {socket && (
+                <OnlineList setCheck={setCheck} check={check} socket={socket} />
+              )}
             </div>
           </div>
         </>

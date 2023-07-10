@@ -73,15 +73,36 @@ const getConversations = async (req,res)=>{
         const endIndex = page * limit;
         const results = {};
 
-        const data = await Conversation.findAll(
+        let data = await Conversation.findAll(
             {
                 where:{
                     [Op.or]:
                         [{USER_1_ID:id},
                         {USER_2_ID:id}]
-                },include:{model:User,attributes:["ACCOUNT_NUMBER","NAME","ONLINE_STATUS","ID_USER"],include:[{model:Multimedia, as:"multimedia"}]}
+                },include:[{model:User,as:"user1",attributes:["ACCOUNT_NUMBER","NAME","ONLINE_STATUS","ID_USER"],include:[{model:Multimedia, as:"multimedia"}]},{model:User,as:"user2",attributes:["ACCOUNT_NUMBER","NAME","ONLINE_STATUS","ID_USER"],include:[{model:Multimedia, as:"multimedia"}]}]
             }
         )
+
+      
+
+        data = await data.map(item => {
+            item = item.dataValues
+            if (item.user1.ID_USER == parseInt(id)) {
+              delete item.user1;
+              item.USER_ = item.user2
+              delete item.user2;
+              return item;
+            }
+            else if (item.user2.ID_USER == parseInt(id)) {
+                
+              delete item.user2;
+              item.USER_ = item.user1
+              delete item.user1;
+              return item;
+            }
+            
+          });
+          
         if (endIndex < data.length) {
             results.next = {
             page: page + 1,

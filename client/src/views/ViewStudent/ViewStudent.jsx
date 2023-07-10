@@ -20,7 +20,7 @@ const ViewStudent = () => {
         `http://localhost:3000?token=${localStorage.getItem("token")}`
       );
     }
-    console.log('socket: ',socket)
+   
   }, [localStorage.getItem("token")]);
 
  
@@ -30,7 +30,7 @@ const ViewStudent = () => {
   //contexto de estudiante
   const { stateStudent, getStudent, putCorreo } = useContext(StudentContext);
 
-  console.log("ContextoUsuario: ", state);
+  
 
   const user = {
     visitante: false,
@@ -47,7 +47,7 @@ const ViewStudent = () => {
     getStudent(state);
   }, [state]);
 
-  console.log("stateStudViewStudent: ", stateStudent);
+  
 
   const handleEmailChange = (e) => {
     setNewEmail({ EMAIL: e.target.value });
@@ -61,10 +61,9 @@ const ViewStudent = () => {
     }
 
     setEmail(newEmail);
-    console.log(newEmail);
     setshowModal(false);
 
-    console.log("state.token: ", state.token);
+
 
     await putCorreo(state, newEmail.EMAIL);
     await getStudent(state);

@@ -5,7 +5,7 @@ import useStudents from "../../utils/hooks/useStudents";
 
 const CardTeachers = ({ student }) => {
   const { state, dispatch } = useContext(StoreContext);
-  const { solicitudes, pendings } = useStudents();
+  const {pendings } = useStudents();
 
   const enviarSolicitudContacto = async () => {
     const senderId = `${state.user.ID_USER}`;
@@ -16,7 +16,7 @@ const CardTeachers = ({ student }) => {
         "http://localhost:3000/registro/contacts/contact-requests",
         { senderId, recipientId }
       );
-      console.log("Solicitud Enviada....", res.data);
+
     } catch (error) {
       console.error("Error al enviar la solicitud", error);
     }
@@ -27,14 +27,12 @@ const CardTeachers = ({ student }) => {
       const response = await axios.put(
         `http://localhost:3000/registro/contacts/contact-requests/${id}/cancel`
       );
-      console.log(response.data);
+
     } catch (error) {
       console.log(error);
     }
   };
-  console.log("Estudiante", student);
-  console.log("Solicitudes Enviadas : ", pendings);
-  console.log("Solicitudes", solicitudes);
+
 
   /*   const esRemitente = state.user.ID_USER === pendings.senderId;
 const esDestinatario = state.user.ID_USER === pendings.recipientId; */

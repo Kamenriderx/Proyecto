@@ -4,7 +4,7 @@ import { StoreContext } from "../../../store/ContextExample";
 import StudentContext from "../../ViewStudent/context/StudentContext";
 import MessagesContext from "../context/Messages/MessagesContext";
 
-const Buscador = ({ chats, enviarDatoAlPadre }) => {
+const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -16,8 +16,7 @@ const Buscador = ({ chats, enviarDatoAlPadre }) => {
   //contexto de estudiante
   const { stateStudent, getStudent } = useContext(StudentContext);
   //contexto de la conversacion
-  const { stateConversation, getConversation } =
-    useContext(ConversationContext);
+  const { stateConversation, getConversation } = useContext(ConversationContext);
   //contexto de mensajes
   const { stateMessages, getMessages } = useContext(MessagesContext);
 
@@ -25,10 +24,8 @@ const Buscador = ({ chats, enviarDatoAlPadre }) => {
     getConversation(state);
     getStudent(state);
     getMessages(state);
-  }, [state]);
+  }, [state,check]);
 
-  console.log("stateMessagesBuscador: ", stateMessages);
-  console.log("stateConversationBuscador: ", stateConversation);
 
   // console.log(
   //   "stateConversationBuscador: ",
@@ -41,7 +38,6 @@ const Buscador = ({ chats, enviarDatoAlPadre }) => {
   //   ].URL
   // );
 
-  console.log(chat);
 
   useEffect(() => {
     setUsers(chats);
@@ -67,7 +63,9 @@ const Buscador = ({ chats, enviarDatoAlPadre }) => {
     <>
       {stateStudent && (
         <>
-          <div className="bg-gray-200 h-16 border-b-2 border-gray-500">
+          <div className="bg-gray-200 h-16 border-b-2 border-gray-500 ">
+            {/*
+            
             <input
               type="text"
               placeholder="buscar"
@@ -75,14 +73,18 @@ const Buscador = ({ chats, enviarDatoAlPadre }) => {
               onChange={searcher}
               className="rounded-2xl m-3"
             />
+            */}
           </div>
-          <div className="overflow-y-auto scrollbar-thin h-[505px]">
+          <div className="overflow-y-auto scrollbar-thin h-[505px] ">
             {results && (
               <>
                 {results.map((chat) => (
                   <div
                     key={chat.ID_CONVERSATION}
-                    className="border-2 border-gray-400 m-3 p-2 rounded-xl flex justify-between"
+                    className="border-2 border-gray-400 m-3 p-2 rounded-xl flex justify-between cursor-pointer hover:bg-gray-300"
+                    onClick={() =>
+                      handleChange(chat.ID_CONVERSATION, chat)
+                    }
                   >
                     <div className="flex gap-2 items-center">
                       <div>
@@ -96,9 +98,7 @@ const Buscador = ({ chats, enviarDatoAlPadre }) => {
                           }
                           alt="seleccine imagen"
                           className="bg-cyan-500 rounded-full w-12 h-12"
-                          onClick={() =>
-                            handleChange(chat.ID_CONVERSATION, chat)
-                          }
+                          
                         />
                       </div>
 

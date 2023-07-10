@@ -15,8 +15,6 @@ const ResultsSearch = () => {
 
   const { students, solicitudes } = useStudents();
   const { state, dispatch } = useContext(StoreContext);
-  console.log("EstudiantesData: ", students);
-  console.log("Solicitudes de Usuario: ", solicitudes);
 
   const studentsFilteres = students.filter(
     ({ user }) =>

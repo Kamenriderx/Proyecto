@@ -60,7 +60,6 @@ const LoginForm = () => {
       [name]: value.trim(),
     });
   };
-  console.log(`http://localhost:3000/registro/login/${login.loginType}`);
   const handleSelect = (e)=>{
     e.preventDefault();
     const { value } = e.target;
@@ -105,7 +104,6 @@ const LoginForm = () => {
     } */
 
     const res = await httpRequests()["post"](`http://localhost:3000/registro/login/${login.loginType}`, { body: { ...login } });
-    console.log(res);
     if (res.status === 200) {
 
       const token = res.data.token;

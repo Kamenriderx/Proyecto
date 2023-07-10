@@ -29,12 +29,13 @@ const ContentNavbar = () => {
     dispatch({ type: "USER", user: {} });
     dispatch({ type: "TOKEN", token: "" });
     dispatch({ type: "LOGOUT" });
+    console.log(state.socket);
+    state.socket?.close();
   };
 
   const Navbar = () => {
     const { state, dispatch } = useContext(StoreContext);
-    console.log("EstudiantesData", students);
-    console.log("Usuario Conectado", state);
+
     return (
       <>
         <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
@@ -151,7 +152,7 @@ const ContentNavbar = () => {
 
   const Profile = () => {
     const { state } = useContext(StoreContext);
-    console.log(state);
+
 
     return (
       <>

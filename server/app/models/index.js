@@ -52,8 +52,9 @@ models.Message.Conversation=models.Message.belongsTo(models.Conversation,{
 });
 
 // CONVERSACION - USER
-models.Conversation.belongsTo(models.User, { foreignKey: 'USER_1_ID' });
-models.Conversation.belongsTo(models.User, { foreignKey: 'USER_2_ID' });
+models.Conversation.belongsTo(models.User, { foreignKey: 'USER_1_ID',as:"user1" });
+models.Conversation.belongsTo(models.User, { foreignKey: 'USER_2_ID', as:"user2" });
+
 models.User.Conversation=models.User.hasMany(models.Conversation,{
     foreignKey:"USER_1_ID"
 });

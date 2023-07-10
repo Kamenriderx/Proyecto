@@ -3,7 +3,7 @@ import { GoDotFill } from "react-icons/go";
 import img from "../assets/fondoPerfil.jpg";
 import { httpRequests } from "../utils/helpers/httpRequests";
 
-const Contact = ({state,userName,photo,userId,ownerList}) =>{
+const Contact = ({state,userName,photo,userId,ownerList,setCheck,check}) =>{
     const [style, setStyle] = useState(
         {
             container:"shadow-lg z-10",
@@ -17,7 +17,7 @@ const Contact = ({state,userName,photo,userId,ownerList}) =>{
                 USER_1_ID:userId,
                 USER_2_ID:ownerList
             }}).then(res=>{
-                console.log("Nuevo chat: ",res);
+                setCheck(!check);
             });
 
     }

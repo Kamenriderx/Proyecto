@@ -59,7 +59,7 @@ const ListTeachers = () => {
       const res = await axios.post(
         `http://localhost:3000/registro/passResetApproval/aprove/${id}/${state.user.ID_USER}`
       );
-      console.log("Respuesta de Aprovacion : ", res);
+
       toast.success("Solicitud de activacion exitosa", {
         position: "top-right",
         autoClose: 3000,
@@ -74,7 +74,6 @@ const ListTeachers = () => {
     }
   };
 
-  console.log("DOCENTES", docentes);
 
   if (loading) return <Spinner />;
 
