@@ -18,7 +18,6 @@ const logger = createLogger({
 
 const sequelizeOptions = {
   logging: false
-  logging:false
 };
 
 

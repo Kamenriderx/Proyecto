@@ -8,16 +8,19 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJyb2xlIjoi
 const socket = io(
   `http://localhost:3000?token=${token}`
 );
-const OnlineList = () => {
+const OnlineList = () => {  
   const [searchValue, setSearchValue] = useState("");
   const [list, setList] = useState([]);
+  const [ownerList, setOwnerList] = useState(0);
 
   useEffect(() => {
     socket.on("onlineList", (data) => {
+      console.log("Dueño de la  ",data.ownerList);
+      setOwnerList(data.ownerList);
       if(searchValue!==""){
         search();
       }else{
-        console.log(data.arrUsers);
+        
         setList(data.arrUsers);
       }
     });
@@ -61,6 +64,8 @@ const OnlineList = () => {
         },
       })
       .then((res) => {
+        setOwnerList(res.data.ownerList)
+        console.log("getList: ",res);
         setList(res.data.arrUsers);
       });
       setSearchValue("");
@@ -78,6 +83,7 @@ const OnlineList = () => {
       .then((res) => {
         setList(res.data.arrUsers);
       });
+      console.log("searchList: ",res);
   };
   return (
     <div className=" max-w-md h-screen mx-auto bg-white rounded-sm  flex flex-col px-0 items-center content-between justify-between  border border-s-gray-100 ">
@@ -99,6 +105,7 @@ const OnlineList = () => {
                 state={"green"}
                 userName={contact.NAME}
                 photo={contact.PROFILE_PHOTO}
+                ownerList={ownerList}
               />
             ))}
         </fieldset>
@@ -115,6 +122,7 @@ const OnlineList = () => {
                 state={"gray"}
                 userName={contact.NAME}
                 photo={contact.PROFILE_PHOTO}
+                ownerList={ownerList}
               />
             ))}
         </fieldset>

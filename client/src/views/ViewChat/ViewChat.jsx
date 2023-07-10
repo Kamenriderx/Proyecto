@@ -8,6 +8,7 @@ import io from "socket.io-client";
 import StudentContext from "../ViewStudent/context/StudentContext";
 import MessagesContext from "./context/Messages/MessagesContext";
 import ConversationContext from "./context/Conversation/ConversationContext";
+import OnlineList from "../../components/OnlineList";
 
 const ViewChat = () => {
   let socket = "";
@@ -276,7 +277,7 @@ const ViewChat = () => {
             </div>
             <div className="w-1/4 bg-green-500 ">
                   
-
+                  <OnlineList/>
 
             </div>
           </div>
