@@ -17,9 +17,7 @@ const logger = createLogger({
 });
 
 const sequelizeOptions = {
-  logging:(msg) => {  
-    logger.info(msg);
-  }
+  logging: false
 };
 
 

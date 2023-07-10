@@ -9,28 +9,45 @@ import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import StudentContext from "./context/StudentContext";
 
+import io from "socket.io-client";
+
 const ViewStudent = () => {
-    //contexto de usuario
-    const { state } = useContext(StoreContext);
-    //contexto de estudiante
-    const {stateStudent, getStudent, putCorreo} = useContext(StudentContext)
+  let socket = "";
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      socket = io(
+        `http://localhost:3000?token=${localStorage.getItem("token")}`
+      );
+    }
+    console.log('socket: ',socket)
+  }, [localStorage.getItem("token")]);
+
+ 
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+
+  //contexto de estudiante
+  const { stateStudent, getStudent, putCorreo } = useContext(StudentContext);
+
+  console.log("ContextoUsuario: ", state);
 
   const user = {
     visitante: false,
   };
 
   const [showModal, setshowModal] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [newEmail, setNewEmail] = useState(email);
 
   //Guardar el perfil
   const [buttonDisabled, setbuttonDisabled] = useState(false);
 
   useEffect(() => {
-    getStudent(state)
-  },[state])
+    getStudent(state);
+  }, [state]);
 
-  console.log('stateStudViewStudent: ',stateStudent)
+  console.log("stateStudViewStudent: ", stateStudent);
 
   const handleEmailChange = (e) => {
     setNewEmail({ EMAIL: e.target.value });
@@ -47,10 +64,10 @@ const ViewStudent = () => {
     console.log(newEmail);
     setshowModal(false);
 
-    console.log('state.token: ',state.token)
+    console.log("state.token: ", state.token);
 
-    await putCorreo(state,newEmail.EMAIL)
-    await getStudent(state)
+    await putCorreo(state, newEmail.EMAIL);
+    await getStudent(state);
   };
 
   const closeModal = () => {

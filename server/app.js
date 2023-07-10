@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const {generateAuthToken} = require("./utils/authToken");
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http://localhost:5173', // Reemplaza con el origen permitido para tu cliente React
+    origin: '*', // Reemplaza con el origen permitido para tu cliente React
     methods: ['GET', 'POST','PUT','DELETE']
   }
 });
