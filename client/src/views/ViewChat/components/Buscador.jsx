@@ -4,7 +4,7 @@ import { StoreContext } from "../../../store/ContextExample";
 import StudentContext from "../../ViewStudent/context/StudentContext";
 import MessagesContext from "../context/Messages/MessagesContext";
 
-const Buscador = ({ chats, enviarDatoAlPadre  }) => {
+const Buscador = ({ chats, enviarDatoAlPadre }) => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -18,9 +18,8 @@ const Buscador = ({ chats, enviarDatoAlPadre  }) => {
   //contexto de la conversacion
   const { stateConversation, getConversation } =
     useContext(ConversationContext);
-      //contexto de mensajes
-  const { stateMessages, getMessages } =
-  useContext(MessagesContext);
+  //contexto de mensajes
+  const { stateMessages, getMessages } = useContext(MessagesContext);
 
   useEffect(() => {
     getConversation(state);
@@ -28,11 +27,8 @@ const Buscador = ({ chats, enviarDatoAlPadre  }) => {
     getMessages(state);
   }, [state]);
 
-
-  console.log('stateMessagesBuscador: ',stateMessages)
-  console.log('stateConversationBuscador: ',stateConversation)
-
-
+  console.log("stateMessagesBuscador: ", stateMessages);
+  console.log("stateConversationBuscador: ", stateConversation);
 
   // console.log(
   //   "stateConversationBuscador: ",
@@ -44,7 +40,6 @@ const Buscador = ({ chats, enviarDatoAlPadre  }) => {
   //     stateStudent.user.user.multimedia.length - 1
   //   ].URL
   // );
-
 
   console.log(chat);
 
@@ -63,7 +58,6 @@ const Buscador = ({ chats, enviarDatoAlPadre  }) => {
     : stateConversation?.results?.results.filter((dato) =>
         dato.name.toLowerCase().includes(search.toLowerCase())
       );
-
 
   const handleChange = (id, chat) => {
     enviarDatoAlPadre(id, chat);
@@ -102,12 +96,16 @@ const Buscador = ({ chats, enviarDatoAlPadre  }) => {
                           }
                           alt="seleccine imagen"
                           className="bg-cyan-500 rounded-full w-12 h-12"
-                          onClick={() => handleChange(chat.ID_CONVERSATION, chat)}
+                          onClick={() =>
+                            handleChange(chat.ID_CONVERSATION, chat)
+                          }
                         />
                       </div>
 
                       <div>
-                        <p className="text-sm font-semibold">{chat.USER_.NAME}</p>
+                        <p className="text-sm font-semibold">
+                          {chat.USER_.NAME}
+                        </p>
                         <p className="text-sm">{}</p>
                       </div>
                     </div>
