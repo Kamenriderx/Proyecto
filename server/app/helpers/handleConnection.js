@@ -11,12 +11,11 @@ const handleConnection = async (socket, data) => {
       } else {
         try {
           const token = decoded;
-          console.log({decoded})
-          const user = await USER.findOne({ where:{ ID_USER: token.userId} });
+          const user = await USER.findOne({where: {ID_USER: token.userId} });
           user.ONLINE_STATUS = data.status;
           await user.save();
-
           if(data.status === "offline"){
+            console.log("Usuario desconectado :", token.userId);
             delete data.activeConnections[token.userId];
           }else{
             data.activeConnections[token.userId] = {
@@ -24,6 +23,7 @@ const handleConnection = async (socket, data) => {
               status: data.status,
               token: data.token,
             };
+            console.log("Nueva conexion usuario: ",token.userId);
           }
           
           resolve( data.activeConnections);
