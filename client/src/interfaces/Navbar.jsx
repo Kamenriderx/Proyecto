@@ -38,9 +38,11 @@ const ContentNavbar = () => {
 
     return (
       <>
-        <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
-          <div className="max-w-screen-xl flex flex-wrap items-center justify-normal mx-auto p-4">
-            <div className="flex items-center">
+        <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200 fixed w-full z-50 top-0 left-0">
+          <div>
+
+          <div className="flex flex-wrap items-center justify-between p-4">
+            <div >
               <Link to="/">
                 <img
                   src="https://www.unah.edu.hn/themes/portalunah/assets/images/logo-unah.png"
@@ -49,6 +51,7 @@ const ContentNavbar = () => {
                 />
               </Link>
             </div>
+
             <div className="flex">
               <button
                 data-collapse-toggle="navbar-cta"
@@ -72,11 +75,12 @@ const ContentNavbar = () => {
                 </svg>
               </button>
             </div>
+
             <div
-              className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+              className="hidden w-full md:flex md:w-auto md:order-1"
               id="navbar-cta"
             >
-              <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
+              <ul className="flex flex-col font-bold text-2xl p-2 border border-gray-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
                 {!state.login ? (
                   <li>
                     <Link to="/login">
@@ -145,6 +149,7 @@ const ContentNavbar = () => {
               </ul>
             </div>
           </div>
+          </div>
         </nav>
       </>
     );
@@ -156,6 +161,7 @@ const ContentNavbar = () => {
 
     return (
       <>
+      <div className="mt-24">
         {state?.user?.ID_ROLE === 1 ? (
           <ViewStudent />
         ) : state?.user?.ID_ROLE === 2 ? (
@@ -165,6 +171,7 @@ const ContentNavbar = () => {
         ) : (
           <h2>Admin</h2>
         )}
+      </div>
       </>
     );
   };

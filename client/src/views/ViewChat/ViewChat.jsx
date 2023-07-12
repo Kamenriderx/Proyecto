@@ -84,7 +84,7 @@ const ViewChat = () => {
     <>
       {stateStudent && (
         <>
-          <div className="flex h-screen bg-gray-50">
+          <div className="flex h-screen bg-gray-50 mt-24">
             <div className="w-1/4 ">
               <Buscador check={check} enviarDatoAlPadre={recibirDatoDelHijo} />
             </div>
@@ -117,7 +117,7 @@ const ViewChat = () => {
                 </div>
                 {showMessages && stateMessages && (
                   <>
-                    <div className="overflow-y-auto scrollbar-thin h-[450px] flex flex-col-reverse  justify-end ">
+                    <div className="overflow-y-scroll h-[450px] flex flex-col-reverse ">
                       {stateMessages.results.results.map((mess) => (
                         <div key={mess.SENDER_ID+""+ state.user.ID_USER}>
                           {mess.SENDER_ID == state.user.ID_USER ? (
@@ -139,7 +139,7 @@ const ViewChat = () => {
                               <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
                                 <p className="break-words ">{mess.CONTENT}</p>
                                 <p className="text-xs float-right">
-                                  {mess.createdAt}
+                                  {new Date(mess.createdAt).getHours()}:{new Date(mess.createdAt).getMinutes()}:{new Date(mess.createdAt).getSeconds()}
                                 </p>
                               </div>
                             </div>
@@ -151,7 +151,7 @@ const ViewChat = () => {
                               <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
                                 <p className="break-words">{mess.CONTENT}</p>
                                 <p className="text-xs float-right">
-                                  {mess.createdAt}
+                                {new Date(mess.createdAt).getHours()}:{new Date(mess.createdAt).getMinutes()}:{new Date(mess.createdAt).getSeconds()}
                                 </p>
                               </div>
                               <img
@@ -179,7 +179,7 @@ const ViewChat = () => {
                         onChange={messageInput}
                       />
                       <MdSend
-                        className="text-5xl mr-6 rounded-xl p-1 border text-blue-600 border-blue-600 hover:bg-blue-200 active:bg-blue-600 active:text-white"
+                        className="text-5xl mr-6 rounded-xl p-1 border text-blue-600 border-blue-600 hover:bg-blue-200 active:bg-blue-600 active:text-white cursor-pointer"
                         onClick={sendMessage}
                       />
                     </div>

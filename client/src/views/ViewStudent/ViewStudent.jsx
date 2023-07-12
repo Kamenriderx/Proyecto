@@ -90,10 +90,10 @@ const ViewStudent = () => {
                       <div className="font-bold">
                         {stateStudent.user.user.NAME}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-md">
                         {stateStudent.user.CAREER}
                       </div>
-                      <div className="text-md text-cyan-500">
+                      <div className="text-md ">
                         {stateStudent.user.user.CENTER}
                       </div>
                       {user.visitante && (
