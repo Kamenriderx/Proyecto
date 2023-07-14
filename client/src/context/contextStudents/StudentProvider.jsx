@@ -30,7 +30,6 @@ const StudentProvider = ({ children }) => {
           `http://localhost:3000/registro/contacts/requests/${state.user.ID_USER}`
         );
         setPendings(res.data.pendingRequests);
-        console.log("Las Solicitudes Pendientes : ", res.data.pendingRequests);
       } catch (error) {
         console.log(error);
       }
@@ -38,15 +37,13 @@ const StudentProvider = ({ children }) => {
     getPending();
   }, []);
 
-  console.log("Estadoooos : ", pendings);
-
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         const { data } = await axios(
           "http://localhost:3000/registro/student/getStudents"
         );
-        console.log(data);
+
         setStudents(data);
         setLoading(false);
       } catch (error) {

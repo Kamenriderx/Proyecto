@@ -24,7 +24,6 @@ const Solicitud = () => {
       e.preventDefault()
     }
 
-    console.log("SOLICITUDES : ",solicitudes);
 
     const handleDelete=async(id)=> {
       try {

@@ -17,6 +17,7 @@ import Solicitud from "./components/Solicitud";
 import ResultsSearch from "./ResultsSearch";
 import ListTeachers from "./ListTeachers";
 import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
+import ViewChat from "../views/ViewChat/ViewChat";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -28,12 +29,13 @@ const ContentNavbar = () => {
     dispatch({ type: "USER", user: {} });
     dispatch({ type: "TOKEN", token: "" });
     dispatch({ type: "LOGOUT" });
+    console.log(state.socket);
+    state.socket?.close();
   };
 
   const Navbar = () => {
     const { state, dispatch } = useContext(StoreContext);
-    console.log("EstudiantesData", students);
-    console.log("Usuario Conectado", state);
+
     return (
       <>
         <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
@@ -150,7 +152,7 @@ const ContentNavbar = () => {
 
   const Profile = () => {
     const { state } = useContext(StoreContext);
-    console.log(state);
+
 
     return (
       <>
@@ -188,6 +190,7 @@ const ContentNavbar = () => {
           {/* rutas privadas */}
           <Route exact path="/perfil" element={<Profile />} />
           <Route exact path="/list-teachers" element={<ListTeachers />} />
+          <Route exact path="/chat" element={<ViewChat />} />
 
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>

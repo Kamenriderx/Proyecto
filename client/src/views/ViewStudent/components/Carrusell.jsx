@@ -4,27 +4,21 @@ import StudentContext from "../context/StudentContext";
 
 import { MdDeleteForever } from "react-icons/Md";
 
-
-
 const Carrusell = ({ user }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [nameImage, setNameImage] = useState([]);
 
   //este estado se enviara al server
-  console.log("nameImage:, ", nameImage);
-  
 
   //contexto de usuario
   const { state } = useContext(StoreContext);
   //contexto de estudiante
-  const {stateStudent, getStudent, deleteImage} = useContext(StudentContext)
+  const { stateStudent, getStudent, deleteImage } = useContext(StudentContext);
 
   useEffect(() => {
-    getStudent(state)
-  },[state])
+    getStudent(state);
+  }, [state]);
 
-  console.log('seggStudentCarrusel: ',stateStudent)
-  
   const handleFileChange = (event) => {
     const files = event.target.files;
 
@@ -36,8 +30,8 @@ const Carrusell = ({ user }) => {
   };
 
   const handleDelete = async (id) => {
-    await deleteImage(state, id)
-    await getStudent(state)
+    await deleteImage(state, id);
+    await getStudent(state);
   };
 
   return (
@@ -51,22 +45,22 @@ const Carrusell = ({ user }) => {
                   {stateStudent.user.user.hasOwnProperty("multimedia") ? (
                     <>
                       {stateStudent.user.user.multimedia.map((imageUrl) => (
-                        <>
-                          <div className="text-center">
+                    
+                          <div className="text-center"  key={imageUrl.ID_MULTIMEDIA}>
                             <button
                               onClick={() =>
                                 handleDelete(imageUrl.ID_MULTIMEDIA)
                               }
                             >
-                      <MdDeleteForever className="text-3xl text-red-600 hover:text-red-800"/>
+                              <MdDeleteForever className="text-3xl text-red-600 hover:text-red-800" />
                             </button>
                             <img
-                              key={imageUrl.ID_MULTIMEDIA}
+                             
                               className="w-52 h-52 object-cover border-2 m-1 border-gray-700"
                               src={imageUrl.URL}
                             />
                           </div>
-                        </>
+                 
                       ))}
                     </>
                   ) : (

@@ -3,7 +3,7 @@ import { StoreContext } from "../../store/ContextExample";
 import axios from "axios";
 import useStudents from "../../utils/hooks/useStudents";
 import AlertTwo from "../../components/AlertTwo";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CardTeachers = ({ student }) => {
@@ -49,9 +49,6 @@ const CardTeachers = ({ student }) => {
       console.log(error);
     }
   };
-  console.log("Estudiante", student);
-  console.log("Solicitudes Enviadas : ", pendings);
-  console.log("Solicitudes", solicitudes);
 
   const { message } = alerta;
 
