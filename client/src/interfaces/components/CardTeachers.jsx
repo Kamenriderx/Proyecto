@@ -2,10 +2,14 @@ import { useState, useContext, useEffect } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import axios from "axios";
 import useStudents from "../../utils/hooks/useStudents";
+import AlertTwo from "../../components/AlertTwo";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CardTeachers = ({ student }) => {
   const { state, dispatch } = useContext(StoreContext);
   const { solicitudes, pendings } = useStudents();
+  const [alerta, setAlerta] = useState({});
 
   const enviarSolicitudContacto = async () => {
     const senderId = `${state.user.ID_USER}`;
@@ -17,6 +21,15 @@ const CardTeachers = ({ student }) => {
         { senderId, recipientId }
       );
       console.log("Solicitud Enviada....", res.data);
+      toast.success("Solicitud enviada correctamente", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (error) {
       console.error("Error al enviar la solicitud", error);
     }
@@ -27,6 +40,10 @@ const CardTeachers = ({ student }) => {
       const response = await axios.put(
         `http://localhost:3000/registro/contacts/contact-requests/${id}/cancel`
       );
+      AlertTwo({
+        message: "Solicitud Eliminada",
+        error: false,
+      });
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -36,12 +53,15 @@ const CardTeachers = ({ student }) => {
   console.log("Solicitudes Enviadas : ", pendings);
   console.log("Solicitudes", solicitudes);
 
+  const { message } = alerta;
+
   /*   const esRemitente = state.user.ID_USER === pendings.senderId;
 const esDestinatario = state.user.ID_USER === pendings.recipientId; */
 
   return (
     <>
       <div className="mt-10 mx-10 bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+        {message && <AlertTwo alerta={alerta} />}
         <div className="md:flex">
           <div className="md:flex">
             <img
@@ -75,19 +95,35 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
               {student.user.ACCOUNT_NUMBER}
             </p>
             <div className="mt-4">
-              <input
+              {pendings.length > 0 &&
+                pendings.map((pending) => {
+                  return (
+                    <>
+                      <input
+                        className={
+                          "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                        }
+                        value="Enviar Solicitud"
+                        type="submit"
+                        onClick={enviarSolicitudContacto}
+                      />
+                    </>
+                  );
+                })}
+
+              {/*      <input
                 className={
                   "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
                 }
                 value="Enviar Solicitud"
                 type="submit"
                 onClick={enviarSolicitudContacto}
-              />
-              {pendings.map((pending) => {
+              /> */}
+              {/* {pendings.map((pending) => {
                 if (
-                  pending.senderId.includes(requestId) ===
-                    pending.recipientId.includes(requestId) &&
-                  pending.status === "pending"
+                  pending.status === "pending" &&
+                  state.user.ID_USER === pending.senderId 
+                  
                 ) {
                   return (
                     <input
@@ -97,7 +133,7 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
                       onClick={() => eliminarSolicitud(pending.requestId)}
                     />
                   );
-                } else if (
+                }   else if (
                   (state.user.ID_USER === pending.senderId &&
                     pending.status === "accepted" &&
                     pending.senderId.includes(requestId) ===
@@ -146,8 +182,8 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
                       onClick={enviarSolicitudContacto}
                     />
                   );
-                }
-              })}
+                } 
+              })} */}
             </div>
           </div>
         </div>
