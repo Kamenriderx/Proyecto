@@ -153,7 +153,6 @@ const ContentNavbar = () => {
   const Profile = () => {
     const { state } = useContext(StoreContext);
 
-
     return (
       <>
         {state?.user?.ID_ROLE === 1 ? (
