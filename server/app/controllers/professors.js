@@ -46,9 +46,3 @@ exports.getProfessorsByCareer = async function (req, res) {
       return res.status(500).json({ error: 'Error al obtener los profesores por carrera' });
     }
   };
-  
-  
-  
-  
-  
-  

@@ -6,6 +6,7 @@ const initialState = {
   login: false,
   user: {},
   token: "",
+  socket:null
 };
 
 const reducer = (state, action) => {
@@ -29,6 +30,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         token: action.token,
+      };
+    case "SOCKET":
+      return {
+        ...state,
+        socket: action.socket,
       };
 
     default:

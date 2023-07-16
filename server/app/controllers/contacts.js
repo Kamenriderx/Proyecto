@@ -68,18 +68,17 @@ exports.createContactRequest = async function(req, res) {
         RECIPIENT_ID: senderId,
       },
     });
-
+    
     // Verifica si la solicitud ya la acepto el remitente
     if (existingRequest && existingRequest.STATUS === 'accepted') {
       return res.status(400).json({ message: 'Ya han aceptado tu solicitud de contacto' });
     }
-    
+
     // Verifica si la solicitud ya ha sido aceptada por el destinatario
     if (mutualRequest && mutualRequest.STATUS === 'accepted') {
       return res.status(400).json({ message: 'Ya has aceptado la solicitud de contacto de este remitente' });
     }
 
-    // Validacion para verificar solicitudes de contaccto mutuas
     if (existingRequest || mutualRequest) {
       if (existingRequest && existingRequest.STATUS === 'rejected') {
         // Actualiza el estado de la solicitud existente a "pending"

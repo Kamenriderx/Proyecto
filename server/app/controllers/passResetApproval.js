@@ -65,7 +65,7 @@ exports.resetApprove = async (req, res) => {
 
      console.log(token)
     //Link 
-    const resetLink = `http://localhost:5173?token=${encodeURIComponent(token)}`;
+    const resetLink = `http://localhost:5173/recuperar-teacher/?token=${encodeURIComponent(token)}`;
 
     // Enviar correo electrónico de notificación
     const emailOptions = {

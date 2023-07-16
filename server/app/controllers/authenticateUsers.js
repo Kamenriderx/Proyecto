@@ -10,31 +10,32 @@ const User = require('../models/user');
 //! Controlador para el inicio de sesión
 exports.loginAccess = async (req, res) => {
   const { identifier, password } = req.body;
-
   try {
     // Busca el usuario por su EMAIL o Numero de Cuenta
     const user = await User.findOne({
       where: Sequelize.or(
         { EMAIL: identifier },
         { ACCOUNT_NUMBER: identifier }
-      )
-    });
-    //console.log(user.dataValues);
-    // Verifica si el usuario existe
-    if (!user) {
-      return res.status(404).json({ error: 'N° de cuenta o email incorrecto. Vuelva a intentar.' });
-    }
-
-    // Verifica la contraseña
-    
-    const passwordMatch = await bcrypt.compare(password, user.USER_PASSWORD);
-    if (!passwordMatch) {
-      return res.status(401).json({ error: 'Contraseña incorrecta. Vuelve a intentarlo o selecciona "¿Restablecer contraseña?" para cambiarla.' });
-    }
+        )
+      });
+      
+      //console.log(user.dataValues);
+      // Verifica si el usuario existe
+      if (!user) {
+        return res.status(404).json({ error: 'N° de cuenta o email incorrecto. Vuelva a intentar.' });
+      }
+      
+      // Verifica la contraseña
+      
+      const passwordMatch = await bcrypt.compare(password, user.USER_PASSWORD);
+      if (!passwordMatch) {
+        return res.status(401).json({ error: 'Contraseña incorrecta. Vuelve a intentarlo o selecciona "¿Restablecer contraseña?" para cambiarla.' });
+      }
 
     // Obtiene el rol del usuario
     const role = await Role.findByPk(user.ID_ROLE);
 
+     
     // Verifica la ruta a la que se está accediendo
     const route = req.route.path;
 
@@ -47,19 +48,19 @@ exports.loginAccess = async (req, res) => {
           }
           break;
         case 'Docente':
-          if (route === '/students' || route === '/admins' || route === '/departmentHeads' || route === '/coordinators') {
+          if (route === '/students' || route === '/admins') {
 
             return res.status(401).json({ error: 'Acceso no permitido' });
           }
           break;
         case 'Jefe de Departamento':
-          if (route === '/students' || route === '/professors' || route === '/admins' || route === '/coordinators') {
+          if (route === '/students' ||  route === '/admins') {
 
             return res.status(401).json({ error: 'Acceso no permitido' });
           }
           break;
         case 'Coordinador':
-          if (route === '/students' || route === '/professors' || route === '/departmentHeads' || route === '/admins') {
+          if (route === '/students' || route === '/admins') {
 
             return res.status(401).json({ error: 'Acceso no permitido' });
           }
@@ -74,10 +75,10 @@ exports.loginAccess = async (req, res) => {
           // Rol desconocido o no manejado
           return res.status(401).json({ error: 'Tipo de usuario no válido.' });
       }
-    
+      console.log(passwordMatch);
       // Genera un token de acceso utilizando JWT
-      const authToken = generateAuthToken({ userId: user.ID_USER, role: role.ROLE_NAME }, '24h');
-    
+      const authToken = generateAuthToken({ userId: user.ID_USER, role: role.ROLE_NAME });
+      console.log("Token:" , authToken);
       // Actualiza la última conexión del usuario
       await user.update({ LAST_CONNECTION: new Date() });
     

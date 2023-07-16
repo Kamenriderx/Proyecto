@@ -21,7 +21,6 @@ const Avatar = ({ user }) => {
     getStudent(state)
   },[state])
 
-  console.log('staeStudentAvatar: ',stateStudent)
 
   //este estado se le enviara al server
   // console.log("nameImageSelected: ", nameImageSelected);

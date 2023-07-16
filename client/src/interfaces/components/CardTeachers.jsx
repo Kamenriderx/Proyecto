@@ -5,7 +5,7 @@ import useStudents from "../../utils/hooks/useStudents";
 
 const CardTeachers = ({ student }) => {
   const { state, dispatch } = useContext(StoreContext);
-  const { solicitudes, pendings } = useStudents();
+  const {pendings } = useStudents();
 
   const enviarSolicitudContacto = async () => {
     const senderId = `${state.user.ID_USER}`;
@@ -16,24 +16,23 @@ const CardTeachers = ({ student }) => {
         "http://localhost:3000/registro/contacts/contact-requests",
         { senderId, recipientId }
       );
-      console.log("Solicitud Enviada....", res.data);
+
     } catch (error) {
       console.error("Error al enviar la solicitud", error);
     }
   };
 
-  const eliminarSolicitud = async () => {
+  const eliminarSolicitud = async (id) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/registro/contacts/contact-requests/${solicitudes.requestId}/cancel`
+        `http://localhost:3000/registro/contacts/contact-requests/${id}/cancel`
       );
-      console.log(response.data);
+
     } catch (error) {
       console.log(error);
     }
   };
-  console.log("Estudiante", student);
-  console.log("PENDIENTES", pendings);
+
 
   /*   const esRemitente = state.user.ID_USER === pendings.senderId;
 const esDestinatario = state.user.ID_USER === pendings.recipientId; */
@@ -74,52 +73,79 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
               {student.user.ACCOUNT_NUMBER}
             </p>
             <div className="mt-4">
-              {pendings.length > 0 ? (
-                pendings.map((pending) => {
-                  if (/* esDestinatario &&  */ pending.status === "pending") {
-                    return (
-                      <input
-                        className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded cursor-pointer"
-                        value="Rechazar Solicitud"
-                        type="submit"
-                        onClick={() => eliminarSolicitud(pending.requestId)}
-                      />
-                    );
-                  } else if (
-                    /* esRemitente &&  */ pending.status === "accepted"
-                  ) {
-                    return (
-                      <input
-                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
-                        value="Ahora somos contacto"
-                        type="submit"
-                      />
-                    );
-                  } else if (
-                    /* esDestinatario && */ pending.status === "rejected"
-                  ) {
-                    return (
-                      <input
-                        className={
-                          "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
-                        }
-                        value="Enviar Solicitud"
-                        type="submit"
-                        onClick={enviarSolicitudContacto}
-                      />
-                    );
-                  }
-                })
-              ) : (
-                <input
-                  className={
-                    "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
-                  }
-                  value="Enviar Solicitud"
-                  type="submit"
-                  onClick={enviarSolicitudContacto}
-                />
-              )}
+              <input
+                className={
+                  "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                }
+                value="Enviar Solicitud"
+                type="submit"
+                onClick={enviarSolicitudContacto}
+              />
+              {pendings.map((pending) => {
+                if (
+                  pending.senderId.includes(requestId) ===
+                    pending.recipientId.includes(requestId) &&
+                  pending.status === "pending"
+                ) {
+                  return (
+                    <input
+                      className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                      value="Rechazar Solicitud"
+                      type="submit"
+                      onClick={() => eliminarSolicitud(pending.requestId)}
+                    />
+                  );
+                } else if (
+                  (state.user.ID_USER === pending.senderId &&
+                    pending.status === "accepted" &&
+                    pending.senderId.includes(requestId) ===
+                      pending.recipientId.includes(requestId)) ||
+                  (state.user.ID_USER === pending.recipientId &&
+                    pending.status === "accepted" &&
+                    pending.recipientId.includes(requestId) ===
+                      pending.senderId.includes(requestId))
+                ) {
+                  return (
+                    <input
+                      className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                      value="Ahora somos contacto"
+                      type="submit"
+                    />
+                  );
+                } else if (
+                  (state.user.ID_USER === pending.senderId &&
+                    pending.status === "rejected" &&
+                    pending.senderId.includes(requestId) ===
+                      pending.recipientId.includes(requestId)) ||
+                  (state.user.ID_USER === pending.recipientId &&
+                    pending.status === "rejected" &&
+                    pending.recipientId.includes(requestId) ===
+                      pending.senderId.includes(requestId))
+                ) {
+                  return (
+                    <input
+                      className={
+                        "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                      }
+                      value="Enviar Solicitud"
+                      type="submit"
+                      onClick={enviarSolicitudContacto}
+                    />
+                  );
+                }
+                {
+                  return (
+                    <input
+                      className={
+                        "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                      }
+                      value="Enviar Solicitud"
+                      type="submit"
+                      onClick={enviarSolicitudContacto}
+                    />
+                  );
+                }
+              })}
             </div>
           </div>
         </div>
