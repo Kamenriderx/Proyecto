@@ -3,6 +3,7 @@ const User = require('../models/user');
 const sendMail = require('../../utils/sendMail');
 const Contacts = require('../models/contacts')
 const connection = require("../../config/database");
+const { Op } = require('sequelize');
 
 //! Controlador para enviar solicitudes pendientes con estado y cancelarlas por parte del que envia
 exports.getRequests = async function(req, res) {
@@ -321,8 +322,6 @@ exports.getPendingContactRequests = async function (req, res) {
   try {
     const { recipientId } = req.params;
 
-    console.log(req.params)
-
     // Busca todas las solicitudes pendientes del destinatario
     const pendingRequests = await ContactRequest.findAll({
       where: {
@@ -355,3 +354,89 @@ exports.getPendingContactRequests = async function (req, res) {
     return res.status(500).json({ message: 'Error al obtener las solicitudes pendientes del destinatario' });
   }
 };
+
+//! Controlador para eliminar contacto
+exports.deleteContact = async function eliminarContacto(req, res) {
+  const { userID, contactID } = req.params;
+
+  try {
+    // Verificar si existe una solicitud de contacto donde el usuario es el remitente o el destinatario y el estado es "accepted"
+    const solicitud = await ContactRequest.findOne({
+      where: {
+        [Op.or]: [
+          {
+            SENDER_ID: userID,
+            RECIPIENT_ID: contactID,
+            STATUS: 'accepted',
+          },
+          {
+            SENDER_ID: contactID,
+            RECIPIENT_ID: userID,
+            STATUS: 'accepted',
+          },
+        ],
+      },
+    });
+
+    if (!solicitud) {
+      return res.status(400).json({ message: 'La solicitud de contacto no existe o no ha sido aceptada' });
+    }
+
+    // Verificar si existe un registro de contacto entre userID y contactID
+    const contacto = await Contacts.findOne({
+      where: {
+        [Op.or]: [
+          {
+            USER_ID: userID,
+            CONTACT_ID: contactID,
+          },
+          {
+            USER_ID: contactID,
+            CONTACT_ID: userID,
+          },
+        ],
+      },
+    });
+
+    if (!contacto) {
+      return res.status(400).json({ message: 'No existe un registro de contacto entre los usuarios' });
+    }
+
+    // Eliminar la solicitud de contacto
+    await ContactRequest.destroy({
+      where: {
+        [Op.or]: [
+          {
+            SENDER_ID: userID,
+            RECIPIENT_ID: contactID,
+          },
+          {
+            SENDER_ID: contactID,
+            RECIPIENT_ID: userID,
+          },
+        ],
+      },
+    });
+
+    // Eliminar el contacto
+    await Contacts.destroy({
+      where: {
+        [Op.or]: [
+          {
+            USER_ID: userID,
+            CONTACT_ID: contactID,
+          },
+          {
+            USER_ID: contactID,
+            CONTACT_ID: userID,
+          },
+        ],
+      },
+    });
+
+    res.status(200).json({ message: 'Contacto eliminado exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar el contacto:', error);
+    res.status(500).json({ message: 'Error al eliminar el contacto' });
+  }
+}
