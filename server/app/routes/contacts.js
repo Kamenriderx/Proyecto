@@ -18,7 +18,7 @@ router.put('/contact-requests/:requestId/reject', rejectContactRequest);
 // Ruta para cancelar una solicitud de contacto por parte del remitente
 router.put('/contact-requests/:requestId/cancel', cancelContactRequest);
 
-// Ruta para obtener todas las solicitudes de contacto de un usuario
+// Ruta para obtener todos los contactos de un usuario
 router.get('/:userId', getContacts);
 
 // Ruta para obtener todas las solicitudes de contacto de un usuario
