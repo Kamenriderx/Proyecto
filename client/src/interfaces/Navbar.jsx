@@ -18,6 +18,7 @@ import ResultsSearch from "./ResultsSearch";
 import ListTeachers from "./ListTeachers";
 import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
 import ViewChat from "../views/ViewChat/ViewChat";
+import ListContacts from "../views/DeleteContacts/components/ListContacts";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -190,6 +191,7 @@ const ContentNavbar = () => {
           <Route exact path="/perfil" element={<Profile />} />
           <Route exact path="/list-teachers" element={<ListTeachers />} />
           <Route exact path="/chat" element={<ViewChat />} />
+          <Route exact path="/contactos" element={<ListContacts />} />
 
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
