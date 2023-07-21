@@ -6,9 +6,50 @@ const models = {
     Rol : require('./roles.js'),
     Multimedia: require('./multimedia.js'),
     Conversation: require('./conversation.js'),
-    Message: require('./message.js')
+    Message: require('./message.js'),
+    Course:require('./course.js'),
+    Building:require("./building.js"),
+    Classroom:require('./classroom.js'),
+    Section:require("./section.js"),
     
 }
+//  edificio - aula
+models.Building.Classroom=models.Building.hasMany(models.Classroom,{
+    foreignKey:"ID_BUILDING"
+});
+models.Classroom.Building=models.Classroom.belongsTo(models.Building,{
+    foreignKey:"ID_BUILDING",
+    unique:true,
+    as:"building"
+});
+//  aula - seccion
+models.Classroom.Section=models.Classroom.hasMany(models.Section,{
+    foreignKey:"ID_CLASSROOM"
+});
+models.Section.Classroom=models.Section.belongsTo(models.Classroom,{
+    foreignKey:"ID_CLASSROOM",
+    unique:true,
+    as:"classroom"
+});
+//  seccion - docente
+models.Professor.Section=models.Professor.hasMany(models.Section,{
+    foreignKey:"ID_PROFFERSSOR"
+});
+models.Section.Professor=models.Section.belongsTo(models.Professor,{
+    foreignKey:"ID_PROFFERSSOR",
+    unique:true,
+    as:"Proffessor"
+});
+//  seccion - clase
+models.Course.Section=models.Course.hasMany(models.Section,{
+    foreignKey:"ID_COURSE"
+});
+models.Section.Course=models.Section.belongsTo(models.Course,{
+    foreignKey:"ID_COURSE",
+    unique:true,
+    as:"course"
+});
+
 //  usuarios- docentes
 models.User.Professor=models.User.hasMany(models.Professor,{
     foreignKey:"ID_USER"
