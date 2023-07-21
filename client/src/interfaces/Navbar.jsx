@@ -19,6 +19,7 @@ import ListTeachers from "./ListTeachers";
 import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
 import ViewChat from "../views/ViewChat/ViewChat";
 import ListContacts from "../views/DeleteContacts/components/ListContacts";
+import AddSections from "../views/AddSections/AddSections";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -141,6 +142,13 @@ const ContentNavbar = () => {
                         </button>
                       </Link>
                     </li>
+                    <li>
+                      <Link to="/addSections">
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
+                          Planificacion
+                        </button>
+                      </Link>
+                    </li>
                   </>
                 )}
               </ul>
@@ -192,6 +200,7 @@ const ContentNavbar = () => {
           <Route exact path="/list-teachers" element={<ListTeachers />} />
           <Route exact path="/chat" element={<ViewChat />} />
           <Route exact path="/contactos" element={<ListContacts />} />
+          <Route exact path="/addSections" element={<AddSections />} />
 
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
