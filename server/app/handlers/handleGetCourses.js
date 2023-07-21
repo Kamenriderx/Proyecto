@@ -12,8 +12,8 @@ const getProfessor = async (id)=>{
 const getCourses = async (career)=>{
     return await Course.findAll({
         where:{
-            CODE_COURSE:{
-                [Op.like]:`%${getCodeCourse(career)}%`
+            CAREER:{
+                [Op.like]:`%${career.toUpperCase()}%`
             }
         }
     })

@@ -13,6 +13,10 @@ const Building = connection.define(
         NAME:{
             type:DataTypes.STRING
         },
+
+        CENTER:{
+            type:DataTypes.STRING
+        },
         createdAt:{
             type:DataTypes.DATE
         },
