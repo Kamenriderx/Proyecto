@@ -1,13 +1,120 @@
 import { AiOutlineAppstoreAdd, AiFillDelete, AiFillEdit } from "react-icons/ai";
 import Modal from "../../components/Modal";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { StoreContext } from "../../store/ContextExample";
+import axios from "axios";
 
 const AddSections = () => {
   const [showModal, setShowModal] = useState(false);
+  const { state, dispatch } = useContext(StoreContext);
+  const [listCourses, setListCourses] = useState([]);
+  const [listAulas, setListAulas] = useState([]);
+  const [docentes, setDocentes] = useState([]);
+  const [START_TIME, setSTART_TIME] = useState("");
+  const [END_TIME, setEND_TIME] = useState("");
+  const [DAYS, setDAYS] = useState("");
+  const [ID_COURSE, setID_COURSE] = useState("");
+  const [ID_PROFFERSSOR, setID_PROFFERSSOR] = useState("");
+  const [ID_CLASSROOM, setID_CLASSROOM] = useState("");
+  const [SPACE_AVAILABLE, setSPACE_AVAILABLE] = useState("");
+
+  useEffect(() => {
+    const fetchDocentes = async () => {
+      try {
+        const response = await axios(
+          `http://localhost:3000/registro/professor/professorsCareer/${state.user.ID_USER}`
+        );
+        setDocentes(response.data);
+      } catch (error) {
+        console.error("Error al obtener la lista de docentes", error);
+      }
+    };
+
+    fetchDocentes();
+  }, []);
+
+  console.log("Todos los docentes de Sistemas :", docentes);
+
+  useEffect(() => {
+    const getListClass = async () => {
+      try {
+        const response = await axios(
+          `http://localhost:3000/registro/course/listCourses/${state.user.ID_USER}`
+        );
+        console.log(response.data.courses);
+        setListCourses(response.data.courses);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getListClass();
+  }, []);
+
+  useEffect(() => {
+    const getListAula = async () => {
+      try {
+        const response = await axios(
+          `http://localhost:3000/registro/classroom/listClassrooms`
+        );
+        console.log(response.data.classrooms);
+        setListAulas(response.data.classrooms);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getListAula();
+  }, []);
+
+  const handleSubmit = async () => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const formData = new FormData();
+      formData.append("DAYS", DAYS);
+      formData.append("START_TIME", START_TIME);
+      formData.append("END_TIME", END_TIME);
+      formData.append("ID_CLASSROOM", ID_CLASSROOM);
+      formData.append("ID_PROFFERSSOR", ID_PROFFERSSOR);
+      formData.append("SPACE_AVAILABLE", SPACE_AVAILABLE);
+      formData.append("ID_COURSE", ID_COURSE);
+      const response = await axios.post(
+        "http://localhost:3000/registro/section/createSection",
+        { body: formData, ...config }
+      );
+
+      console.log(response);
+
+      setEND_TIME("");
+      setSTART_TIME("");
+      setID_CLASSROOM("");
+      setID_COURSE("");
+      setID_PROFFERSSOR("");
+      setSPACE_AVAILABLE("");
+      setDAYS("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log("Lista de Cursos", listCourses);
+  console.log("Listado de Aulas", listAulas);
+
   return (
     <div className="container mx-auto">
       <Modal Visible={showModal} Close={() => setShowModal(false)}>
-        <form className="bg-gray-50 py-3 px-2 shadow-sm rounded-lg">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-gray-50 py-3 px-2 shadow-sm rounded-lg"
+        >
           <div className="text-center mb-5 mt-5">
             <span className="text-sky-700 font-bold text-2xl">
               Agregar Nueva Seccion
@@ -18,87 +125,140 @@ const AddSections = () => {
               <label className="mx-2 text-black font-bold text-md block">
                 HI:
               </label>
-              <input
+              <select
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                type="text"
-                placeholder="Hora Inicial"
-              />
+                value={START_TIME}
+                onChange={(e) => setSTART_TIME(e.target.value)}
+              >
+                <option value="">-- Hora Inicial --</option>
+                <option value="0700">07:00</option>
+                <option value="0800">08:00</option>
+                <option value="0900">09:00</option>
+                <option value="1000">10:00</option>
+                <option value="1100">11:00</option>
+                <option value="1200">12:00</option>
+                <option value="1300">13:00</option>
+                <option value="1400">14:00</option>
+                <option value="1500">15:00</option>
+                <option value="1600">16:00</option>
+                <option value="1700">17:00</option>
+                <option value="1800">18:00</option>
+                <option value="1900">19:00</option>
+                <option value="2000">20:00</option>
+              </select>
             </div>
             <div className="">
               <label className="mx-2 text-black font-bold text-md block">
                 HF:
               </label>
-              <input
-                type="text"
-                placeholder="Hora Final"
+              <select
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              />
+                value={END_TIME}
+                onChange={(e) => setEND_TIME(e.target.value)}
+              >
+                <option value="">-- Hora Final --</option>
+                <option value="0700">07:00</option>
+                <option value="0800">08:00</option>
+                <option value="0900">09:00</option>
+                <option value="1000">10:00</option>
+                <option value="1100">11:00</option>
+                <option value="1200">12:00</option>
+                <option value="1300">13:00</option>
+                <option value="1400">14:00</option>
+                <option value="1500">15:00</option>
+                <option value="1600">16:00</option>
+                <option value="1700">17:00</option>
+                <option value="1800">18:00</option>
+                <option value="1900">19:00</option>
+                <option value="2000">20:00</option>
+              </select>
             </div>
           </div>
-          <div className="flex justify-around mt-3 w-full">
-            <div className="">
-              <label className="mx-2 text-black font-bold text-md block">
-                Edificio:
+          <div className="mt-5">
+            <div className="text-center">
+              <label className=" text-black font-bold text-md block">
+                Aula y Edificio:
               </label>
-              <input
-                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                type="text"
-                placeholder="Edificio"
-              />
             </div>
-            <div className="">
-              <label className="mx-2 text-black font-bold text-md block">
-                Aula:
-              </label>
-              <input
-                type="text"
-                placeholder="Numero de Aula"
-                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              />
+            <div className="flex justify-center">
+              <select
+                value={ID_CLASSROOM}
+                onChange={(e) => setID_CLASSROOM(e.target.value)}
+                className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+              >
+                <option value=""> Aula - Edificio </option>
+                {listAulas.map((aulas) => (
+                  <option key={aulas.ID_CLASSROOM} value={aulas.ID_CLASSROOM}>
+                    {aulas.NUMBER} - {aulas.building.NAME}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-          <div className="mt-5 flex items-center justify-around ml-6">
-            <label className=" text-black font-bold text-md">Docente: </label>
-            <input
-              placeholder="Nombre del Docente"
-              className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
-            />
+          <div className="mt-5">
+            <div className="text-center">
+              <label className=" text-black font-bold text-md block">
+                Nombre del Docente:
+              </label>
+            </div>
+            <div className="flex justify-center">
+              <select
+                value={ID_PROFFERSSOR}
+                onChange={(e) => setID_PROFFERSSOR(e.target.value)}
+                className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+              >
+                <option value=""> Seleccione el Docente </option>
+                {docentes.map((docente) => (
+                  <option
+                    key={docente.ID_PROFFERSSOR}
+                    value={docente.ID_PROFFERSSOR}
+                  >
+                    {docente.NAME}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div className="flex justify-around mt-5 w-full">
             <div className="">
               <label className="mx-2 text-black font-bold text-md block">
                 Cupos:
               </label>
-              <select className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
-                <option value="">-- Seleccion los Cupos --</option>
-                <option value="">15</option>
-                <option value="">16</option>
-                <option value="">17</option>
-                <option value="">18</option>
-                <option value="">19</option>
-                <option value="">20</option>
-              </select>
+              <input
+                type="number"
+                placeholder="Numero de Cupos"
+                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                value={SPACE_AVAILABLE}
+                onChange={(e) => setSPACE_AVAILABLE(e.target.value)}
+              />
             </div>
             <div className="">
               <label className="mx-2 text-black font-bold text-md block">
                 Dias:
               </label>
-              <select className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+              <select
+                value={DAYS}
+                onChange={(e) => setDAYS(e.target.value)}
+                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+              >
                 <option>-- Selecciona los Dias --</option>
-                <option value="">LuMaMiJuVi</option>
-                <option value="">LuMaMiJu</option>
-                <option value="">LuMaMi</option>
-                <option value="">LuMa</option>
-                <option value="">LuMi</option>
-                <option value="">LuJu</option>
-                <option value="">MiJu</option>
-                <option value="">MaJu</option>
-                <option value="">Sa</option>
+                <option value="LuMaMiJuVi">LuMaMiJuVi</option>
+                <option value="LuMaMiJu">LuMaMiJu</option>
+                <option value="LuMaMi">LuMaMi</option>
+                <option value="LuMa">LuMa</option>
+                <option value="LuMi">LuMi</option>
+                <option value="LuJu">LuJu</option>
+                <option value="MiJu">MiJu</option>
+                <option value="MaJu">MaJu</option>
+                <option value="Sa">Sa</option>
               </select>
             </div>
           </div>
           <div className="flex justify-around mt-8 mb-5">
-            <button className="bg-sky-600 hover:bg-sky-700 text-white font-bold text-lg py-2 px-8 rounded-md shadow">
+            <button
+              type="submit"
+              className="bg-sky-600 hover:bg-sky-700 text-white font-bold text-lg py-2 px-8 rounded-md shadow"
+            >
               Crear
             </button>
             <button
@@ -131,11 +291,17 @@ const AddSections = () => {
             </button>
           </div>
           <div className="">
-            <select className="bg-sky-600 hover:bg-sky-700 rounded shadow font-bold text-white text-center border-2 cursor-pointer">
+            <select
+              value={ID_COURSE}
+              onChange={(e) => setID_COURSE(e.target.value)}
+              className="bg-sky-600 hover:bg-sky-700 rounded shadow font-bold text-white text-center border-2 cursor-pointer"
+            >
               <option value="">--- Seleccione una Clase ---</option>
-              <option value="">Ingenieria de Software</option>
-              <option value="">Base de Datos II</option>
-              <option value="">Base de Datos I</option>
+              {listCourses.map((listcourse) => (
+                <option value={listcourse.ID_COURSE} key={listcourse.ID_COURSE}>
+                  {listcourse.NAME}
+                </option>
+              ))}
             </select>
           </div>
         </div>
