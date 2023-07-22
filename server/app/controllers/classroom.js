@@ -1,11 +1,12 @@
-const { Classroom, Building } = require("../models");
+
+const {getClassroomsByCenter,getProfessor} = require('../helpers/repositoryClassroom');
+
 
 const getClassrooms = async (req,res)=>{
     try {
-
-        const classrooms = await Classroom.findAll({
-            include:{model:Building, as:"building"}
-        })
+        const {id} = req.params 
+        const professor = await getProfessor(id)
+        const classrooms = await getClassroomsByCenter(professor.user.CENTER,professor.CAREER)
         res.status(200).json({classrooms})
         
     } catch (error) {

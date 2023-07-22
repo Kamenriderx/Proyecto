@@ -33,7 +33,8 @@ models.Section.Classroom=models.Section.belongsTo(models.Classroom,{
 });
 //  seccion - docente
 models.Professor.Section=models.Professor.hasMany(models.Section,{
-    foreignKey:"ID_PROFFERSSOR"
+    foreignKey:"ID_PROFFERSSOR",
+    as:"sections"
 });
 models.Section.Professor=models.Section.belongsTo(models.Professor,{
     foreignKey:"ID_PROFFERSSOR",

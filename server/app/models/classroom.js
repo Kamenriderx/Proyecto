@@ -19,6 +19,9 @@ const Classroom = connection.define(
         AMOUNT_PEOPLE:{
             type:DataTypes.INTEGER
         },
+        CAREER:{
+            type:DataTypes.STRING
+        },
         createdAt:{
             type:DataTypes.DATE
         },

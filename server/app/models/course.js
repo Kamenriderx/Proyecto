@@ -16,6 +16,11 @@ const Course = connection.define(
         NAME:{
             type:DataTypes.STRING
         },
+        
+        CAREER:{
+            type:DataTypes.STRING
+        },
+
         UV:{
             type:DataTypes.INTEGER
         },
