@@ -1,51 +1,46 @@
 const { DataTypes } = require("sequelize");
 const connection = require("../../config/database");
 
-const Classroom = connection.define(
-    "CLASSROOM",
+const Career = connection.define(
+    "CAREER",
     {
-        ID_CLASSROOM:{
+        ID_CAREER:{
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
         },
         
-        NUMBER:{
+
+        NAME:{
+            type:DataTypes.STRING
+        },
+
+        ID_DEPARTMENT:{
             type:DataTypes.INTEGER
         },
-        ID_BUILDING:{
-            type:DataTypes.INTEGER
-        },
-        AMOUNT_PEOPLE:{
-            type:DataTypes.INTEGER
-        },
-        ID_CAREER:{
-            type:DataTypes.INTEGER
-        },
+        
         createdAt:{
             type:DataTypes.DATE
         },
         updatedAt:{
             type:DataTypes.DATE
         },
-
-
        
     },
     {
-        tableName:'CLASSROOM',
+        tableName:'CAREER',
         timestamps: true,  
     }
 );
 
 
-Classroom.sync({ force: false })
+Career.sync({ force: false })
   .then(() => {
-    console.log("Tabla de Aulas sincronizada");
+    console.log("Tabla de Carreras sincronizada");
   })
   .catch((error) => {
-    console.error("Error al sincronizar tabla de Aulas:", error);
+    console.error("Error al sincronizar tabla de Carreras:", error);
 });
 
-module.exports = Classroom
+module.exports = Career
 

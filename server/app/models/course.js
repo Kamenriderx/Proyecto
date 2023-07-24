@@ -17,8 +17,11 @@ const Course = connection.define(
             type:DataTypes.STRING
         },
         
-        CAREER:{
-            type:DataTypes.STRING
+        ID_CAREER:{
+            type:DataTypes.INTEGER
+        },
+        IS_SERVICE:{
+            type:DataTypes.INTEGER
         },
 
         UV:{

@@ -11,7 +11,7 @@ const listCourses = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        resizeBy.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"ALGO SALIO MAL"})
     }
 }
 

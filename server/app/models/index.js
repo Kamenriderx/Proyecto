@@ -11,8 +11,53 @@ const models = {
     Building:require("./building.js"),
     Classroom:require('./classroom.js'),
     Section:require("./section.js"),
+    Department:require("./department.js"),
+    Career:require("./career.js"),
+    RequerimentsCourse:require("./requirementsCourse.js"),
     
 }
+
+// requerimientos clase
+models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'ID_COURSE',as:"course" });
+models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'REQUIREMENT_ID_COURSE', as:"requirement" });
+// carrera - departamento 
+
+models.Department.Career=models.Department.hasMany(models.Career,{
+    foreignKey:"ID_DEPARTMENT"
+});
+models.Career.Department=models.Career.belongsTo(models.Department,{
+    foreignKey:"ID_DEPARTMENT",
+    unique:true,
+    as:"department"
+});
+
+
+
+
+// aula - carrera
+
+models.Career.Classroom=models.Career.hasMany(models.Classroom,{
+    foreignKey:"ID_CAREER"
+});
+models.Classroom.Career=models.Classroom.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    unique:true,
+    as:"career"
+});
+
+
+// clase - carrera
+models.Career.Course=models.Career.hasMany(models.Course,{
+    foreignKey:"ID_CAREER"
+});
+models.Course.Career=models.Course.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    unique:true,
+    as:"career"
+});
+
+
+
 //  edificio - aula
 models.Building.Classroom=models.Building.hasMany(models.Classroom,{
     foreignKey:"ID_BUILDING"
