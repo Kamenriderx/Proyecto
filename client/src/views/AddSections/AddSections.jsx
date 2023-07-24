@@ -3,6 +3,8 @@ import Modal from "../../components/Modal";
 import { useState, useContext, useEffect } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddSections = () => {
   const [showModal, setShowModal] = useState(false);
@@ -17,16 +19,30 @@ const AddSections = () => {
   const [ID_PROFFERSSOR, setID_PROFFERSSOR] = useState("");
   const [ID_CLASSROOM, setID_CLASSROOM] = useState("");
   const [SPACE_AVAILABLE, setSPACE_AVAILABLE] = useState("");
+  const [DAYS_COUNT, setDAYS_COUNT] = useState("");
+  const [sections, setSections] = useState([]);
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
     const fetchDocentes = async () => {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
         const response = await axios(
-          `http://localhost:3000/registro/professor/professorsCareer/${state.user.ID_USER}`
+          `http://localhost:3000/registro/section/getProfessorsByCenterCareer`,
+          config
         );
-        setDocentes(response.data);
+        setDocentes(response.data.professors);
+        console.log("Docentes Por Carrera", response.data.professors);
       } catch (error) {
-        console.error("Error al obtener la lista de docentes", error);
+        console.log("Error al obtener la lista de docentes", error);
       }
     };
 
@@ -34,12 +50,23 @@ const AddSections = () => {
   }, []);
 
   console.log("Todos los docentes de Sistemas :", docentes);
+  console.log("Estado de Sesion", state);
 
   useEffect(() => {
     const getListClass = async () => {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
         const response = await axios(
-          `http://localhost:3000/registro/course/listCourses/${state.user.ID_USER}`
+          `http://localhost:3000/registro/course/listCourses/${state.user.ID_USER}`,
+          config
         );
         console.log(response.data.courses);
         setListCourses(response.data.courses);
@@ -53,8 +80,18 @@ const AddSections = () => {
   useEffect(() => {
     const getListAula = async () => {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
         const response = await axios(
-          `http://localhost:3000/registro/classroom/listClassrooms`
+          `http://localhost:3000/registro/classroom/listClassrooms/${state.user.ID_USER}`,
+          config
         );
         console.log(response.data.classrooms);
         setListAulas(response.data.classrooms);
@@ -65,7 +102,10 @@ const AddSections = () => {
     getListAula();
   }, []);
 
-  const handleSubmit = async () => {
+  console.log("Lista de Cursos", listCourses);
+  console.log("Listado de Aulas", listAulas);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
@@ -78,21 +118,36 @@ const AddSections = () => {
         },
       };
 
-      const formData = new FormData();
-      formData.append("DAYS", DAYS);
-      formData.append("START_TIME", START_TIME);
-      formData.append("END_TIME", END_TIME);
-      formData.append("ID_CLASSROOM", ID_CLASSROOM);
-      formData.append("ID_PROFFERSSOR", ID_PROFFERSSOR);
-      formData.append("SPACE_AVAILABLE", SPACE_AVAILABLE);
-      formData.append("ID_COURSE", ID_COURSE);
+      const data = {
+        DAYS,
+        START_TIME,
+        END_TIME,
+        ID_CLASSROOM,
+        ID_PROFFERSSOR,
+        SPACE_AVAILABLE,
+        ID_COURSE,
+        DAYS_COUNT,
+      };
+
       const response = await axios.post(
         "http://localhost:3000/registro/section/createSection",
-        { body: formData, ...config }
+        data,
+        config
       );
 
       console.log(response);
 
+      toast.success("Seccion Creada Exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+      setCheck(!check);
       setEND_TIME("");
       setSTART_TIME("");
       setID_CLASSROOM("");
@@ -100,20 +155,49 @@ const AddSections = () => {
       setID_PROFFERSSOR("");
       setSPACE_AVAILABLE("");
       setDAYS("");
+      setDAYS_COUNT("");
     } catch (error) {
-      console.log(error);
+      console.log("Error del Submit", error);
     }
   };
 
-  console.log("Lista de Cursos", listCourses);
-  console.log("Listado de Aulas", listAulas);
+  useEffect(() => {
+    const getSection = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        if (!token) return;
+
+        const response = await axios(
+          "http://localhost:3000/registro/section/getSections",
+          config
+        );
+        setSections(response.data.sections);
+        console.log(response.data.sections);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getSection();
+  }, [check]);
+
+  console.log("LAS SECCIONES", sections);
 
   return (
     <div className="container mx-auto">
+      <ToastContainer position="top-right" />
       <Modal Visible={showModal} Close={() => setShowModal(false)}>
         <form
           onSubmit={handleSubmit}
           className="bg-gray-50 py-3 px-2 shadow-sm rounded-lg"
+          setCheck={setCheck}
+          check={check}
         >
           <div className="text-center mb-5 mt-5">
             <span className="text-sky-700 font-bold text-2xl">
@@ -213,7 +297,7 @@ const AddSections = () => {
                     key={docente.ID_PROFFERSSOR}
                     value={docente.ID_PROFFERSSOR}
                   >
-                    {docente.NAME}
+                    {docente.user.NAME}
                   </option>
                 ))}
               </select>
@@ -226,8 +310,8 @@ const AddSections = () => {
               </label>
               <input
                 type="number"
-                placeholder="Numero de Cupos"
-                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                placeholder="Cupos"
+                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 w-36"
                 value={SPACE_AVAILABLE}
                 onChange={(e) => setSPACE_AVAILABLE(e.target.value)}
               />
@@ -241,7 +325,7 @@ const AddSections = () => {
                 onChange={(e) => setDAYS(e.target.value)}
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
               >
-                <option>-- Selecciona los Dias --</option>
+                <option>-- Dias --</option>
                 <option value="LuMaMiJuVi">LuMaMiJuVi</option>
                 <option value="LuMaMiJu">LuMaMiJu</option>
                 <option value="LuMaMi">LuMaMi</option>
@@ -252,6 +336,18 @@ const AddSections = () => {
                 <option value="MaJu">MaJu</option>
                 <option value="Sa">Sa</option>
               </select>
+            </div>
+            <div className="">
+              <label className="mx-2 text-black font-bold text-md block">
+                Unidades Valorativas:
+              </label>
+              <input
+                type="number"
+                placeholder="UV"
+                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 w-36"
+                value={DAYS_COUNT}
+                onChange={(e) => setDAYS_COUNT(e.target.value)}
+              />
             </div>
           </div>
           <div className="flex justify-around mt-8 mb-5">
@@ -315,6 +411,8 @@ const AddSections = () => {
                 <th className="p-2">Edif</th>
                 <th className="p-2">Aula</th>
                 <th className="p-2">Maestro</th>
+                <th className="p-2">Asignatura</th>
+                <th className="p-2">UV</th>
                 <th className="p-2">Cupos</th>
                 <th className="p-2">Seccion</th>
                 <th className="p-2">Dias</th>
@@ -322,46 +420,60 @@ const AddSections = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b" /* key={estudiante.ID_USER} */>
-                <td className="border px-4 py-2 text-lg font-bold r">
-                  <p>1500</p>
-                </td>
-                <td className="border px-4 py-2 text-lg font-bold r">1600</td>
-                <td className="border px-4 py-2 text-lg font-bold r">B2</td>
-                <td className="border px-4 py-2 text-lg font-bold r">201</td>
-                <td className="text-center border px-4 py-2 text-lg font-bold r">
-                  Nestor Adrian Luque
-                </td>
-                <td className="text-center border px-4 py-2 text-lg font-bold r">
-                  20
-                </td>
-                <td className="text-center border px-4 py-2 text-lg font-bold r">
-                  15:00
-                </td>
-                <td className="text-center border px-4 py-2 text-lg font-bold r">
-                  LuMaMiJu
-                </td>
-                <td className="border px-4 py-2 text-lg font-bold r">
-                  <div className="flex items-center gap-5">
-                    <div className="mx-auto">
-                      <AiFillDelete
-                        className="cursor-pointer"
-                        /* onClick={() => handleDelete(estudiante.ID_USER)} */
-                        size={25}
-                      ></AiFillDelete>
-                      <span className="-mx-3 text-sm">Eliminar</span>
+              {sections.map((section) => (
+                <tr className="border-b" key={section.ID_SECTION}>
+                  <td className="border px-4 py-2 text-lg font-bold r">
+                    <p>{section.START_TIME}</p>
+                  </td>
+                  <td className="border px-4 py-2 text-lg font-bold r">
+                    {section.END_TIME}
+                  </td>
+                  <td className="border px-4 py-2 text-lg font-bold r">
+                    {section.classroom.building.NAME}
+                  </td>
+                  <td className="border px-4 py-2 text-lg font-bold r">
+                    {section.classroom.NUMBER}
+                  </td>
+                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                    {section.Proffessor.user.NAME}
+                  </td>
+                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                    {section.course.NAME}
+                  </td>
+                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                    {section.course.UV}
+                  </td>
+                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                    {section.SPACE_AVAILABLE}
+                  </td>
+                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                    {section.SECTION_CODE}
+                  </td>
+                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                    {section.DAYS}
+                  </td>
+                  <td className="border px-4 py-2 text-lg font-bold r">
+                    <div className="flex items-center gap-5">
+                      <div className="mx-auto">
+                        <AiFillDelete
+                          className="cursor-pointer"
+                          /* onClick={() => handleDelete(estudiante.ID_USER)} */
+                          size={25}
+                        ></AiFillDelete>
+                        <span className="-mx-3 text-sm">Eliminar</span>
+                      </div>
+                      <div className="mx-auto">
+                        <AiFillEdit
+                          className="cursor-pointer"
+                          /* onClick={() => handleDelete(estudiante.ID_USER)} */
+                          size={25}
+                        ></AiFillEdit>
+                        <span className="-mx-1 text-sm">Editar</span>
+                      </div>
                     </div>
-                    <div className="mx-auto">
-                      <AiFillEdit
-                        className="cursor-pointer"
-                        /* onClick={() => handleDelete(estudiante.ID_USER)} */
-                        size={25}
-                      ></AiFillEdit>
-                      <span className="-mx-1 text-sm">Editar</span>
-                    </div>
-                  </div>
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
