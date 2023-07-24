@@ -18,11 +18,16 @@ const createSection = async(req,res)=>{
             return
             
         }
+        if (section && (section.DAYS.includes(body.DAYS) || body.DAYS.includes(section.DAYS))) {
+            res.status(400).json({messagge:"EL AULA ESTA OCUPADA EN ESE HORARIO"});
+            return    
+        }
         if (section && section.DAYS == body.DAYS) {
             res.status(400).json({messagge:"EL AULA ESTA OCUPADA EN ESE HORARIO Y ESOS DIAS"});
             return    
         }
-
+        
+        
         section = await sectionExists(body);
 
         if (section && section.DAYS == body.DAYS ) {
@@ -94,7 +99,10 @@ const getProfessorsByCenterAndCarrer = async(req,res)=>{
                 as:"user",
                 where:{
                     CENTER:user.CENTER
-                }
+                }, attributes:[ "ID_USER",
+                "ID_ROLE","ACCOUNT_NUMBER","NAME",
+                "DNI","CENTER",
+                "EMAIL"]
             }
         })
         res.status(200).json({professors})    

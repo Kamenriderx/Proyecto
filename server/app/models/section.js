@@ -35,6 +35,9 @@ const Section = connection.define(
         SPACE_AVAILABLE:{
             type:DataTypes.INTEGER,
         }, 
+        ID_PERIOD:{
+            type:DataTypes.INTEGER,
+        }, 
         createdAt:{
             type:DataTypes.DATE
         },

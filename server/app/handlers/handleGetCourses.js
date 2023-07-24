@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Professor, Course } = require("../models");
+const { Professor, Course, Career } = require("../models");
 
 const getProfessor = async (id)=>{
     return await Professor.findOne({
@@ -11,11 +11,11 @@ const getProfessor = async (id)=>{
 
 const getCourses = async (career)=>{
     return await Course.findAll({
-        where:{
-            CAREER:{
+        include:[{
+            model:Career, as:"career", where:{NAME:{
                 [Op.like]:`%${career.toUpperCase()}%`
-            }
-        }
+            },},attributes:["NAME"]
+        }]
     })
 
 }

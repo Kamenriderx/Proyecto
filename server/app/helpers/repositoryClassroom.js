@@ -1,4 +1,4 @@
-const {User, Professor,Classroom,Building} = require('../models');
+const {User, Professor,Classroom,Building,Career} = require('../models');
 const {Op} = require('sequelize');
 
 
@@ -16,16 +16,16 @@ const getProfessor = async (id)=>{
 
 const getClassroomsByCenter = async(center,career)=>{
     return await Classroom.findAll({
-        where:{
-            CAREER:{
-                [Op.like]:`%${career.toUpperCase()}%`
-            }
-        },
+        
         include:[{model:Building, as:"building",where:{
             CENTER:{
                 [Op.like]:`%${center.toUpperCase()}%`
             }
-        }}]
+        }},{
+            model:Career, as:"career", where:{NAME:{
+                [Op.like]:`%${career.toUpperCase()}%`
+            }}, attributes:["NAME"]
+        }]
     })
 }
 
