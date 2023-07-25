@@ -38,6 +38,14 @@ const Section = connection.define(
         ID_PERIOD:{
             type:DataTypes.INTEGER,
         }, 
+        DELETED:{
+            type:DataTypes.INTEGER,
+            defaultValue: 0
+        }, 
+        JUSTIFY:{
+            type:DataTypes.TEXT,
+            defaultValue: "-"
+        }, 
         createdAt:{
             type:DataTypes.DATE
         },
