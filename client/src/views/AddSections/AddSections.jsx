@@ -5,6 +5,7 @@ import { StoreContext } from "../../store/ContextExample";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AlertTwo from "../../components/AlertTwo";
 
 const AddSections = () => {
   const [showModal, setShowModal] = useState(false);
@@ -22,6 +23,7 @@ const AddSections = () => {
   const [DAYS_COUNT, setDAYS_COUNT] = useState("");
   const [sections, setSections] = useState([]);
   const [check, setCheck] = useState(false);
+  const [alerta, setAlerta] = useState({});
 
   useEffect(() => {
     const fetchDocentes = async () => {
@@ -107,6 +109,34 @@ const AddSections = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      [
+        DAYS,
+        START_TIME,
+        END_TIME,
+        ID_CLASSROOM,
+        ID_COURSE,
+        ID_PROFFERSSOR,
+        SPACE_AVAILABLE,
+        DAYS_COUNT,
+      ].includes("")
+    ) {
+      setAlerta({
+        message: "Todos los campos son obligatorios",
+        error: true,
+      });
+      return;
+    }
+
+    if (START_TIME === END_TIME) {
+      setAlerta({
+        message: "El horario de inicio y finalizacion no debe ser igual",
+        error: true,
+      });
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -158,6 +188,10 @@ const AddSections = () => {
       setDAYS_COUNT("");
     } catch (error) {
       console.log("Error del Submit", error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
     }
   };
 
@@ -189,10 +223,68 @@ const AddSections = () => {
 
   console.log("LAS SECCIONES", sections);
 
+  const handleStartTimeChange = (e) => {
+    const selectedStartTime = e.target.value;
+    setSTART_TIME(selectedStartTime);
+
+    // Add validation to check if HF is less than or equal to HI
+    if (END_TIME && parseInt(selectedStartTime) >= parseInt(END_TIME)) {
+      setEND_TIME((prevEndTime) =>
+        parseInt(selectedStartTime) + 100 <= 2000
+          ? (parseInt(selectedStartTime) + 100).toString()
+          : prevEndTime
+      ); // Set HF to the next valid time slot if it's less than or equal to HI
+    } else if (!END_TIME) {
+      // If HF is not set, set it to the next valid time slot
+      setEND_TIME((prevEndTime) =>
+        parseInt(selectedStartTime) + 100 <= 2000
+          ? (parseInt(selectedStartTime) + 100).toString()
+          : prevEndTime
+      );
+    }
+  };
+
+  const handleEndTimeChange = (e) => {
+    const selectedEndTime = e.target.value;
+    setEND_TIME(selectedEndTime);
+
+    // Add validation to check if HI is greater than or equal to HF
+    if (START_TIME && parseInt(selectedEndTime) <= parseInt(START_TIME)) {
+      setSTART_TIME((prevStartTime) =>
+        parseInt(selectedEndTime) - 100 >= 700
+          ? (parseInt(selectedEndTime) - 100).toString()
+          : prevStartTime
+      ); // Set HI to the previous valid time slot if it's greater than or equal to HF
+    }
+  };
+
+  const clearStates = () => {
+    setEND_TIME("");
+    setSTART_TIME("");
+    setID_CLASSROOM("");
+    setID_COURSE("");
+    setID_PROFFERSSOR("");
+    setSPACE_AVAILABLE("");
+    setDAYS("");
+    setDAYS_COUNT("");
+  };
+
+  const showModalClear = () => {
+    setShowModal(false);
+  };
+
+  const handleClick = () => {
+    showModalClear();
+    clearStates();
+  };
+
+  const { message } = alerta;
+
   return (
     <div className="container mx-auto">
+      {message && <AlertTwo alerta={alerta} />}
       <ToastContainer position="top-right" />
-      <Modal Visible={showModal} Close={() => setShowModal(false)}>
+      <Modal Visible={showModal} Close={handleClick}>
         <form
           onSubmit={handleSubmit}
           className="bg-gray-50 py-3 px-2 shadow-sm rounded-lg"
@@ -212,7 +304,7 @@ const AddSections = () => {
               <select
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                 value={START_TIME}
-                onChange={(e) => setSTART_TIME(e.target.value)}
+                onChange={handleStartTimeChange}
               >
                 <option value="">-- Hora Inicial --</option>
                 <option value="0700">07:00</option>
@@ -238,7 +330,7 @@ const AddSections = () => {
               <select
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                 value={END_TIME}
-                onChange={(e) => setEND_TIME(e.target.value)}
+                onChange={handleEndTimeChange}
               >
                 <option value="">-- Hora Final --</option>
                 <option value="0700">07:00</option>
@@ -358,7 +450,7 @@ const AddSections = () => {
               Crear
             </button>
             <button
-              onClick={() => setShowModal(false)}
+              onClick={handleClick}
               className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg py-2 px-8 rounded-md shadow"
             >
               Descartar
@@ -422,34 +514,34 @@ const AddSections = () => {
             <tbody>
               {sections.map((section) => (
                 <tr className="border-b" key={section.ID_SECTION}>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-md font-bold r">
                     <p>{section.START_TIME}</p>
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-md font-bold r">
                     {section.END_TIME}
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-md font-bold r">
                     {section.classroom.building.NAME}
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-md font-bold r">
                     {section.classroom.NUMBER}
                   </td>
-                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                  <td className="text-center border px-4 py-2 text-md font-bold r">
                     {section.Proffessor.user.NAME}
                   </td>
-                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                  <td className="text-center border px-4 py-2 text-md font-bold r">
                     {section.course.NAME}
                   </td>
-                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                  <td className="text-center border px-4 py-2 text-md font-bold r">
                     {section.course.UV}
                   </td>
-                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                  <td className="text-center border px-4 py-2 text-md font-bold r">
                     {section.SPACE_AVAILABLE}
                   </td>
-                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                  <td className="text-center border px-4 py-2 text-md font-bold r">
                     {section.SECTION_CODE}
                   </td>
-                  <td className="text-center border px-4 py-2 text-lg font-bold r">
+                  <td className="text-center border px-4 py-2 text-md font-bold r">
                     {section.DAYS}
                   </td>
                   <td className="border px-4 py-2 text-lg font-bold r">
