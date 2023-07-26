@@ -4,12 +4,13 @@ const {Op} = require('sequelize');
 const getSectionsByCenterAndCareer = async (user) =>{
     const professor = await getProfessorIdUser(user);
 
-
     return await Section.findAll({
         where:{
             DELETED:0
         },include:[
-            {model:Professor, as:"Proffessor",include:[{model:User, as:"user", attributes:[ "ID_USER",
+            {model:Professor, as:"Proffessor",where:{CAREER:{
+                [Op.like]:`%${professor.CAREER.toUpperCase()}%`
+            }},include:[{model:User, as:"user", attributes:[ "ID_USER",
             "ID_ROLE","ACCOUNT_NUMBER","NAME",
             "DNI","CENTER",
             "EMAIL"]}]},
