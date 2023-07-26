@@ -623,10 +623,10 @@ const AddSections = () => {
                         {section.END_TIME}
                       </td>
                       <td className="border px-4 py-2 text-md font-medium r">
-                        {/* {section.classroom.building.NAME} */}
+                        {section.classroom.building.NAME}
                       </td>
                       <td className="border px-4 py-2 text-md font-medium r">
-                        {/* {section.classroom.NUMBER} */}
+                        {section.classroom.NUMBER}
                       </td>
                       <td className="text-center border px-4 py-2 text-md font-medium r">
                         {section.Proffessor.user.NAME}
