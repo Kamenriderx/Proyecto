@@ -24,6 +24,31 @@ const AddSections = () => {
   const [sections, setSections] = useState([]);
   const [check, setCheck] = useState(false);
   const [alerta, setAlerta] = useState({});
+  const [selectedSection, setSelectedSection] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sectionsPerPage] = useState(4);
+  const indexOfLastTeacher = currentPage * sectionsPerPage;
+  const indexOfFirstTeacher = indexOfLastTeacher - sectionsPerPage;
+  const currentSections = sections.slice(
+    indexOfFirstTeacher,
+    indexOfLastTeacher
+  );
+
+  const totalPages = Math.ceil(sections.length / sectionsPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    setIsEditMode(selectedSection !== null);
+  }, [selectedSection]);
 
   useEffect(() => {
     const fetchDocentes = async () => {
@@ -107,6 +132,23 @@ const AddSections = () => {
   console.log("Lista de Cursos", listCourses);
   console.log("Listado de Aulas", listAulas);
 
+  const handleEdit = (section) => {
+    setShowModal(true);
+    setSelectedSection(section);
+    setIsEditMode(true);
+    setSTART_TIME(section.START_TIME);
+    setEND_TIME(section.END_TIME);
+    setID_CLASSROOM(section.ID_CLASSROOM);
+    setID_COURSE(section.ID_COURSE);
+    setID_PROFFERSSOR(section.ID_PROFFERSSOR);
+    setSPACE_AVAILABLE(section.SPACE_AVAILABLE);
+    setDAYS(section.DAYS);
+    setDAYS_COUNT(section.course.UV);
+    console.log("UNIDADES VALORATIVAS", section.DAYS_COUNT);
+  };
+
+  console.log("SELECTED SECTION", selectedSection);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -159,24 +201,41 @@ const AddSections = () => {
         DAYS_COUNT,
       };
 
-      const response = await axios.post(
-        "http://localhost:3000/registro/section/createSection",
-        data,
-        config
-      );
+      if (selectedSection) {
+        const response = await axios.put(
+          `http://localhost:3000/registro/section/updateSection/${selectedSection.ID_SECTION}`,
+          data,
+          config
+        );
+        console.log(response);
+        toast.success("Seccion Actualizada Exitosamente", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        const response = await axios.post(
+          "http://localhost:3000/registro/section/createSection",
+          data,
+          config
+        );
 
-      console.log(response);
+        console.log(response);
 
-      toast.success("Seccion Creada Exitosamente", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-
+        toast.success("Seccion Creada Exitosamente", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
       setCheck(!check);
       setEND_TIME("");
       setSTART_TIME("");
@@ -186,6 +245,8 @@ const AddSections = () => {
       setSPACE_AVAILABLE("");
       setDAYS("");
       setDAYS_COUNT("");
+
+      resetForm();
     } catch (error) {
       console.log("Error del Submit", error);
       setAlerta({
@@ -271,11 +332,46 @@ const AddSections = () => {
 
   const showModalClear = () => {
     setShowModal(false);
+    setSelectedSection(null); // Restablecer selectedSection a null
+    setIsEditMode(false); // Restablecer el modo de edición a false
+    clearStates(); // Restablecer otros estados del formulario
   };
 
   const handleClick = () => {
     showModalClear();
     clearStates();
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      if (!token) return;
+
+      const response = await axios.post(
+        `http://localhost:3000/registro/section/deleteSection/${id}`,
+        {
+          JUSTIFY:
+            "LA SECCION NO CUMPLE CON LA CANTIDAD DE ALUMNOS SUFICIENTES",
+        },
+        config
+      );
+      setSections((prevSection) =>
+        prevSection.filter((section) => section.ID_SECTION !== id)
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
+    }
   };
 
   const { message } = alerta;
@@ -293,7 +389,7 @@ const AddSections = () => {
         >
           <div className="text-center mb-5 mt-5">
             <span className="text-sky-700 font-bold text-2xl">
-              Agregar Nueva Seccion
+              {isEditMode ? "Editar Sección" : "Agregar Nueva Sección"}
             </span>
           </div>
           <div className="flex justify-around mt-3 w-full">
@@ -445,9 +541,13 @@ const AddSections = () => {
           <div className="flex justify-around mt-8 mb-5">
             <button
               type="submit"
-              className="bg-sky-600 hover:bg-sky-700 text-white font-bold text-lg py-2 px-8 rounded-md shadow"
+              className={
+                selectedSection
+                  ? "bg-green-400 hover:bg-green-500 text-white font-bold text-lg py-2 px-8 rounded-md shadow"
+                  : "bg-sky-600 hover:bg-sky-700 text-white font-bold text-lg py-2 px-8 rounded-md shadow"
+              }
             >
-              Crear
+              {selectedSection ? "Editar Seccion" : "Crear Seccion"}
             </button>
             <button
               onClick={handleClick}
@@ -482,7 +582,7 @@ const AddSections = () => {
             <select
               value={ID_COURSE}
               onChange={(e) => setID_COURSE(e.target.value)}
-              className="bg-sky-600 hover:bg-sky-700 rounded shadow font-bold text-white text-center border-2 cursor-pointer"
+              className="bg-sky-600 hover:bg-sky-700 rounded shadow text-white text-center border-2 cursor-pointer"
             >
               <option value="">--- Seleccione una Clase ---</option>
               {listCourses.map((listcourse) => (
@@ -495,79 +595,105 @@ const AddSections = () => {
         </div>
 
         <div className="mt-10">
-          <table className="w-full bg-white shadow-md table-auto">
-            <thead className="bg-blue-800 text-white">
-              <tr>
-                <th className="p-2">HI</th>
-                <th className="p-2">HF</th>
-                <th className="p-2">Edif</th>
-                <th className="p-2">Aula</th>
-                <th className="p-2">Maestro</th>
-                <th className="p-2">Asignatura</th>
-                <th className="p-2">UV</th>
-                <th className="p-2">Cupos</th>
-                <th className="p-2">Seccion</th>
-                <th className="p-2">Dias</th>
-                <th className="p-2">Accion</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sections.map((section) => (
-                <tr className="border-b" key={section.ID_SECTION}>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    <p>{section.START_TIME}</p>
-                  </td>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    {section.END_TIME}
-                  </td>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    {section.classroom.building.NAME}
-                  </td>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    {section.classroom.NUMBER}
-                  </td>
-                  <td className="text-center border px-4 py-2 text-md font-bold r">
-                    {section.Proffessor.user.NAME}
-                  </td>
-                  <td className="text-center border px-4 py-2 text-md font-bold r">
-                    {section.course.NAME}
-                  </td>
-                  <td className="text-center border px-4 py-2 text-md font-bold r">
-                    {section.course.UV}
-                  </td>
-                  <td className="text-center border px-4 py-2 text-md font-bold r">
-                    {section.SPACE_AVAILABLE}
-                  </td>
-                  <td className="text-center border px-4 py-2 text-md font-bold r">
-                    {section.SECTION_CODE}
-                  </td>
-                  <td className="text-center border px-4 py-2 text-md font-bold r">
-                    {section.DAYS}
-                  </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
-                    <div className="flex items-center gap-5">
-                      <div className="mx-auto">
-                        <AiFillDelete
-                          className="cursor-pointer"
-                          /* onClick={() => handleDelete(estudiante.ID_USER)} */
-                          size={25}
-                        ></AiFillDelete>
-                        <span className="-mx-3 text-sm">Eliminar</span>
-                      </div>
-                      <div className="mx-auto">
-                        <AiFillEdit
-                          className="cursor-pointer"
-                          /* onClick={() => handleDelete(estudiante.ID_USER)} */
-                          size={25}
-                        ></AiFillEdit>
-                        <span className="-mx-1 text-sm">Editar</span>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {sections?.length > 0 ? (
+            <>
+              <table className="w-full bg-white shadow-md table-auto">
+                <thead className="bg-blue-800 text-white">
+                  <tr>
+                    <th className="p-2">HI</th>
+                    <th className="p-2">HF</th>
+                    <th className="p-2">Edif</th>
+                    <th className="p-2">Aula</th>
+                    <th className="p-2">Maestro</th>
+                    <th className="p-2">Asignatura</th>
+                    <th className="p-2">UV</th>
+                    <th className="p-2">Cupos</th>
+                    <th className="p-2">Seccion</th>
+                    <th className="p-2">Dias</th>
+                    <th className="p-2">Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentSections.map((section) => (
+                    <tr className="border-b" key={section.ID_SECTION}>
+                      <td className="border px-4 py-2 text-md font-medium r">
+                        <p>{section.START_TIME}</p>
+                      </td>
+                      <td className="border px-4 py-2 text-md font-medium r">
+                        {section.END_TIME}
+                      </td>
+                      <td className="border px-4 py-2 text-md font-medium r">
+                        {/* {section.classroom.building.NAME} */}
+                      </td>
+                      <td className="border px-4 py-2 text-md font-medium r">
+                        {/* {section.classroom.NUMBER} */}
+                      </td>
+                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                        {section.Proffessor.user.NAME}
+                      </td>
+                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                        {section.course.NAME}
+                      </td>
+                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                        {section.course.UV}
+                      </td>
+                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                        {section.SPACE_AVAILABLE}
+                      </td>
+                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                        {section.SECTION_CODE}
+                      </td>
+                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                        {section.DAYS}
+                      </td>
+                      <td className="border px-4 py-2 text-lg font-medium r">
+                        <div className="flex items-center gap-8">
+                          <div className="mx-auto">
+                            <AiFillDelete
+                              className="cursor-pointer text-gray-600"
+                              onClick={() => handleDelete(section.ID_SECTION)}
+                              size={20}
+                            ></AiFillDelete>
+                            <span className="-mx-3 text-xs">Eliminar</span>
+                          </div>
+                          <div className="mx-auto">
+                            <AiFillEdit
+                              className="cursor-pointer text-gray-600"
+                              onClick={() => handleEdit(section)}
+                              size={20}
+                            ></AiFillEdit>
+                            <span className="-mx-1 text-xs">Editar</span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="flex flex-col">
+                {/* ... */}
+                <div className="flex justify-center mt-4">
+                  {pageNumbers.map((number) => (
+                    <button
+                      key={number}
+                      onClick={() => paginate(number)}
+                      className={`mx-1 px-2 py-1 rounded ${
+                        currentPage === number
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-200"
+                      }`}
+                    >
+                      {number}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <p className="text-2xl text-center uppercase font-bold ">
+              La Planificacion esta Vacia
+            </p>
+          )}
         </div>
       </div>
     </div>

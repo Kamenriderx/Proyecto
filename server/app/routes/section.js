@@ -10,7 +10,7 @@ router.get("/getProfessorsByCenterCareer",authMiddleware, checkRolJefe,getProfes
 router.post("/createSection",authMiddleware, checkRolJefe,createSection);
 
 
-router.delete("/deleteSection/:id",authMiddleware, checkRolJefe,deleteSection)
+router.post("/deleteSection/:id",authMiddleware, checkRolJefe,deleteSection)
 router.put("/updateSection/:id",authMiddleware, checkRolJefe,updateSection)
 module.exports = router
 
