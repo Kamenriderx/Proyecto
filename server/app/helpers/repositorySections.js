@@ -6,7 +6,9 @@ const getSectionsByCenterAndCareer = async (user) =>{
 
 
     return await Section.findAll({
-        include:[
+        where:{
+            DELETED:0
+        },include:[
             {model:Professor, as:"Proffessor",include:[{model:User, as:"user", attributes:[ "ID_USER",
             "ID_ROLE","ACCOUNT_NUMBER","NAME",
             "DNI","CENTER",
@@ -32,8 +34,40 @@ const getProfessorIdUser = async (user)=>{
     })
 }
 
+const sectionExistsHourClassroom = async (body)=>{
+    return await Section.findOne({
+        where:{
+            ID_SECTION:{
+                [Op.ne]: body.ID_SECTION
+            },
+            ID_CLASSROOM: body.ID_CLASSROOM,
+            START_TIME: body.START_TIME,
+            END_TIME: body.END_TIME
+        }
+    })
+}
+
+const sectionbyProffessor = async (body)=>{
+    return await Section.findOne({
+        where:{
+            ID_PROFFERSSOR: body.ID_PROFFERSSOR,
+            START_TIME: body.START_TIME,
+            END_TIME: body.END_TIME
+        }
+    })
+}
+
+const getSection = async (body)=>{
+    return await Section.findOne({
+        where:{
+            ID_SECTION: body.ID_SECTION}
+    })
+}
 
 module.exports = {
     getSectionsByCenterAndCareer,
-    getProfessorIdUser
+    getProfessorIdUser,
+    getSection,
+    sectionExistsHourClassroom,
+    sectionbyProffessor
 };
