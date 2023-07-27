@@ -14,9 +14,38 @@ const models = {
     Department:require("./department.js"),
     Career:require("./career.js"),
     RequerimentsCourse:require("./requirementsCourse.js"),
+    Request : require('./requests.js'),
+    RequestCareer : require('./requestCareer.js'),
     
 }
+// ESTUDIANTE - SOLICITUDES
 
+models.Student.Request=models.Student.hasMany(models.Request,{
+    foreignKey:"ID_STUDENT"
+});
+models.Request.Student=models.Request.belongsTo(models.Student,{
+    foreignKey:"ID_STUDENT",
+    as:"student"
+});
+// solicitudes - cambioCarrera
+
+models.Request.RequestCareer=models.Request.hasMany(models.RequestCareer,{
+    foreignKey:"ID_REQUEST",
+    as:"requestCareer"
+});
+models.RequestCareer.Request=models.RequestCareer.belongsTo(models.Request,{
+    foreignKey:"ID_REQUEST",
+    as:"request"
+});
+// cambioCarrera - carrera
+
+models.Career.RequestCareer=models.Career.hasMany(models.RequestCareer,{
+    foreignKey:"ID_CAREER"
+});
+models.RequestCareer.Career=models.RequestCareer.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    as:"career"
+});
 // requerimientos clase
 models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'ID_COURSE',as:"course" });
 models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'REQUIREMENT_ID_COURSE', as:"requirement" });
