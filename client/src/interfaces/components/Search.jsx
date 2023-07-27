@@ -39,7 +39,7 @@ const Search = () => {
 
   return (
     <form onSubmit={onSearchSubmit}>
-      <div className="flex border rounded-full overflow-hidden">
+      <div className="flex w-full border rounded-full overflow-hidden">
         <input
           type="text"
           name="valueSearch"
