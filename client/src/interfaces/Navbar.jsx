@@ -20,6 +20,8 @@ import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
 import ViewChat from "../views/ViewChat/ViewChat";
 import ListContacts from "../views/DeleteContacts/components/ListContacts";
 import AddSections from "../views/AddSections/AddSections";
+import Requests from "../views/Solicitudes/Requests";
+import CambioCarrera from "../views/Solicitudes/components/CambioCarrera";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -161,6 +163,8 @@ const ContentNavbar = () => {
           <Route exact path="/chat" element={<ViewChat />} />
           <Route exact path="/contactos" element={<ListContacts />} />
           <Route exact path="/addSections" element={<AddSections />} />
+          <Route exact path="/solicitudes" element={<Requests />} />
+          <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
 
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
