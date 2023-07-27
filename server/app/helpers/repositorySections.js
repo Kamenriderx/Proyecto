@@ -61,7 +61,10 @@ const sectionbyProffessor = async (body)=>{
 const getSection = async (body)=>{
     return await Section.findOne({
         where:{
-            ID_SECTION: body.ID_SECTION}
+            ID_SECTION: body.ID_SECTION
+        },include:{
+            model:Professor, as:"Proffessor"
+        }
     })
 }
 

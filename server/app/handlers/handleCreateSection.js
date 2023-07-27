@@ -159,10 +159,18 @@ const getProfessor = async (body)=>{
     return await Professor.findOne({
         where:{
             ID_PROFFERSSOR: body.ID_PROFFERSSOR
-        },include:{model:Section, as:"sections"}
+        }
     })
 }
 
+const getSectionsProffessor = async (ID_PROFFERSSOR)=>{
+    return await Section.findAndCountAll({
+        where:{
+            ID_PROFFERSSOR,
+            DELETED:0
+        }
+    })
+}
 
 const validateSchedule=  async(body)=>{
     let section = await Section.findOne({
@@ -323,5 +331,6 @@ module.exports = {
     sectionExists,
     createSectionCode,
     getProfessor,
-    validateSchedule    
+    validateSchedule,
+    getSectionsProffessor   
 }

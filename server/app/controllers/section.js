@@ -1,4 +1,4 @@
-const {getCourse, getClassroom, sectionRange, sectionExists,createSectionCode, getProfessor, validateSchedule} = require('../handlers/handleCreateSection');
+const {getCourse, getClassroom, sectionRange, sectionExists,createSectionCode, getProfessor, validateSchedule, getSectionsProffessor} = require('../handlers/handleCreateSection');
 const { Section, Professor, User } = require('../models');
 const {getProfessorIdUser, getSectionsByCenterAndCareer,getSection, sectionExistsHourClassroom,sectionbyProffessor} = require('../helpers/repositorySections');
 
@@ -48,8 +48,9 @@ const createSection = async(req,res)=>{
 
 
         }
-    
-        if (professor.sections.length == 5 ) {
+        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR);
+        professor.sections = sections.rows
+        if (professor.sections != null && professor.sections.length == 5 ) {
             res.status(400).json({messagge:"EL DOCENTE YA TIENE ASIGNADAS 5 SECCIONES"});
             return
         }
@@ -141,8 +142,12 @@ const updateSection = async (req,res)=>{
         const classroom = await getClassroom(body);
         body.SPACE_AVAILABLE = (body.SPACE_AVAILABLE == null || body.SPACE_AVAILABLE==0) ? classroom.AMOUNT_PEOPLE : body.SPACE_AVAILABLE
         
-        if (parseInt(section.ID_PROFFERSOR) != parseInt(body.ID_PROFFERSOR)) {
+        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR);
+        professor.sections = sections.rows
+        
+        if (parseInt(section.Proffessor.ID_PROFFERSSOR) != parseInt(body.ID_PROFFERSSOR)) {
             if (professor.sections.length == 5 ) {
+                
                 res.status(400).json({messagge:"EL DOCENTE YA TIENE ASIGNADAS 5 SECCIONES"});
                 return
             }
