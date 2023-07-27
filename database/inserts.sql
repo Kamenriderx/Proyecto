@@ -37,6 +37,3 @@ VALUES
 ('1', '$2b$10$vvvwQCXvQgmeQqJXPgdKIOLWRHVHeFreUBd0xbjV9cKws4R355LYe', '20230012871', 'Severus Snape', '0864-3999-90656', 'cu', 'severus.snape@example.com', 'offline');
 
 
-
-
-
