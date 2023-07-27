@@ -14,9 +14,19 @@ import TeacherState from "./views/ViewTeacher/context/TeacherState";
 
 function App() {
   return (
-    <div>
-      <Period/>
-    </div>
+    <StoreProvider>
+      <StudentProvider>
+        <StudentState>
+          <TeacherState>
+            <ConversationState>
+              <MessagesState>
+                <ContentNavbar />
+              </MessagesState>
+            </ConversationState>
+          </TeacherState>
+        </StudentState>
+      </StudentProvider>
+    </StoreProvider>
   );
 }
 
