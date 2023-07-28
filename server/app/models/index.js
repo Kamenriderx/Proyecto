@@ -28,6 +28,15 @@ models.Request.Student=models.Request.belongsTo(models.Student,{
     foreignKey:"ID_STUDENT",
     as:"student"
 });
+// DOCENTE - SOLICITUDES
+
+models.Professor.Request=models.Professor.hasMany(models.Request,{
+    foreignKey:"ID_COORDINATOR"
+});
+models.Request.Professor=models.Request.belongsTo(models.Professor,{
+    foreignKey:"ID_COORDINATOR",
+    as:"coordinator"
+});
 // solicitudes - cambioCarrera
 
 models.Request.RequestCareer=models.Request.hasMany(models.RequestCareer,{

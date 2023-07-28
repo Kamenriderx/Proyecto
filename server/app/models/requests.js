@@ -21,7 +21,6 @@ const Request = connection.define(
         },
         TYPE:{
             type:DataTypes.ENUM("CARRERA","CENTRO"),
-            defaultValue: "Pendiente"
         },
 
         OBS:{
@@ -29,8 +28,14 @@ const Request = connection.define(
             defaultValue: "-"
         },
 
+        CENTER:{
+            type:DataTypes.STRING,
+        },
 
         ID_STUDENT:{
+            type:DataTypes.INTEGER
+        },
+        ID_COORDINATOR:{
             type:DataTypes.INTEGER
         },
         
