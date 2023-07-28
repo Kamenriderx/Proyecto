@@ -13,7 +13,23 @@ const checkRolJefe = (req,res,next)=>{
         res.status(500).json({messagge:"ALGO SALIO MAL"})
     }
 }
+const checkRolCoordinador = (req,res,next)=>{
+    try {
+        if (req.user.ID_ROLE != 4) {
+            res.status(401).json({messagge:"NO ESTAS AUTORIZADO"})
+            return
+            
+        }
+
+        next()
+        
+    } catch (error) {
+        console.log({error})
+        res.status(500).json({messagge:"ALGO SALIO MAL"})
+    }
+}
 
 module.exports = {
-    checkRolJefe
+    checkRolJefe, 
+    checkRolCoordinador
 };

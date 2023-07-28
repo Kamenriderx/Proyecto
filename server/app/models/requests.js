@@ -20,6 +20,11 @@ const Request = connection.define(
             defaultValue: "Pendiente"
         },
 
+        OBS:{
+            type:DataTypes.TEXT,
+            defaultValue: "-"
+        },
+
 
         ID_STUDENT:{
             type:DataTypes.INTEGER

@@ -1,5 +1,6 @@
 const { Career, Request, RequestCareer, User, Student } = require("../models");
-const {getStudent, changeStateRequest, changeCareerStudent} = require('../helpers/repositoryRequest');
+const {getStudent, changeStateRequest, changeCareerStudent, getProfessor} = require('../helpers/repositoryRequest');
+const { Op } = require("sequelize");
 
 const getCareers = async (req,res)=>{
     try {
@@ -18,9 +19,21 @@ const getCareers = async (req,res)=>{
 const requestChangeCareer = async (req,res)=>{
     try {
         const {file, user, body}= req
-
         const student = await getStudent(user.ID_USER)
+        const request = await Request.findAll({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:"Pendiente"
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
 
+
+        })
+
+        if (request.length ==1 ) {
+            res.status(400).send({messagge:"Ya tiene una solicitud Pendiente"})
+            return
+        }
         const url = `http://localhost:3000/docs/${file.filename}`
         await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,requestCareer:[ {URL:url, ID_CAREER:body.ID_CAREER}]},{include:{model:RequestCareer, as:"requestCareer" }})
 
@@ -41,15 +54,34 @@ const requestChangeCareer = async (req,res)=>{
 const getRequestChangeCareer = async (req,res)=>{
     try {
         const {user} = req;
+        const professor = await getProfessor(user.ID_USER)
+        const request = await Request.findAll({
+            where:{
+                STATE: "Pendiente",
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"], where:{
+                    CENTER: user.CENTER} }]
+            }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career", where:{NAME:{[Op.like]:`%${professor.CAREER.toUpperCase()}%`}}}]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
+
+const getMyRequests = async (req,res)=>{
+    try {
+        const {user} = req;
         const student = await getStudent(user.ID_USER)
         const request = await Request.findAll({
             where:{
-                STATE: "Pendiente"
-            }, include:[{
-                model:Student, as:"student", where:{CAREER:student.CAREER}, include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"], where:{
-                    CENTER: user.CENTER
-                }}]
-            }]
+                ID_STUDENT: student.ID_STUDENT,
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
 
 
         })
@@ -64,10 +96,25 @@ const getRequestChangeCareer = async (req,res)=>{
 
 const responseRequest = async(req,res)=>{
     try {
-        const {body} = req
-        await changeStateRequest(body)
+        const {body, user} = req
+        const professor = await getProfessor(user.ID_USER)
+        if (body.RESPONSE.toUpperCase() == "ACEPTADA") {
+            body.NEW_CAREER = professor.CAREER
+            body.OBS = `Felicidades, has sido aceptado en la carrera de ${professor.CAREER}.`
+            await changeCareerStudent(body)
+            await changeStateRequest(body)
+            res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+            return
+            
+        }
+        if (body.RESPONSE.toUpperCase() == "DENEGADA") {
+            body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
+            await changeStateRequest(body)
+            res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+            return
+            
+        }
 
-        res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
         
     } catch (error) {
         console.log({error})
@@ -78,10 +125,11 @@ const responseRequest = async(req,res)=>{
 const cancelledRequest = async(req,res)=>{
     try {
         const {body} = req
+
+        body.OBS= `solicitud ${body.RESPONSE}`
+
         await changeStateRequest(body)
-
-        
-        res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+        res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE} correctamente`})
         
     } catch (error) {
         console.log({error})
@@ -90,23 +138,12 @@ const cancelledRequest = async(req,res)=>{
 }
 
 
-const changeCareer = async(req,res)=>{
-    try {
-        const {body} = req
-        await changeCareerStudent(body)
-
-        res.status(200).json({messagge:"CAMBIO DE CARRERA"})
-        
-    } catch (error) {
-        console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
-    }
-}
 
 module.exports = {
     getCareers,
     requestChangeCareer,
     getRequestChangeCareer, 
     responseRequest, 
-    cancelledRequest
+    cancelledRequest,
+    getMyRequests
 };
