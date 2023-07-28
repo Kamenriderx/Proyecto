@@ -1,4 +1,4 @@
-const { Career, Request, RequestCareer, User, Student } = require("../models");
+const { Career, Request, RequestCareer, User, Student, RequestCenter } = require("../models");
 const {getStudent, changeStateRequest, changeCareerStudent, getProfessor} = require('../helpers/repositoryRequest');
 const { Op } = require("sequelize");
 
@@ -20,28 +20,66 @@ const requestChangeCareer = async (req,res)=>{
     try {
         const {file, user, body}= req
         const student = await getStudent(user.ID_USER)
-        const request = await Request.findAll({
+        const request = await Request.findOne({
             where:{
                 ID_STUDENT: student.ID_STUDENT,
-                STATE:"Pendiente"
+                STATE:"Pendiente",
+                TYPE:"CARRERA"
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
             }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
 
 
         })
 
-        if (request.length ==1 ) {
-            res.status(400).send({messagge:"Ya tiene una solicitud Pendiente"})
+        if (request) {
+            res.status(400).send({messagge:"Ya tiene una solicitud de cambio de carrera Pendiente"})
             return
         }
+
         const url = `http://localhost:3000/docs/${file.filename}`
-        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,requestCareer:[ {URL:url, ID_CAREER:body.ID_CAREER}]},{include:{model:RequestCareer, as:"requestCareer" }})
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CARRERA",requestCareer:[ {URL:url, ID_CAREER:body.ID_CAREER}]},{include:{model:RequestCareer, as:"requestCareer" }})
 
     
 
 
 
-        res.status(200).send({messagge:"solicitud enviada"})
+        res.status(200).send({messagge:"solicitud de cambio de carrera enviada"})
+
+
+        
+    } catch (error) {
+        console.log({error})
+        res.status(500).json({messagge:"ALGO SALIO MAL"})
+    }
+}
+const requestChangeCenter = async (req,res)=>{
+    try {
+        const {file, user, body}= req
+        const student = await getStudent(user.ID_USER)
+        const request = await Request.findOne({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:"Pendiente",
+                TYPE:"CENTRO"
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCenter, as:"requestCenter",attributes:["URL", "CENTER"]}]
+
+
+        })
+
+        if (request) {
+            res.status(400).send({messagge:"Ya tiene una solicitud de cambio de centro Pendiente"})
+            return
+        }
+
+        const url = `http://localhost:3000/docs/${file.filename}`
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CENTRO",requestCenter:[ {URL:url, CENTER:body.CENTER}]},{include:{model:RequestCenter, as:"requestCenter" }})
+
+    
+
+
+
+        res.status(200).send({messagge:"solicitud de cambio de centro enviada"})
 
 
         
@@ -145,5 +183,6 @@ module.exports = {
     getRequestChangeCareer, 
     responseRequest, 
     cancelledRequest,
-    getMyRequests
+    getMyRequests,
+    requestChangeCenter
 };

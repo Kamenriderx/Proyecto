@@ -16,6 +16,7 @@ const models = {
     RequerimentsCourse:require("./requirementsCourse.js"),
     Request : require('./requests.js'),
     RequestCareer : require('./requestCareer.js'),
+    RequestCenter : require('./requestCenter.js'),
     
 }
 // ESTUDIANTE - SOLICITUDES
@@ -37,6 +38,16 @@ models.RequestCareer.Request=models.RequestCareer.belongsTo(models.Request,{
     foreignKey:"ID_REQUEST",
     as:"request"
 });
+// solicitudes - cambioCentro
+
+models.Request.RequestCenter=models.Request.hasMany(models.RequestCenter,{
+    foreignKey:"ID_REQUEST",
+    as:"requestCenter"
+});
+models.RequestCenter.Request=models.RequestCenter.belongsTo(models.Request,{
+    foreignKey:"ID_REQUEST",
+    as:"request"
+});
 // cambioCarrera - carrera
 
 models.Career.RequestCareer=models.Career.hasMany(models.RequestCareer,{
@@ -46,6 +57,7 @@ models.RequestCareer.Career=models.RequestCareer.belongsTo(models.Career,{
     foreignKey:"ID_CAREER",
     as:"career"
 });
+
 // requerimientos clase
 models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'ID_COURSE',as:"course" });
 models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'REQUIREMENT_ID_COURSE', as:"requirement" });
