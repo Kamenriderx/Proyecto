@@ -22,6 +22,7 @@ import ListContacts from "../views/DeleteContacts/components/ListContacts";
 import AddSections from "../views/AddSections/AddSections";
 import Requests from "../views/Solicitudes/Requests";
 import CambioCarrera from "../views/Solicitudes/components/CambioCarrera";
+import ObtenerSolicitudes from "../views/SolicitudesAdmin/ObtenerSolicitudes";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -165,6 +166,11 @@ const ContentNavbar = () => {
           <Route exact path="/addSections" element={<AddSections />} />
           <Route exact path="/solicitudes" element={<Requests />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
+          <Route
+            exact
+            path="/solicitudes-coordinador"
+            element={<ObtenerSolicitudes />}
+          />
 
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>

@@ -44,7 +44,7 @@ const CambioCarrera = () => {
           </div>
         </div>
         <div className="py-2 px-2">
-          <FormCarrera />
+          <FormCarrera setShowModal={setShowModal} />
         </div>
       </Modal2>
       <div>

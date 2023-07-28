@@ -18,6 +18,7 @@ const getCareers = async (req,res)=>{
 const requestChangeCareer = async (req,res)=>{
     try {
         const {file, user, body}= req
+        console.log({body});
 
         const student = await getStudent(user.ID_USER)
 
