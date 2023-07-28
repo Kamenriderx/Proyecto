@@ -1,10 +1,10 @@
 const { DataTypes } = require("sequelize");
 const connection = require("../../config/database");
 
-const RequestCareer = connection.define(
-    "REQUEST_CAREER",
+const RequestCenter = connection.define(
+    "REQUEST_CENTER",
     {
-        ID_REQUEST_CARRER:{
+        ID_REQUEST_CENTER:{
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
@@ -22,8 +22,8 @@ const RequestCareer = connection.define(
         },
 
         
-        ID_CAREER:{
-            type:DataTypes.INTEGER
+        CENTER:{
+            type:DataTypes.STRING
         },
 
         
@@ -37,19 +37,19 @@ const RequestCareer = connection.define(
        
     },
     {
-        tableName:'REQUEST_CAREER',
+        tableName:'REQUEST_CENTER',
         timestamps: true,  
     }
 );
 
 
-RequestCareer.sync({ force: false })
+RequestCenter.sync({ force: false })
   .then(() => {
-    console.log("Tabla de Solicitudes_Cambio_Carreras sincronizada");
+    console.log("Tabla de Solicitudes sincronizada");
   })
   .catch((error) => {
-    console.error("Error al sincronizar tabla de Solicitudes_Cambio_Carreras:", error);
+    console.error("Error al sincronizar tabla de Solicitudes:", error);
 });
 
-module.exports = RequestCareer
+module.exports = RequestCenter
 

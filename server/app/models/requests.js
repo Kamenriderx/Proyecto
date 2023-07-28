@@ -19,6 +19,15 @@ const Request = connection.define(
             type:DataTypes.ENUM("Pendiente","Aceptada","Denegada","Cancelada"),
             defaultValue: "Pendiente"
         },
+        TYPE:{
+            type:DataTypes.ENUM("CARRERA","CENTRO"),
+            defaultValue: "Pendiente"
+        },
+
+        OBS:{
+            type:DataTypes.TEXT,
+            defaultValue: "-"
+        },
 
 
         ID_STUDENT:{
