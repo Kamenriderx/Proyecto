@@ -6,6 +6,7 @@ const RequestStudent = () => {
   const [listRequest, setListRequest] = useState([]);
   const [alerta, setAlerta] = useState({});
   const [estado, setEstado] = useState(false);
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
     const getListRequest = async () => {
@@ -29,7 +30,7 @@ const RequestStudent = () => {
       }
     };
     getListRequest();
-  }, []);
+  }, [check]);
 
   const CancelRequest = async (ID_REQUEST) => {
     const token = localStorage.getItem("token");
@@ -51,6 +52,7 @@ const RequestStudent = () => {
         message: "Solicitud Cancelada",
         error: false,
       });
+      setCheck(!check);
       setEstado(!estado);
       console.log(response);
     } catch (error) {
@@ -112,21 +114,6 @@ const RequestStudent = () => {
                         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded"
                       >
                         {estado ? "Cancelada" : "Cancelar"}
-                      </button>
-                    )}
-                    {solicitudes.STATE === "Aceptada" && (
-                      <p className="text-green-800 font-bold text-lg">
-                        Solicitud Aceptada
-                      </p>
-                    )}
-                    {solicitudes.STATE === "Denegada" && (
-                      <p className="text-red-800 font-bold text-lg">
-                        Solicitud Rechazada
-                      </p>
-                    )}
-                    {solicitudes.STATE === "Cancelada" && (
-                      <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded">
-                        Cancelada
                       </button>
                     )}
                   </td>

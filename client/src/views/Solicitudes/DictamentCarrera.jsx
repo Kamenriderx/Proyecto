@@ -16,7 +16,7 @@ const DictamentCarrera = () => {
       };
       try {
         const response = await axios(
-          "http://localhost:3000/registro/request/getMyRequest",
+          "http://localhost:3000/registro/request/getMyDictamenCareer",
           config
         );
         setListRequest(response.data.request);
@@ -47,7 +47,7 @@ const DictamentCarrera = () => {
       {listRequest.length > 0 ? (
         <div className="w-3/5 mx-auto bg-gray-200 shadow rounded-md p-2 mt-3">
           {listRequest.map((request) => (
-            <>
+            <div className="bg-white p-2 mt-3 shadow rounded-md">
               <div className="mt-2 block">
                 <p className="text-gray-800 font-bold text-md">
                   ID SOLICITUD:{" "}
@@ -76,26 +76,12 @@ const DictamentCarrera = () => {
                   fundamentacion :
                 </p>
                 <div className="mt-2">
-                  {request.STATE === "Aceptada" && (
-                    <p className="text-red-800 font-bold uppercase">
-                      Contenido para estado Aceptada
-                    </p>
-                  )}
-
-                  {request.STATE === "Denegada" && (
-                    <p className="text-red-800 font-bold uppercase">
-                      Contenido para estado Denegada
-                    </p>
-                  )}
-
-                  {request.STATE === "Cancelada" && (
-                    <p className="text-red-800 font-bold uppercase">
-                      Contenido para estado Cancelada
-                    </p>
-                  )}
+                  <p className="text-gray-800 text-md font-bold">
+                    {request.OBS}
+                  </p>
                 </div>
               </div>
-            </>
+            </div>
           ))}
         </div>
       ) : (

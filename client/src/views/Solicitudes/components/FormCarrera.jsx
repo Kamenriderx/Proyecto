@@ -55,6 +55,14 @@ const FormCarrera = ({ setShowModal }) => {
       return;
     }
 
+    if (comprobante === null) {
+      setAlerta({
+        message: "Debe adjuntar el pago de cambio de carrera",
+        error: true,
+      });
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       if (!token) return;

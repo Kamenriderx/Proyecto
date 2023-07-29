@@ -60,11 +60,9 @@ const ContentNavbar = () => {
             </div>
             <div className="flex items-center justify-center">
               {" "}
-              {/* Centering the search input */}
               {state?.user?.ID_ROLE === 1 && (
-                <Search className="text-3xl px-4 py-2 rounded-lg border border-gray-300" />
+                <Search className="text-4xl px-6 py-3 rounded-lg border border-gray-300" />
               )}{" "}
-              {/* Render the Search component only when logged in */}
             </div>
             <div
               className="items-center justify-end w-full md:w-auto md:order-1 md:flex md:items-center"

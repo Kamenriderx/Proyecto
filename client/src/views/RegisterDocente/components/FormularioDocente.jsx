@@ -219,7 +219,7 @@ const FormularioDocente = ({ check, setCheck }) => {
               Ingenieria Electrica Industrial
             </option>
             <option value="Ingenieria Industrial">Ingenieria Industrial</option>
-            <option value="Ingeniería Civil">Ingeniería Civil</option>
+            <option value="INGENIERIA CIVIL">Ingeniería Civil</option>
             <option value="Ingenieria Mecanica Industrial">
               Ingenieria Mecanica Industrial
             </option>
