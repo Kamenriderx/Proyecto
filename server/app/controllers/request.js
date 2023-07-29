@@ -117,7 +117,7 @@ const getRequestChangeCareer = async (req,res)=>{
                 ID_COORDINATOR:professor.ID_PROFFERSSOR,
                 STATE: "Pendiente",
                 TYPE:"CARRERA",
-                CENTER:{[Op.like]:`%${professor.user.CENTER}%`}
+                CENTER:{[Op.like]:professor.user.CENTER}
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"], where:{
                     CENTER: user.CENTER} }]
             }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career"}]},
@@ -144,8 +144,8 @@ const getRequestChangeCenter = async (req,res)=>{
                 STATE: "Pendiente",
                 TYPE:"CENTRO",
                 CENTER:{[Op.like]:professor.user.CENTER}
-            }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:`%${professor.CAREER}%`}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
-            }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career"}]},
+            }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:professor.CAREER}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCenter, as:"requestCenter"},
         {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}]
 
 
