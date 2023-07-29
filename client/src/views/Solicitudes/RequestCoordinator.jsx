@@ -8,13 +8,14 @@ const RequestCoordinator = () => {
     const getSolicitudes = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) return;
 
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         };
+
+        if (!token) return;
 
         const response = await axios(
           "http://localhost:3000/registro/request/listRequestChangeCareer",
