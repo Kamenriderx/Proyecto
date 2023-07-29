@@ -87,7 +87,7 @@ const FormCenter = ({ setShowModal }) => {
       <ToastContainer position="top-right" />
       <div className="">
         <p className="font-semibold text-md">
-          Seleccione la Carrera a la cual desea hacer el Cambio:
+          Seleccione el centro al cual desea hacer el Cambio:
         </p>
       </div>
       <div className="appearance-none mx-auto w-2/3 h-auto border border-gray-300 mt-5">

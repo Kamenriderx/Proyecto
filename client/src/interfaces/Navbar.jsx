@@ -27,6 +27,8 @@ import RequestCoordinator from "../views/Solicitudes/RequestCoordinator";
 import RequestRepo from "../views/Solicitudes/RequestRepo";
 import RequestCenter from "../views/Solicitudes/RequestCenter";
 import DictamentCarrera from "../views/Solicitudes/DictamentCarrera";
+import RequestCoordinatorCenter from "../views/Solicitudes/RequestCoordinatorCenter";
+import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -72,9 +74,16 @@ const ContentNavbar = () => {
                 {state?.user?.ID_ROLE === 4 && (
                   <>
                     <li>
+                      <Link to="/solicitudes-coordinador-centro">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Centro
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
                       <Link to="/solicitudes-coordinador">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Solicitudes
+                          Solicitudes Carrera
                         </button>
                       </Link>
                     </li>
@@ -194,6 +203,12 @@ const ContentNavbar = () => {
             path="/dictamen-carrera"
             element={<DictamentCarrera />}
           />
+          <Route
+            exact
+            path="/solicitudes-coordinador-centro"
+            element={<RequestCoordinatorCenter />}
+          />
+          <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
           <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
           <Route exact path="/pago-reposicion" element={<RequestRepo />} />
           <Route exact path="/Docentes" element={<Docentes />} />
