@@ -12,7 +12,8 @@ const Request = connection.define(
         
 
         JUSTIFY:{
-            type:DataTypes.TEXT
+            type:DataTypes.TEXT,
+            defaultValue: "-"
         },
        
         STATE:{
@@ -20,7 +21,7 @@ const Request = connection.define(
             defaultValue: "Pendiente"
         },
         TYPE:{
-            type:DataTypes.ENUM("CARRERA","CENTRO"),
+            type:DataTypes.ENUM("CARRERA","CENTRO","PAGO_REPO", "CANCELACION_CLASE"),
         },
 
         OBS:{
@@ -36,6 +37,10 @@ const Request = connection.define(
             type:DataTypes.INTEGER
         },
         ID_COORDINATOR:{
+            type:DataTypes.INTEGER
+        },
+
+        ID_PERIOD:{
             type:DataTypes.INTEGER
         },
         

@@ -34,6 +34,18 @@ const changeCenterStudent=async(body)=>{
 const getRequestCurrent = async (id)=>{
     return await Request.findOne({where:{ID_REQUEST:id}, include:[{model:RequestCenter, as:"requestCenter"}]})
 }
+const getRequestPaymentReplacement = async(student)=>{
+    return await Request.findOne({
+        where:{
+            ID_STUDENT: student.ID_STUDENT,
+            STATE:"Pendiente",
+            TYPE:"PAGO_REPO"
+        }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+        },]
+
+
+    })
+}
 
 module.exports = {
     getStudent, 
@@ -43,5 +55,6 @@ module.exports = {
     getCoordinator, 
     getCareerChange,
     getRequestCurrent, 
-    changeCenterStudent
+    changeCenterStudent,
+    getRequestPaymentReplacement
 };
