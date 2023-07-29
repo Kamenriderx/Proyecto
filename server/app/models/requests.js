@@ -21,7 +21,6 @@ const Request = connection.define(
         },
         TYPE:{
             type:DataTypes.ENUM("CARRERA","CENTRO"),
-            defaultValue: "Pendiente"
         },
 
         OBS:{

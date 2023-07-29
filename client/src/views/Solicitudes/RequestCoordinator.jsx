@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const ObtenerSolicitudes = () => {
-  const [solicitudes, setSolicitudes] = useState([]);
+const RequestCoordinator = () => {
+  const [solicitudesCordi, setSolicitudesCordi] = useState([]);
 
   useEffect(() => {
     const getSolicitudes = async () => {
@@ -17,23 +17,24 @@ const ObtenerSolicitudes = () => {
         };
 
         const response = await axios(
-          "http://localhost:3000/registro/request/requestChangeCareer",
+          "http://localhost:3000/registro/request/listRequestChangeCareer",
           config
         );
-        setSolicitudes(response);
-        console.log("RESPUESTA", response);
+        setSolicitudesCordi(response);
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
+      getSolicitudes();
     };
-    getSolicitudes();
   }, []);
-  console.log("SOLICITUDES DEL COORDINADOR", solicitudes);
+
+  console.log("SOLICITUDES DEL COORDINADOR", solicitudesCordi);
   return (
-    <div>
-      <h1>Apartado de Solicitudes</h1>
+    <div className="container mx-auto mt-10">
+      Aquie las solicitudes del Coordi
     </div>
   );
 };
 
-export default ObtenerSolicitudes;
+export default RequestCoordinator;

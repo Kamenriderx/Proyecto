@@ -22,7 +22,11 @@ import ListContacts from "../views/DeleteContacts/components/ListContacts";
 import AddSections from "../views/AddSections/AddSections";
 import Requests from "../views/Solicitudes/Requests";
 import CambioCarrera from "../views/Solicitudes/components/CambioCarrera";
-import ObtenerSolicitudes from "../views/SolicitudesAdmin/ObtenerSolicitudes";
+import RequestStudent from "../views/Solicitudes/RequestStudent";
+import RequestCoordinator from "../views/Solicitudes/RequestCoordinator";
+import RequestRepo from "../views/Solicitudes/RequestRepo";
+import RequestCenter from "../views/Solicitudes/RequestCenter";
+import DictamentCarrera from "../views/Solicitudes/DictamentCarrera";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -67,6 +71,17 @@ const ContentNavbar = () => {
               id="navbar-cta"
             >
               <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
+                {state?.user?.ID_ROLE === 4 && (
+                  <>
+                    <li>
+                      <Link to="/solicitudes-coordinador">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes
+                        </button>
+                      </Link>
+                    </li>
+                  </>
+                )}
                 {state?.user?.ID_ROLE === 5 && (
                   <>
                     <li>
@@ -168,10 +183,21 @@ const ContentNavbar = () => {
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
             exact
-            path="/solicitudes-coordinador"
-            element={<ObtenerSolicitudes />}
+            path="/solicitudes-estudiantes"
+            element={<RequestStudent />}
           />
-
+          <Route
+            exact
+            path="/solicitudes-coordinador"
+            element={<RequestCoordinator />}
+          />
+          <Route
+            exact
+            path="/dictamen-carrera"
+            element={<DictamentCarrera />}
+          />
+          <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
+          <Route exact path="/pago-reposicion" element={<RequestRepo />} />
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
       </BrowserRouter>

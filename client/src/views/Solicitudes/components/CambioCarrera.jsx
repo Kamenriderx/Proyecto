@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal2 from "../../../components/Modal2";
 import FormCarrera from "./FormCarrera";
+import { Link } from "react-router-dom";
 
 const CambioCarrera = () => {
   const [showModal, setShowModal] = useState(false);
@@ -69,14 +70,18 @@ const CambioCarrera = () => {
             </button>
           </div>
           <div className="mt-5">
-            <button className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded">
-              Borrar Solicitud
-            </button>
+            <Link to="/solicitudes-estudiantes ">
+              <button className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded">
+                Ver Solicitudes
+              </button>
+            </Link>
           </div>
           <div className="mt-5">
-            <button className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded">
-              Ver Dictamen
-            </button>
+            <Link to="/dictamen-carrera">
+              <button className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded">
+                Ver Dictamen
+              </button>
+            </Link>
           </div>
         </aside>
       </div>
