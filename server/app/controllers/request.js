@@ -1,5 +1,5 @@
-const { Career, Request, RequestCareer, User, Student, RequestCenter } = require("../models");
-const {getStudent, changeStateRequest, changeCareerStudent, getProfessor} = require('../helpers/repositoryRequest');
+const { Career, Request, RequestCareer, User, Student, RequestCenter, Professor } = require("../models");
+const {getStudent, changeStateRequest, changeCareerStudent, getProfessor, getCoordinator} = require('../helpers/repositoryRequest');
 const { Op } = require("sequelize");
 
 const getCareers = async (req,res)=>{
@@ -22,6 +22,7 @@ const requestChangeCareer = async (req,res)=>{
         console.log({body});
 
         const student = await getStudent(user.ID_USER)
+        const coordinator = await getCoordinator(student.user.CENTER, student.CAREER)
         const request = await Request.findOne({
             where:{
                 ID_STUDENT: student.ID_STUDENT,
@@ -39,7 +40,7 @@ const requestChangeCareer = async (req,res)=>{
         }
 
         const url = `http://localhost:3000/docs/${file.filename}`
-        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CARRERA",requestCareer:[ {URL:url, ID_CAREER:body.ID_CAREER}]},{include:{model:RequestCareer, as:"requestCareer" }})
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CARRERA",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:student.user.CENTER,requestCareer:[ {URL:url, ID_CAREER:body.ID_CAREER}]},{include:{model:RequestCareer, as:"requestCareer" }})
 
     
 
@@ -58,6 +59,8 @@ const requestChangeCenter = async (req,res)=>{
     try {
         const {file, user, body}= req
         const student = await getStudent(user.ID_USER)
+        
+        const coordinator = await getCoordinator(student.user.CENTER, student.CAREER)
         const request = await Request.findOne({
             where:{
                 ID_STUDENT: student.ID_STUDENT,
@@ -75,7 +78,7 @@ const requestChangeCenter = async (req,res)=>{
         }
 
         const url = `http://localhost:3000/docs/${file.filename}`
-        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CENTRO",requestCenter:[ {URL:url, CENTER:body.CENTER}]},{include:{model:RequestCenter, as:"requestCenter" }})
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CENTRO",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:student.user.CENTER,requestCenter:[ {URL:url, CENTER:body.CENTER}]},{include:{model:RequestCenter, as:"requestCenter" }})
 
     
 
@@ -97,10 +100,39 @@ const getRequestChangeCareer = async (req,res)=>{
         const professor = await getProfessor(user.ID_USER)
         const request = await Request.findAll({
             where:{
+                ID_COORDINATOR:professor.ID_PROFFERSSOR,
                 STATE: "Pendiente",
-            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"], where:{
+                TYPE:"CARRERA",
+                CENTER:{[Op.like]:`%${professor.user.CENTER}%`}
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"], where:{
                     CENTER: user.CENTER} }]
-            }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career", where:{NAME:{[Op.like]:`%${professor.CAREER.toUpperCase()}%`}}}]}]
+            }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career"}]},
+        {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
+const getRequestChangeCenter = async (req,res)=>{
+    try {
+        const {user} = req;
+        const professor = await getProfessor(user.ID_USER)
+        const request = await Request.findAll({
+            where:{
+                ID_COORDINATOR:professor.ID_PROFFERSSOR,
+                STATE: "Pendiente",
+                TYPE:"CENTER",
+                CENTER:{[Op.like]:`%${professor.user.CENTER}%`}
+            }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:`%${professor.CAREER}%`}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"], where:{
+                    CENTER: user.CENTER} }]
+            }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career"}]},
+        {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}]
 
 
         })
@@ -120,8 +152,55 @@ const getMyRequests = async (req,res)=>{
         const request = await Request.findAll({
             where:{
                 ID_STUDENT: student.ID_STUDENT,
+                STATE:"Pendiente"
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
             }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
+const getMyRequestsAcceptDenyCenter = async (req,res)=>{
+    try {
+        const {user} = req;
+        const student = await getStudent(user.ID_USER)
+        const request = await Request.findAll({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:{
+                    [Op.or]:['Aceptada', 'Denegada']
+                }, TYPE:"CENTRO"
+            }, include:[ {model:RequestCenter, as:"requestCenter",attributes:["URL", "CENTER"]},{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            },  {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
+const getMyRequestsAcceptDenyCareer = async (req,res)=>{
+    try {
+        const {user} = req;
+        const student = await getStudent(user.ID_USER)
+        const request = await Request.findAll({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:{
+                    [Op.or]:['Aceptada', 'Denegada']
+                }, TYPE:"CARRERA"
+            }, include:[  {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]},{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            }]
 
 
         })
@@ -183,8 +262,11 @@ module.exports = {
     getCareers,
     requestChangeCareer,
     getRequestChangeCareer, 
+    getRequestChangeCenter, 
     responseRequest, 
     cancelledRequest,
     getMyRequests,
-    requestChangeCenter
+    requestChangeCenter,
+    getMyRequestsAcceptDenyCenter,
+    getMyRequestsAcceptDenyCareer
 };
