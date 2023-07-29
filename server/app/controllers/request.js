@@ -105,6 +105,24 @@ const requestChangeCenter = async (req,res)=>{
     }
 }
 
+const requestPaymentReplacement = async (req, res)=>{
+    try {
+        const { user, body}= req
+        const student = await getStudent(user.ID_USER)
+        const coordinator = await getCoordinator(student.user.CENTER, student.CAREER)
+
+
+        await Request.create({JUSTIFY:body.JUSTIFY, ID_STUDENT:student.ID_STUDENT, ID_COORDINATOR: coordinator.ID_PROFFERSSOR, TYPE:"PAGO_REPO", CENTER: student.user.CENTER})
+
+        res.status(200).json({messagge:"SOLICITUD ENVIADA CORRECTAMENTE"})
+
+        
+    } catch (error) {
+        console.log({error})
+        res.status(500).json({messagge:"algo salio mal"})
+    }
+}
+
 const getRequestChangeCareer = async (req,res)=>{
     try {
         const {user} = req;
@@ -144,6 +162,30 @@ const getRequestChangeCenter = async (req,res)=>{
             }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:professor.CAREER}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
             }, {model:RequestCenter, as:"requestCenter"},
         {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
+
+
+const getMyRequestsPaymentReplacements = async (req,res)=>{
+    try {
+        const {user} = req;
+        const student = await getStudent(user.ID_USER)
+        const request = await Request.findAll({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:"Pendiente",
+                TYPE:"PAGO_REPO"
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            },]
 
 
         })
@@ -296,6 +338,8 @@ module.exports = {
     cancelledRequest,
     getMyRequests,
     requestChangeCenter,
+    requestPaymentReplacement,
     getMyRequestsAcceptDenyCenter,
-    getMyRequestsAcceptDenyCareer
+    getMyRequestsAcceptDenyCareer,
+    getMyRequestsPaymentReplacements
 };
