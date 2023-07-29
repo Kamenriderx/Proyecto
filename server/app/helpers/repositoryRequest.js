@@ -10,7 +10,7 @@ const getProfessor= async (id)=>{
 }
 
 const getCoordinator= async (center, career)=>{
-    return await Professor.findOne({where:{CAREER:{[Op.like]:career}}, include:[{model:User, as:"user", attributes:["CENTER", "ID_ROLE"],where:[{ID_ROLE:4,CENTER:center}]}]})
+    return await Professor.findOne({where:{CAREER:{[Op.like]:career}}, include:[{model:User, as:"user", attributes:["CENTER", "ID_ROLE"],where:[{ID_ROLE:4,CENTER:{[Op.like]:center}}]}]})
 }
 const changeStateRequest= async (body)=>{
 
