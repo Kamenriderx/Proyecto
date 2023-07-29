@@ -1,5 +1,5 @@
 const { Career, Request, RequestCareer, User, Student, RequestCenter, Professor } = require("../models");
-const {getStudent, changeStateRequest, changeCareerStudent, getProfessor, getCoordinator} = require('../helpers/repositoryRequest');
+const {getStudent, changeStateRequest, changeCareerStudent, getProfessor, getCoordinator, getCareerChange, getRequestCurrent, changeCenterStudent} = require('../helpers/repositoryRequest');
 const { Op } = require("sequelize");
 
 const getCareers = async (req,res)=>{
@@ -22,7 +22,15 @@ const requestChangeCareer = async (req,res)=>{
         console.log({body});
 
         const student = await getStudent(user.ID_USER)
-        const coordinator = await getCoordinator(student.user.CENTER, student.CAREER)
+        const career = await getCareerChange(body.ID_CAREER)
+        const coordinator = await getCoordinator(student.user.CENTER, career.NAME)
+
+        if (career.NAME.toUpperCase() == student.CAREER.toUpperCase()) {
+            res.status(400).json({messagge:"TU CARRERA ACTUAL Y A LA QUE TE QUIERES CAMBIAR ES LAL MISMA"})
+            return 
+            
+        }
+        
         const request = await Request.findOne({
             where:{
                 ID_STUDENT: student.ID_STUDENT,
@@ -59,8 +67,13 @@ const requestChangeCenter = async (req,res)=>{
     try {
         const {file, user, body}= req
         const student = await getStudent(user.ID_USER)
+        const coordinator = await getCoordinator(body.CENTER, student.CAREER)
+        if (body.CENTER.toUpperCase() == student.user.CENTER.toUpperCase()) {
+            res.status(400).json({messagge:"TU CENTRO ACTUAL Y EL QUE TE QUIERES CAMBIAR ES EL MISMO"})
+            return
+            
+        }
         
-        const coordinator = await getCoordinator(student.user.CENTER, student.CAREER)
         const request = await Request.findOne({
             where:{
                 ID_STUDENT: student.ID_STUDENT,
@@ -78,7 +91,7 @@ const requestChangeCenter = async (req,res)=>{
         }
 
         const url = `http://localhost:3000/docs/${file.filename}`
-        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CENTRO",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:student.user.CENTER,requestCenter:[ {URL:url, CENTER:body.CENTER}]},{include:{model:RequestCenter, as:"requestCenter" }})
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CENTRO",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:body.CENTER,requestCenter:[ {URL:url, CENTER:body.CENTER}]},{include:{model:RequestCenter, as:"requestCenter" }})
 
     
 
@@ -123,14 +136,14 @@ const getRequestChangeCenter = async (req,res)=>{
     try {
         const {user} = req;
         const professor = await getProfessor(user.ID_USER)
+        console.log({centroDocente: professor.user.CENTER, ID: professor.ID_PROFFERSSOR})
         const request = await Request.findAll({
             where:{
                 ID_COORDINATOR:professor.ID_PROFFERSSOR,
                 STATE: "Pendiente",
-                TYPE:"CENTER",
-                CENTER:{[Op.like]:`%${professor.user.CENTER}%`}
-            }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:`%${professor.CAREER}%`}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"], where:{
-                    CENTER: user.CENTER} }]
+                TYPE:"CENTRO",
+                CENTER:{[Op.like]:professor.user.CENTER}
+            }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:`%${professor.CAREER}%`}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
             }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career"}]},
         {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}]
 
@@ -216,8 +229,9 @@ const getMyRequestsAcceptDenyCareer = async (req,res)=>{
 const responseRequest = async(req,res)=>{
     try {
         const {body, user} = req
+        const request = await getRequestCurrent(body.ID_REQUEST)
         const professor = await getProfessor(user.ID_USER)
-        if (body.RESPONSE.toUpperCase() == "ACEPTADA") {
+        if (body.RESPONSE.toUpperCase() == "ACEPTADA" && request.TYPE == "CARRERA") {
             body.NEW_CAREER = professor.CAREER
             body.OBS = `Felicidades, has sido aceptado en la carrera de ${professor.CAREER}.`
             await changeCareerStudent(body)
@@ -226,7 +240,24 @@ const responseRequest = async(req,res)=>{
             return
             
         }
-        if (body.RESPONSE.toUpperCase() == "DENEGADA") {
+        if (body.RESPONSE.toUpperCase() == "ACEPTADA" && request.TYPE == "CENTRO") {
+            
+            body.NEW_CENTER = request.requestCenter[0].dataValues.CENTER
+            body.OBS = `Felicidades, has sido aceptado en el nuevo centro de ${body.NEW_CENTER}.`
+            await changeCenterStudent(body)
+            await changeStateRequest(body)
+            res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+            return
+            
+        }
+        if (body.RESPONSE.toUpperCase() == "DENEGADA" && request.TYPE =="CARRERA") {
+            body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
+            await changeStateRequest(body)
+            res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+            return
+            
+        }
+        if (body.RESPONSE.toUpperCase() == "DENEGADA" && request.TYPE =="CENTRO") {
             body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
             await changeStateRequest(body)
             res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
