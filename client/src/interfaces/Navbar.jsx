@@ -29,6 +29,7 @@ import RequestCenter from "../views/Solicitudes/RequestCenter";
 import DictamentCarrera from "../views/Solicitudes/DictamentCarrera";
 import RequestCoordinatorCenter from "../views/Solicitudes/RequestCoordinatorCenter";
 import DictamenCenter from "../views/Solicitudes/DictamenCenter";
+import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -192,6 +193,11 @@ const ContentNavbar = () => {
             exact
             path="/solicitudes-estudiantes"
             element={<RequestStudent />}
+          />
+          <Route
+            exact
+            path="/solicitudes-estudiantescenterenter"
+            element={<RequesStudentCenter />}
           />
           <Route
             exact

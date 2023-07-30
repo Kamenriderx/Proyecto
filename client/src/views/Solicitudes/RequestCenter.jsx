@@ -40,7 +40,7 @@ const RequestCenter = () => {
             </button>
           </div>
           <div className="mt-5">
-            <Link to="/solicitudes-estudiantes">
+            <Link to="/solicitudes-estudiantescenterenter">
               <button className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded">
                 Ver Solicitudes
               </button>

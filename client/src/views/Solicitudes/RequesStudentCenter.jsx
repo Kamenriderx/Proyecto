@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import AlertTwo from "../../components/AlertTwo";
 
-const RequestStudent = () => {
+const RequesStudentCenter = () => {
   const [listRequest, setListRequest] = useState([]);
   const [alerta, setAlerta] = useState({});
   const [estado, setEstado] = useState(false);
@@ -20,7 +20,7 @@ const RequestStudent = () => {
       };
       try {
         const response = await axios(
-          "http://localhost:3000/registro/request/getMyRequestsChangeCareer",
+          "http://localhost:3000/registro/request/getMyRequestChangeCenter",
           config
         );
         setListRequest(response.data.request);
@@ -63,14 +63,13 @@ const RequestStudent = () => {
   console.log("Listado de Solicitudes de Estudiante", listRequest);
 
   const { message } = alerta;
-
   return (
     <>
       <div className="container mx-auto mt-10">
         {message && <AlertTwo alerta={alerta} />}
         <div className="text-center mb-10">
           <p className="text-red-800 text-2xl font-bold">
-            Solicitudes Camabio de Carrera
+            Solicitudes Camabio de Centro
           </p>
         </div>
         {listRequest.length > 0 ? (
@@ -133,4 +132,4 @@ const RequestStudent = () => {
   );
 };
 
-export default RequestStudent;
+export default RequesStudentCenter;
