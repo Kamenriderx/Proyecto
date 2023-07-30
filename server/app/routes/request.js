@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const {getCareers, requestChangeCareer, getRequestChangeCareer, responseRequest, cancelledRequest, getMyRequests, requestChangeCenter, getMyRequestsAcceptDenyCenter, getMyRequestsAcceptDenyCareer, getRequestChangeCenter, requestPaymentReplacement, getMyRequestsPaymentReplacements} = require('../controllers/request.js');
+const {getCareers, requestChangeCareer, getRequestChangeCareer, responseRequest, cancelledRequest, getMyRequests, requestChangeCenter, getMyRequestsAcceptDenyCenter, getMyRequestsAcceptDenyCareer, getRequestChangeCenter, requestPaymentReplacement, getMyRequestsPaymentReplacements, getMyRequestsChangeCareer, getMyRequestsChangeCenter} = require('../controllers/request.js');
 const {checkRolCoordinador} = require('../middlewares/rol.js');
 const authMiddleware = require('../middlewares/authentication.js');
 const upload = require('../middlewares/uploadFiles.js');
@@ -14,7 +14,8 @@ router.put("/responseRequest", authMiddleware,checkRolCoordinador, responseReque
 
 // estudiante
 router.get("/listCareers" ,getCareers);
-router.get("/getMyRequest" ,authMiddleware,getMyRequests);
+router.get("/getMyRequestsChangeCareer" ,authMiddleware,getMyRequestsChangeCareer);
+router.get("/getMyRequestChangeCenter" ,authMiddleware,getMyRequestsChangeCenter);
 router.get("/getMyRequestPaymentReplacements" ,authMiddleware,getMyRequestsPaymentReplacements);
 router.get("/getMyDictamenCenter" ,authMiddleware,getMyRequestsAcceptDenyCenter);
 router.get("/getMyDictamenCareer" ,authMiddleware,getMyRequestsAcceptDenyCareer);
