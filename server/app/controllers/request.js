@@ -201,14 +201,38 @@ const getMyRequestsPaymentReplacements = async (req,res)=>{
     }
 }
 
-const getMyRequests = async (req,res)=>{
+const getMyRequestsChangeCareer = async (req,res)=>{
     try {
         const {user} = req;
         const student = await getStudent(user.ID_USER)
         const request = await Request.findAll({
             where:{
                 ID_STUDENT: student.ID_STUDENT,
-                STATE:"Pendiente"
+                STATE:"Pendiente",
+                TYPE:"CARRERA"
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
+
+const getMyRequestsChangeCenter = async (req,res)=>{
+    try {
+        const {user} = req;
+        const student = await getStudent(user.ID_USER)
+        const request = await Request.findAll({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:"Pendiente",
+                TYPE:"CENTRO"
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
             }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
 
@@ -339,7 +363,8 @@ module.exports = {
     getRequestChangeCenter, 
     responseRequest, 
     cancelledRequest,
-    getMyRequests,
+    getMyRequestsChangeCareer,
+    getMyRequestsChangeCenter,
     requestChangeCenter,
     requestPaymentReplacement,
     getMyRequestsAcceptDenyCenter,
