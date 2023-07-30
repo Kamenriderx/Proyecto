@@ -327,7 +327,7 @@ exports.editPeriod = async function (req, res) {
     const periodId = req.params.periodId;
     const updatedData = req.body;
 
-    // Verificar si el ID del período es válido (puedes agregar más validaciones si es necesario)
+    // Verificar si el ID del período es válido
     if (!periodId || isNaN(periodId)) {
       return res.status(400).json({ error: 'ID de período inválido' });
     }
@@ -343,31 +343,45 @@ exports.editPeriod = async function (req, res) {
       return res.status(404).json({ error: 'El período académico no existe' });
     }
 
-    // Verificar si se desea editar el campo FINISH_DATE
+    // Verificar si la fecha FINISH_DATE se desea editar y es válida
     if (updatedData.hasOwnProperty('FINISH_DATE')) {
       const newFinishDate = new Date(updatedData.FINISH_DATE);
-      const currentFinishDate = new Date(existingPeriod.FINISH_DATE);
+      const originalFinishDate = new Date(existingPeriod.FINISH_DATE);
 
-      // Verificar que la nueva fecha no sea menor o igual a la fecha actual
-      if (newFinishDate <= currentFinishDate) {
-        return res.status(400).json({ error: 'La nueva fecha debe ser posterior a la fecha actual' });
-      }
+      // Verificar que la diferencia entre la nueva fecha y la fecha original sea de hasta 7 días
+      const maxAllowedDifference = 7 * 24 * 60 * 60 * 1000; // 7 días en milisegundos
+      const dateDifference = newFinishDate.getTime() - originalFinishDate.getTime();
 
-      // Verificar que la diferencia entre la nueva fecha y la actual no sea mayor a 7 días
-      const sevenDaysInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-      if (newFinishDate - currentFinishDate > sevenDaysInMilliseconds) {
-        return res.status(400).json({ error: 'La nueva fecha no puede ser más de 7 días después de la fecha actual' });
-      }
-
-      // Verificar que la nueva fecha no sea posterior a 2024-12-27
-      const maxAllowedDate = new Date('2024-12-27');
-      if (newFinishDate > maxAllowedDate) {
-        return res.status(400).json({ error: 'La nueva fecha no puede ser posterior al 27 de diciembre de 2024' });
+      if (dateDifference > maxAllowedDifference) {
+        return res.status(400).json({ error: 'La nueva fecha FINISH_DATE excede los 7 días permitidos' });
       }
     }
 
+    // Verificar si la fecha REGISTRATION_PAYMENT_END_DATE se desea editar y es válida
+    if (updatedData.hasOwnProperty('REGISTRATION_PAYMENT_END_DATE')) {
+      const newPaymentEndDate = new Date(updatedData.REGISTRATION_PAYMENT_END_DATE);
+      const originalPaymentEndDate = new Date(existingPeriod.REGISTRATION_PAYMENT_END_DATE);
+
+      // Verificar que la diferencia entre la nueva fecha y la fecha original sea de hasta 14 días
+      const maxAllowedDifferencePaymentEnd = 14;
+      const paymentEndDateDifference = differenceInCalendarDays(newPaymentEndDate, originalPaymentEndDate);
+
+      if (paymentEndDateDifference > maxAllowedDifferencePaymentEnd) {
+        return res.status(400).json({ error: 'La nueva fecha REGISTRATION_PAYMENT_END_DATE excede los 14 días permitidos' });
+      }
+    }
+
+    // Filtrar los campos que se pueden actualizar para evitar que se modifiquen campos no permitidos
+    const allowedFields = ['FINISH_DATE', 'PERIOD_NAME', 'STATUS'];
+    const filteredData = Object.keys(updatedData).reduce((acc, key) => {
+      if (allowedFields.includes(key)) {
+        acc[key] = updatedData[key];
+      }
+      return acc;
+    }, {});
+
     // Actualizar el período académico
-    await PeriodAcademic.update(updatedData, {
+    await PeriodAcademic.update(filteredData, {
       where: {
         ID_PERIOD: periodId,
       },
