@@ -77,7 +77,7 @@ const RequestStudent = () => {
           <table className="w-full bg-white shadow-md table-auto">
             <thead className="bg-blue-800 text-white">
               <tr className="">
-                <th className="p-2">Carrera Actula</th>
+                <th className="p-2">Carrera Actual</th>
                 <th className="p-2">Solicitud de Cambio</th>
                 <th className="p-2">Correo Institucional</th>
                 <th className="p-2">Centro</th>
@@ -89,25 +89,25 @@ const RequestStudent = () => {
             <tbody>
               {listRequest.map((solicitudes) => (
                 <tr className="border-b" key={solicitudes.ID_REQUEST}>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-sm font-semibold r">
                     {solicitudes.student.CAREER}
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-sm font-semibold r">
                     {solicitudes.TYPE}
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-sm font-semibold r">
                     {solicitudes.student.INSTITUTIONAL_EMAIL}
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-sm font-semibold r">
                     {solicitudes.student.user.CENTER}
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-sm font-semibold r">
                     {solicitudes.JUSTIFY}
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-sm font-semibold r">
                     {solicitudes.STATE}
                   </td>
-                  <td className="border px-4 py-2 text-lg font-bold r">
+                  <td className="border px-4 py-2 text-sm font-semibold r">
                     {solicitudes.STATE === "Pendiente" && (
                       <button
                         onClick={() => CancelRequest(solicitudes.ID_REQUEST)}
