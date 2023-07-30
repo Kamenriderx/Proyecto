@@ -30,6 +30,7 @@ import DictamentCarrera from "../views/Solicitudes/DictamentCarrera";
 import RequestCoordinatorCenter from "../views/Solicitudes/RequestCoordinatorCenter";
 import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
+import Planificacion from "../views/Planificacion/Planificacion";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -103,6 +104,13 @@ const ContentNavbar = () => {
                       <Link to="/Docentes">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Docentes
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/planificacion">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Planificacion
                         </button>
                       </Link>
                     </li>
@@ -217,6 +225,7 @@ const ContentNavbar = () => {
           <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
           <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
           <Route exact path="/pago-reposicion" element={<RequestRepo />} />
+          <Route exact path="/planificacion" element={<Planificacion />} />
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
       </BrowserRouter>

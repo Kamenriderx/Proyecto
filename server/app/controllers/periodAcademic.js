@@ -8,6 +8,7 @@ const DetailsPeriod = require("../models/detailsPeriod");
 exports.createPeriodAcademic = async (req, res) => {
   try {
     const { startDate, finishDate } = req.body;
+    console.log({startDate});
 
     // Calcula el año a partir de la fecha de inicio
     const year = new Date(startDate).getFullYear();
@@ -25,11 +26,12 @@ exports.createPeriodAcademic = async (req, res) => {
     // Validación 1: Verifica que el período esté dentro de los rangos de meses especificados
     const startMonth = new Date(startDate).getMonth() + 1;
     const endMonth = new Date(finishDate).getMonth() + 1;
+    console.log({startMonth},{endMonth});
 
     const periods = ["I Periodo", "II Periodo", "III Periodo"];
     let periodName = "";
 
-    if ([1, 2, 4].includes(startMonth) && [1, 2, 4].includes(endMonth)) {
+    if ([1, 2, 3,4].includes(startMonth) && [1, 2,3, 4].includes(endMonth)) {
       periodName = `${periods[0]} ${year}`;
     } else if (
       [5, 6, 7, 8].includes(startMonth) &&
@@ -50,9 +52,10 @@ exports.createPeriodAcademic = async (req, res) => {
     // Validación 2: Verifica que la duración del período esté dentro del rango especificado
     const startDateObj = new Date(startDate);
     const finishDateObj = new Date(finishDate);
+    console.log(finishDate);
     const diffInMonths =
       (finishDateObj - startDateObj) / (1000 * 60 * 60 * 24 * 30);
-
+    console.log(diffInMonths)
     if (diffInMonths < 3.5 || diffInMonths > 4) {
       throw new Error(
         "La duración del período no está dentro del rango válido (entre 3.5 y 4 meses)."
