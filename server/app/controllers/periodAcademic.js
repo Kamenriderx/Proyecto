@@ -107,10 +107,10 @@ exports.createPeriodAcademic = async (req, res) => {
 
     const detailsPeriodData = {
       ID_PERIOD: newPeriodAcademic.ID_PERIOD,
-      PREREGISTRATION_START_DATE: detailsStartDate.toDate(),
-      PREREGISTRATION_END_DATE: detailsEndDate.toDate(),
-      REGISTRATION_START_DATE: moment.utc(startDate).add(2, "days").toDate(),
-      REGISTRATION_END_DATE: moment.utc(startDate).add(7, "days").toDate(),
+      PREREGISTRATION_START_DATE: detailsStartDate.hour(9).toDate(),
+      PREREGISTRATION_END_DATE: detailsEndDate.hour(23).toDate(),
+      REGISTRATION_START_DATE: moment.utc(startDate).add(2, "days").hour(9).toDate(),
+      REGISTRATION_END_DATE: moment.utc(startDate).add(7, "days").hour(23).toDate(),
       ADD_CANCELLATIONS_START_DATE: moment
         .utc(startDate)
         .add(8, "days")
@@ -137,15 +137,17 @@ exports.createPeriodAcademic = async (req, res) => {
         .utc(startDate)
         .add(21, "days")
         .toDate(),
-      NOTE_UPLOAD_START_DATE: moment.utc(startDate).add(82, "days").toDate(),
-      NOTE_UPLOAD_END_DATE: moment.utc(startDate).add(87, "days").toDate(),
+      NOTE_UPLOAD_START_DATE: moment.utc(startDate).add(82, "days").hour(9).toDate(),
+      NOTE_UPLOAD_END_DATE: moment.utc(startDate).add(87, "days").hour(23).toDate(),
       NOTES_UPLOAD_REGISTRATION_START_DATE: moment
         .utc(startDate)
         .add(88, "days")
+        .hour(9)
         .toDate(),
       NOTES_UPLOAD_REGISTRATION_END_DATE: moment
         .utc(startDate)
         .add(89, "days")
+        .hour(23)
         .toDate(),
     };
 
@@ -327,6 +329,8 @@ exports.editPeriod = async function (req, res) {
     const periodId = req.params.periodId;
     const updatedData = req.body;
 
+    console.log(periodId);
+
     // Verificar si el ID del período es válido
     if (!periodId || isNaN(periodId)) {
       return res.status(400).json({ error: 'ID de período inválido' });
@@ -357,22 +361,8 @@ exports.editPeriod = async function (req, res) {
       }
     }
 
-    // Verificar si la fecha REGISTRATION_PAYMENT_END_DATE se desea editar y es válida
-    if (updatedData.hasOwnProperty('REGISTRATION_PAYMENT_END_DATE')) {
-      const newPaymentEndDate = new Date(updatedData.REGISTRATION_PAYMENT_END_DATE);
-      const originalPaymentEndDate = new Date(existingPeriod.REGISTRATION_PAYMENT_END_DATE);
-
-      // Verificar que la diferencia entre la nueva fecha y la fecha original sea de hasta 14 días
-      const maxAllowedDifferencePaymentEnd = 14;
-      const paymentEndDateDifference = differenceInCalendarDays(newPaymentEndDate, originalPaymentEndDate);
-
-      if (paymentEndDateDifference > maxAllowedDifferencePaymentEnd) {
-        return res.status(400).json({ error: 'La nueva fecha REGISTRATION_PAYMENT_END_DATE excede los 14 días permitidos' });
-      }
-    }
-
     // Filtrar los campos que se pueden actualizar para evitar que se modifiquen campos no permitidos
-    const allowedFields = ['FINISH_DATE', 'PERIOD_NAME', 'STATUS'];
+    const allowedFields = ['FINISH_DATE'];
     const filteredData = Object.keys(updatedData).reduce((acc, key) => {
       if (allowedFields.includes(key)) {
         acc[key] = updatedData[key];
@@ -392,11 +382,17 @@ exports.editPeriod = async function (req, res) {
       const detailsData = updatedData.details;
 
       // Actualizar los detalles del período
-      await DetailsPeriod.update(detailsData, {
-        where: {
-          ID_PERIOD: periodId,
-        },
-      });
+      try {
+        await DetailsPeriod.update(detailsData, {
+          where: {
+            ID_PERIOD: periodId,
+          },
+        });
+      } catch (error) {
+        // Capturar el error del trigger y proporcionar una respuesta adecuada al usuario
+        console.error("Error al editar los detalles del período:", error);
+        return res.status(400).json({ error: 'Error al actualizar los detalles del período' });
+      }
     }
 
     res.json({ success: true, message: 'Período académico y detalles actualizados correctamente' });
