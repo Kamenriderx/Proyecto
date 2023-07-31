@@ -101,20 +101,18 @@ const ViewTeacher = () => {
               </a>
             </li>
 
-            {state?.user?.ID_ROLE === 4 && (
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg 
-                 hover:bg-orange-100 hover:font-bold"
-                >
-                  <BsQuestionCircleFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">
-                    Solicitudes
-                  </span>
-                </a>
-              </li>
-            )}
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+              >
+                <BsQuestionCircleFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Solicitudes
+                </span>
+              </a>
+            </li>
 
             <li>
               <a
@@ -152,52 +150,20 @@ const ViewTeacher = () => {
                 </span>
               </a>
             </li>
-            {state?.user?.ID_ROLE === 3 && (
-              <>
-                <li>
-                  <Link to="/solicitudes-coordinador">
-                    <a
-                      href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg 
+
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
-                    >
-                      <BsQuestionCircleFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                      <span className="flex-1 ml-3 whitespace-nowrap">
-                        Solicitudes
-                      </span>
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/addSections">
-                    <a
-                      href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-                    >
-                      <PiNotebookFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                      <span className="flex-1 ml-3 whitespace-nowrap">
-                        Programación
-                      </span>
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/list-teachers">
-                    <a
-                      href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg 
-              hover:bg-orange-100 hover:font-bold"
-                    >
-                      <AiOutlineUnorderedList className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                      <span className="flex-1 ml-3 whitespace-nowrap">
-                        Listado Docentes
-                      </span>
-                    </a>
-                  </Link>
-                </li>
-              </>
-            )}
+              >
+                <PiNotebookFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Programación
+                </span>
+              </a>
+            </li>
+
             <li>
               <a
                 href="#"
