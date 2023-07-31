@@ -18,6 +18,7 @@ import ResultsSearch from "./ResultsSearch";
 import ListTeachers from "./ListTeachers";
 import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
 import ViewChat from "../views/ViewChat/ViewChat";
+import Period from "../views/Period/Period";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -105,6 +106,15 @@ const ContentNavbar = () => {
                       </Link>
                     </li>
                     <li>
+                      <Link to="/period">
+                        <button
+                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
+                        >
+                          Periodo 
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
                       <Link to="perfil">
                         <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                           Perfil
@@ -179,6 +189,7 @@ const ContentNavbar = () => {
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
           <Route exact path="/proffessor" />
           <Route

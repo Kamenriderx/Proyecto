@@ -4,7 +4,7 @@ const path = require("path");
 
 const generateImage = async () => {
   const canvas = createCanvas(200, 200);
-  const ctx = canvas.getContext("2d");  |
+  const ctx = canvas.getContext("2d");  
   ctx.fillStyle = "green";
 
   // Write "Awesome!"
