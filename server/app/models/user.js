@@ -43,9 +43,7 @@ const USER = connection.define(
     },
     CENTER: {
       type: DataTypes.STRING,
-      validate: {
-        len: [0, 20], 
-      },
+      
     },
     EMAIL: {
       type: DataTypes.STRING,

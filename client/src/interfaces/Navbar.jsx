@@ -18,6 +18,19 @@ import ResultsSearch from "./ResultsSearch";
 import ListTeachers from "./ListTeachers";
 import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
 import ViewChat from "../views/ViewChat/ViewChat";
+import ListContacts from "../views/DeleteContacts/components/ListContacts";
+import AddSections from "../views/AddSections/AddSections";
+import Requests from "../views/Solicitudes/Requests";
+import CambioCarrera from "../views/Solicitudes/components/CambioCarrera";
+import RequestStudent from "../views/Solicitudes/RequestStudent";
+import RequestCoordinator from "../views/Solicitudes/RequestCoordinator";
+import RequestRepo from "../views/Solicitudes/RequestRepo";
+import RequestCenter from "../views/Solicitudes/RequestCenter";
+import DictamentCarrera from "../views/Solicitudes/DictamentCarrera";
+import RequestCoordinatorCenter from "../views/Solicitudes/RequestCoordinatorCenter";
+import DictamenCenter from "../views/Solicitudes/DictamenCenter";
+import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
+import Planificacion from "../views/Planificacion/Planificacion";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -38,11 +51,9 @@ const ContentNavbar = () => {
 
     return (
       <>
-        <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200 fixed w-full z-50 top-0 left-0">
-          <div>
-
-          <div className="flex flex-wrap items-center justify-between p-4">
-            <div >
+        <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
+          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <div className="flex items-center">
               <Link to="/">
                 <img
                   src="https://www.unah.edu.hn/themes/portalunah/assets/images/logo-unah.png"
@@ -52,35 +63,18 @@ const ContentNavbar = () => {
               </Link>
             </div>
 
-            <div className="flex">
-              <button
-                data-collapse-toggle="navbar-cta"
-                type="button"
-                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
-                aria-controls="navbar-cta"
-                aria-expanded="false"
-              >
-                <svg
-                  className="w-6 h-6"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </button>
+            <div className="flex items-center justify-center">
+              {" "}
+              {state?.user?.ID_ROLE === 1 && (
+                <Search className="text-4xl px-6 py-3 rounded-lg border border-gray-300" />
+              )}{" "}
             </div>
 
             <div
-              className="hidden w-full md:flex md:w-auto md:order-1"
+              className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
               id="navbar-cta"
             >
-              <ul className="flex flex-col font-bold text-2xl p-2 border border-gray-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
+              <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
                 {!state.login ? (
                   <li>
                     <Link to="/login">
@@ -92,26 +86,16 @@ const ContentNavbar = () => {
                 ) : (
                   <>
                     <li>
-                      <Search />
-                    </li>
-                    <li>
-                      <Solicitud />
-                    </li>
-
-                    <li>
-                      <Link to="/">
-                        <button
-                          onClick={handleSession}
-                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
-                          Cerrar sesion
+                      <Link to="/solicitudes-coordinador-centro">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Centro
                         </button>
                       </Link>
                     </li>
                     <li>
-                      <Link to="perfil">
-                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
-                          Perfil
+                      <Link to="/solicitudes-coordinador">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Carrera
                         </button>
                       </Link>
                     </li>
@@ -121,29 +105,54 @@ const ContentNavbar = () => {
                   <>
                     <li>
                       <Link to="/Estudiantes">
-                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Estudiantes
                         </button>
                       </Link>
                     </li>
                     <li>
                       <Link to="/Docentes">
-                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Docentes
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/planificacion">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Planificacion
                         </button>
                       </Link>
                     </li>
                   </>
                 )}
-                {state?.user?.ID_ROLE === 3 && (
+                {!state.login ? (
+                  <li>
+                    <Link to="/login">
+                      <button className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3">
+                        Inicio de sesión
+                      </button>
+                    </Link>
+                  </li>
+                ) : (
                   <>
-                    <li>
-                      <Link to="/list-teachers">
-                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
-                          Listado Docentes
+                    <div className="md:flex md:items-center flex-grow gap-x-5">
+                      {" "}
+                      {/* Moved the button to the right end */}
+                      {state?.user?.ID_ROLE === 1 && (
+                        <li>
+                          <Solicitud />
+                        </li>
+                      )}
+                      <Link to="/">
+                        <button
+                          onClick={handleSession}
+                          className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3"
+                        >
+                          Cerrar sesion
                         </button>
                       </Link>
-                    </li>
+                    </div>
                   </>
                 )}
               </ul>
@@ -157,7 +166,6 @@ const ContentNavbar = () => {
 
   const Profile = () => {
     const { state } = useContext(StoreContext);
-
 
     return (
       <>
@@ -198,7 +206,39 @@ const ContentNavbar = () => {
           <Route exact path="/perfil" element={<Profile />} />
           <Route exact path="/list-teachers" element={<ListTeachers />} />
           <Route exact path="/chat" element={<ViewChat />} />
-
+          <Route exact path="/contactos" element={<ListContacts />} />
+          <Route exact path="/addSections" element={<AddSections />} />
+          <Route exact path="/solicitudes" element={<Requests />} />
+          <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
+          <Route
+            exact
+            path="/solicitudes-estudiantes"
+            element={<RequestStudent />}
+          />
+          <Route
+            exact
+            path="/solicitudes-estudiantescenterenter"
+            element={<RequesStudentCenter />}
+          />
+          <Route
+            exact
+            path="/solicitudes-coordinador"
+            element={<RequestCoordinator />}
+          />
+          <Route
+            exact
+            path="/dictamen-carrera"
+            element={<DictamentCarrera />}
+          />
+          <Route
+            exact
+            path="/solicitudes-coordinador-centro"
+            element={<RequestCoordinatorCenter />}
+          />
+          <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
+          <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
+          <Route exact path="/pago-reposicion" element={<RequestRepo />} />
+          <Route exact path="/planificacion" element={<Planificacion />} />
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
       </BrowserRouter>
