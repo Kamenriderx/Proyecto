@@ -10,8 +10,13 @@ import {
 } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
 import Video from "./components/Video";
+import { Link } from "react-router-dom";
+import { AiOutlineUnorderedList } from "react-icons/ai";
+import { StoreContext } from "../../store/ContextExample";
+import { useContext } from "react";
 
 const ViewTeacher = () => {
+  const { state, dispatch } = useContext(StoreContext);
   return (
     <>
       <button
@@ -106,18 +111,20 @@ const ViewTeacher = () => {
               </a>
             </li>
 
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-              >
-                <BsQuestionCircleFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Solicitudes
-                </span>
-              </a>
-            </li>
+            {state?.user?.ID_ROLE === 4 && (
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center p-2 text-gray-900 rounded-lg 
+                 hover:bg-orange-100 hover:font-bold"
+                >
+                  <BsQuestionCircleFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                  <span className="flex-1 ml-3 whitespace-nowrap">
+                    Solicitudes
+                  </span>
+                </a>
+              </li>
+            )}
 
             <li>
               <a
@@ -155,20 +162,52 @@ const ViewTeacher = () => {
                 </span>
               </a>
             </li>
-
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
+            {state?.user?.ID_ROLE === 3 && (
+              <>
+                <li>
+                  <Link to="/solicitudes-coordinador">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
-              >
-                <PiNotebookFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Programación
-                </span>
-              </a>
-            </li>
-
+                    >
+                      <BsQuestionCircleFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Solicitudes
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/addSections">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <PiNotebookFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Programación
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/list-teachers">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+              hover:bg-orange-100 hover:font-bold"
+                    >
+                      <AiOutlineUnorderedList className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Listado Docentes
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+              </>
+            )}
             <li>
               <a
                 href="#"
@@ -187,20 +226,42 @@ const ViewTeacher = () => {
 
       <div className="grid grid-cols-3 gap-6 p-4 sm:ml-64 ">
         <div className="col-span-2">
-   <div className="bg-gray-200 m-8 rounded-xl w-auto h-96  ">
-    <Video/>
-   </div>
+          <div className="bg-gray-200 m-8 rounded-xl w-auto h-96  ">
+            <Video />
+          </div>
         </div>
         <div className="overflow-hidden hover:overflow-auto h-96 mt-8 mr-8">
           <div className="flex flex-col">
-            <div className="bg-gray-200 mb-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase1</div>
-            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 2</div>
-            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 3</div>
-            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 4</div>
-            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 5</div>
-            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 6</div> <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 7</div>
-            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 8</div>
-            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 9</div> <div className="bg-gray-200 mt-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">Clase 10</div>
+            <div className="bg-gray-200 mb-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase1
+            </div>
+            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 2
+            </div>
+            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 3
+            </div>
+            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 4
+            </div>
+            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 5
+            </div>
+            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 6
+            </div>{" "}
+            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 7
+            </div>
+            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 8
+            </div>
+            <div className="bg-gray-200 my-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 9
+            </div>{" "}
+            <div className="bg-gray-200 mt-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
+              Clase 10
+            </div>
           </div>
         </div>
         <div className="col-span-3 ml-4">

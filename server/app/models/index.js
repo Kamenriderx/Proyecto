@@ -6,9 +6,146 @@ const models = {
     Rol : require('./roles.js'),
     Multimedia: require('./multimedia.js'),
     Conversation: require('./conversation.js'),
-    Message: require('./message.js')
+    Message: require('./message.js'),
+    Course:require('./course.js'),
+    Building:require("./building.js"),
+    Classroom:require('./classroom.js'),
+    Section:require("./section.js"),
+    Department:require("./department.js"),
+    Career:require("./career.js"),
+    RequerimentsCourse:require("./requirementsCourse.js"),
+    Request : require('./requests.js'),
+    RequestCareer : require('./requestCareer.js'),
+    RequestCenter : require('./requestCenter.js'),
     
 }
+// ESTUDIANTE - SOLICITUDES
+
+models.Student.Request=models.Student.hasMany(models.Request,{
+    foreignKey:"ID_STUDENT"
+});
+models.Request.Student=models.Request.belongsTo(models.Student,{
+    foreignKey:"ID_STUDENT",
+    as:"student"
+});
+// DOCENTE - SOLICITUDES
+
+models.Professor.Request=models.Professor.hasMany(models.Request,{
+    foreignKey:"ID_COORDINATOR"
+});
+models.Request.Professor=models.Request.belongsTo(models.Professor,{
+    foreignKey:"ID_COORDINATOR",
+    as:"coordinator"
+});
+// solicitudes - cambioCarrera
+
+models.Request.RequestCareer=models.Request.hasMany(models.RequestCareer,{
+    foreignKey:"ID_REQUEST",
+    as:"requestCareer"
+});
+models.RequestCareer.Request=models.RequestCareer.belongsTo(models.Request,{
+    foreignKey:"ID_REQUEST",
+    as:"request"
+});
+// solicitudes - cambioCentro
+
+models.Request.RequestCenter=models.Request.hasMany(models.RequestCenter,{
+    foreignKey:"ID_REQUEST",
+    as:"requestCenter"
+});
+models.RequestCenter.Request=models.RequestCenter.belongsTo(models.Request,{
+    foreignKey:"ID_REQUEST",
+    as:"request"
+});
+// cambioCarrera - carrera
+
+models.Career.RequestCareer=models.Career.hasMany(models.RequestCareer,{
+    foreignKey:"ID_CAREER"
+});
+models.RequestCareer.Career=models.RequestCareer.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    as:"career"
+});
+
+// requerimientos clase
+models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'ID_COURSE',as:"course" });
+models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'REQUIREMENT_ID_COURSE', as:"requirement" });
+// carrera - departamento 
+
+models.Department.Career=models.Department.hasMany(models.Career,{
+    foreignKey:"ID_DEPARTMENT"
+});
+models.Career.Department=models.Career.belongsTo(models.Department,{
+    foreignKey:"ID_DEPARTMENT",
+    unique:true,
+    as:"department"
+});
+
+
+
+
+// aula - carrera
+
+models.Career.Classroom=models.Career.hasMany(models.Classroom,{
+    foreignKey:"ID_CAREER"
+});
+models.Classroom.Career=models.Classroom.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    unique:true,
+    as:"career"
+});
+
+
+// clase - carrera
+models.Career.Course=models.Career.hasMany(models.Course,{
+    foreignKey:"ID_CAREER"
+});
+models.Course.Career=models.Course.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    unique:true,
+    as:"career"
+});
+
+
+
+//  edificio - aula
+models.Building.Classroom=models.Building.hasMany(models.Classroom,{
+    foreignKey:"ID_BUILDING"
+});
+models.Classroom.Building=models.Classroom.belongsTo(models.Building,{
+    foreignKey:"ID_BUILDING",
+    unique:true,
+    as:"building"
+});
+//  aula - seccion
+models.Classroom.Section=models.Classroom.hasMany(models.Section,{
+    foreignKey:"ID_CLASSROOM"
+});
+models.Section.Classroom=models.Section.belongsTo(models.Classroom,{
+    foreignKey:"ID_CLASSROOM",
+    unique:true,
+    as:"classroom"
+});
+//  seccion - docente
+models.Professor.Section=models.Professor.hasMany(models.Section,{
+    foreignKey:"ID_PROFFERSSOR",
+    as:"sections"
+});
+models.Section.Professor=models.Section.belongsTo(models.Professor,{
+    foreignKey:"ID_PROFFERSSOR",
+    unique:true,
+    as:"Proffessor"
+});
+//  seccion - clase
+models.Course.Section=models.Course.hasMany(models.Section,{
+    foreignKey:"ID_COURSE"
+});
+models.Section.Course=models.Section.belongsTo(models.Course,{
+    foreignKey:"ID_COURSE",
+    unique:true,
+    as:"course"
+});
+
 //  usuarios- docentes
 models.User.Professor=models.User.hasMany(models.Professor,{
     foreignKey:"ID_USER"

@@ -70,15 +70,19 @@ const Sidevar = () => {
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
+              <Link to="/contactos">
+                <a
+                  href="#"
+                  className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
-              >
-                <BiSolidContact className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                >
+                  <BiSolidContact className="flex-shrink-0 w-6 h-6 text-gray-500" />
 
-                <span className="flex-1 ml-3 whitespace-nowrap">Contactos</span>
-              </a>
+                  <span className="flex-1 ml-3 whitespace-nowrap">
+                    Contactos
+                  </span>
+                </a>
+              </Link>
             </li>
             <li>
               <Link
@@ -106,16 +110,18 @@ const Sidevar = () => {
             </li>
 
             <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
+              <Link to="/solicitudes">
+                <a
+                  href="#"
+                  className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
-              >
-                <BsQuestionCircleFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Solicitudes
-                </span>
-              </a>
+                >
+                  <BsQuestionCircleFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                  <span className="flex-1 ml-3 whitespace-nowrap">
+                    Solicitudes
+                  </span>
+                </a>
+              </Link>
             </li>
 
             <li>
