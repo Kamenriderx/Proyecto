@@ -155,7 +155,7 @@ const LoginForm = () => {
         Ingresar
       </label>
       <input
-        className="mt-3 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-3/5"
+        className="mt-3 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-2/5"
         id="email"
         name="identifier"
         placeholder="Numero de cuenta"
@@ -163,7 +163,7 @@ const LoginForm = () => {
       />
 
       <input
-        className="mt-3 shadow appearance-none border border-none focus:ring-0 rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-3/5"
+        className="mt-3 shadow  border border-none focus:ring-0 rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-2/5"
         id="password"
         name="password"
         type="password"
@@ -172,7 +172,7 @@ const LoginForm = () => {
       />
 
       <button
-        className="px-4 py-1 w-2/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5 "
+        className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5 "
         onClick={handleSubmit}
       >
         Iniciar sesion
