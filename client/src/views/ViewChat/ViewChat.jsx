@@ -136,7 +136,7 @@ const ViewChat = () => {
                             : fondoPerfil
                         }
                         alt="seleccine imagen"
-                        className=" rounded-full w-12 h-12 "
+                        className=" rounded-full w-12 h-12 object-cover"
                       />
                       <div className="flex flex-col justify-center">
                         <p className="font-bold">
@@ -165,7 +165,7 @@ const ViewChat = () => {
                                     : fondoPerfil
                                 }
                                 alt="No hay imagen"
-                                className="bg-cyan-400 rounded-full h-12 w-12"
+                                className="bg-cyan-400 rounded-full h-12 w-12 object-cover"
                               />
                               <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
                                 <p className="break-words ">{mess.CONTENT}</p>
@@ -195,7 +195,7 @@ const ViewChat = () => {
                                     : fondoPerfil
                                 }
                                 alt="No hay imagen"
-                                className="bg-cyan-400 rounded-full h-12 w-12"
+                                className="bg-cyan-400 rounded-full h-12 w-12 object-cover"
                               />
                             </div>
                           )}
