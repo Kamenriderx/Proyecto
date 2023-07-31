@@ -3,6 +3,9 @@ const User = require('../models/user');
 const sendMail = require('../../utils/sendMail');
 const Contacts = require('../models/contacts')
 const connection = require("../../config/database");
+const Student = require('../models/student');
+const Multimedia = require('../models/multimedia');
+const { Op } = require('sequelize');
 
 //! Controlador para enviar solicitudes pendientes con estado y cancelarlas por parte del que envia
 exports.getRequests = async function(req, res) {
@@ -283,9 +286,11 @@ exports.getContacts = async function(req, res) {
     if (userId) {
       // Consulta para obtener los contactos en CONTACT_ID de un USER_ID
       userContacts = await connection.query(
-        'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
+        'SELECT user_.ID_USER, user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER, student.INSTITUTIONAL_EMAIL, student.CAREER, multimedia.URL ' +
         'FROM contacts ' +
         'INNER JOIN user_ ON contacts.CONTACT_ID = user_.ID_USER ' +
+        'LEFT JOIN student ON user_.ID_USER = student.ID_USER ' +
+        'LEFT JOIN multimedia ON user_.ID_USER = multimedia.ID_USER ' +
         'WHERE contacts.USER_ID = :userId',
         {
           type: connection.QueryTypes.SELECT,
@@ -295,9 +300,11 @@ exports.getContacts = async function(req, res) {
 
       // Consulta para obtener los contactos en USER_ID de un CONTACT_ID
       const contactContacts = await connection.query(
-        'SELECT user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER ' +
+        'SELECT user_.ID_USER, user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER, student.INSTITUTIONAL_EMAIL, student.CAREER, multimedia.URL ' +
         'FROM contacts ' +
         'INNER JOIN user_ ON contacts.USER_ID = user_.ID_USER ' +
+        'LEFT JOIN student ON user_.ID_USER = student.ID_USER ' +
+        'LEFT JOIN multimedia ON user_.ID_USER = multimedia.ID_USER ' +
         'WHERE contacts.CONTACT_ID = :userId',
         {
           type: connection.QueryTypes.SELECT,
@@ -320,8 +327,6 @@ exports.getContacts = async function(req, res) {
 exports.getPendingContactRequests = async function (req, res) {
   try {
     const { recipientId } = req.params;
-
-    console.log(req.params)
 
     // Busca todas las solicitudes pendientes del destinatario
     const pendingRequests = await ContactRequest.findAll({
@@ -355,3 +360,89 @@ exports.getPendingContactRequests = async function (req, res) {
     return res.status(500).json({ message: 'Error al obtener las solicitudes pendientes del destinatario' });
   }
 };
+
+//! Controlador para eliminar contacto
+exports.deleteContact = async function eliminarContacto(req, res) {
+  const { userID, contactID } = req.params;
+
+  try {
+    // Verificar si existe una solicitud de contacto donde el usuario es el remitente o el destinatario y el estado es "accepted"
+    const solicitud = await ContactRequest.findOne({
+      where: {
+        [Op.or]: [
+          {
+            SENDER_ID: userID,
+            RECIPIENT_ID: contactID,
+            STATUS: 'accepted',
+          },
+          {
+            SENDER_ID: contactID,
+            RECIPIENT_ID: userID,
+            STATUS: 'accepted',
+          },
+        ],
+      },
+    });
+
+    if (!solicitud) {
+      return res.status(400).json({ message: 'La solicitud de contacto no existe o no ha sido aceptada' });
+    }
+
+    // Verificar si existe un registro de contacto entre userID y contactID
+    const contacto = await Contacts.findOne({
+      where: {
+        [Op.or]: [
+          {
+            USER_ID: userID,
+            CONTACT_ID: contactID,
+          },
+          {
+            USER_ID: contactID,
+            CONTACT_ID: userID,
+          },
+        ],
+      },
+    });
+
+    if (!contacto) {
+      return res.status(400).json({ message: 'No existe un registro de contacto entre los usuarios' });
+    }
+
+    // Eliminar la solicitud de contacto
+    await ContactRequest.destroy({
+      where: {
+        [Op.or]: [
+          {
+            SENDER_ID: userID,
+            RECIPIENT_ID: contactID,
+          },
+          {
+            SENDER_ID: contactID,
+            RECIPIENT_ID: userID,
+          },
+        ],
+      },
+    });
+
+    // Eliminar el contacto
+    await Contacts.destroy({
+      where: {
+        [Op.or]: [
+          {
+            USER_ID: userID,
+            CONTACT_ID: contactID,
+          },
+          {
+            USER_ID: contactID,
+            CONTACT_ID: userID,
+          },
+        ],
+      },
+    });
+
+    res.status(200).json({ message: 'Contacto eliminado exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar el contacto:', error);
+    res.status(500).json({ message: 'Error al eliminar el contacto' });
+  }
+}

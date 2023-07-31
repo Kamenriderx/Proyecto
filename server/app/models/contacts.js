@@ -2,6 +2,7 @@ const { DataTypes } = require("sequelize");
 const connection = require("../../config/database");
 const { Sequelize } = require('sequelize');
 const USER = require("./user");
+
 const Contacts = connection.define(
   "Contacts",
   {
