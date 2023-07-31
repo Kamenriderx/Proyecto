@@ -19,6 +19,8 @@ const getCareers = async (req,res)=>{
 const requestChangeCareer = async (req,res)=>{
     try {
         const {file, user, body}= req
+        console.log({body});
+
         const student = await getStudent(user.ID_USER)
         const career = await getCareerChange(body.ID_CAREER)
         const coordinator = await getCoordinator(student.user.CENTER, career.NAME)
@@ -64,6 +66,7 @@ const requestChangeCareer = async (req,res)=>{
 const requestChangeCenter = async (req,res)=>{
     try {
         const {file, user, body}= req
+        console.log({body});
         const student = await getStudent(user.ID_USER)
         const coordinator = await getCoordinator(body.CENTER, student.CAREER)
         if (body.CENTER.toUpperCase() == student.user.CENTER.toUpperCase()) {
