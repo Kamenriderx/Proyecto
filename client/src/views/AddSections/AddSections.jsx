@@ -144,7 +144,6 @@ const AddSections = () => {
     setSPACE_AVAILABLE(section.SPACE_AVAILABLE);
     setDAYS(section.DAYS);
     setDAYS_COUNT(section.course.UV);
-    console.log("UNIDADES VALORATIVAS", section.DAYS_COUNT);
   };
 
   console.log("SELECTED SECTION", selectedSection);

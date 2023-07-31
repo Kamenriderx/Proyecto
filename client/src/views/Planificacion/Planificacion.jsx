@@ -4,6 +4,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import AlertTwo from "../../components/AlertTwo";
+import Modal3 from "../../components/Modal3";
 
 const Planificacion = () => {
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +21,15 @@ const Planificacion = () => {
   const [periodo, setPeriodo] = useState([]);
   const [anyo, setAnyo] = useState("");
   const [check, setCheck] = useState(false);
+  const [alerta, setalerta] = useState({});
+  const [showModal1, setShowModal1] = useState(false);
+  const [endDate, setEndDate] = useState("");
+  const [regisStartDate, setRegisStartDate] = useState("");
+  const [regisEndDate, setRegisEndDate] = useState("");
+  const [labStartDate, setLabStartDate] = useState("");
+  const [labEndDate, setLabEndDate] = useState("");
+  const [dateSelected, setDateSelected] = useState(null);
+  const [id, setId] = useState("");
 
   const handleClose = () => {
     setShowModal(false);
@@ -28,6 +39,65 @@ const Planificacion = () => {
     setStartDate1("");
     setFinishDate2("");
     setStartDate2("");
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleEdit = (solicitud) => {
+    console.log("SOLICITUDES DE LA MODAL", solicitud);
+    setShowModal1(true);
+    setDateSelected(solicitud);
+    setEndDate(
+      formatDate(solicitud.details.map((fecha) => fecha.CLASS_END_DATE))
+    );
+    setRegisStartDate(
+      formatDate(
+        solicitud.details.map((fecha) => fecha.REGISTRATION_PAYMENT_START_DATE)
+      )
+    );
+    setRegisEndDate(
+      formatDate(
+        solicitud.details.map((fecha) => fecha.REGISTRATION_PAYMENT_END_DATE)
+      )
+    );
+    setLabStartDate(
+      formatDate(
+        solicitud.details.map((fecha) => fecha.LABORATORIES_PAYMENT_START_DATE)
+      )
+    );
+    setLabEndDate(
+      formatDate(
+        solicitud.details.map((fecha) => fecha.LABORATORIES_PAYMENT_END_DATE)
+      )
+    );
+    setId(solicitud.period.ID_PERIOD);
+  };
+
+  const clearStates = () => {
+    setEndDate("");
+    setRegisStartDate("");
+    setRegisEndDate("");
+    setLabStartDate("");
+    setLabEndDate("");
+    setId("");
+  };
+
+  const showModalClear = () => {
+    setShowModal1(false);
+    setDateSelected(null);
+    clearStates();
+  };
+
+  const handleClick = () => {
+    showModalClear();
+    clearStates();
   };
 
   const handleSubmit = async (e) => {
@@ -52,7 +122,10 @@ const Planificacion = () => {
       setFinishDate("");
       setEstado(true);
     } catch (error) {
-      console.log(error);
+      setalerta({
+        message: error.response.data.error,
+        error: true,
+      });
     }
   };
 
@@ -81,7 +154,10 @@ const Planificacion = () => {
       setFinishDate1("");
       setEstado1(true);
     } catch (error) {
-      console.log(error);
+      setalerta({
+        message: error.response.data.error,
+        error: true,
+      });
     }
   };
 
@@ -107,7 +183,10 @@ const Planificacion = () => {
       setFinishDate2("");
       setEstado2(true);
     } catch (error) {
-      console.log(error);
+      setalerta({
+        message: error.response.data.error,
+        error: true,
+      });
     }
   };
 
@@ -135,15 +214,73 @@ const Planificacion = () => {
       setPeriodo((prevPeriodo) =>
         prevPeriodo.filter((periodo) => periodo.period.ID_PERIOD !== id)
       );
+      setalerta({
+        message: "Periodo Eliminado Exitosamente",
+        error: false,
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const formattedEndDate = new Date(
+        `${endDate}T23:59:59.000Z`
+      ).toISOString();
+      const formattedRegisStartDate = new Date(
+        `${regisStartDate}T23:59:59.000Z`
+      ).toISOString();
+      const formattedRegisEndDate = new Date(
+        `${regisEndDate}T23:59:59.000Z`
+      ).toISOString();
+      const formattedLabStartDate = new Date(
+        `${labStartDate}T23:59:59.000Z`
+      ).toISOString();
+      const formattedLabEndDate = new Date(
+        `${labEndDate}T23:59:59.000Z`
+      ).toISOString();
+
+      const response = await axios.put(
+        `http://localhost:3000/registro/periodAcademic/editPeriod/${id}`,
+        {
+          details: {
+            CLASS_END_DATE: formattedEndDate,
+            REGISTRATION_PAYMENT_START_DATE: formattedRegisStartDate,
+            REGISTRATION_PAYMENT_END_DATE: formattedRegisEndDate,
+            LABORATORIES_PAYMENT_START_DATE: formattedLabStartDate,
+            LABORATORIES_PAYMENT_END_DATE: formattedLabEndDate,
+          },
+        }
+      );
+
+      // Update the estado states accordingly, you can use a switch statement if you have multiple periods.
+
+      console.log(response);
+      toast.success("Fechas actualizadas exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (error) {
+      setalerta({
+        message: error.response.data.error,
+        error: true,
+      });
+    }
+  };
+
   console.log("El periodo es:", periodo);
+  const { message } = alerta;
 
   return (
     <div className="container mx-auto">
+      {message && <AlertTwo alerta={alerta} />}
       <Modal Visible={showModal} Close={handleClose}>
         <div className="mt-3">
           <ToastContainer position="top-right" />
@@ -285,6 +422,94 @@ const Planificacion = () => {
           </form>
         </div>
       </Modal>
+      <Modal3 Visible={showModal1} Close={handleClick}>
+        <div className="mt-3">
+          <ToastContainer position="top-right" />
+          <form
+            onSubmit={handleSubmitEdit}
+            className="bg-white shadow-md rounded-sm p-2"
+          >
+            <div className="mt-2 text-center">
+              <p className="text-red-800 font-black text-2xl">
+                Edicion de Fechas
+              </p>
+            </div>
+            <div className="mt-3 flex text-center justify-around">
+              <div className="mt-3">
+                <p className="text-gray-800 text-sm font-bold">
+                  Fecha de Finalizacion de Clases
+                </p>
+                <div className="mt-2">
+                  <input
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    type="date"
+                    className="py-2 px-4 rounded shadow"
+                  />
+                </div>
+              </div>
+              <div className="mt-3">
+                <p className="text-gray-800 text-sm font-bold">
+                  Fechas de pago de Matricula
+                </p>
+                <div className="mt-2 flex gap-3 justify-around">
+                  <div>
+                    <div>
+                      <input
+                        value={regisStartDate}
+                        onChange={(e) => setRegisStartDate(e.target.value)}
+                        type="date"
+                        className="py-2 px-4 rounded shadow"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    {" "}
+                    <input
+                      value={regisEndDate}
+                      onChange={(e) => setRegisEndDate(e.target.value)}
+                      type="date"
+                      className="py-2 px-4 rounded shadow"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3">
+                <p className="text-gray-800 text-sm font-bold">
+                  Fechas de Pago de Laboratorios
+                </p>
+                <div className="mt-2 flex gap-3 justify-around">
+                  <div>
+                    <input
+                      value={labStartDate}
+                      onChange={(e) => setLabStartDate(e.target.value)}
+                      type="date"
+                      className="py-2 px-4 rounded shadow"
+                    />
+                  </div>
+                  <div>
+                    {" "}
+                    <input
+                      value={labEndDate}
+                      onChange={(e) => setLabEndDate(e.target.value)}
+                      type="date"
+                      className="py-2 px-4 rounded shadow"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="items-center flex">
+                <button
+                  type="submit"
+                  className="bg-sky-500 hover:bg-sky-600 text-white text-lg font-bold p-2 px-3 shadow rounded"
+                >
+                  Editar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </Modal3>
       <div className="w-3/4 mx-auto">
         <div className="mt-5 text-center">
           <p className="text-red-800 font-bold text-2xl">
@@ -302,6 +527,7 @@ const Planificacion = () => {
           </div>
           <div>
             <select value={anyo} onChange={(e) => setAnyo(e.target.value)}>
+              <option value="">-- Selecciona el Año --</option>
               <option value="2023">2023</option>
               <option value="2024">2024</option>
               <option value="2025">2025</option>
@@ -325,7 +551,7 @@ const Planificacion = () => {
               </thead>
               <tbody>
                 {periodo.map((solicitudes) => (
-                  <tr className="border-b" key={solicitudes.ID_REQUEST}>
+                  <tr className="border-b" key={solicitudes.period.ID_PERIOD}>
                     <td className="border px-4 py-2 text-sm font-semibold r">
                       {solicitudes.period.PERIOD_NAME}
                     </td>
@@ -347,8 +573,7 @@ const Planificacion = () => {
                         <div className="mx-auto">
                           <AiFillEdit
                             className="cursor-pointer text-gray-600"
-                            /* onClick={() => handleEdit(solicitudes.period.ID_PERIOD
-                                )} */
+                            onClick={() => handleEdit(solicitudes)}
                             size={20}
                           ></AiFillEdit>
                           <span className="-mx-1 text-xs">Editar</span>
