@@ -51,7 +51,7 @@ const ContentNavbar = () => {
 
     return (
       <>
-        <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
+        <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200 fixed top-0 w-full z-50">
           <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div className="flex items-center">
               <Link to="/">
@@ -134,6 +134,13 @@ const ContentNavbar = () => {
                           <Solicitud />
                         </li>
                       )}
+                       <Link to="/perfil">
+                        <button
+                          className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3"
+                        >
+                          Perfil
+                        </button>
+                      </Link>
                       <Link to="/">
                         <button
                           onClick={handleSession}
