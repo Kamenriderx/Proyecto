@@ -329,8 +329,6 @@ exports.editPeriod = async function (req, res) {
     const periodId = req.params.periodId;
     const updatedData = req.body;
 
-    console.log(periodId);
-
     // Verifica si el ID del período es válido
     if (!periodId || isNaN(periodId)) {
       return res.status(400).json({ error: 'ID de período inválido' });
