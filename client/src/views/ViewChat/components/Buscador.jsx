@@ -63,7 +63,10 @@ const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
     <>
       {stateStudent && (
         <>
-          <div className="bg-gray-200 h-16 border-b-2 border-gray-500 ">
+          <div className="bg-gray-200 h-16 border-b-2 border-gray-500 flex justify-center items-center">
+            <h1 className="font-bold">
+              CHATS
+            </h1>
             {/*
             
             <input
@@ -75,6 +78,7 @@ const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
             />
             */}
           </div>
+          
           <div className="overflow-y-auto scrollbar-thin h-[505px] ">
             {results && (
               <>

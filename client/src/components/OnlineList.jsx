@@ -77,7 +77,7 @@ const OnlineList = ({setCheck,check,socket}) => {
   return (
     <div className=" max-w-md h-screen mx-auto bg-white rounded-sm  flex flex-col px-0 items-center content-between justify-between">
       <div className="flex justify-center items-center  w-full bg-gray-200 border-b-2 border-gray-500 h-16 p-2 font-bold">
-        <h1 className="m-3">Contactos</h1>
+        <h1 className="m-3">CONTACTOS</h1>
       </div>
 
       <div className="h-5/6  overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
