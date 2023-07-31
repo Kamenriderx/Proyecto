@@ -141,7 +141,7 @@ exports.createPeriodAcademic = async (req, res) => {
       NOTE_UPLOAD_END_DATE: moment.utc(startDate).add(87, "days").hour(23).toDate(),
       NOTES_UPLOAD_REGISTRATION_START_DATE: moment
         .utc(startDate)
-        .add(88, "days")
+        .add(89, "days")
         .hour(9)
         .toDate(),
       NOTES_UPLOAD_REGISTRATION_END_DATE: moment
@@ -331,12 +331,12 @@ exports.editPeriod = async function (req, res) {
 
     console.log(periodId);
 
-    // Verificar si el ID del período es válido
+    // Verifica si el ID del período es válido
     if (!periodId || isNaN(periodId)) {
       return res.status(400).json({ error: 'ID de período inválido' });
     }
 
-    // Verificar si el período existe en la base de datos
+    // Verifica si el período existe en la base de datos
     const existingPeriod = await PeriodAcademic.findOne({
       where: {
         ID_PERIOD: periodId,
@@ -347,22 +347,8 @@ exports.editPeriod = async function (req, res) {
       return res.status(404).json({ error: 'El período académico no existe' });
     }
 
-    // Verificar si la fecha FINISH_DATE se desea editar y es válida
-    if (updatedData.hasOwnProperty('FINISH_DATE')) {
-      const newFinishDate = new Date(updatedData.FINISH_DATE);
-      const originalFinishDate = new Date(existingPeriod.FINISH_DATE);
-
-      // Verificar que la diferencia entre la nueva fecha y la fecha original sea de hasta 7 días
-      const maxAllowedDifference = 7 * 24 * 60 * 60 * 1000; // 7 días en milisegundos
-      const dateDifference = newFinishDate.getTime() - originalFinishDate.getTime();
-
-      if (dateDifference > maxAllowedDifference) {
-        return res.status(400).json({ error: 'La nueva fecha FINISH_DATE excede los 7 días permitidos' });
-      }
-    }
-
-    // Filtrar los campos que se pueden actualizar para evitar que se modifiquen campos no permitidos
-    const allowedFields = ['FINISH_DATE'];
+    // Filtrar los campos que se pueden actualizar 
+    const allowedFields = [];
     const filteredData = Object.keys(updatedData).reduce((acc, key) => {
       if (allowedFields.includes(key)) {
         acc[key] = updatedData[key];
@@ -370,7 +356,7 @@ exports.editPeriod = async function (req, res) {
       return acc;
     }, {});
 
-    // Actualizar el período académico
+    // Actualiza el período académico
     await PeriodAcademic.update(filteredData, {
       where: {
         ID_PERIOD: periodId,
@@ -389,7 +375,7 @@ exports.editPeriod = async function (req, res) {
           },
         });
       } catch (error) {
-        // Capturar el error del trigger y proporcionar una respuesta adecuada al usuario
+        // Captura los errores de los triggers
         console.error("Error al editar los detalles del período:", error);
         return res.status(400).json({ error: 'Error al actualizar los detalles del período' });
       }
