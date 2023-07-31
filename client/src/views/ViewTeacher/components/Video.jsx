@@ -87,9 +87,9 @@ const Video = () => {
                   className="rounded-full "
                 />
                 <br />
-                {stateTeacher.user.user.multimedia.length  == 1 && (
+                {stateTeacher?.user?.user?.multimedia?.length  == 1 && (
                   <ReactPlayer
-                    url={stateTeacher.user.user.multimedia[0].URL}
+                    url={stateTeacher?.user?.user?.multimedia[0].URL}
                     controls={true}
                     width="100%"
                     height="100%"

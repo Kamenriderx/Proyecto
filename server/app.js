@@ -4,9 +4,11 @@ const http = require('http').createServer(app);
 const configCors = require('./config/cors');
 const path = require('path');
 const bodyParser = require('body-parser');
+
+const generateImage = require("./utils/generateImage");
 const io = require('socket.io')(http, {
   cors: {
-    origin: '*', 
+    origin: '*', // Reemplaza con el origen permitido para tu cliente React
     methods: ['GET', 'POST','PUT','DELETE']
   },
   allowEIO3:true
@@ -37,7 +39,7 @@ app.use('/images', express.static(imagesPath));
 // Rutas 
 app.use('/registro', require('./app/routes'));
 
-
+generateImage();
 
 //Levantando servidor
 http.listen(3000, () => {

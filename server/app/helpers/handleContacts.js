@@ -49,7 +49,8 @@ const handleContacts = async (data) => {
             ACCOUNT_NUMBER: user.dataValues.ACCOUNT_NUMBER,
             NAME: user.dataValues.NAME,
             ONLINE_STATUS: user.dataValues.ONLINE_STATUS,
-            PROFILE_PHOTO:user.dataValues.multimedia[0]?.dataValues.URL||""
+            PROFILE_PHOTO:user.dataValues.multimedia[0]?.dataValues.URL||"",
+            
           };
         });
         resolve({ arrUsers, ownerList: decoded.userId });

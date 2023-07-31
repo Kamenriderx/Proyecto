@@ -48,19 +48,19 @@ exports.loginAccess = async (req, res) => {
           }
           break;
         case 'Docente':
-          if (route === '/students' || route === '/admins' || route === '/departmentHeads' || route === '/coordinators') {
+          if (route === '/students' || route === '/admins') {
 
             return res.status(401).json({ error: 'Acceso no permitido' });
           }
           break;
         case 'Jefe de Departamento':
-          if (route === '/students' || route === '/professors' || route === '/admins' || route === '/coordinators') {
+          if (route === '/students' ||  route === '/admins') {
 
             return res.status(401).json({ error: 'Acceso no permitido' });
           }
           break;
         case 'Coordinador':
-          if (route === '/students' || route === '/professors' || route === '/departmentHeads' || route === '/admins') {
+          if (route === '/students' || route === '/admins') {
 
             return res.status(401).json({ error: 'Acceso no permitido' });
           }

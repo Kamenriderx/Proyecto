@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 import { useNavigate } from "react-router";
 import { StoreContext } from "../../../store/ContextExample";
+import { Link } from "react-router-dom";
 
 const style = {
   button: {
@@ -60,7 +61,6 @@ const LoginForm = () => {
       [name]: value.trim(),
     });
   };
-  console.log(`http://localhost:3000/registro/login/${login.loginType}`);
   const handleSelect = (e)=>{
     e.preventDefault();
     const { value } = e.target;
@@ -105,7 +105,6 @@ const LoginForm = () => {
     } */
 
     const res = await httpRequests()["post"](`http://localhost:3000/registro/login/${login.loginType}`, { body: { ...login } });
-    console.log(res);
     if (res.status === 200) {
 
       const token = res.data.token;
@@ -177,6 +176,9 @@ const LoginForm = () => {
       >
         Iniciar sesion
       </button>
+        <Link to="/RecuperarContrasena" className="px-4 py-1 w-3/5 text-sm text-purple-600 font-semibold rounded-md border text-center border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none    mt-5 ">
+          Recuperar contraseña
+        </Link>
     </form>
   );
 };

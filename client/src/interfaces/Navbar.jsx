@@ -15,6 +15,10 @@ import useStudents from "../utils/hooks/useStudents";
 import Search from "./components/Search";
 import Solicitud from "./components/Solicitud";
 import ResultsSearch from "./ResultsSearch";
+import ListTeachers from "./ListTeachers";
+import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
+import ViewChat from "../views/ViewChat/ViewChat";
+import Period from "../views/Period/Period";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -26,12 +30,13 @@ const ContentNavbar = () => {
     dispatch({ type: "USER", user: {} });
     dispatch({ type: "TOKEN", token: "" });
     dispatch({ type: "LOGOUT" });
+    console.log(state.socket);
+    state.socket?.close();
   };
 
   const Navbar = () => {
     const { state, dispatch } = useContext(StoreContext);
-    console.log("EstudiantesData", students);
-    console.log("Usuario Conectado", state);
+
     return (
       <>
         <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
@@ -101,6 +106,15 @@ const ContentNavbar = () => {
                       </Link>
                     </li>
                     <li>
+                      <Link to="/period">
+                        <button
+                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
+                        >
+                          Periodo 
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
                       <Link to="perfil">
                         <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
                           Perfil
@@ -127,6 +141,17 @@ const ContentNavbar = () => {
                     </li>
                   </>
                 )}
+                {state?.user?.ID_ROLE === 3 && (
+                  <>
+                    <li>
+                      <Link to="/list-teachers">
+                        <button className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
+                          Listado Docentes
+                        </button>
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -137,13 +162,15 @@ const ContentNavbar = () => {
 
   const Profile = () => {
     const { state } = useContext(StoreContext);
-    console.log(state);
+
 
     return (
       <>
         {state?.user?.ID_ROLE === 1 ? (
           <ViewStudent />
         ) : state?.user?.ID_ROLE === 2 ? (
+          <ViewTeacher />
+        ) : state?.user?.ID_ROLE === 3 ? (
           <ViewTeacher />
         ) : (
           <h2>Admin</h2>
@@ -160,7 +187,9 @@ const ContentNavbar = () => {
           {/* rutas publicas */}
           <Route path="*" element={<NotFound />} />
           <Route exact path="/" element={<Principal />} />
+          <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
           <Route exact path="/proffessor" />
           <Route
@@ -169,9 +198,10 @@ const ContentNavbar = () => {
             element={<RequestPasswordForm />}
           />
           <Route exact path="/Estudiantes" element={<ReadCSV />} />
-
           {/* rutas privadas */}
           <Route exact path="/perfil" element={<Profile />} />
+          <Route exact path="/list-teachers" element={<ListTeachers />} />
+          <Route exact path="/chat" element={<ViewChat />} />
 
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>

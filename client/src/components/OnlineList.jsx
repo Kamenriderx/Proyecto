@@ -4,36 +4,32 @@ import { BiSearch } from "react-icons/Bi";
 import { io } from "socket.io-client";
 import { httpRequests } from "../utils/helpers/httpRequests";
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJyb2xlIjoiRXN0dWRpYW50ZSIsImlhdCI6MTY4ODk1NTQ1NywiZXhwIjoxNzIwNDkxNDU3fQ.aCTLXova8wMLyoONWLfwxr13LjvVbdiFE0kM-ksgJgs";
-const socket = io(
-  `http://localhost:3000?token=${token}`
-);
-const OnlineList = () => {
+
+const OnlineList = ({setCheck,check,socket}) => {  
   const [searchValue, setSearchValue] = useState("");
   const [list, setList] = useState([]);
+  const [ownerList, setOwnerList] = useState(0);
 
   useEffect(() => {
     socket.on("onlineList", (data) => {
+      setOwnerList(data.ownerList);
       if(searchValue!==""){
         search();
       }else{
-        console.log(data.arrUsers);
+        
         setList(data.arrUsers);
       }
     });
     socket.on("reloadList", (data) => {
       if (searchValue.trim() !== "") {
-        console.log(searchValue);
         search();
       }else{
         getList();
       }
     });
-    console.log(list);
   }, [socket]);
 
   useEffect(() => {
-    console.log(searchValue);
     if (searchValue !== "") {
       search();
     } else {
@@ -49,7 +45,6 @@ const OnlineList = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(searchValue);
     search();
   };
   const getList = () => {
@@ -57,21 +52,21 @@ const OnlineList = () => {
       ["get"]("http://localhost:3000/registro/onlineList/getList", {
         headers: {
           authorization:
-            `Bearer ${token}`,
+            `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
+        setOwnerList(res.data.ownerList)
         setList(res.data.arrUsers);
       });
       setSearchValue("");
   };
   const search = () => {
-    console.log(searchValue);
     httpRequests()
       ["post"]("http://localhost:3000/registro/onlineList/searchList", {
         headers: {
           authorization:
-          `Bearer ${token}`,
+          `Bearer ${localStorage.getItem("token")}`,
         },
         body: { userName: searchValue },
       })
@@ -99,6 +94,9 @@ const OnlineList = () => {
                 state={"green"}
                 userName={contact.NAME}
                 photo={contact.PROFILE_PHOTO}
+                ownerList={ownerList}
+                setCheck={setCheck}
+                check = {check}
               />
             ))}
         </fieldset>
@@ -115,6 +113,9 @@ const OnlineList = () => {
                 state={"gray"}
                 userName={contact.NAME}
                 photo={contact.PROFILE_PHOTO}
+                ownerList={ownerList}
+                setCheck={setCheck}
+                check = {check}
               />
             ))}
         </fieldset>

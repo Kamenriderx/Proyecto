@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { GoDotFill } from "react-icons/go";
 import img from "../assets/fondoPerfil.jpg";
+import { httpRequests } from "../utils/helpers/httpRequests";
 
-const Contact = ({state,userName,photo,userId}) =>{
+const Contact = ({state,userName,photo,userId,ownerList,setCheck,check}) =>{
     const [style, setStyle] = useState(
         {
             container:"shadow-lg z-10",
@@ -11,7 +12,13 @@ const Contact = ({state,userName,photo,userId}) =>{
     );
 
     const handleClick = (e) => {
-        console.log(userId);
+        httpRequests()["post"]("http://localhost:3000/registro/conversation/",{
+            body:{
+                USER_1_ID:userId,
+                USER_2_ID:ownerList
+            }}).then(res=>{
+                setCheck(!check);
+            });
 
     }
 
