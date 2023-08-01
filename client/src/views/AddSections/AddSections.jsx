@@ -448,22 +448,46 @@ const AddSections = () => {
           <div className="mt-5">
             <div className="text-center">
               <label className=" text-black font-bold text-md block">
-                Aula y Edificio:
+                Clase:
               </label>
             </div>
             <div className="flex justify-center">
               <select
-                value={ID_CLASSROOM}
-                onChange={(e) => setID_CLASSROOM(e.target.value)}
+                value={ID_COURSE}
+                onChange={(e) => setID_COURSE(e.target.value)}
                 className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
               >
-                <option value=""> Aula - Edificio </option>
-                {listAulas.map((aulas) => (
-                  <option key={aulas.ID_CLASSROOM} value={aulas.ID_CLASSROOM}>
-                    {aulas.NUMBER} - {aulas.building.NAME}
+                <option value="">Seleccione una Clase</option>
+                {listCourses.map((listcourse) => (
+                  <option
+                    value={listcourse.ID_COURSE}
+                    key={listcourse.ID_COURSE}
+                  >
+                    {listcourse.NAME}
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="text-center mt-3">
+              <label className=" text-black font-bold text-md block">
+                Aula y Edificio:
+              </label>
+            </div>
+            <div>
+              <div className="flex justify-center">
+                <select
+                  value={ID_CLASSROOM}
+                  onChange={(e) => setID_CLASSROOM(e.target.value)}
+                  className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+                >
+                  <option value=""> Aula - Edificio </option>
+                  {listAulas.map((aulas) => (
+                    <option key={aulas.ID_CLASSROOM} value={aulas.ID_CLASSROOM}>
+                      {aulas.NUMBER} - {aulas.building.NAME}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
           <div className="mt-5">
@@ -577,19 +601,22 @@ const AddSections = () => {
               <AiOutlineAppstoreAdd className="mr-2" size={30} />
             </button>
           </div>
-          <div className="">
-            <select
-              value={ID_COURSE}
-              onChange={(e) => setID_COURSE(e.target.value)}
-              className="bg-sky-600 hover:bg-sky-700 rounded shadow text-white text-center border-2 cursor-pointer"
-            >
-              <option value="">--- Seleccione una Clase ---</option>
-              {listCourses.map((listcourse) => (
-                <option value={listcourse.ID_COURSE} key={listcourse.ID_COURSE}>
-                  {listcourse.NAME}
-                </option>
-              ))}
-            </select>
+          <div className="flex justify-around gap-2">
+            <div>
+              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
+                <option value="">Año</option>
+              </select>
+            </div>
+            <div>
+              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
+                <option value="">Periodo</option>
+              </select>
+            </div>
+            <div>
+              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
+                <option value="">Clase</option>
+              </select>
+            </div>
           </div>
         </div>
 

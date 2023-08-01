@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
 import AlertTwo from "../../components/AlertTwo";
 import Modal3 from "../../components/Modal3";
+import Modal2 from "../../components/Modal2";
 
 const Planificacion = () => {
   const [showModal, setShowModal] = useState(false);
@@ -30,6 +31,7 @@ const Planificacion = () => {
   const [labEndDate, setLabEndDate] = useState("");
   const [dateSelected, setDateSelected] = useState(null);
   const [id, setId] = useState("");
+  const [showModal2, setShowModal2] = useState(false);
 
   const handleClose = () => {
     setShowModal(false);
@@ -510,6 +512,11 @@ const Planificacion = () => {
           </form>
         </div>
       </Modal3>
+      <Modal2 Visible={showModal2} Close={() => setShowModal2(false)}>
+        <div className="bg-gray-100 shadow rounded p-2">
+          <h1>Esperando el Get por ID</h1>
+        </div>
+      </Modal2>
       <div className="w-3/4 mx-auto">
         <div className="mt-5 text-center">
           <p className="text-red-800 font-bold text-2xl">
@@ -558,8 +565,8 @@ const Planificacion = () => {
                     <td className="border px-4 py-2 text-sm font-semibold r">
                       {solicitudes.period.STATUS}
                     </td>
-                    <td className="border px-4 py-2 text-lg font-medium r">
-                      <div className="flex items-center gap-8">
+                    <td className="border py-2 text-lg font-medium r">
+                      <div className="flex items-center gap-2">
                         <div className="mx-auto">
                           <AiFillDelete
                             className="cursor-pointer text-gray-600"
@@ -577,6 +584,14 @@ const Planificacion = () => {
                             size={20}
                           ></AiFillEdit>
                           <span className="-mx-1 text-xs">Editar</span>
+                        </div>
+                        <div className="mx-auto">
+                          <AiFillEye
+                            onClick={() => setShowModal2(true)}
+                            className="cursor-pointer text-gray-600"
+                            size={20}
+                          ></AiFillEye>
+                          <span className="text-xs">Ver</span>
                         </div>
                       </div>
                     </td>

@@ -43,7 +43,7 @@ const ListContacts = () => {
   if (loading) return <Spinner2 />;
   return (
     <>
-      <div className="mt-6">
+      <div className="mt-5">
         {listContacts?.length > 0 ? (
           <>
             <table className="w-full bg-white shadow-md table-auto">
