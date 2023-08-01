@@ -1,14 +1,4 @@
 import "flowbite";
-import { AiFillHome } from "react-icons/ai";
-import { IoMdContact } from "react-icons/io";
-import { BiSolidContact, BiSolidKey, BiNotepad } from "react-icons/Bi";
-import { BsFillChatDotsFill, BsQuestionCircleFill } from "react-icons/bs";
-import {
-  PiNotebookBold,
-  PiComputerTowerFill,
-  PiNotebookFill,
-} from "react-icons/pi";
-import { FaHistory } from "react-icons/fa";
 import Video from "./components/Video";
 import { Link } from "react-router-dom";
 import { AiOutlineUnorderedList } from "react-icons/ai";
@@ -230,7 +220,7 @@ const ViewTeacher = () => {
             <Video />
           </div>
         </div>
-        <div className="overflow-hidden hover:overflow-auto h-96 mt-8 mr-8">
+        <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 h-96 mt-8 mr-8">
           <div className="flex flex-col">
             <div className="bg-gray-200 mb-4 rounded-xl w-auto h-12 flex items-center justify-center font-bold">
               Clase1

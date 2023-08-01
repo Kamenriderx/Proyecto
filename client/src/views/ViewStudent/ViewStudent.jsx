@@ -90,10 +90,10 @@ const ViewStudent = () => {
                       <div className="font-bold">
                         {stateStudent.user.user.NAME}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-md">
                         {stateStudent.user.CAREER}
                       </div>
-                      <div className="text-md text-cyan-500">
+                      <div className="text-md ">
                         {stateStudent.user.user.CENTER}
                       </div>
                       {user.visitante && (
@@ -172,7 +172,7 @@ const ViewStudent = () => {
             <div className="animate__animated animate__fadeIn fixed inset-0 flex items-center justify-center z-50">
               <div className="absolute inset-0 bg-black opacity-50"></div>
               <div className="bg-white rounded-lg p-8 z-10 w-2/6">
-                <h2 className="text-xl font-bold mb-4">ACTUALIZAR CORREO</h2>
+                <h2 className="text-xl font-bold mb-4">ACTUALIZAR CORREO PERSONAL</h2>
 
                 <div className="relative my-4">
                   <input
@@ -191,16 +191,16 @@ const ViewStudent = () => {
                   </label>
                 </div>
 
-                <div className="flex justify-center">
+                <div className="flex justify-center gap-2">
                   <button
                     onClick={handleUpdateEmail}
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full mr-2 w-24 "
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold p-2  rounded-full w-24"
                   >
                     Actualizar
                   </button>
                   <button
                     onClick={closeModal}
-                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full w-24 "
+                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold p-2 rounded-full w-24 "
                   >
                     Cancelar
                   </button>

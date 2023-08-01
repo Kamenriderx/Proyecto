@@ -24,7 +24,7 @@ function Auth() {
         alignContent: "flex-start",
         width: "100%",
         height: "400px",
-        marginTop: "100px",
+        marginTop: "130px",
         //backgroundImage:"../../asset/auth_background.jpg"
       }}
     >
