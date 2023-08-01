@@ -53,8 +53,8 @@ const handleConnections = (io) => {
     });
 
     socket.on("sendMessage", (data) => {
-      const user = getUser(data.ID_RECEIVER);
-      io.to(user.socketId).emit("getMessage", {});
+      const user = getUser(data.RECEIVER_ID);
+      io.to(user.socketId).emit("getMessage", data);
     });
   });
 };
