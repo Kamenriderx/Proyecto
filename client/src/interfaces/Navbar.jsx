@@ -68,7 +68,6 @@ const ContentNavbar = () => {
                 <Search className="text-4xl px-6 py-3 rounded-lg border border-gray-300" />
               )}{" "}
             </div>
-
             <div
               className="items-center justify-end w-full md:w-auto md:order-1 md:flex md:items-center"
               id="navbar-cta"
@@ -149,7 +148,6 @@ const ContentNavbar = () => {
               </ul>
             </div>
           </div>
-          </div>
         </nav>
       </>
     );
@@ -160,17 +158,17 @@ const ContentNavbar = () => {
 
     return (
       <>
-      <div className="mt-24">
-        {state?.user?.ID_ROLE === 1 ? (
-          <ViewStudent />
-        ) : state?.user?.ID_ROLE === 2 ? (
-          <ViewTeacher />
-        ) : state?.user?.ID_ROLE === 3 ? (
-          <ViewTeacher />
-        ) : (
-          <h2>Admin</h2>
-        )}
-      </div>
+        <div className="mt-24">
+          {state?.user?.ID_ROLE === 1 ? (
+            <ViewStudent />
+          ) : state?.user?.ID_ROLE === 2 ? (
+            <ViewTeacher />
+          ) : state?.user?.ID_ROLE === 3 ? (
+            <ViewTeacher />
+          ) : (
+            <h2>Admin</h2>
+          )}
+        </div>
       </>
     );
   };
