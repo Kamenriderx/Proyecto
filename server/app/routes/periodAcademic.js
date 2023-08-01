@@ -11,5 +11,5 @@ router.get('/allperiods', getAllPeriodsDetails);
 router.put('/editPeriod/:periodId', editPeriod);
 router.get('/years', getYears)
 router.get('/calendar/:id', getAcademicPeriodDetails)
-router.get('/periods/: periodId' , getPeriodsById)
+router.get('/period/:periodId' , getPeriodsById)
 module.exports = router;

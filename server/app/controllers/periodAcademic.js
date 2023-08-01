@@ -514,12 +514,12 @@ exports.getPeriodsById = async function (req, res) {
   try {
     const periodId = req.params.periodId;
 
-    // Verifica si el periodId es válido
+    // Verificar si el periodId es válido
     if (!periodId || isNaN(periodId)) {
       return res.status(400).json({ error: "ID de período inválido" });
     }
 
-    // Obtiene el periodo académico por el ID 
+    // Obtener el periodo académico por el ID especificado
     const period = await PeriodAcademic.findOne({
       where: {
         ID_PERIOD: periodId,
@@ -530,7 +530,7 @@ exports.getPeriodsById = async function (req, res) {
       return res.status(404).json({ error: "Período académico no encontrado" });
     }
 
-    // Obtiene los detalles del periodo
+    // Obtener los detalles del periodo académico encontrado
     const details = await DetailsPeriod.findAll({
       where: {
         ID_PERIOD: period.ID_PERIOD,
