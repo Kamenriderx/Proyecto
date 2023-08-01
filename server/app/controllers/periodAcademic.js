@@ -508,3 +508,43 @@ const formatDate = (date) => {
   const options = { weekday: 'long', day: 'numeric', month: 'long' };
   return date.toLocaleDateString('es-ES', options);
 };
+
+//! Controlador que envia periodos por ID
+exports.getPeriodsById = async function (req, res) {
+  try {
+    const periodId = req.params.periodId;
+
+    // Verifica si el periodId es válido
+    if (!periodId || isNaN(periodId)) {
+      return res.status(400).json({ error: "ID de período inválido" });
+    }
+
+    // Obtiene el periodo académico por el ID 
+    const period = await PeriodAcademic.findOne({
+      where: {
+        ID_PERIOD: periodId,
+      },
+    });
+
+    if (!period) {
+      return res.status(404).json({ error: "Período académico no encontrado" });
+    }
+
+    // Obtiene los detalles del periodo
+    const details = await DetailsPeriod.findAll({
+      where: {
+        ID_PERIOD: period.ID_PERIOD,
+      },
+    });
+
+    const periodWithDetails = {
+      period,
+      details,
+    };
+
+    res.json(periodWithDetails);
+  } catch (error) {
+    console.error("Error al obtener el período académico:", error);
+    res.status(500).json({ error: "Error al obtener el período académico" });
+  }
+};
