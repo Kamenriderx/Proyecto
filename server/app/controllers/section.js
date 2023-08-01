@@ -54,7 +54,7 @@ const createSection = async(req,res)=>{
             res.status(400).json({messagge:"EL DOCENTE YA TIENE ASIGNADAS 5 SECCIONES"});
             return
         }
-        sectionPro = await sectionbyProffessor(body)
+        const sectionPro = await sectionbyProffessor(body)
         if (await validateSchedule(body) || (sectionPro && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
          
             res.status(400).json({messagge:"EL DOCENTE YA TIENE UNA SECCION A ESA HORA Y ESOS DIAS"});

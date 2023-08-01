@@ -1,6 +1,6 @@
-const { Career, Request, RequestCareer, User, Student, RequestCenter, Professor } = require("../models");
+const { Career, Request, RequestCareer, User, Student, RequestCenter, Professor, PeriodAcademic } = require("../models");
 const {getStudent, changeStateRequest, changeCareerStudent, getProfessor, getCoordinator, getCareerChange, getRequestCurrent, changeCenterStudent} = require('../helpers/repositoryRequest');
-const { Op } = require("sequelize");
+const { Op, fn, col} = require('sequelize');
 
 const getCareers = async (req,res)=>{
     try {
@@ -19,8 +19,7 @@ const getCareers = async (req,res)=>{
 const requestChangeCareer = async (req,res)=>{
     try {
         const {file, user, body}= req
-        console.log({body});
-
+        
         const student = await getStudent(user.ID_USER)
         const career = await getCareerChange(body.ID_CAREER)
         const coordinator = await getCoordinator(student.user.CENTER, career.NAME)
@@ -48,11 +47,12 @@ const requestChangeCareer = async (req,res)=>{
         }
 
         const url = `http://localhost:3000/docs/${file.filename}`
-        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CARRERA",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:student.user.CENTER,requestCareer:[ {URL:url, ID_CAREER:body.ID_CAREER}]},{include:{model:RequestCareer, as:"requestCareer" }})
+        
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CARRERA",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:student.user.CENTER,ID_PERIOD:body.ID_PERIOD,requestCareer:[ {URL:url, ID_CAREER:body.ID_CAREER}]},{include:{model:RequestCareer, as:"requestCareer" }})
 
     
 
-
+        
 
         res.status(200).send({messagge:"solicitud de cambio de carrera enviada"})
 
@@ -66,7 +66,6 @@ const requestChangeCareer = async (req,res)=>{
 const requestChangeCenter = async (req,res)=>{
     try {
         const {file, user, body}= req
-        console.log({body});
         const student = await getStudent(user.ID_USER)
         const coordinator = await getCoordinator(body.CENTER, student.CAREER)
         if (body.CENTER.toUpperCase() == student.user.CENTER.toUpperCase()) {
@@ -91,8 +90,10 @@ const requestChangeCenter = async (req,res)=>{
             return
         }
 
+        
+
         const url = `http://localhost:3000/docs/${file.filename}`
-        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CENTRO",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:body.CENTER,requestCenter:[ {URL:url, CENTER:body.CENTER}]},{include:{model:RequestCenter, as:"requestCenter" }})
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CENTRO",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:body.CENTER,ID_PERIOD:body.ID_PERIOD,requestCenter:[ {URL:url, CENTER:body.CENTER}]},{include:{model:RequestCenter, as:"requestCenter" }})
 
     
 
@@ -114,8 +115,39 @@ const requestPaymentReplacement = async (req, res)=>{
         const student = await getStudent(user.ID_USER)
         const coordinator = await getCoordinator(student.user.CENTER, student.CAREER)
 
+        let request = await Request.findOne({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:"Pendiente",
+                TYPE:"PAGO_REPO"
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
 
-        await Request.create({JUSTIFY:body.JUSTIFY, ID_STUDENT:student.ID_STUDENT, ID_COORDINATOR: coordinator.ID_PROFFERSSOR, TYPE:"PAGO_REPO", CENTER: student.user.CENTER})
+
+        })
+
+        if (request) {
+            res.status(400).send({messagge:"Ya tiene una solicitud de reposicion Pendiente"})
+            return
+        }
+
+        request = await Request.findOne({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                [Op.or]:[{STATE:"Pendiente"},{STATE:"Aceptada"}],
+                ID_PERIOD:body.ID_PERIOD,
+                TYPE:"PAGO_REPO"
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
+
+
+        })
+
+        if (request) {
+            res.status(400).send({messagge:"Ya realizaste tu pago de reposicion"})
+            return
+        }
+        await Request.create({JUSTIFY:body.JUSTIFY, ID_STUDENT:student.ID_STUDENT, ID_COORDINATOR: coordinator.ID_PROFFERSSOR, TYPE:"PAGO_REPO", CENTER: student.user.CENTER,ID_PERIOD:body.ID_PERIOD})
 
         res.status(200).json({messagge:"SOLICITUD ENVIADA CORRECTAMENTE"})
 
@@ -139,7 +171,8 @@ const getRequestChangeCareer = async (req,res)=>{
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"], where:{
                     CENTER: user.CENTER} }]
             }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career"}]},
-        {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}]
+        {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}, 
+        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
 
         })
@@ -164,7 +197,8 @@ const getRequestChangeCenter = async (req,res)=>{
                 CENTER:{[Op.like]:professor.user.CENTER}
             }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:professor.CAREER}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
             }, {model:RequestCenter, as:"requestCenter"},
-        {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}]
+        {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]},
+        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
 
         })
@@ -188,7 +222,8 @@ const getMyRequestsPaymentReplacements = async (req,res)=>{
                 STATE:"Pendiente",
                 TYPE:"PAGO_REPO"
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
-            },]
+            },
+            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
 
         })
@@ -211,7 +246,8 @@ const getMyRequestsChangeCareer = async (req,res)=>{
                 STATE:"Pendiente",
                 TYPE:"CARRERA"
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
-            }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
+            }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}, 
+            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
 
         })
@@ -234,7 +270,8 @@ const getMyRequestsChangeCenter = async (req,res)=>{
                 STATE:"Pendiente",
                 TYPE:"CENTRO"
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
-            }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
+            }, {model:RequestCenter, as:"requestCenter",attributes:["URL", "CENTER"]}, 
+            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
 
         })
@@ -257,7 +294,8 @@ const getMyRequestsAcceptDenyCenter = async (req,res)=>{
                     [Op.or]:['Aceptada', 'Denegada']
                 }, TYPE:"CENTRO"
             }, include:[ {model:RequestCenter, as:"requestCenter",attributes:["URL", "CENTER"]},{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
-            },  {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]
+            },  {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}, 
+            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
 
         })
@@ -279,8 +317,9 @@ const getMyRequestsAcceptDenyCareer = async (req,res)=>{
                 STATE:{
                     [Op.or]:['Aceptada', 'Denegada']
                 }, TYPE:"CARRERA"
-            }, include:[  {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]},{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
-            }]
+            }, include:[  {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]},{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"],  }]
+            }, 
+            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
 
         })
