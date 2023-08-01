@@ -17,8 +17,30 @@ const models = {
     Request : require('./requests.js'),
     RequestCareer : require('./requestCareer.js'),
     RequestCenter : require('./requestCenter.js'),
+    PeriodAcademic: require('./periodAcademic.js')
     
 }
+
+// PERIODO - SOLICITUDES
+
+models.PeriodAcademic.Request=models.PeriodAcademic.hasMany(models.Request,{
+    foreignKey:"ID_PERIOD"
+});
+models.Request.PeriodAcademic=models.Request.belongsTo(models.PeriodAcademic,{
+    foreignKey:"ID_PERIOD",
+    as:"period"
+});
+// PERIODO - SECCIONES
+
+models.PeriodAcademic.Section=models.PeriodAcademic.hasMany(models.Section,{
+    foreignKey:"ID_PERIOD"
+});
+models.Section.PeriodAcademic=models.Section.belongsTo(models.PeriodAcademic,{
+    foreignKey:"ID_PERIOD",
+    as:"period"
+});
+
+
 // ESTUDIANTE - SOLICITUDES
 
 models.Student.Request=models.Student.hasMany(models.Request,{
