@@ -287,15 +287,13 @@ const AddSections = () => {
     const selectedStartTime = e.target.value;
     setSTART_TIME(selectedStartTime);
 
-    // Add validation to check if HF is less than or equal to HI
     if (END_TIME && parseInt(selectedStartTime) >= parseInt(END_TIME)) {
       setEND_TIME((prevEndTime) =>
         parseInt(selectedStartTime) + 100 <= 2000
           ? (parseInt(selectedStartTime) + 100).toString()
           : prevEndTime
-      ); // Set HF to the next valid time slot if it's less than or equal to HI
+      );
     } else if (!END_TIME) {
-      // If HF is not set, set it to the next valid time slot
       setEND_TIME((prevEndTime) =>
         parseInt(selectedStartTime) + 100 <= 2000
           ? (parseInt(selectedStartTime) + 100).toString()
@@ -308,13 +306,12 @@ const AddSections = () => {
     const selectedEndTime = e.target.value;
     setEND_TIME(selectedEndTime);
 
-    // Add validation to check if HI is greater than or equal to HF
     if (START_TIME && parseInt(selectedEndTime) <= parseInt(START_TIME)) {
       setSTART_TIME((prevStartTime) =>
         parseInt(selectedEndTime) - 100 >= 700
           ? (parseInt(selectedEndTime) - 100).toString()
           : prevStartTime
-      ); // Set HI to the previous valid time slot if it's greater than or equal to HF
+      );
     }
   };
 
