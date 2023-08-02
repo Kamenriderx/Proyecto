@@ -7,6 +7,8 @@ import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
 import AlertTwo from "../../components/AlertTwo";
 import Modal3 from "../../components/Modal3";
 import Modal2 from "../../components/Modal2";
+import { format } from "date-fns";
+import es from "date-fns/locale/es";
 
 const Planificacion = () => {
   const [showModal, setShowModal] = useState(false);
@@ -32,6 +34,16 @@ const Planificacion = () => {
   const [dateSelected, setDateSelected] = useState(null);
   const [id, setId] = useState("");
   const [showModal2, setShowModal2] = useState(false);
+  const [peri, setperi] = useState([]);
+
+  function mostrarFecha(fechaOriginal) {
+    const fechaObjeto = new Date(fechaOriginal);
+    const nombreMes = format(fechaObjeto, "MMMM", { locale: es });
+    const dia = format(fechaObjeto, "d");
+    const ano = format(fechaObjeto, "yyyy");
+    const fechaFormateada = `${dia} de ${nombreMes} de ${ano}`;
+    return fechaFormateada;
+  }
 
   const handleClose = () => {
     setShowModal(false);
@@ -277,7 +289,22 @@ const Planificacion = () => {
     }
   };
 
-  console.log("El periodo es:", periodo);
+  const getPeriodo = async (id) => {
+    try {
+      const response = await axios(
+        `http://localhost:3000/registro/periodAcademic/period/${id}`
+      );
+      setperi(response.data.details);
+      console.log(response.data.details);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const verPeriodo = (id) => {
+    setShowModal2(true), getPeriodo(id);
+  };
+
   const { message } = alerta;
 
   return (
@@ -441,13 +468,18 @@ const Planificacion = () => {
                 <p className="text-gray-800 text-sm font-bold">
                   Fecha de Finalizacion de Clases
                 </p>
-                <div className="mt-2">
-                  <input
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    type="date"
-                    className="py-2 px-4 rounded shadow"
-                  />
+                <div>
+                  <div className="mt-2 block">
+                    <p className="text-gray-800 text-sm font-semibold">
+                      Fecha Final de Clases
+                    </p>
+                    <input
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      type="date"
+                      className="py-2 px-4 rounded shadow"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="mt-3">
@@ -456,7 +488,10 @@ const Planificacion = () => {
                 </p>
                 <div className="mt-2 flex gap-3 justify-around">
                   <div>
-                    <div>
+                    <div className="block">
+                      <p className="text-gray-800 text-sm font-semibold">
+                        Incio Pago de Matricula
+                      </p>
                       <input
                         value={regisStartDate}
                         onChange={(e) => setRegisStartDate(e.target.value)}
@@ -465,8 +500,11 @@ const Planificacion = () => {
                       />
                     </div>
                   </div>
-                  <div>
+                  <div className="block">
                     {" "}
+                    <p className="text-gray-800 text-sm font-semibold">
+                      Fin Pago de Matricula
+                    </p>
                     <input
                       value={regisEndDate}
                       onChange={(e) => setRegisEndDate(e.target.value)}
@@ -481,7 +519,10 @@ const Planificacion = () => {
                   Fechas de Pago de Laboratorios
                 </p>
                 <div className="mt-2 flex gap-3 justify-around">
-                  <div>
+                  <div className="block">
+                    <p className="text-gray-800 text-sm font-semibold">
+                      Inicio Pago de Laboratorios
+                    </p>
                     <input
                       value={labStartDate}
                       onChange={(e) => setLabStartDate(e.target.value)}
@@ -489,8 +530,11 @@ const Planificacion = () => {
                       className="py-2 px-4 rounded shadow"
                     />
                   </div>
-                  <div>
+                  <div className="block">
                     {" "}
+                    <p className="text-gray-800 text-sm font-semibold">
+                      Fin Pago de Laboratorios
+                    </p>
                     <input
                       value={labEndDate}
                       onChange={(e) => setLabEndDate(e.target.value)}
@@ -514,7 +558,79 @@ const Planificacion = () => {
       </Modal3>
       <Modal2 Visible={showModal2} Close={() => setShowModal2(false)}>
         <div className="bg-gray-100 shadow rounded p-2">
-          <h1>Esperando el Get por ID</h1>
+          {peri.map((per) => (
+            <div key={per.ID_PERIOD}>
+              <div className="mt-3">
+                <div className="text-center">
+                  <p className="text-red-800 text-xl font-bold">
+                    Fechas importantes del año {anyo}
+                  </p>
+                  <div className="mt-2">
+                    <p className="text-gray-900 font-bold text-lg">
+                      Inicio de Clases
+                    </p>
+                    <p className="text-gray-700 font-semibold text-base">
+                      Del {mostrarFecha(per.CLASS_START_DATE)} al{" "}
+                      {mostrarFecha(per.CLASS_END_DATE)}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-gray-900 font-bold text-lg">
+                      Pago de Matricula
+                    </p>
+                    <p className="text-gray-700 font-semibold text-base">
+                      Del {mostrarFecha(per.REGISTRATION_PAYMENT_START_DATE)} al{" "}
+                      {mostrarFecha(per.REGISTRATION_PAYMENT_END_DATE)}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-gray-900 font-bold text-lg">
+                      Pago de Laboratorios
+                    </p>
+                    <p className="text-gray-700 font-semibold text-base">
+                      Del {mostrarFecha(per.LABORATORIES_PAYMENT_START_DATE)} al{" "}
+                      {mostrarFecha(per.NOTES_UPLOAD_REGISTRATION_END_DATE)}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-gray-900 font-bold text-lg">
+                      Prematricula
+                    </p>
+                    <p className="text-gray-700 font-semibold text-base">
+                      Del {mostrarFecha(per.PREREGISTRATION_START_DATE)} al{" "}
+                      {mostrarFecha(per.PREREGISTRATION_END_DATE)}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-gray-900 font-bold text-lg">Matricula</p>
+                    <p className="text-gray-700 font-semibold text-base">
+                      Del {mostrarFecha(per.REGISTRATION_START_DATE)} al{" "}
+                      {mostrarFecha(per.REGISTRATION_END_DATE)}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-gray-900 font-bold text-lg">
+                      Adiciones y Cancelaciones
+                    </p>
+                    <p className="text-gray-700 font-semibold text-base">
+                      Del {mostrarFecha(per.ADD_CANCELLATIONS_START_DATE)} al{" "}
+                      {mostrarFecha(per.ADD_CANCELLATIONS_END_DATE)}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-gray-900 font-bold text-lg">
+                      Subida de Notas
+                    </p>
+                    <p className="text-gray-700 font-semibold text-base">
+                      Del{" "}
+                      {mostrarFecha(per.NOTES_UPLOAD_REGISTRATION_START_DATE)}{" "}
+                      al {mostrarFecha(per.NOTES_UPLOAD_REGISTRATION_END_DATE)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </Modal2>
       <div className="w-3/4 mx-auto">
@@ -587,7 +703,9 @@ const Planificacion = () => {
                         </div>
                         <div className="mx-auto">
                           <AiFillEye
-                            onClick={() => setShowModal2(true)}
+                            onClick={() =>
+                              verPeriodo(solicitudes.period.ID_PERIOD)
+                            }
                             className="cursor-pointer text-gray-600"
                             size={20}
                           ></AiFillEye>

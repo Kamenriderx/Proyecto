@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {createPeriodAcademic, getValidYears, deletePeriodAcademic, getPeriodsByYear, getAllPeriodsDetails, editPeriod, getYears} = require('../controllers/periodAcademic');
+const {createPeriodAcademic, getValidYears, deletePeriodAcademic, getPeriodsByYear, getAllPeriodsDetails, editPeriod, getYears, getAcademicPeriodDetails, getPeriodsById} = require('../controllers/periodAcademic');
 
 
 router.post('/', createPeriodAcademic);
@@ -11,5 +11,6 @@ router.get('/allperiods', getAllPeriodsDetails);
 router.put('/editPeriod/:periodId', editPeriod);
 router.get('/years', getYears);
 
-router.get('/getYears', getValidYears);
+router.get('/calendar/:id', getAcademicPeriodDetails)
+router.get('/period/:periodId' , getPeriodsById)
 module.exports = router;
