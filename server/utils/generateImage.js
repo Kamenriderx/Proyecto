@@ -1,34 +1,47 @@
-const { createCanvas, loadImage } = require("canvas");
+const express = require("express");
+const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
+const getCalendarTemplate = require("./getCalendarTemplate");
 
 const generateImage = async () => {
-  const canvas = createCanvas(200, 200);
-  const ctx = canvas.getContext("2d");  
-  ctx.fillStyle = "green";
+  const browser = await puppeteer.launch();
+    const page = await browser.newPage();
 
-  // Write "Awesome!"
-  ctx.font = "30px Impact";
-  ctx.rotate(0.1);
-  ctx.fillText("Awesome!", 50, 100);
+    const content = {
+      pac:"III PAC 2023",
+      calendar:[
+        {date:"Sabado 4 de Septiembre",hour:"9:00 a.m A 11:59 p.m.",students:"PRIMER INGRESO"},
+        {date:"Domingo 5 de Septiembre",hour:"9:00 a.m A 11:59 p.m.",students:"84% a 100%"},
+        {date:"Lunes 6 de Septiembre",hour:"9:00 a.m A 11:59 p.m.",students:"70% a 83%"},
+        {date:"Martes 7 de Septiembre",hour:"9:00 a.m A 11:59 p.m.",students:"0% a 69%"},
+      ],
+      previousPac:"II PAC 2023",
+      initDate:"1 de Septiembre",
+      finalDate:"20 de diciembre",
+      aditionInterval:"8 al 20 de septiembre"
+    }
+    const htmlContent = getCalendarTemplate(content);
 
-  // Draw line under text
-  var text = ctx.measureText("Awesome!");
-  ctx.strokeStyle = "rgba(0,0,0,0.5)";
-  ctx.beginPath();
-  ctx.lineTo(50, 102);
-  ctx.lineTo(50 + text.width, 102);
-  ctx.stroke();
+    await page.setContent(htmlContent);
+    const contentSize = await page.evaluate(() => {
+      const contentElement = document.querySelector("#calendar-content"); 
+      const { width, height } = contentElement.getBoundingClientRect();
+      return { width, height };
+    });
+  
+    await page.setViewport(contentSize);
+  
+    const screenshotBuffer = await page.screenshot();
+  
+    await browser.close();
+    const parentDirectory = path.join(__dirname,"..");
 
-  // Convert the canvas to a buffer (PNG format by default)
-  const buffer = canvas.toBuffer("image/jpeg"); // You can also use "image/png" for PNG format
 
-  // Specify the path where the image should be saved
-  const imagePath = path.join(__dirname, "images", "output.jpg");
-
-  // Write the buffer to the specified file path
-  fs.writeFileSync(imagePath, buffer);
+    const imagePath = path.join(parentDirectory, `public/images/`, `${content.pac}.png`);
+    fs.writeFileSync(imagePath, screenshotBuffer);
 };
 
-
 module.exports = generateImage;
+
+

@@ -7,11 +7,10 @@ import { httpRequests } from "../../utils/helpers/httpRequests";
 
 const Period = () => {
   const [visible, setVisible] = useState(false);
-  const actualYear = (new Date()).getFullYear().toString();
   const [state, setState] = useState({
     initDate: "",
     finalDate: "",
-    selectedYear: actualYear
+    selectedYear: "I"
   });
 
 
@@ -26,22 +25,11 @@ const Period = () => {
 
   }
 
+
+
   return (
     <div className="flex w-full justify-center p-3 m-3">
       <div className="w-2/3">
-        <div className="flex min-w-full justify-between mb-4 items-center align-middle">
-          <button
-            onClick={() => setVisible(true)}
-            className="bg-lime-400 text-white w-20 rounded-md h-6"
-          >
-            Nuevo
-          </button>
-          <select name="selectedYear" value = {state.selectedYear} id="years" onChange={handleChange} className="w-25 h-9 rounded-md w">
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-          </select>
-        </div>
         <PeriodTable />
 
         <Modal Visible={visible} Close={setVisible}>
