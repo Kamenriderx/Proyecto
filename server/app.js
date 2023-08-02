@@ -40,7 +40,6 @@ app.use('/images', express.static(imagesPath));
 // Rutas 
 app.use('/registro', require('./app/routes'));
 
-generateImage();
 
 //Levantando servidor
 http.listen(3000, () => {

@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 const moment = require("moment");
 const connection = require("../../config/database");
 const DetailsPeriod = require("../models/detailsPeriod");
-
+const generateImage = require("../../utils/generateImage");
 //! Controlador para crear un período académico
 exports.createPeriodAcademic = async (req, res) => {
   try {
@@ -104,10 +104,13 @@ exports.createPeriodAcademic = async (req, res) => {
       FINISH_DATE: finishDate,
     });
 
+    
+
     // Crea los registros del modelo DetailsPeriod para el nuevo período académico
     const detailsStartDate = moment.utc(startDate).subtract(5, "days");
     const detailsEndDate = moment.utc(detailsStartDate).add(5, "days");
 
+    
     const detailsPeriodData = {
       ID_PERIOD: newPeriodAcademic.ID_PERIOD,
       PREREGISTRATION_START_DATE: detailsStartDate.hour(9).toDate(),
@@ -153,6 +156,14 @@ exports.createPeriodAcademic = async (req, res) => {
         .hour(23)
         .toDate(),
     };
+
+     generateImage({
+      PERIOD_NAME: periodName,
+      START_DATE: startDate,
+      FINISH_DATE: finishDate,
+      INTERVAL : `${detailsPeriodData.ADD_CANCELLATIONS_START_DATE} al ${detailsPeriodData.ADD_CANCELLATIONS_END_DATE}`
+      
+    }); 
 
     await DetailsPeriod.create(detailsPeriodData);
 

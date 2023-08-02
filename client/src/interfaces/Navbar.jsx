@@ -106,7 +106,7 @@ const ContentNavbar = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/periodos">
+                      <Link to="/ps">s
                         <button
                           className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
                         >
@@ -136,6 +136,13 @@ const ContentNavbar = () => {
                       <Link to="/Docentes">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Docentes
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Periodos">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Periodo
                         </button>
                       </Link>
                     </li>
@@ -220,6 +227,7 @@ const ContentNavbar = () => {
           <Route exact path="/login" element={<Auth />} />
           <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
+          <Route exact path="/periodos" element={<Period />} />
           <Route exact path="/proffessor" />
           <Route
             exact
