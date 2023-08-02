@@ -3,25 +3,15 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 const getCalendarTemplate = require("./getCalendarTemplate");
+const PeriodAcademic = require("../app/models/periodAcademic");
 
-const generateImage = async (properties) => {
-  const browser = await puppeteer.launch();
+const generateImage = async (properties,id) => {
+  
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-
-    const content = {
-      pac:properties.PERIOD_NAME,
-      calendar:[
-        {date:"Sabado 4 de Septiembre",hour:"9:00 a.m A 11:59 p.m.",students:"PRIMER INGRESO"},
-        {date:"Domingo 5 de Septiembre",hour:"9:00 a.m A 11:59 p.m.",students:"84% a 100%"},
-        {date:"Lunes 6 de Septiembre",hour:"9:00 a.m A 11:59 p.m.",students:"70% a 83%"},
-        {date:"Martes 7 de Septiembre",hour:"9:00 a.m A 11:59 p.m.",students:"0% a 69%"},
-      ],
-      previousPac:null,
-      initDate:properties.START_DATE,
-      finalDate:properties.FINISH_DATE,
-      aditionInterval:properties.INTERVAL
-    }
-    const htmlContent = getCalendarTemplate(content);
+    
+    console.log(properties);
+    const htmlContent = getCalendarTemplate(properties);
 
     await page.setContent(htmlContent);
     const contentSize = await page.evaluate(() => {
@@ -38,8 +28,15 @@ const generateImage = async (properties) => {
     const parentDirectory = path.join(__dirname,"..");
 
 
-    const imagePath = path.join(parentDirectory, `public/images/`, `${content.pac}.png`);
+    const imagePath = path.join(parentDirectory, `public/images/`, `${properties.pac}.png`);
+    await PeriodAcademic.update(
+      {
+      CALENDAR_REGISTRATION:`http://localhost:3000/images/${properties.pac}.png`
+    },
+    { where: { ID_PERIOD: id} });
     fs.writeFileSync(imagePath, screenshotBuffer);
+
+  
 };
 
 module.exports = generateImage;
