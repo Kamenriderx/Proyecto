@@ -54,7 +54,8 @@ const sectionbyProffessor = async (body)=>{
         where:{
             ID_PROFFERSSOR: body.ID_PROFFERSSOR,
             START_TIME: body.START_TIME,
-            END_TIME: body.END_TIME
+            END_TIME: body.END_TIME,
+            DELETED:0
         }
     })
 }

@@ -35,7 +35,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.gt]:body.START_TIME
                         },
-                    },
+                    },{DELETED : 0}
                     
                 ]},
                 {[Op.and]:[
@@ -51,7 +51,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.gt]:body.START_TIME
                         },
-                    },
+                    },{DELETED : 0}
                     
                 ]},
                 {[Op.and]:[
@@ -77,7 +77,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.lt]:body.END_TIME
                         },
-                    },
+                    },{DELETED : 0}
                     
                 ]},
                 {[Op.and]:[
@@ -93,7 +93,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.gt]:body.END_TIME
                         },
-                    },
+                    },{DELETED : 0}
                     
                 ]},
                 {[Op.and]:[
@@ -109,7 +109,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.eq]:body.END_TIME
                         },
-                    },
+                    },{DELETED : 0}
                     
                 ]},
             ]
@@ -123,7 +123,8 @@ const sectionExists = async (body)=>{
         where:{
             ID_CLASSROOM: body.ID_CLASSROOM,
             START_TIME: body.START_TIME,
-            END_TIME: body.END_TIME
+            END_TIME: body.END_TIME,
+            DELETED:0
         }
     })
 }
