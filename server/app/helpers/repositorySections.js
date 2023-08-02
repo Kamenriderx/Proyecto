@@ -23,7 +23,7 @@ const getSectionsByCenterAndCareer = async (user) =>{
                 }}
             }]},
             {model:Course, as:"course", attributes:["CODE_COURSE","NAME","UV"]},
-            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}
+            {model:PeriodAcademic, as:"period", attributes:["ID_PERIOD","PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}
         ]
     })
 }
@@ -54,7 +54,8 @@ const sectionbyProffessor = async (body)=>{
         where:{
             ID_PROFFERSSOR: body.ID_PROFFERSSOR,
             START_TIME: body.START_TIME,
-            END_TIME: body.END_TIME
+            END_TIME: body.END_TIME,
+            DELETED:0
         }
     })
 }
