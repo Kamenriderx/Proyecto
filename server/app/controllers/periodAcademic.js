@@ -31,9 +31,9 @@ exports.createPeriodAcademic = async (req, res) => {
     const periods = ["I Periodo", "II Periodo", "III Periodo"];
     let periodName = "";
 
-    if ([1, 2, 3,4].includes(startMonth) && [1, 2,3, 4].includes(endMonth)) {
+    if ([3,4].includes(startMonth) && [1, 2,3, 4].includes(endMonth)) {
       periodName = `${periods[0]} ${year}`;
-    } else if (
+    } else if (1, 2, 
       [5, 6, 7, 8].includes(startMonth) &&
       [5, 6, 7, 8].includes(endMonth)
     ) {
@@ -149,7 +149,7 @@ exports.createPeriodAcademic = async (req, res) => {
         .toDate(),
       NOTES_UPLOAD_REGISTRATION_END_DATE: moment
         .utc(startDate)
-        .add(89, "days")
+        .add(91, "days")
         .hour(23)
         .toDate(),
     };
@@ -533,7 +533,7 @@ exports.getPeriodsById = async function (req, res) {
       return res.status(404).json({ error: "Período académico no encontrado" });
     }
 
-    // Obtiene los detalles del periodo
+    // Obtiene los detalles del periodo académico
     const details = await DetailsPeriod.findAll({
       where: {
         ID_PERIOD: period.ID_PERIOD,
