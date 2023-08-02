@@ -12,14 +12,14 @@ const verifyData = (data)=>{
             if (!student.hasOwnProperty('NAME')|| student.NAME.length <2 || typeof student.NAME !== 'string' || student.NAME.trim()==="") {
                 error+=`Campo NAME invalido: ${student.NAME}, `;
             }
-            if (!student.hasOwnProperty('DNI') || typeof student.DNI !== 'string' || student.DNI.split("-").length <= 1) {
+            if (!student.hasOwnProperty('DNI') || typeof student.DNI !== 'string' || student.DNI.length != 13) {
                 error+=`Campo DNI invalido: ${student.DNI}, `;
             }
             if (!student.hasOwnProperty('CARRER') || typeof student.CARRER !== 'string' || student.CARRER.trim()==="") {
                 error+=`Campo CARRER invalido: ${student.CARRER}, `;
             }
            
-            if (!student.hasOwnProperty('CENTER') || typeof student.CENTER !== 'string'|| student.CENTER.trim()==="") {
+            if (!student.hasOwnProperty('CENTER') || typeof student.CENTER !== 'string'|| student.CENTER.trim()==="" || student.CENTER.split(" ").length < 2) {
                 error+=`Campo invalido: ${student.CENTER}, `;
             }
         
