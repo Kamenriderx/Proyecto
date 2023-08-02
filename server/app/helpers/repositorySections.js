@@ -28,6 +28,30 @@ const getSectionsByCenterAndCareer = async (user) =>{
     })
 }
 
+const getSectionsByCenterAndCareerPeriod = async (user,id) =>{
+    const professor = await getProfessorIdUser(user);
+
+    return await Section.findAll({
+        where:{
+            ID_PERIOD:id ,
+            DELETED:0
+        },attributes:["SECTION_CODE","START_TIME","END_TIME","DAYS","SPACE_AVAILABLE","ID_SECTION"],include:[
+            {model:Professor, as:"Proffessor",attributes:["INSTITUTIONAL_EMAIL","CAREER"],where:{CAREER:{
+                [Op.like]:`%${professor.CAREER.toUpperCase()}%`
+            }},include:[{model:User, as:"user", attributes:["NAME"]}]},
+            {model:Classroom, as:"classroom",attributes:["NUMBER","AMOUNT_PEOPLE"],include:[
+                {model:Building, as:"building",attributes:["NAME","CENTER"], where:{CENTER:{
+                [Op.like]:`%${user.CENTER.toUpperCase()}%`
+            }}},{
+                model:Career, as:"career", where:{NAME:{
+                    [Op.like]:`%${professor.CAREER.toUpperCase()}%`
+                }}
+            }]},
+            {model:Course, as:"course", attributes:["CODE_COURSE","NAME","UV"]},
+            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}
+        ]
+    })
+}
 const getProfessorIdUser = async (user)=>{
     return await Professor.findOne({
         where:{
@@ -72,6 +96,7 @@ const getSection = async (body)=>{
 
 module.exports = {
     getSectionsByCenterAndCareer,
+    getSectionsByCenterAndCareerPeriod,
     getProfessorIdUser,
     getSection,
     sectionExistsHourClassroom,
