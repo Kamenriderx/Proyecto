@@ -83,10 +83,10 @@ const ContentNavbar = () => {
                       <Solicitud />
                     </li>
                     <li>
-                    <Link to="/solicitudes-coordinador-centro">
+                      <Link to="/solicitudes-coordinador-centro"/>
                     </li>
                     <li>
-                      <Link to="/">
+                      <Link to="/secciones">
                         <button
                           onClick={handleSession}
                           className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
@@ -96,11 +96,21 @@ const ContentNavbar = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/period">
+                      <Link to="/">
+                        <button
+                          onClick={handleSession}
+                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
+                        >
+                          Cerrar sesión
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/periodos">
                         <button
                           className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
                         >
-                          Periodo 
+                          Periodos 
                         </button>
                       </Link>
                     </li>

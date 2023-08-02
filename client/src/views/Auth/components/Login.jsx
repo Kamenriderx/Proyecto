@@ -176,7 +176,7 @@ const LoginForm = () => {
       >
         Iniciar sesion
       </button>
-        <Link to="/RecuperarContrasena" className="px-4 py-1 w-3/5 text-sm text-purple-600 font-semibold rounded-md border text-center border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none    mt-5 ">
+        <Link to="/RecuperarContrasena" className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5">
           Recuperar contraseña
         </Link>
     </form>
