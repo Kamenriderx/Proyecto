@@ -2,8 +2,10 @@ import { useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { BsArrowRightCircle } from "react-icons/bs";
 import Swal from "sweetalert2";
+
 const PeriodRow = (props) => {
   const [hover, setHover] = useState(false);
+  console.log("Las props:",props);
   const showAlert = () => {
     Swal.fire({
         title: `¿Borrar ${props.periodName}?`,
@@ -33,29 +35,18 @@ const PeriodRow = (props) => {
     >
       <ul className="list-none flex flex-row min-w-ful">
         <li className="flex justify-center items-center w-1/3 ">
-          {props.periodName}
+          {props.section.course.CODE_COURSE}
         </li>
         <li
           className={`flex justify-center items-center w-1/3 ${
             props.state === "En curso" ? "text-lime-400" : ""
           }`}
         >
-          {props.state}
+          {props.section.course.NAME}
         </li>
         <li className="w-1/3  flex justify-center items-center">
-          <div className="w-1/2 flex justify-end">
-            <div
-              className="w-5 h-5  border  hover:bg-gray-400 cursor-pointer rounded-full flex justify-center items-center "
-              onClick={() => showAlert()}
-            >
-              <AiFillDelete />
-            </div>
-          </div>
-          <div className="w-1/2 flex justify-end">
-            <div className="w-5 h-5 cursor-pointer flex justify-center items-center">
-              {hover && <BsArrowRightCircle />}
-            </div>
-          </div>
+          {props.section.SECTION_CODE}
+          
         </li>
       </ul>
     </li>

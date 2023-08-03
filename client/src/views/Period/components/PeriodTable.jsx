@@ -4,37 +4,75 @@ import "jspdf-autotable";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 import { useEffect, useState } from "react";
 
-
-
 const PeriodTable = () => {
   const [state, setState] = useState({
     periods: [],
     selectedYear: "",
-    notAwaiting:false,
-    page:0,
-    data:[],
-    sections:[
-      {code:"is-309",className: "Ingenieria del software",section: "1700"},
-      {code:"is-309",className: "Ingenieria del software",section: "1800"},
-      {code:"is-309",className: "Ingenieria del software",section: "1900"},
-    ]
+    notAwaiting: false,
+    charginPeriods: false,
+    page: 0,
+    data: [],
+    sections: [],
+    clicked: false,
   });
+
+  const [selectedPeriod, setSelectedPeriod] = useState("");
+
+  const handlePe = (value) => {
+    console.log("Valor seleccionado",selectedPeriod)
+    httpRequests()
+      ["get"](
+        `http://localhost:3000/registro/section/getSectionsPeriod/${value}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      )
+      .then((res) => {
+        setState({
+          ...state,
+          sections: res.data.sections,
+        });
+      });
+  };
+
   const handlePeriodChange = (event) => {
     const { value, name } = event.target;
-    setState({ ...state, [name]: value });
-
-
-
+    console.log(value,name);
+    setSelectedPeriod(value);
+    handlePe(value);
   };
 
   useEffect(() => {
     const handlePetitions = async () => {
-      setState({...state,notAwaiting:false});
-      const periods = await httpRequests()["get"](
-        "http://localhost:3000/registro/planification/getPeriods",
-        {}
-        );
-      setState({ ...state,periods: periods.data,notAwaiting:true});
+      setState({ ...state });
+      httpRequests()
+        ["get"]("http://localhost:3000/registro/periodAcademic/allperiods", {})
+
+        .then((res) => {
+          setState({...state,periods:res.data});
+          setSelectedPeriod()
+          httpRequests(res.data[0].ID_PERIOD)
+            ["get"](
+              `http://localhost:3000/registro/section/getSectionsPeriod/${selectedPeriod}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            )
+            .then((res2) => {
+              console.log("Valores",res,res2);
+              console.log("Valores",selectedPeriod);
+              setState({
+                ...state,
+                sections: res2.data.sections
+              });
+            });
+
+         
+
+          console.log("Periodos", res);
+        });
     };
     handlePetitions();
   }, []);
@@ -44,11 +82,13 @@ const PeriodTable = () => {
 
     const tableColumn = ["Codigo", "Clase", "Seccion"];
     const tableRows = [];
+    console.log("Secciones:", state.sections["0"]);
     state.sections.forEach((section) => {
+      console.log(section);
       const sectionData = [
-        section.code,
-        section.className,
-        section.section
+        section.course.CODE_COURSE,
+        section.course.NAME,
+        section.SECTION_CODE,
       ];
       tableRows.push(sectionData);
     });
@@ -62,11 +102,13 @@ const PeriodTable = () => {
 
   const generateCSV = () => {
     const header = ["Codigo", "Clase", "Seccion"];
-    const data = state.sections.map((row) => `${row.code},${row.className},${row.section}\n`);
-    const csvContent =`data:text/csv;charset=utf-8,${header[0]},${header[1]},${header[2]}\n
+    const data = state.sections.map(
+      (row) =>
+        `${row.course.CODE_COURSE},${row.course.NAME},${row.SECTION_CODE}\n`
+    );
+    const csvContent = `data:text/csv;charset=utf-8,${header[0]},${header[1]},${header[2]}\n
         ${data}
-      `
-              
+      `;
 
     const downloadLink = document.createElement("a");
     downloadLink.href = encodeURI(csvContent);
@@ -82,15 +124,18 @@ const PeriodTable = () => {
     <div>
       <div className="flex min-w-full justify-end mb-4 items-center align-middle">
         <select
-          name="selectedYear"
-          value={state.selectedYear}
+          name="selectedPeriod"
+          value={selectedPeriod}
+          
           id="years"
           onChange={handlePeriodChange}
           className="w-25 h-9 rounded-md w"
         >
-
-          {state.notAwaiting && state.periods.map(p=><option key={p.ID_PERIOD} value={p.ID_PERIOD}>{p.PERIOD_NAME}</option>) || ""}
-          
+          {state.periods.map((p) => (
+            <option  key={p.ID_PERIOD} value={p.ID_PERIOD}>
+              {p.PERIOD_NAME}
+            </option>
+          ))}
         </select>
       </div>
       <div className="m-3 flex justify-around">
@@ -116,9 +161,9 @@ const PeriodTable = () => {
           </ul>
         </li>
         <div className="border border-gray-200 rounded-lg p-0">
-          <PeriodRow state={"Finalizado"} periodName={"I Periodo 2023"} />
-          <PeriodRow state={"En curso"} periodName={"II Periodo 2023"} />
-          <PeriodRow state={"-"} periodName={"III Periodo 2023"} />
+          {state.sections.map((section, index) => (
+            <PeriodRow key={index} section={section} />
+          ))}
         </div>
       </ul>
     </div>
