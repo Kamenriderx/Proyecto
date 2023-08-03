@@ -25,10 +25,7 @@ const Principal = () => {
         <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-40">
           <div className="text-center w-1/2 mx-auto">
             <p className="text-white text-4xl font-black">
-              Bienvenido al Registro de la{" "}
-              <span className="text-yellow-500 text-4xl font-black">
-                Universidad Nacional Autónoma de Honduras.
-              </span>
+              Bienvenido al Registro de la Universidad Nacional Autónoma de Honduras.
             </p>
             <div className="mt-10 grid grid-cols-3 text-center">
               <div className="">
@@ -55,7 +52,7 @@ const Principal = () => {
                     <BsFillPhoneFill className="cursor-pointer" size={15} />
                   </p>
                   <p className="text-white font-semibold">
-                    Telefonos : 2216-3043, 2216-3044, 2216-3045, 2216-3046
+                    Teléfonos : 2216-3043, 2216-3044, 2216-3045, 2216-3046
                   </p>
                 </div>
               </div>
