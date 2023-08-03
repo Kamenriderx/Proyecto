@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AlertTwo from "../../components/AlertTwo";
 
 const RequestRepo = () => {
   const [showModal, setShowModal] = useState(false);
   const [JUSTIFY, setJUSTIFY] = useState("");
   const [pago, setPago] = useState([]);
   const [check, setCheck] = useState(false);
+  const [alerta, setAlerta] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +44,10 @@ const RequestRepo = () => {
       setCheck(!check);
       setJUSTIFY("");
     } catch (error) {
-      console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
     }
   };
 
@@ -84,9 +89,11 @@ const RequestRepo = () => {
   };
 
   console.log("SOLICITUDES PAGO MATRICULA", pago);
+  const { message } = alerta;
 
   return (
     <div className="container mx-auto mt-10">
+      {message && <AlertTwo alerta={alerta} />}
       <Modal Visible={showModal} Close={handleClose}>
         <form
           onSubmit={handleSubmit}
