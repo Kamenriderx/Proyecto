@@ -10,6 +10,7 @@ const User = require('../models/user');
 //! Controlador para el inicio de sesión
 exports.loginAccess = async (req, res) => {
   const { identifier, password } = req.body;
+  
   try {
     // Busca el usuario por su EMAIL o Numero de Cuenta
     const user = await User.findOne({
@@ -28,12 +29,14 @@ exports.loginAccess = async (req, res) => {
       // Verifica la contraseña
       
       const passwordMatch = await bcrypt.compare(password, user.USER_PASSWORD);
+      
       if (!passwordMatch) {
         return res.status(401).json({ error: 'Contraseña incorrecta. Vuelve a intentarlo o selecciona "¿Restablecer contraseña?" para cambiarla.' });
       }
 
     // Obtiene el rol del usuario
     const role = await Role.findByPk(user.ID_ROLE);
+    
 
      
     // Verifica la ruta a la que se está accediendo
@@ -61,7 +64,7 @@ exports.loginAccess = async (req, res) => {
           break;
         case 'Coordinador':
           if (route === '/students' || route === '/admins') {
-
+           
             return res.status(401).json({ error: 'Acceso no permitido' });
           }
           break;

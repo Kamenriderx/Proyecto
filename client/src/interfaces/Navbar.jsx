@@ -31,6 +31,7 @@ import RequestCoordinatorCenter from "../views/Solicitudes/RequestCoordinatorCen
 import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
 import Planificacion from "../views/Planificacion/Planificacion";
+import Period from "../views/Period/Period";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -76,9 +77,40 @@ const ContentNavbar = () => {
                 {state?.user?.ID_ROLE === 4 && (
                   <>
                     <li>
-                      <Link to="/solicitudes-coordinador-centro">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Solicitudes Centro
+                      <Search />
+                    </li>
+                    <li>
+                      <Solicitud />
+                    </li>
+                    <li>
+                      <Link to="/solicitudes-coordinador-centro"/>
+                    </li>
+                    <li>
+                      <Link to="/secciones">
+                        <button
+                          onClick={handleSession}
+                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
+                        >
+                          Cerrar sesion
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/">
+                        <button
+                          onClick={handleSession}
+                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
+                        >
+                          Cerrar sesión
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/ps">s
+                        <button
+                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
+                        >
+                          Periodos 
                         </button>
                       </Link>
                     </li>
@@ -104,6 +136,13 @@ const ContentNavbar = () => {
                       <Link to="/Docentes">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Docentes
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Periodos">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Periodo
                         </button>
                       </Link>
                     </li>
@@ -186,7 +225,9 @@ const ContentNavbar = () => {
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
+          <Route exact path="/periodos" element={<Period />} />
           <Route exact path="/proffessor" />
           <Route
             exact
