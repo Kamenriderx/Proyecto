@@ -74,49 +74,19 @@ const ContentNavbar = () => {
               id="navbar-cta"
             >
               <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
-                <li>
-                  <Link to="/Periodos">
-                    <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                      Periodo
-                    </button>
-                  </Link>
-                </li>
                 {state?.user?.ID_ROLE === 4 && (
                   <>
                     <li>
-                      <Search />
-                    </li>
-                    <li>
-                      <Solicitud />
-                    </li>
-                    <li>
-                      <Link to="/solicitudes-coordinador-centro" />
-                    </li>
-                    <li>
-                      <Link to="/secciones">
-                        <button
-                          onClick={handleSession}
-                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
-                          Cerrar sesion
+                      <Link to="/solicitudes-coordinador-centro">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Centro
                         </button>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/">
-                        <button
-                          onClick={handleSession}
-                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
-                          Cerrar sesión
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/ps">
-                        s
-                        <button className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
-                          Periodos
+                      <Link to="/Periodos">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Secciones
                         </button>
                       </Link>
                     </li>
@@ -142,13 +112,6 @@ const ContentNavbar = () => {
                       <Link to="/Docentes">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Docentes
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/Periodos">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Periodo
                         </button>
                       </Link>
                     </li>
