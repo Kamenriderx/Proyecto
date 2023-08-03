@@ -65,11 +65,11 @@ const TableStudents = ({ body }) => {
     },
     {
       accessorKey: "DNI",
-      header: () => <span>CARRERA</span>      
+      header: () => <span>DNI</span>      
     },
     {
       accessorKey: "CARRER",
-      header: () => <span>DNI</span>
+      header: () => <span>CARRERA</span>
     },
     {
       accessorKey: "EMAIL",
