@@ -19,7 +19,7 @@ const createSection = async(req,res)=>{
             return
             
         }
-        if (section && (section.DAYS.includes(body.DAYS) || body.DAYS.includes(section.DAYS))) {
+        if (section  && (section.DAYS.includes(body.DAYS) || body.DAYS.includes(section.DAYS))) {
             res.status(400).json({messagge:"EL AULA ESTA OCUPADA EN ESE HORARIO"});
             return    
         }
