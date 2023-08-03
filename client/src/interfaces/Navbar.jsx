@@ -9,33 +9,50 @@ import RequestPasswordForm from "../views/Auth/components/RequestPasswordForm";
 import Docentes from "../views/RegisterDocente/Docentes";
 import ReadCSV from "../components/ReadCSV";
 import Principal from "../views/Principal";
+import ViewStudent from "../views/ViewStudent/ViewStudent";
+import ViewTeacher from "../views/ViewTeacher/ViewTeacher";
 import useStudents from "../utils/hooks/useStudents";
 import Search from "./components/Search";
 import Solicitud from "./components/Solicitud";
 import ResultsSearch from "./ResultsSearch";
+import ListTeachers from "./ListTeachers";
+import ConfirTeachers from "../views/Auth/components/ConfirTeachers";
+import ViewChat from "../views/ViewChat/ViewChat";
+import ListContacts from "../views/DeleteContacts/components/ListContacts";
+import AddSections from "../views/AddSections/AddSections";
+import Requests from "../views/Solicitudes/Requests";
+import CambioCarrera from "../views/Solicitudes/components/CambioCarrera";
+import RequestStudent from "../views/Solicitudes/RequestStudent";
+import RequestCoordinator from "../views/Solicitudes/RequestCoordinator";
+import RequestRepo from "../views/Solicitudes/RequestRepo";
+import RequestCenter from "../views/Solicitudes/RequestCenter";
+import DictamentCarrera from "../views/Solicitudes/DictamentCarrera";
+import RequestCoordinatorCenter from "../views/Solicitudes/RequestCoordinatorCenter";
+import DictamenCenter from "../views/Solicitudes/DictamenCenter";
+import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
+import Planificacion from "../views/Planificacion/Planificacion";
 /* import InitialSession from "./components/InitialSession"; */
-
 
 const ContentNavbar = () => {
   const { state, dispatch } = useContext(StoreContext);
 
-  const {students} = useStudents()
+  const { students } = useStudents();
 
   const handleSession = () => {
     dispatch({ type: "USER", user: {} });
     dispatch({ type: "TOKEN", token: "" });
     dispatch({ type: "LOGOUT" });
-    
+    console.log(state.socket);
+    state.socket?.close();
   };
 
   const Navbar = () => {
     const { state, dispatch } = useContext(StoreContext);
-    console.log('EstudiantesData',students);
-    console.log('Usuario Conectado',state);
+
     return (
       <>
-        <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
-          <div className="max-w-screen-xl flex flex-wrap items-center justify-normal mx-auto p-4">
+        <nav className="bg-gradient-to-r from-sky-600 via-sky-400 to-sky-600 border-gray-200 fixed top-0 w-full z-50">
+          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div className="flex items-center">
               <Link to="/">
                 <img
@@ -45,102 +62,94 @@ const ContentNavbar = () => {
                 />
               </Link>
             </div>
-            <div className="flex">
-              <button
-                data-collapse-toggle="navbar-cta"
-                type="button"
-                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
-                aria-controls="navbar-cta"
-                aria-expanded="false"
-              >
-                <svg
-                  className="w-6 h-6"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </button>
+            <div className="flex items-center justify-center">
+              {" "}
+              {state?.user?.ID_ROLE === 1 && (
+                <Search className="text-4xl px-6 py-3 rounded-lg border border-gray-300" />
+              )}{" "}
             </div>
             <div
-              className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+              className="items-center justify-end w-full md:w-auto md:order-1 md:flex md:items-center"
               id="navbar-cta"
             >
-              <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
-                {!state.login ? (
-                  <li>
-                    <Link to="/login">
-                      <button className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
-                        Inicio de sesión
-                      </button>
-                    </Link>
-                  </li>
-                ) : (
+              <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
+                {state?.user?.ID_ROLE === 4 && (
                   <>
                     <li>
-                      <Link to="/">
-                        <button
-                          onClick={handleSession}
-                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
-                          Cerrar sesion
+                      <Link to="/solicitudes-coordinador-centro">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Centro
                         </button>
                       </Link>
                     </li>
                     <li>
-                      <Link to="perfil">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
-                          Perfil
+                      <Link to="/solicitudes-coordinador">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Carrera
                         </button>
                       </Link>
                     </li>
                   </>
                 )}
-                {
-                  state?.user?.ID_ROLE ===5 &&(<>
+                {state?.user?.ID_ROLE === 5 && (
+                  <>
                     <li>
                       <Link to="/Estudiantes">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Estudiantes
                         </button>
                       </Link>
                     </li>
                     <li>
                       <Link to="/Docentes">
-                        <button
-                          className="block p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Docentes
                         </button>
                       </Link>
                     </li>
-                  
-                  </>)
-                }
-                
-                {
-                  state?.user?.ID_ROLE ===1 &&(<>
                     <li>
-                     <Search/>
+                      <Link to="/planificacion">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Planificacion
+                        </button>
+                      </Link>
                     </li>
-                    <li>
-                      <Solicitud/>
-                    </li >
-                    {/* <li >
-                    <InitialSession/>
-                    </li> */}
-                  </>)
-                }
+                  </>
+                )}
+                {!state.login ? (
+                  <li>
+                    <Link to="/login">
+                      <button className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3">
+                        Inicio de sesión
+                      </button>
+                    </Link>
+                  </li>
+                ) : (
+                  <>
+                    <div className="md:flex md:items-center flex-grow gap-x-5">
+                      {" "}
+                      {/* Moved the button to the right end */}
+                      {state?.user?.ID_ROLE === 1 && (
+                        <li>
+                          <Solicitud />
+                        </li>
+                      )}
+                      <Link to="/perfil">
+                        <button className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3">
+                          Perfil
+                        </button>
+                      </Link>
+                      <Link to="/">
+                        <button
+                          onClick={handleSession}
+                          className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3"
+                        >
+                          Cerrar sesion
+                        </button>
+                      </Link>
+                    </div>
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -149,24 +158,21 @@ const ContentNavbar = () => {
     );
   };
 
-
   const Profile = () => {
-    const { state, dispatch } = useContext(StoreContext);
-    console.log(state);
+    const { state } = useContext(StoreContext);
+
     return (
-      <div className="bg-gray-100 text-2xl font-bold p-4">
-        <ul>
-          <li>
-            Nombre {state?.user?.NAME}
-          </li>
-          <li>
-            Correo {state?.user?.EMAIL}
-          </li>
-          <li>
-            Centro {state?.user?.CENTER}
-          </li>
-        </ul>
-      </div>
+      <>
+        {state?.user?.ID_ROLE === 1 ? (
+          <ViewStudent />
+        ) : state?.user?.ID_ROLE === 2 ? (
+          <ViewTeacher />
+        ) : state?.user?.ID_ROLE === 3 ? (
+          <ViewTeacher />
+        ) : (
+          <h2>Admin</h2>
+        )}
+      </>
     );
   };
 
@@ -178,33 +184,54 @@ const ContentNavbar = () => {
           {/* rutas publicas */}
           <Route path="*" element={<NotFound />} />
           <Route exact path="/" element={<Principal />} />
+          <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/search" element={<ResultsSearch />} />
+          <Route exact path="/proffessor" />
           <Route
             exact
-            path="/proffessor"
-       
+            path="/iniciar/RecuperarContrasena"
+            element={<RequestPasswordForm />}
           />
-          <Route exact path="/iniciar/RecuperarContrasena" element={<RequestPasswordForm/>} />
-          <Route
-            exact
-            path="/Estudiantes"
-            element={<ReadCSV />}
-          />
-
+          <Route exact path="/Estudiantes" element={<ReadCSV />} />
           {/* rutas privadas */}
+          <Route exact path="/perfil" element={<Profile />} />
+          <Route exact path="/list-teachers" element={<ListTeachers />} />
+          <Route exact path="/chat" element={<ViewChat />} />
+          <Route exact path="/contactos" element={<ListContacts />} />
+          <Route exact path="/addSections" element={<AddSections />} />
+          <Route exact path="/solicitudes" element={<Requests />} />
+          <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
             exact
-            path="/perfil"
-            element={<Profile/>}
+            path="/solicitudes-estudiantes"
+            element={<RequestStudent />}
           />
-
           <Route
             exact
-            path="/Docentes"
-            element={<Docentes/>}
+            path="/solicitudes-estudiantescenterenter"
+            element={<RequesStudentCenter />}
           />
-
-      <Route exact path="/resultados" element={<ResultsSearch/>}/>
+          <Route
+            exact
+            path="/solicitudes-coordinador"
+            element={<RequestCoordinator />}
+          />
+          <Route
+            exact
+            path="/dictamen-carrera"
+            element={<DictamentCarrera />}
+          />
+          <Route
+            exact
+            path="/solicitudes-coordinador-centro"
+            element={<RequestCoordinatorCenter />}
+          />
+          <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
+          <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
+          <Route exact path="/pago-reposicion" element={<RequestRepo />} />
+          <Route exact path="/planificacion" element={<Planificacion />} />
+          <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -4,8 +4,16 @@ const http = require('http').createServer(app);
 const configCors = require('./config/cors');
 const path = require('path');
 const bodyParser = require('body-parser');
-const sendMail = require('./utils/sendMail');
-const generatePDF = require('./utils/generatePDF');
+const connection = require("./config/database");
+const io = require('socket.io')(http, {
+  cors: {
+    origin: '*', // Reemplaza con el origen permitido para tu cliente React
+    methods: ['GET', 'POST','PUT','DELETE']
+  },
+  allowEIO3:true
+});
+const handlerSockets = require('./app/connection');
+handlerSockets(io);
 
 
 
@@ -35,5 +43,11 @@ app.use('/registro', require('./app/routes'));
 //Levantando servidor
 http.listen(3000, () => {
   console.log('API lista en el puerto ', 3000)
+  connection.query("UPDATE user_ SET ONLINE_STATUS = :NEW_STATE WHERE ONLINE_STATUS = :OLD_STATE",{
+    replacements:{
+      NEW_STATE: "offline",
+      OLD_STATE:"online"
+    }
+  })
 
 });

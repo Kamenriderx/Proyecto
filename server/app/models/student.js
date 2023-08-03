@@ -39,12 +39,7 @@ const Student = connection.define(
     }
 );
 
-User.hasMany(Student,{
-    foreignKey:"ID_USER"
-});
-Student.belongsTo(User,{
-    foreignKey:"ID_USER"
-})
+
 
 Student.inserStudent = async function(student){
     return await connection.query('CALL sp_createstudent(:ROLE, :NAME, :DNI, :CENTER, :EMAIL, :CAREER,:INSTITUTIONAL_EMAIL,:USER_PASSWORD)', {
@@ -60,7 +55,24 @@ Student.inserStudent = async function(student){
         }
     });
 }
+Student.updatePhoto = async function(id,url,isProfile=1){
+    
+    connection.query("INSERT INTO multimedia(ID_USER,URL,IS_PROFILE) VALUES(:ID_USER,:URL,:IS_PROFILE)",{
+        replacements: {
+            ID_USER: id,
+            URL:url,
+            IS_PROFILE:isProfile
 
+        }
+    })
+
+}
+
+
+Student.updateProfile = async function(id,URL){
+
+    await Student.updatePhoto(id,URL);
+}
 
 
 

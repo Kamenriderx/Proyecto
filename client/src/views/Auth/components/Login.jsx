@@ -45,7 +45,7 @@ const LoginForm = () => {
       className:""
     },
     students:{
-      className:"outline-none ring-2 ring-purple-600 bg-purple-600  ring-offset-2  text-white"
+      className:"outline-none ring-2 ring-sky-500 bg-sky-500  ring-offset-2  text-white"
     }
   });
 
@@ -60,7 +60,6 @@ const LoginForm = () => {
       [name]: value.trim(),
     });
   };
-  console.log(`http://localhost:3000/registro/login/${login.loginType}`);
   const handleSelect = (e)=>{
     e.preventDefault();
     const { value } = e.target;
@@ -75,7 +74,7 @@ const LoginForm = () => {
         className:""
       }
     }
-    defaultState[value].className = "outline-none ring-2 ring-purple-600 ring-offset-2 bg-purple-600 text-white" 
+    defaultState[value].className = "outline-none ring-2 ring-sky-500 ring-offset-2 bg-sky-500 text-white" 
     setClassName(
       defaultState
     );
@@ -105,7 +104,6 @@ const LoginForm = () => {
     } */
 
     const res = await httpRequests()["post"](`http://localhost:3000/registro/login/${login.loginType}`, { body: { ...login } });
-
     if (res.status === 200) {
 
       const token = res.data.token;
@@ -126,25 +124,25 @@ const LoginForm = () => {
         // todo Cambiar esto a una barra 
       } 
       <div style={style.buttonContainer}>
-        <button style={style.button} className={` hover:text-white hover:bg-purple-600 hover:border-transparent ${className.professors.className}`} name="loginType" value="professors" onClick={handleSelect}>
+        <button style={style.button} className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.professors.className}`} name="loginType" value="professors" onClick={handleSelect}>
           Profesores
         </button>
-        <button style={style.button} className={` hover:text-white hover:bg-purple-600 hover:border-transparent ${className.students.className}`} name="loginType" value="students" onClick={handleSelect}>
+        <button style={style.button} className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.students.className}`} name="loginType" value="students" onClick={handleSelect}>
           Estudiantes
         </button>
-        <button style={style.button} className={` hover:text-white hover:bg-purple-600 hover:border-transparent ${className.admins.className}`} name="loginType" value="admins" onClick={handleSelect}>
+        <button style={style.button} className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.admins.className}`} name="loginType" value="admins" onClick={handleSelect}>
           Administracion
         </button>
       </div>
 
 
       <div className="flex flex-row justify-center items-center mb-3">
-        <GiLynxHead style={{ width: "40px", height: "40px" }} />
+        {/*<GiLynxHead style={{ width: "40px", height: "40px" }} />*/ }
         <h2
           className="text-gray-800 text-xl font-bold text-center flex items-center"
           htmlFor="email"
         >
-          Portal East High
+          Portal UNAH
         </h2>
       </div>
 
@@ -155,7 +153,7 @@ const LoginForm = () => {
         Ingresar
       </label>
       <input
-        className="w-3/5 mt-3 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+        className="mt-3 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-2/5"
         id="email"
         name="identifier"
         placeholder="Numero de cuenta"
@@ -163,7 +161,7 @@ const LoginForm = () => {
       />
 
       <input
-        className="mt-3 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-3/5"
+        className="mt-3 shadow  border border-none focus:ring-0 rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-2/5"
         id="password"
         name="password"
         type="password"
@@ -172,7 +170,7 @@ const LoginForm = () => {
       />
 
       <button
-        className="px-4 py-1 w-3/5 text-sm text-purple-600 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none    mt-5 "
+        className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5 "
         onClick={handleSubmit}
       >
         Iniciar sesion

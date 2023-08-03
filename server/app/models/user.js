@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const connection = require("../../config/database");
 
+
 const USER = connection.define(
   "USER_",
   {
@@ -42,9 +43,7 @@ const USER = connection.define(
     },
     CENTER: {
       type: DataTypes.STRING,
-      validate: {
-        len: [0, 20], 
-      },
+      
     },
     EMAIL: {
       type: DataTypes.STRING,
@@ -55,8 +54,12 @@ const USER = connection.define(
     VERIFICATION_CODE: {
       type: DataTypes.STRING,
       validate: {
-        len: [0, 10], 
+        len: [0, 100], 
       },
+    },
+    ONLINE_STATUS: {
+      type: DataTypes.STRING,
+
     },
   },
   {
@@ -64,6 +67,17 @@ const USER = connection.define(
     timestamps: false,
   }
 );
+
+USER.updateEmail =async function(id,EMAIL){
+  connection.query("UPDATE user_ SET EMAIL = :EMAIL WHERE ID_USER= :ID_USER",{
+      replacements:{
+          EMAIL:EMAIL,
+          ID_USER:id
+      }
+  })
+}
+
+USER.connection = connection;
 
 USER.sync({ force: false })
   .then(() => {
@@ -73,4 +87,6 @@ USER.sync({ force: false })
     console.error("Error al sincronizar tabla de USER:", error);
   });
 
+
+  
 module.exports = USER;

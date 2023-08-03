@@ -38,4 +38,12 @@ const ContactRequest = connection.define('ContactRequest', {
 ContactRequest.belongsTo(User, { foreignKey: 'SENDER_ID', as: 'sender' });
 ContactRequest.belongsTo(User, { foreignKey: 'RECIPIENT_ID', as: 'recipient' });
 
+ContactRequest.sync({ force: false })
+  .then(() => {
+    console.log("Tabla de peticion de contacto sincronizada");
+  })
+  .catch((error) => {
+    console.error("Error al sincronizar tabla de peticion de contacto:", error);
+  });
+
 module.exports = ContactRequest;
