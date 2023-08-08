@@ -78,9 +78,6 @@ const AddSections = () => {
     fetchDocentes();
   }, []);
 
-  console.log("Todos los docentes de Sistemas :", docentes);
-  console.log("Estado de Sesion", state);
-
   useEffect(() => {
     const getListClass = async () => {
       try {
@@ -131,9 +128,6 @@ const AddSections = () => {
     getListAula();
   }, []);
 
-  console.log("Lista de Cursos", listCourses);
-  console.log("Listado de Aulas", listAulas);
-
   const handleEdit = (section) => {
     setShowModal(true);
     setSelectedSection(section);
@@ -146,7 +140,7 @@ const AddSections = () => {
     setSPACE_AVAILABLE(section.SPACE_AVAILABLE);
     setDAYS(section.DAYS);
     setDAYS_COUNT(section.course.UV);
-    setID_PERIOD(section.period.PERIOD_NAME);
+    setID_PERIOD(section.period.ID_PERIOD);
   };
 
   console.log("SELECTED SECTION", selectedSection);

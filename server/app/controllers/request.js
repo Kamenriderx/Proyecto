@@ -135,7 +135,6 @@ const requestPaymentReplacement = async (req, res)=>{
             where:{
                 ID_STUDENT: student.ID_STUDENT,
                 [Op.or]:[{STATE:"Pendiente"},{STATE:"Aceptada"}],
-                ID_PERIOD:body.ID_PERIOD,
                 TYPE:"PAGO_REPO"
             }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
             }, {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]}]

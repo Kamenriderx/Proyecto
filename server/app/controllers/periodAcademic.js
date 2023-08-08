@@ -3,12 +3,120 @@ const { Op } = require("sequelize");
 const moment = require("moment");
 const connection = require("../../config/database");
 const DetailsPeriod = require("../models/detailsPeriod");
+const generateImage = require("../../utils/generateImage");
+
+//! Controlador para creacion de calendario academico
+const getAcademicPeriodDetails = async (id) => {
+  try {
+    // Obtiene el período académico por ID
+    const detailsPeriod = await DetailsPeriod.findOne({where:{ID_PERIOD:id}});
+    console.log(detailsPeriod);
+    if (!detailsPeriod) {
+      return { error: 'No se encontró información para el período académico especificado' };
+    }
+
+    const { REGISTRATION_START_DATE, REGISTRATION_END_DATE } = detailsPeriod;
+
+    // Crea una lista para almacenar la información de cada día del período
+    const calendar = [];
+    
+    // Convierte las fechas en objetos Date
+    const startDate = new Date(REGISTRATION_START_DATE);
+    const finishDate = new Date(REGISTRATION_END_DATE);
+
+    // Itera sobre el rango de fechas y la información se agrega a cada día "calendar"
+    let currentDate = new Date(startDate);
+    let percentageIndex = 0;
+
+    while (currentDate <= finishDate) {
+      const dateLabel = formatDate(currentDate); 
+
+      // Asigna un texto fijo
+      let students = "PRIMER INGRESO";
+      switch (percentageIndex) {
+        case 0:
+          students = "EXCELENCIA ACADEMICA (índice global de 80% a 100% y que además tengan 10 o más asignaturas aprobadas en su historial académico / REPRESENTANTES DE LA UNAH EN ASPECTOS ARTÍSTICOS, CULTURALES Y DEPORTIVOS / CONDICIONADOS /  PROSEENE / POR EGRESAR (índice global de 80% a 100% y su índice de periodo es de 0% a 100%) / PRIMER INGRESO PROVENIENTES DE OTRAS UNIVERSIDADES Y GRADUADOS DE LA UNAH";
+          break;
+        case 1: 
+          students = "POR EGRESAR (índice global de 0% a 79% y su índice de periodo es de 0% a 100%)";
+          break;
+        case 2:
+          students = "91% a 100%";
+          break;
+        case 3:
+          students = "80% a 90%";
+          break;
+        case 4:
+          students = "70% a 79%";
+          break;
+        case 5:
+          students = "0% a 69%";
+          break;
+        default:
+          break;
+      }
+
+      calendar.push({
+        date: dateLabel,
+        hour: "9:00 a.m A 10:59 p.m.", 
+        students: students,
+      });
+
+      // Incrementa el índice de porcentaje 
+      percentageIndex = (percentageIndex + 1) % 6;
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // Obtiene información del período académico
+    const academicPeriod = await PeriodAcademic.findOne({where:{ID_PERIOD:id}});
+    console.log("Periodo academico: ",academicPeriod, "ID PERIODOOOOOOOOOOOOO: ",id);
+    if (!academicPeriod) {
+      return{ error: 'No se encontró información para el período académico especificado' };
+    }
+
+    // Obtiene el valor de PERIOD_NAME 
+    const { PERIOD_NAME } = academicPeriod;
+
+    // Obtiene información del período anterior
+    const previousPeriod = await PeriodAcademic.findOne({
+      where: {
+        FINISH_DATE: {
+          [Op.lt]: startDate,
+        },
+      },
+      order: [['FINISH_DATE', 'DESC']],
+      attributes: ['PERIOD_NAME'],
+    });
+
+    // Crea el objeto final con la información recopilada
+    const academicPeriodDetails = {
+      pac: PERIOD_NAME,
+      calendar: calendar,
+      previousPac: previousPeriod ? previousPeriod.PERIOD_NAME : null,
+      initDate: formatDate(startDate),
+      finalDate: formatDate(finishDate),
+      aditionInterval: formatDate(startDate) + " al " + formatDate(finishDate), 
+    };
+
+    return academicPeriodDetails;
+  } catch (error) {
+    console.error('Error al obtener detalles del período académico:', error);
+    return { error: 'Ocurrió un error al obtener detalles del período académico' };
+  }
+};
+
+// Formatea la fecha
+const formatDate = (date) => {
+  const options = { weekday: 'long', day: 'numeric', month: 'long' };
+  return date.toLocaleDateString('es-ES', options);
+};
+
 
 //! Controlador para crear un período académico
 exports.createPeriodAcademic = async (req, res) => {
   try {
     const { startDate, finishDate } = req.body;
-    console.log({startDate});
 
     // Calcula el año a partir de la fecha de inicio
     const year = new Date(startDate).getFullYear();
@@ -26,14 +134,13 @@ exports.createPeriodAcademic = async (req, res) => {
     // Validación 1: Verifica que el período esté dentro de los rangos de meses especificados
     const startMonth = new Date(startDate).getMonth() + 1;
     const endMonth = new Date(finishDate).getMonth() + 1;
-    console.log({startMonth},{endMonth});
 
     const periods = ["I Periodo", "II Periodo", "III Periodo"];
     let periodName = "";
 
-    if ([3,4].includes(startMonth) && [1, 2,3, 4].includes(endMonth)) {
+    if ([1, 2, 4].includes(startMonth) && [1, 2, 4].includes(endMonth)) {
       periodName = `${periods[0]} ${year}`;
-    } else if (1, 2, 
+    } else if (
       [5, 6, 7, 8].includes(startMonth) &&
       [5, 6, 7, 8].includes(endMonth)
     ) {
@@ -52,10 +159,9 @@ exports.createPeriodAcademic = async (req, res) => {
     // Validación 2: Verifica que la duración del período esté dentro del rango especificado
     const startDateObj = new Date(startDate);
     const finishDateObj = new Date(finishDate);
-    console.log(finishDate);
     const diffInMonths =
       (finishDateObj - startDateObj) / (1000 * 60 * 60 * 24 * 30);
-    console.log(diffInMonths)
+
     if (diffInMonths < 3.5 || diffInMonths > 4) {
       throw new Error(
         "La duración del período no está dentro del rango válido (entre 3.5 y 4 meses)."
@@ -149,13 +255,16 @@ exports.createPeriodAcademic = async (req, res) => {
         .toDate(),
       NOTES_UPLOAD_REGISTRATION_END_DATE: moment
         .utc(startDate)
-        .add(91, "days")
+        .add(89, "days")
         .hour(23)
         .toDate(),
     };
 
-    await DetailsPeriod.create(detailsPeriodData);
-
+    DetailsPeriod.create(detailsPeriodData).then(res=>{
+      getAcademicPeriodDetails(newPeriodAcademic.ID_PERIOD).then(res2=>{
+        generateImage(res2,newPeriodAcademic.ID_PERIOD); 
+      })
+    });
     return res.status(201).json({
       success: true,
       message: "Período académico creado exitosamente.",
@@ -169,6 +278,8 @@ exports.createPeriodAcademic = async (req, res) => {
     });
   }
 };
+//! Controlador para crear un período académico
+
 
 //! Controlador pra eliminar periodos
 exports.deletePeriodAcademic = async (req, res) => {
@@ -407,110 +518,7 @@ exports.getYears = (req, res) => {
   res.json({ years });
 };
 
-//! Controlador para creacion de calendario academico
-exports.getAcademicPeriodDetails = async (req, res) => {
-  try {
-    // Obtiene el período académico por ID
-    const detailsPeriod = await DetailsPeriod.findByPk(req.params.id);
 
-    if (!detailsPeriod) {
-      return res.status(404).json({ error: 'No se encontró información para el período académico especificado' });
-    }
-
-    const { REGISTRATION_START_DATE, REGISTRATION_END_DATE } = detailsPeriod;
-
-    // Crea una lista para almacenar la información de cada día del período
-    const calendar = [];
-    
-    // Convierte las fechas en objetos Date
-    const startDate = new Date(REGISTRATION_START_DATE);
-    const finishDate = new Date(REGISTRATION_END_DATE);
-
-    // Itera sobre el rango de fechas y la información se agrega a cada día "calendar"
-    let currentDate = new Date(startDate);
-    let percentageIndex = 0;
-
-    while (currentDate <= finishDate) {
-      const dateLabel = formatDate(currentDate); 
-
-      // Asigna un texto fijo
-      let students = "PRIMER INGRESO";
-      switch (percentageIndex) {
-        case 0:
-          students = "EXCELENCIA ACADEMICA (índice global de 80% a 100% y que además tengan 10 o más asignaturas aprobadas en su historial académico / REPRESENTANTES DE LA UNAH EN ASPECTOS ARTÍSTICOS, CULTURALES Y DEPORTIVOS / CONDICIONADOS /  PROSEENE / POR EGRESAR (índice global de 80% a 100% y su índice de periodo es de 0% a 100%) / PRIMER INGRESO PROVENIENTES DE OTRAS UNIVERSIDADES Y GRADUADOS DE LA UNAH";
-          break;
-        case 1: 
-          students = "POR EGRESAR (índice global de 0% a 79% y su índice de periodo es de 0% a 100%)";
-          break;
-        case 2:
-          students = "91% a 100%";
-          break;
-        case 3:
-          students = "80% a 90%";
-          break;
-        case 4:
-          students = "70% a 79%";
-          break;
-        default:
-          students = "0% a 69%";
-          break;
-      }
-
-      calendar.push({
-        date: dateLabel,
-        hour: "9:00 a.m A 10:59 p.m.", 
-        students: students,
-      });
-
-      // Incrementa el índice de porcentaje 
-      percentageIndex = (percentageIndex + 1) % 5;
-
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    // Obtiene información del período académico
-    const academicPeriod = await PeriodAcademic.findByPk(req.params.id);
-
-    if (!academicPeriod) {
-      return res.status(404).json({ error: 'No se encontró información para el período académico especificado' });
-    }
-
-    // Obtiene el valor de PERIOD_NAME 
-    const { PERIOD_NAME } = academicPeriod;
-
-    // Obtiene información del período anterior
-    const previousPeriod = await PeriodAcademic.findOne({
-      where: {
-        FINISH_DATE: {
-          [Op.lt]: startDate,
-        },
-      },
-      order: [['FINISH_DATE', 'DESC']],
-      attributes: ['PERIOD_NAME'],
-    });
-
-    // Crea el objeto final con la información recopilada
-    const academicPeriodDetails = {
-      pac: PERIOD_NAME,
-      calendar: calendar,
-      previousPac: previousPeriod ? previousPeriod.PERIOD_NAME : null,
-      initDate: formatDate(startDate),
-      finalDate: formatDate(finishDate),
-      aditionInterval: formatDate(startDate) + " al " + formatDate(finishDate), 
-    };
-
-    return res.json(academicPeriodDetails);
-  } catch (error) {
-    console.error('Error al obtener detalles del período académico:', error);
-    return res.status(500).json({ error: 'Ocurrió un error al obtener detalles del período académico' });
-  }
-};
-
-// Formatea la fecha
-const formatDate = (date) => {
-  const options = { weekday: 'long', day: 'numeric', month: 'long' };
-  return date.toLocaleDateString('es-ES', options);
-};
 
 //! Controlador que envia periodos por ID
 exports.getPeriodsById = async function (req, res) {
