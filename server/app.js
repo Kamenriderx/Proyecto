@@ -4,6 +4,8 @@ const http = require('http').createServer(app);
 const configCors = require('./config/cors');
 const path = require('path');
 const bodyParser = require('body-parser');
+
+const generateImage = require("./utils/generateImage");
 const connection = require("./config/database");
 const io = require('socket.io')(http, {
   cors: {
@@ -37,7 +39,6 @@ app.use('/images', express.static(imagesPath));
 
 // Rutas 
 app.use('/registro', require('./app/routes'));
-
 
 
 //Levantando servidor

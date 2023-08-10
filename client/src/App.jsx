@@ -1,6 +1,8 @@
 import { StudentProvider } from "../src/context/contextStudents/StudentProvider";
 import ContentNavbar from "./interfaces/Navbar";
 import { StoreProvider } from "./store/ContextExample";
+import Period from "./views/Period/Period";
+import PeriodRow from "./views/Period/components/PeriodRow";
 import ViewChat from "./views/ViewChat/ViewChat";
 import ConversationState from "./views/ViewChat/context/Conversation/ConversationState";
 import MessagesState from "./views/ViewChat/context/Messages/MessagesState";

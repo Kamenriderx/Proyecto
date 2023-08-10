@@ -31,6 +31,7 @@ import RequestCoordinatorCenter from "../views/Solicitudes/RequestCoordinatorCen
 import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
 import Planificacion from "../views/Planificacion/Planificacion";
+import Period from "../views/Period/Period";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -79,6 +80,13 @@ const ContentNavbar = () => {
                       <Link to="/solicitudes-coordinador-centro">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Solicitudes Centro
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Periodos">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Secciones
                         </button>
                       </Link>
                     </li>
@@ -186,7 +194,9 @@ const ContentNavbar = () => {
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
+          <Route exact path="/periodos" element={<Period />} />
           <Route exact path="/proffessor" />
           <Route
             exact

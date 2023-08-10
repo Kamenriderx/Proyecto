@@ -24,6 +24,10 @@ const PeriodAcademic = connection.define('PeriodAcademic', {
     allowNull: false,
     defaultValue: 'Por empezar',
   },
+  CALENDAR_REGISTRATION:{
+    type: DataTypes.TEXT,
+    defaultValue:""
+  }
 }, {
   tableName: 'periodAcademic',
   timestamps: false,

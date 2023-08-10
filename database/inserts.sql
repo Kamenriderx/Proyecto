@@ -36,7 +36,3 @@ VALUES
 ('1', '$2b$10$vvvwQCXvQgmeQqJXPgdKIOLWRHVHeFreUBd0xbjV9cKws4R355LYe', '20230012870', 'Ginny Weasley', '0864-3999-90655', 'cu', 'ginny.weasley@example.com', 'offline'),
 ('1', '$2b$10$vvvwQCXvQgmeQqJXPgdKIOLWRHVHeFreUBd0xbjV9cKws4R355LYe', '20230012871', 'Severus Snape', '0864-3999-90656', 'cu', 'severus.snape@example.com', 'offline');
 
-
-
-
-
