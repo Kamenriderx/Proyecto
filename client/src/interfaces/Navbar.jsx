@@ -32,6 +32,7 @@ import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
 import Planificacion from "../views/Planificacion/Planificacion";
 import Period from "../views/Period/Period";
+import Matricula from "../views/Matricula/Matricula";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -237,6 +238,7 @@ const ContentNavbar = () => {
             path="/solicitudes-coordinador-centro"
             element={<RequestCoordinatorCenter />}
           />
+          <Route exact path="/matricula-jefe" element={<Matricula />} />
           <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
           <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
           <Route exact path="/pago-reposicion" element={<RequestRepo />} />
