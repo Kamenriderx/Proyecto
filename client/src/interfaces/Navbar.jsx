@@ -32,6 +32,8 @@ import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
 import Planificacion from "../views/Planificacion/Planificacion";
 import Period from "../views/Period/Period";
+import Matricula from "../views/Matricula/Matricula";
+import AdicionarClase from "../views/Matricula/AdicionarClase";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -210,6 +212,8 @@ const ContentNavbar = () => {
           <Route exact path="/chat" element={<ViewChat />} />
           <Route exact path="/contactos" element={<ListContacts />} />
           <Route exact path="/addSections" element={<AddSections />} />
+          <Route exact path="/matricula" element={<Matricula />} />
+          <Route exact path="/matricula/adicionar-clase" element={<AdicionarClase />} />
           <Route exact path="/solicitudes" element={<Requests />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route

@@ -71,8 +71,7 @@ const Sidevar = () => {
             </li>
             <li>
               <Link to="/contactos">
-                <a
-                  href="#"
+                <div
                   className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
                 >
@@ -81,7 +80,7 @@ const Sidevar = () => {
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Contactos
                   </span>
-                </a>
+                </div>
               </Link>
             </li>
             <li>
@@ -98,21 +97,24 @@ const Sidevar = () => {
             <li className="text-center">
               <span className="text-gray-600">Registro</span>
             </li>
+
             <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
+              <Link to="/matricula">
+                <div
+                  className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
-              >
-                <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">Matricula</span>
-              </a>
+                >
+                  <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                  <span className="flex-1 ml-3 whitespace-nowrap">
+                    Matricula
+                  </span>
+                </div>
+              </Link>
             </li>
 
             <li>
               <Link to="/solicitudes">
-                <a
-                  href="#"
+                <div
                   className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
                 >
@@ -120,7 +122,7 @@ const Sidevar = () => {
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Solicitudes
                   </span>
-                </a>
+                </div>
               </Link>
             </li>
 
