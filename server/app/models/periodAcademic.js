@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const connection = require('../../config/database'); 
+const connection = require('../../config/database');
 
 const PeriodAcademic = connection.define('PeriodAcademic', {
   ID_PERIOD: {
@@ -24,8 +24,11 @@ const PeriodAcademic = connection.define('PeriodAcademic', {
     allowNull: false,
     defaultValue: 'Por empezar',
   },
+  CALENDAR_REGISTRATION: {
+    type: DataTypes.TEXT,
+  },
 }, {
-  tableName: 'periodAcademic',
+  tableName: 'periodAcademic', // Asegúrate de que 'periodAcademic' esté entre backticks
   timestamps: false,
 });
 
@@ -36,6 +39,5 @@ PeriodAcademic.sync({ force: false })
   .catch((error) => {
     console.error("Error al sincronizar tabla de personas:", error);
   });
-
 
 module.exports = PeriodAcademic;

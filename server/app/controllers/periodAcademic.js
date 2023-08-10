@@ -548,3 +548,29 @@ exports.getPeriodsById = async function (req, res) {
     res.status(500).json({ error: "Error al obtener el período académico" });
   }
 };
+
+//! Controlador para enviar primer calendario 
+exports.getCalendarForPortal = async function (req, res) {
+  try {
+    const nearestPeriod = await PeriodAcademic.findOne({
+      where: {
+        STATUS: 'Por empezar',
+        START_DATE: {
+          [Op.gte]: new Date(),
+        },
+      },
+      order: [['START_DATE', 'ASC']],
+    });
+
+    if (!nearestPeriod) {
+      return res.status(404).json({ error: 'No se encontró un período académico próximo por empezar.' });
+    }
+
+    const calendarRegistrationContent = nearestPeriod.CALENDAR_REGISTRATION;
+
+    return res.json({ calendarRegistration: calendarRegistrationContent });
+  } catch (error) {
+    console.error('Error al obtener el contenido de CALENDAR_REGISTRATION:', error);
+    return res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+}
