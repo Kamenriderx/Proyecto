@@ -61,8 +61,8 @@ const PeriodTable = () => {
               }
             )
             .then((res2) => {
-              console.log("Valores", res, res2);
-              console.log("Valores", selectedPeriod);
+              console.log("Valores 1", res, res2);
+              console.log("Valores 2", selectedPeriod);
               setState({
                 ...state,
                 sections: res2.data.sections,
