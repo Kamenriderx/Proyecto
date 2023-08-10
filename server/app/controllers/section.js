@@ -1,6 +1,6 @@
 const {getCourse, getClassroom, sectionRange, sectionExists,createSectionCode, getProfessor, validateSchedule, getSectionsProffessor} = require('../handlers/handleCreateSection');
 const { Section, Professor, User } = require('../models');
-const {getProfessorIdUser, getSectionsByCenterAndCareer,getSection, sectionExistsHourClassroom,sectionbyProffessor} = require('../helpers/repositorySections');
+const {getProfessorIdUser, getSectionsByCenterAndCareer,getSection, sectionExistsHourClassroom,sectionbyProffessor, getSectionsByCenterAndCareerPeriod} = require('../helpers/repositorySections');
 
 
 
@@ -19,7 +19,7 @@ const createSection = async(req,res)=>{
             return
             
         }
-        if (section && (section.DAYS.includes(body.DAYS) || body.DAYS.includes(section.DAYS))) {
+        if (section  && (section.DAYS.includes(body.DAYS) || body.DAYS.includes(section.DAYS))) {
             res.status(400).json({messagge:"EL AULA ESTA OCUPADA EN ESE HORARIO"});
             return    
         }
@@ -54,7 +54,7 @@ const createSection = async(req,res)=>{
             res.status(400).json({messagge:"EL DOCENTE YA TIENE ASIGNADAS 5 SECCIONES"});
             return
         }
-        sectionPro = await sectionbyProffessor(body)
+        const sectionPro = await sectionbyProffessor(body)
         if (await validateSchedule(body) || (sectionPro && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
          
             res.status(400).json({messagge:"EL DOCENTE YA TIENE UNA SECCION A ESA HORA Y ESOS DIAS"});
@@ -81,6 +81,17 @@ const listSections = async (req,res)=>{
     try {
         const {user} = req
         const sections = await getSectionsByCenterAndCareer(user)
+        res.status(200).json({sections})
+    } catch (error) {
+        console.log({error})
+        res.status(500).json({messagge:"ALGO SALIO MAL"})
+    }
+}
+const listSectionsPeriod = async (req,res)=>{
+    try {
+        const {user} = req
+        const {id} = req.params
+        const sections = await getSectionsByCenterAndCareerPeriod(user,id)
         res.status(200).json({sections})
     } catch (error) {
         console.log({error})
@@ -228,6 +239,7 @@ const updateSection = async (req,res)=>{
 module.exports = {
     createSection,
     listSections,
+    listSectionsPeriod,
     getProfessorsByCenterAndCarrer,
     deleteSection,
     updateSection

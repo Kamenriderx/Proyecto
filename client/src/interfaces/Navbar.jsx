@@ -30,6 +30,8 @@ import DictamentCarrera from "../views/Solicitudes/DictamentCarrera";
 import RequestCoordinatorCenter from "../views/Solicitudes/RequestCoordinatorCenter";
 import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
+import Planificacion from "../views/Planificacion/Planificacion";
+import Period from "../views/Period/Period";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -50,7 +52,7 @@ const ContentNavbar = () => {
 
     return (
       <>
-        <nav className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 border-gray-200">
+        <nav className="bg-gradient-to-r from-sky-600 via-sky-400 to-sky-600 border-gray-200 fixed top-0 w-full z-50">
           <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div className="flex items-center">
               <Link to="/">
@@ -82,6 +84,13 @@ const ContentNavbar = () => {
                       </Link>
                     </li>
                     <li>
+                      <Link to="/Periodos">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Secciones
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
                       <Link to="/solicitudes-coordinador">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Solicitudes Carrera
@@ -106,6 +115,13 @@ const ContentNavbar = () => {
                         </button>
                       </Link>
                     </li>
+                    <li>
+                      <Link to="/planificacion">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Planificacion
+                        </button>
+                      </Link>
+                    </li>
                   </>
                 )}
                 {!state.login ? (
@@ -126,6 +142,11 @@ const ContentNavbar = () => {
                           <Solicitud />
                         </li>
                       )}
+                      <Link to="/perfil">
+                        <button className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3">
+                          Perfil
+                        </button>
+                      </Link>
                       <Link to="/">
                         <button
                           onClick={handleSession}
@@ -173,7 +194,9 @@ const ContentNavbar = () => {
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
+          <Route exact path="/periodos" element={<Period />} />
           <Route exact path="/proffessor" />
           <Route
             exact
@@ -217,6 +240,7 @@ const ContentNavbar = () => {
           <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
           <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
           <Route exact path="/pago-reposicion" element={<RequestRepo />} />
+          <Route exact path="/planificacion" element={<Planificacion />} />
           <Route exact path="/Docentes" element={<Docentes />} />
         </Routes>
       </BrowserRouter>

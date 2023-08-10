@@ -19,7 +19,7 @@ const verifyData = (data)=>{
                 error+=`Campo CARRER invalido: ${student.CARRER}, `;
             }
            
-            if (!student.hasOwnProperty('CENTER') || typeof student.CENTER !== 'string'|| student.CENTER.trim()==="") {
+            if (!student.hasOwnProperty('CENTER') || typeof student.CENTER !== 'string'|| student.CENTER.trim()==="" || student.CENTER.split(" ").length < 2) {
                 error+=`Campo invalido: ${student.CENTER}, `;
             }
         

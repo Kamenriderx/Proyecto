@@ -4,7 +4,7 @@ import { StoreContext } from "../../../store/ContextExample";
 import StudentContext from "../../ViewStudent/context/StudentContext";
 import MessagesContext from "../context/Messages/MessagesContext";
 
-const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
+const Buscador = ({ chats, enviarDatoAlPadre, check }) => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -16,7 +16,8 @@ const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
   //contexto de estudiante
   const { stateStudent, getStudent } = useContext(StudentContext);
   //contexto de la conversacion
-  const { stateConversation, getConversation } = useContext(ConversationContext);
+  const { stateConversation, getConversation } =
+    useContext(ConversationContext);
   //contexto de mensajes
   const { stateMessages, getMessages } = useContext(MessagesContext);
 
@@ -24,8 +25,7 @@ const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
     getConversation(state);
     getStudent(state);
     getMessages(state);
-  }, [state,check]);
-
+  }, [state, check]);
 
   // console.log(
   //   "stateConversationBuscador: ",
@@ -37,7 +37,6 @@ const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
   //     stateStudent.user.user.multimedia.length - 1
   //   ].URL
   // );
-
 
   useEffect(() => {
     setUsers(chats);
@@ -82,15 +81,14 @@ const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
                   <div
                     key={chat.ID_CONVERSATION}
                     className="border-2 border-gray-400 m-3 p-2 rounded-xl flex justify-between cursor-pointer hover:bg-gray-300"
-                    onClick={() =>
-                      handleChange(chat.ID_CONVERSATION, chat)
-                    }
+                    onClick={() => handleChange(chat.ID_CONVERSATION, chat)}
                   >
                     <div className="flex gap-2 items-center">
                       <div>
                         <img
                           src={
-                            chat.USER_.hasOwnProperty("multimedia")
+                            chat.USER_.hasOwnProperty("multimedia") &&
+                            chat.USER_.multimedia.length > 0
                               ? chat.USER_.multimedia[
                                   chat.USER_.multimedia.length - 1
                                 ].URL
@@ -98,7 +96,6 @@ const Buscador = ({ chats, enviarDatoAlPadre,check }) => {
                           }
                           alt="seleccine imagen"
                           className="bg-cyan-500 rounded-full w-12 h-12"
-                          
                         />
                       </div>
 

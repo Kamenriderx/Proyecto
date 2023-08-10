@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import "flowbite";
 import { AiFillHome } from "react-icons/ai";
 import { IoMdContact } from "react-icons/io";
@@ -10,8 +11,11 @@ import {
 } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { AiOutlineUnorderedList } from "react-icons/ai";
+import { StoreContext } from "../../../store/ContextExample";
 
 const Sidevar = () => {
+  const { state, dispatch } = useContext(StoreContext);
   return (
     <>
       <button
@@ -39,7 +43,7 @@ const Sidevar = () => {
 
       <aside
         id="default-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 mt-24"
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 ">
@@ -156,20 +160,38 @@ const Sidevar = () => {
               </a>
             </li>
 
-            <li>
-              <Link to="/addSections">
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg 
+            {state?.user?.ID_ROLE === 3 && (
+              <>
+                <li>
+                  <Link to="/addSections">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
-                >
-                  <PiNotebookFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">
-                    Programación
-                  </span>
-                </a>
-              </Link>
-            </li>
+                    >
+                      <PiNotebookFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Programación
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/list-teachers">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <AiOutlineUnorderedList className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Listado de Docentes
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+              </>
+            )}
 
             <li>
               <a

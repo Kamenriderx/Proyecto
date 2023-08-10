@@ -26,6 +26,8 @@ const AddSections = () => {
   const [alerta, setAlerta] = useState({});
   const [selectedSection, setSelectedSection] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [allPeriodos, setAllPeriodos] = useState([]);
+  const [ID_PERIOD, setID_PERIOD] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sectionsPerPage] = useState(4);
   const indexOfLastTeacher = currentPage * sectionsPerPage;
@@ -75,9 +77,6 @@ const AddSections = () => {
 
     fetchDocentes();
   }, []);
-
-  console.log("Todos los docentes de Sistemas :", docentes);
-  console.log("Estado de Sesion", state);
 
   useEffect(() => {
     const getListClass = async () => {
@@ -129,9 +128,6 @@ const AddSections = () => {
     getListAula();
   }, []);
 
-  console.log("Lista de Cursos", listCourses);
-  console.log("Listado de Aulas", listAulas);
-
   const handleEdit = (section) => {
     setShowModal(true);
     setSelectedSection(section);
@@ -144,7 +140,7 @@ const AddSections = () => {
     setSPACE_AVAILABLE(section.SPACE_AVAILABLE);
     setDAYS(section.DAYS);
     setDAYS_COUNT(section.course.UV);
-    console.log("UNIDADES VALORATIVAS", section.DAYS_COUNT);
+    setID_PERIOD(section.period.ID_PERIOD);
   };
 
   console.log("SELECTED SECTION", selectedSection);
@@ -162,6 +158,7 @@ const AddSections = () => {
         ID_PROFFERSSOR,
         SPACE_AVAILABLE,
         DAYS_COUNT,
+        ID_PERIOD,
       ].includes("")
     ) {
       setAlerta({
@@ -199,6 +196,7 @@ const AddSections = () => {
         SPACE_AVAILABLE,
         ID_COURSE,
         DAYS_COUNT,
+        ID_PERIOD,
       };
 
       if (selectedSection) {
@@ -245,6 +243,7 @@ const AddSections = () => {
       setSPACE_AVAILABLE("");
       setDAYS("");
       setDAYS_COUNT("");
+      setID_PERIOD("");
 
       resetForm();
     } catch (error) {
@@ -288,15 +287,13 @@ const AddSections = () => {
     const selectedStartTime = e.target.value;
     setSTART_TIME(selectedStartTime);
 
-    // Add validation to check if HF is less than or equal to HI
     if (END_TIME && parseInt(selectedStartTime) >= parseInt(END_TIME)) {
       setEND_TIME((prevEndTime) =>
         parseInt(selectedStartTime) + 100 <= 2000
           ? (parseInt(selectedStartTime) + 100).toString()
           : prevEndTime
-      ); // Set HF to the next valid time slot if it's less than or equal to HI
+      );
     } else if (!END_TIME) {
-      // If HF is not set, set it to the next valid time slot
       setEND_TIME((prevEndTime) =>
         parseInt(selectedStartTime) + 100 <= 2000
           ? (parseInt(selectedStartTime) + 100).toString()
@@ -309,13 +306,12 @@ const AddSections = () => {
     const selectedEndTime = e.target.value;
     setEND_TIME(selectedEndTime);
 
-    // Add validation to check if HI is greater than or equal to HF
     if (START_TIME && parseInt(selectedEndTime) <= parseInt(START_TIME)) {
       setSTART_TIME((prevStartTime) =>
         parseInt(selectedEndTime) - 100 >= 700
           ? (parseInt(selectedEndTime) - 100).toString()
           : prevStartTime
-      ); // Set HI to the previous valid time slot if it's greater than or equal to HF
+      );
     }
   };
 
@@ -328,6 +324,7 @@ const AddSections = () => {
     setSPACE_AVAILABLE("");
     setDAYS("");
     setDAYS_COUNT("");
+    setID_PERIOD("");
   };
 
   const showModalClear = () => {
@@ -373,6 +370,23 @@ const AddSections = () => {
       });
     }
   };
+
+  useEffect(() => {
+    const allPeriodos = async () => {
+      try {
+        const response = await axios(
+          "http://localhost:3000/registro/periodAcademic/allperiods"
+        );
+        setAllPeriodos(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    allPeriodos();
+  }, []);
+
+  console.log("TODOS LOS PERIODOS", allPeriodos);
 
   const { message } = alerta;
 
@@ -449,22 +463,65 @@ const AddSections = () => {
           <div className="mt-5">
             <div className="text-center">
               <label className=" text-black font-bold text-md block">
-                Aula y Edificio:
+                Periodo Academico:
               </label>
             </div>
             <div className="flex justify-center">
               <select
-                value={ID_CLASSROOM}
-                onChange={(e) => setID_CLASSROOM(e.target.value)}
+                value={ID_PERIOD}
+                onChange={(e) => setID_PERIOD(e.target.value)}
                 className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
               >
-                <option value=""> Aula - Edificio </option>
-                {listAulas.map((aulas) => (
-                  <option key={aulas.ID_CLASSROOM} value={aulas.ID_CLASSROOM}>
-                    {aulas.NUMBER} - {aulas.building.NAME}
+                <option value="">Seleccione el periodo</option>
+                {allPeriodos.map((periodo) => (
+                  <option value={periodo.ID_PERIOD} key={periodo.ID_PERIOD}>
+                    {periodo.PERIOD_NAME}
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="text-center mt-2">
+              <label className=" text-black font-bold text-md block">
+                Clase:
+              </label>
+            </div>
+            <div className="flex justify-center">
+              <select
+                value={ID_COURSE}
+                onChange={(e) => setID_COURSE(e.target.value)}
+                className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Seleccione una Clase</option>
+                {listCourses.map((listcourse) => (
+                  <option
+                    value={listcourse.ID_COURSE}
+                    key={listcourse.ID_COURSE}
+                  >
+                    {listcourse.NAME}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="text-center mt-3">
+              <label className=" text-black font-bold text-md block">
+                Aula y Edificio:
+              </label>
+            </div>
+            <div>
+              <div className="flex justify-center">
+                <select
+                  value={ID_CLASSROOM}
+                  onChange={(e) => setID_CLASSROOM(e.target.value)}
+                  className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+                >
+                  <option value=""> Aula - Edificio </option>
+                  {listAulas.map((aulas) => (
+                    <option key={aulas.ID_CLASSROOM} value={aulas.ID_CLASSROOM}>
+                      {aulas.NUMBER} - {aulas.building.NAME}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
           <div className="mt-5">
@@ -578,19 +635,22 @@ const AddSections = () => {
               <AiOutlineAppstoreAdd className="mr-2" size={30} />
             </button>
           </div>
-          <div className="">
-            <select
-              value={ID_COURSE}
-              onChange={(e) => setID_COURSE(e.target.value)}
-              className="bg-sky-600 hover:bg-sky-700 rounded shadow text-white text-center border-2 cursor-pointer"
-            >
-              <option value="">--- Seleccione una Clase ---</option>
-              {listCourses.map((listcourse) => (
-                <option value={listcourse.ID_COURSE} key={listcourse.ID_COURSE}>
-                  {listcourse.NAME}
-                </option>
-              ))}
-            </select>
+          <div className="flex justify-around gap-2">
+            <div>
+              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
+                <option value="">Año</option>
+              </select>
+            </div>
+            <div>
+              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
+                <option value="">Periodo</option>
+              </select>
+            </div>
+            <div>
+              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
+                <option value="">Clase</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -600,6 +660,7 @@ const AddSections = () => {
               <table className="w-full bg-white shadow-md table-auto">
                 <thead className="bg-blue-800 text-white">
                   <tr>
+                    <th className="p-2">Periodo</th>
                     <th className="p-2">HI</th>
                     <th className="p-2">HF</th>
                     <th className="p-2">Edif</th>
@@ -616,34 +677,37 @@ const AddSections = () => {
                 <tbody>
                   {currentSections.map((section) => (
                     <tr className="border-b" key={section.ID_SECTION}>
-                      <td className="border px-4 py-2 text-md font-medium r">
+                      <td className="border px-4 py-2 text-sm font-medium r">
+                        <p>{section.period.PERIOD_NAME}</p>
+                      </td>
+                      <td className="border px-4 py-2 text-sm font-medium r">
                         <p>{section.START_TIME}</p>
                       </td>
-                      <td className="border px-4 py-2 text-md font-medium r">
+                      <td className="border px-4 py-2 text-sm font-medium r">
                         {section.END_TIME}
                       </td>
-                      <td className="border px-4 py-2 text-md font-medium r">
+                      <td className="border px-4 py-2 text-sm font-medium r">
                         {section.classroom.building.NAME}
                       </td>
-                      <td className="border px-4 py-2 text-md font-medium r">
+                      <td className="border px-4 py-2 text-sm font-medium r">
                         {section.classroom.NUMBER}
                       </td>
-                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                      <td className="text-center border px-4 py-2 text-sm font-medium r">
                         {section.Proffessor.user.NAME}
                       </td>
-                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                      <td className="text-center border px-4 py-2 text-sm font-medium r">
                         {section.course.NAME}
                       </td>
-                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                      <td className="text-center border px-4 py-2 text-sm font-medium r">
                         {section.course.UV}
                       </td>
-                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                      <td className="text-center border px-4 py-2 text-sm font-medium r">
                         {section.SPACE_AVAILABLE}
                       </td>
-                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                      <td className="text-center border px-4 py-2 text-sm font-medium r">
                         {section.SECTION_CODE}
                       </td>
-                      <td className="text-center border px-4 py-2 text-md font-medium r">
+                      <td className="text-center border px-4 py-2 text-sm font-medium r">
                         {section.DAYS}
                       </td>
                       <td className="border px-4 py-2 text-lg font-medium r">
