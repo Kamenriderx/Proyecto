@@ -31,6 +31,7 @@ const Enrollment = connection.define(
         ID_STUDENT:{
             type:DataTypes.INTEGER
         },
+        
         ID_SECTION:{
             type:DataTypes.INTEGER,
         },
