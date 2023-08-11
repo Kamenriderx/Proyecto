@@ -14,6 +14,7 @@ exports.detailsSection = async function (req, res) {
   try {
     const query = `
       SELECT
+        e.ID_SECTION,
         c.NAME AS courseName,
         s.SECTION_CODE AS sectionNumber,
         SUM(CASE WHEN e.STATE = 'En Espera' THEN 1 ELSE 0 END) AS totalWaitlist,
@@ -54,6 +55,7 @@ exports.getEnrolledStudents = async function (req, res) {
   try {
     const query = `
       SELECT
+        s.ID_STUDENT,
         u.NAME AS STUDENT_NAME,
         u.ACCOUNT_NUMBER,
         s.INSTITUTIONAL_EMAIL,
@@ -71,7 +73,7 @@ exports.getEnrolledStudents = async function (req, res) {
         AND e.STATE = 'Matriculada';
     `;
 
-    const [results] = await connection.query(query, {
+    const results = await connection.query(query, {
       replacements: { idSection },
       type: connection.QueryTypes.SELECT,
     });
@@ -111,7 +113,7 @@ exports.getWaitingStudents = async function (req, res) {
         AND e.STATE = 'En Espera';
     `;
 
-    const [results] = await connection.query(query, {
+    const results = await connection.query(query, {
       replacements: { idSection },
       type: connection.QueryTypes.SELECT,
     });
