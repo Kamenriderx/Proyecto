@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { StoreContext } from "../../store/ContextExample";
 import { Link } from "react-router-dom";
-
 const Matricula = () => {
   const { state, dispatch } = useContext(StoreContext);
   const [sections, setSections] = useState([]);
@@ -111,7 +110,10 @@ const Matricula = () => {
                     {filteredSections.map((section) => (
                       <tr className="border-b" key={section.ID_SECTION}>
                         <td className="text-center border px-4 py-2 text-sm font-medium r">
-                          <Link className="text-sky-600 hover:text-sky-700 underline">
+                          <Link
+                            to={`/sections/${section.ID_SECTION}`}
+                            className="text-sky-600 hover:text-sky-700 underline"
+                          >
                             Ver Seccion
                           </Link>
                         </td>

@@ -33,6 +33,7 @@ import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
 import Planificacion from "../views/Planificacion/Planificacion";
 import Period from "../views/Period/Period";
 import Matricula from "../views/Matricula/Matricula";
+import SectionDetails from "../views/Matricula/components/SectionDetails";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -237,6 +238,11 @@ const ContentNavbar = () => {
             exact
             path="/solicitudes-coordinador-centro"
             element={<RequestCoordinatorCenter />}
+          />
+          <Route
+            exact
+            path="/sections/:idSection"
+            element={<SectionDetails />}
           />
           <Route exact path="/matricula-jefe" element={<Matricula />} />
           <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
