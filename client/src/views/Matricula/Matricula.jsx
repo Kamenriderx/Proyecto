@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { StoreContext } from "../../store/ContextExample";
+import { Link } from "react-router-dom";
 
 const Matricula = () => {
   const { state, dispatch } = useContext(StoreContext);
   const [sections, setSections] = useState([]);
   const [listCourses, setListCourses] = useState([]);
-  const [ID_COURSE, setID_COURSE] = useState("");
+  const [courseName, setCourseName] = useState("");
   const [filteredSections, setFilteredSections] = useState([]);
 
   useEffect(() => {
@@ -63,29 +64,31 @@ const Matricula = () => {
   }, []);
 
   useEffect(() => {
-    if (ID_COURSE) {
+    if (courseName) {
       const filtered = sections.filter(
-        (section) => section.course.ID_COURSE === ID_COURSE
+        (section) => section.course.NAME === courseName
       );
       setFilteredSections(filtered);
     } else {
       setFilteredSections(sections);
     }
-  }, [ID_COURSE, sections]);
+  }, [courseName, sections]);
+
+  console.log("FILTRADOS", filteredSections);
 
   return (
     <div className="container mx-auto">
       <div className="mt-10">
-        <div className="flex justify-center w-3/4">
+        <div className="flex justify-center w-4/5">
           <div className="w-1/2 mt-10">
             <select
-              value={ID_COURSE}
-              onChange={(e) => setID_COURSE(e.target.value)}
-              className="w-3/4 mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+              value={courseName}
+              onChange={(e) => setCourseName(e.target.value)}
+              className="w-auto mx-5 text-center py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 bg-gray-100 font-bold text-gray-700"
             >
-              <option value="">Seleccione una Clase</option>
+              <option value="">SELECCIONE UNA CLASE</option>
               {listCourses.map((listcourse) => (
-                <option value={listcourse.ID_COURSE} key={listcourse.ID_COURSE}>
+                <option value={listcourse.NAME} key={listcourse.ID_COURSE}>
                   {listcourse.NAME}
                 </option>
               ))}
@@ -99,6 +102,7 @@ const Matricula = () => {
                 <table className="w-full bg-white shadow-md table-auto">
                   <thead className="bg-blue-800 text-white">
                     <tr>
+                      <th className="p-2">Detalles</th>
                       <th className="p-2">Asignatura</th>
                       <th className="p-2">Seccion</th>
                     </tr>
@@ -106,6 +110,11 @@ const Matricula = () => {
                   <tbody>
                     {filteredSections.map((section) => (
                       <tr className="border-b" key={section.ID_SECTION}>
+                        <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          <Link className="text-sky-600 hover:text-sky-700 underline">
+                            Ver Seccion
+                          </Link>
+                        </td>
                         <td className="text-center border px-4 py-2 text-sm font-medium r">
                           {section.course.NAME}
                         </td>
@@ -119,7 +128,7 @@ const Matricula = () => {
               </>
             ) : (
               <p className="text-2xl text-center uppercase font-bold ">
-                No Hay Clases por el Momento
+                No se encontraron resultados de la clase seleccionada
               </p>
             )}
           </div>
