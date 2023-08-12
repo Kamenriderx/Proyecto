@@ -71,7 +71,7 @@ exports.getEnrolledStudents = async function (req, res) {
         AND e.STATE = 'Matriculada';
     `;
 
-    const [results] = await connection.query(query, {
+    const results = await connection.query(query, {
       replacements: { idSection },
       type: connection.QueryTypes.SELECT,
     });
@@ -94,6 +94,7 @@ exports.getWaitingStudents = async function (req, res) {
   try {
     const query = `
       SELECT
+        s.ID_STUDENT,
         u.NAME AS STUDENT_NAME,
         u.ACCOUNT_NUMBER,
         s.INSTITUTIONAL_EMAIL,
@@ -111,7 +112,7 @@ exports.getWaitingStudents = async function (req, res) {
         AND e.STATE = 'En Espera';
     `;
 
-    const [results] = await connection.query(query, {
+    const results = await connection.query(query, {
       replacements: { idSection },
       type: connection.QueryTypes.SELECT,
     });
@@ -123,6 +124,49 @@ exports.getWaitingStudents = async function (req, res) {
     }
   } catch (error) {
     console.error('Error al obtener los detalles de matriculados:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+}
+
+//! Controlador para forzar matricula
+exports.updateStudentStatus = async function (req, res) {
+  const idStudent = req.params.idStudent;
+
+  try {
+    //Valida si esta en estado 'En Espera'
+    const checkQuery = `
+      SELECT COUNT(*) AS count
+      FROM ENROLLMENT
+      WHERE ID_STUDENT = :idStudent AND STATE = 'En Espera';
+    `;
+
+    const [result] = await connection.query(checkQuery, {
+      replacements: { idStudent },
+      type: connection.QueryTypes.SELECT,
+    });
+
+    const studentCount = result.count;
+
+    if (studentCount === 0) {
+      res.status(404).json({ error: 'No se encontró el estudiante en lista de espera' });
+      return;
+    }
+
+    // Actualiza estado a 'Matriculada'
+    const updateQuery = `
+      UPDATE ENROLLMENT
+      SET STATE = 'Matriculada'
+      WHERE ID_STUDENT = :idStudent AND STATE = 'En Espera';
+    `;
+
+    await connection.query(updateQuery, {
+      replacements: { idStudent },
+      type: connection.QueryTypes.UPDATE,
+    });
+
+    res.json({ message: 'Estado de estudiante actualizado exitosamente' });
+  } catch (error) {
+    console.error('Error al actualizar el estado del estudiante:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 }

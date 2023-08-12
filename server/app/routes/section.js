@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 const {createSection,listSections, getProfessorsByCenterAndCarrer, deleteSection, updateSection, listSectionsPeriod} = require("../controllers/section.js");
-const {detailsSection, getEnrolledStudents, getWaitingStudents} =  require('../controllers/detailsSection.js');
+const {detailsSection, getEnrolledStudents, getWaitingStudents, updateStudentStatus} =  require('../controllers/detailsSection.js');
 
 const authMiddleware = require('../middlewares/authentication.js');
 const {checkRolJefe} = require('../middlewares/rol.js');
@@ -24,5 +24,9 @@ router.get("/studentsEnrolled/:idSection", getEnrolledStudents)
 
 // Ruta que obtiene estudiantes en espera de una seccion
 router.get("/studentsWaiting/:idSection", getWaitingStudents)
+
+// Ruta para forzar matricula
+router.post("/updateState/:idStudent", updateStudentStatus)
+
 module.exports = router
 
