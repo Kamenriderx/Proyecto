@@ -12,6 +12,7 @@ const SectionDetails = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [matriculados, setMatriculados] = useState([]);
   const [listaEspera, setListaEspera] = useState([]);
+  const [check, setCheck] = useState(false);
   const [alerta, setAlerta] = useState({});
 
   useEffect(() => {
@@ -57,6 +58,27 @@ const SectionDetails = () => {
     }
   };
 
+  const handleClickUpdate = async (id) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/registro/section/updateState/${id}`
+      );
+
+      console.log("RESPUESTA UPDATE", response);
+      setAlerta({
+        message: response.data.message,
+        error: false,
+      });
+      setCheck(!check);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getIdListaEspera();
+  }, [check]);
+
   const handleClick = (id) => {
     setShowModal2(true);
     getIdMatriculados(id);
@@ -67,12 +89,15 @@ const SectionDetails = () => {
     getIdListaEspera(id);
   };
 
+  const { message } = alerta;
+
   if (!sectionDetails) {
     return <p>Cargando detalles...</p>;
   }
 
   return (
     <div className="flex mt-24">
+      {message && <AlertTwo alerta={alerta} />}
       <Modal2 Visible={showModal} Close={() => setShowModal(false)}>
         <div className="mt-5 text-center">
           <p className="text-gray-800 font-bold text-lg">
@@ -102,7 +127,12 @@ const SectionDetails = () => {
                         </td>
                         <td className="py-2 px-3">
                           <div className="flex justify-center">
-                            <button className="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-base py-2 px-3 shadow rounded-md">
+                            <button
+                              onClick={() =>
+                                handleClickUpdate(lista.ID_STUDENT)
+                              }
+                              className="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-base py-2 px-3 shadow rounded-md"
+                            >
                               Matricular
                             </button>
                           </div>

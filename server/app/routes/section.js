@@ -26,7 +26,7 @@ router.get("/studentsEnrolled/:idSection", getEnrolledStudents)
 router.get("/studentsWaiting/:idSection", getWaitingStudents)
 
 // Ruta para forzar matricula
-router.post("/updateState/:idStudent", updateStudentStatus)
+router.put("/updateState/:idStudent", updateStudentStatus)
 
 module.exports = router
 
