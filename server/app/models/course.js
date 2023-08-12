@@ -27,6 +27,7 @@ const Course = connection.define(
         UV:{
             type:DataTypes.INTEGER
         },
+
         createdAt:{
             type:DataTypes.DATE
         },

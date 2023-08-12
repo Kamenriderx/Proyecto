@@ -1,22 +1,22 @@
 const { DataTypes } = require("sequelize");
 const connection = require("../../config/database");
 
-const ServiceCareer = connection.define(
-    "CAREER_SERVICE",
+const ServiceCourse = connection.define(
+    "SERVICE_COURSE",
     {
-        ID_CAREER_SERVICE:{
+        ID_SERVICE:{
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
         },
 
         
-        ID_CAREER:{
+        ID_COURSE:{
             type:DataTypes.INTEGER,
           
         },
 
-        ID_SERVICED_CAREER:{
+        ID_CAREER:{
             type:DataTypes.INTEGER,
            
         },
@@ -26,13 +26,13 @@ const ServiceCareer = connection.define(
 
     },
     {
-        tableName:'CAREER_SERVICE',
+        tableName:'SERVICE_COURSE',
         timestamps: false,  
     }
 );
 
 
-ServiceCareer.sync({ force: false })
+ServiceCourse.sync({ force: false })
   .then(() => {
     console.log("Tabla de ROLES sincronizada");
   })
@@ -43,4 +43,4 @@ ServiceCareer.sync({ force: false })
 
 
 
-module.exports = ServiceCareer;
+module.exports = ServiceCourse;

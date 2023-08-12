@@ -19,7 +19,7 @@ const models = {
     RequestCenter : require('./requestCenter.js'),
     PeriodAcademic: require('./periodAcademic.js'),
     Enrollment: require('./enrollment.js'),
-    ServiceCareer : require('./serviceCareer.js')
+    ServiceCourse : require('./serviceCourse.js')
     
 }
 
@@ -125,10 +125,15 @@ models.RequestCareer.Career=models.RequestCareer.belongsTo(models.Career,{
 
 // requerimientos clase
 models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'ID_COURSE',as:"course" });
-models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'REQUIREMENT_ID_COURSE', as:"requirement" });
-// CARRERA - CARRERA_SERVIDA
-models.ServiceCareer.belongsTo(models.Career, { foreignKey: 'ID_CAREER',as:"career" });
-models.ServiceCareer.belongsTo(models.Career, { foreignKey: 'ID_SERVICED_CAREER', as:"servicedCareer" });
+models.Course.RequerimentsCourse=models.Course.hasMany(models.RequerimentsCourse,{
+    foreignKey:"ID_COURSE",
+    as:"requirement"
+});
+models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'REQUIREMENT_ID_COURSE', as:"requirementCourse" });
+models.Course.RequerimentsCourse2=models.Course.hasMany(models.RequerimentsCourse,{
+    foreignKey:"REQUIREMENT_ID_COURSE",
+});
+
 // carrera - departamento 
 
 models.Department.Career=models.Department.hasMany(models.Career,{
@@ -154,6 +159,29 @@ models.Classroom.Career=models.Classroom.belongsTo(models.Career,{
     as:"career"
 });
 
+// service - carrera
+
+models.Career.ServiceCourse=models.Career.hasMany(models.ServiceCourse,{
+    foreignKey:"ID_CAREER"
+});
+models.ServiceCourse.Career=models.ServiceCourse.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    unique:true,
+    as:"career"
+});
+
+
+// service - clase
+
+models.Course.ServiceCourse=models.Course.hasMany(models.ServiceCourse,{
+    foreignKey:"ID_COURSE"
+});
+models.ServiceCourse.Course=models.ServiceCourse.belongsTo(models.Course,{
+    foreignKey:"ID_COURSE",
+    unique:true,
+    as:"course"
+});
+
 
 // clase - carrera
 models.Career.Course=models.Career.hasMany(models.Course,{
@@ -164,8 +192,6 @@ models.Course.Career=models.Course.belongsTo(models.Career,{
     unique:true,
     as:"career"
 });
-
-
 
 //  edificio - aula
 models.Building.Classroom=models.Building.hasMany(models.Classroom,{
@@ -193,7 +219,7 @@ models.Professor.Section=models.Professor.hasMany(models.Section,{
 models.Section.Professor=models.Section.belongsTo(models.Professor,{
     foreignKey:"ID_PROFFERSSOR",
     unique:true,
-    as:"Proffessor"
+    as:"proffessor"
 });
 //  seccion - clase
 models.Course.Section=models.Course.hasMany(models.Section,{
