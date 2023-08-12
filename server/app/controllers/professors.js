@@ -1,4 +1,4 @@
-const Professor = require('../models/professor'); // Importa el modelo Professor
+const Professor = require('../models/Professor'); // Importa el modelo Professor
 const User = require('../models/user');
 const { Op } = require('sequelize');
 const connection = require("../../config/database");

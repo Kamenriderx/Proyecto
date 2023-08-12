@@ -14,6 +14,7 @@ exports.detailsSection = async function (req, res) {
   try {
     const query = `
       SELECT
+        e.ID_SECTION,
         c.NAME AS courseName,
         s.SECTION_CODE AS sectionNumber,
         SUM(CASE WHEN e.STATE = 'En Espera' THEN 1 ELSE 0 END) AS totalWaitlist,
@@ -54,6 +55,7 @@ exports.getEnrolledStudents = async function (req, res) {
   try {
     const query = `
       SELECT
+        s.ID_STUDENT,
         u.NAME AS STUDENT_NAME,
         u.ACCOUNT_NUMBER,
         s.INSTITUTIONAL_EMAIL,

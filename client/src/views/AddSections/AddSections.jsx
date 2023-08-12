@@ -625,7 +625,7 @@ const AddSections = () => {
             "Carrera" - "Nombre del Periodo"
           </span>
         </div>
-        <div className="flex justify-around mt-5 mb-5">
+        <div className="flex justify-start mt-5 mb-5">
           <div className="flex items-center">
             <button
               onClick={() => setShowModal(true)}
@@ -635,7 +635,7 @@ const AddSections = () => {
               <AiOutlineAppstoreAdd className="mr-2" size={30} />
             </button>
           </div>
-          <div className="flex justify-around gap-2">
+          {/*  <div className="flex justify-around gap-2">
             <div>
               <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
                 <option value="">Año</option>
@@ -651,7 +651,7 @@ const AddSections = () => {
                 <option value="">Clase</option>
               </select>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-10">
