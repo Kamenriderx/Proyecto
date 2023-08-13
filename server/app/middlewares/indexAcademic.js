@@ -6,7 +6,8 @@ const verifyIndexAcademic = async(req,res,next)=>{
     try {
 
       const {student} = req
-      const {idPeriod} = req.params
+      const periodAux = await PeriodAcademic.findOne({where:{STATUS: "En curso"}})
+      const idPeriod = periodAux.ID_PERIOD
       const courses = await getMyCourseEnded(student.ID_STUDENT)
       const {calendars, previousPeriod} = await getAcademicPeriodDetails(idPeriod)
       const coursesPeriodPrev = await getMyCoursePeriodPrev(student.ID_STUDENT,previousPeriod)
@@ -16,52 +17,8 @@ const verifyIndexAcademic = async(req,res,next)=>{
       let currentDayMonth = formatDate(new Date());
       let currentYear = new Date().getFullYear()
       let currentMonth = new Date().getMonth()
-      indexAcademicPeriod = 84
+      // indexAcademicPeriod = 84 
       
-      // for (let index = 0; index < calendars.length; index++) {
-      //     const calendar = calendars[index];
-      //     console.log({currentDayMonth, hoy:calendar.date})
-
-      //     if (calendar.date == currentDayMonth && index==0  && (student.TYPE == 'Primer ingreso' ||student.TYPE == 'Proseene' ||student.TYPE == 'Condicionado' || student.TYPE == 'Representante'|| (student.TYPE =="Re-ingreso" && indexAcademicGlobal >= 80 && coursesAproved.count >=10 )|| (student.TYPE =="Por egresar" && indexAcademicGlobal >= 80))) {
-      //       console.log({message:"DIA 1"})
-      //       console.log({date:calendar.date, indexAcademicGlobal, indexAcademicPeriod})
-      //       next()
-      //       return
-      //     }
-      //     if (calendar.date == currentDayMonth && index==1 && ((student.TYPE == 'Por egresar' && indexAcademicGlobal < 80) || (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 91))) {
-      //       console.log({message:"DIA 2"})
-      //       console.log({date:calendar.date, indexAcademicGlobal, indexAcademicPeriod})
-      //       next()
-      //       return
-      //     }
-      //     if (calendar.date === currentDayMonth && index==2 && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 91 && indexAcademicPeriod <= 100 )) {
-      //       console.log({message:"DIA 3"})
-      //       console.log({date:calendar.date, indexAcademicGlobal, indexAcademicPeriod})
-      //       next()
-      //       return
-      //     }
-      //     if (calendar.date == currentDayMonth && index==3 && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 80 && indexAcademicPeriod <=90)) {
-      //       console.log({message:"DIA 4"})
-      //       console.log({date:calendar.date, indexAcademicGlobal, indexAcademicPeriod})
-      //       next()
-      //       return
-      //     }
-          
-      //     if (calendar.date == currentDayMonth && index==4 && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 70 && indexAcademicPeriod < 80)) {
-      //       console.log({message:"DIA 5"})
-      //       console.log({date:calendar.date, indexAcademicGlobal, indexAcademicPeriod})
-      //       next()
-      //       return
-      //     }
-          
-      //     if (calendar.date == currentDayMonth && index==5 && (student.TYPE =="Re-ingreso" && indexAcademicPeriod <70)) {
-      //       console.log({message:"DIA 6"})
-      //       console.log({date:calendar.date, indexAcademicGlobal, indexAcademicPeriod})
-      //       next()
-      //       return
-      //     }  
-      // }
-
       if (calendars[0].date == currentDayMonth && (student.TYPE == 'Primer ingreso' ||student.TYPE == 'Proseene' ||student.TYPE == 'Condicionado' || student.TYPE == 'Representante'|| (student.TYPE =="Re-ingreso" && indexAcademicGlobal >= 80 && coursesAproved.count >=10 )|| (student.TYPE =="Por egresar" && indexAcademicGlobal >= 80))) {
           
         next()
@@ -171,10 +128,6 @@ const getAcademicPeriodDetails = async (id) => {
         return{ error: 'No se encontró información para el período académico especificado' };
       }
   
-    //   // Obtiene el valor de PERIOD_NAME 
-    //   const { PERIOD_NAME } = academicPeriod;
-  
-      // Obtiene información del período anterior
     const previousPeriod = await PeriodAcademic.findOne({
     where: {
         FINISH_DATE: {
@@ -185,15 +138,6 @@ const getAcademicPeriodDetails = async (id) => {
     attributes: ['PERIOD_NAME', "ID_PERIOD"],
     });
 
-    //   // Crea el objeto final con la información recopilada
-    //   const academicPeriodDetails = {
-    //     pac: PERIOD_NAME,
-    //     calendars: calendars,
-    //     previousPac: previousPeriod ? previousPeriod.PERIOD_NAME : null,
-    //     initDate: formatDate(startDate),
-    //     finalDate: formatDate(finishDate),
-    //     aditionInterval: formatDate(startDate) + " al " + formatDate(finishDate), 
-    //   };
   
       return {calendars, previousPeriod};
     } catch (error) {
@@ -246,12 +190,6 @@ module.exports = {
       date: 'lunes, 14 de agosto',
       hour: '9:00 a.m A 10:59 p.m.',
       students: '0% a 69%'
-    },
-    {
-      date: 'martes, 15 de agosto',
-      hour: '9:00 a.m A 10:59 p.m.',
-      students: 'EXCELENCIA ACADEMICA (índice global de 80% a 100% y que además tengan 10 o más asignaturas aprobadas en su historial académico / REPRESENTANTES DE LA UNAH EN ASPECTOS ARTÍSTICOS, CULTURALES Y DEPORTIVOS / CONDICIONADOS /  PROSEENE / POR EGRESAR (índice global de 
-80% a 100% y su índice de periodo es de 0% a 100%) / PRIMER INGRESO PROVENIENTES DE OTRAS UNIVERSIDADES Y GRADUADOS DE LA UNAH'
     }
   ]
  * 

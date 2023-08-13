@@ -7,14 +7,14 @@ const {getEnrollmentAreas, enrolmentCourse, listCoursesArea, getSectionsByIdCour
 
 
 // enpoint para generar matricula
-router.post("/inscription/:idUser/:idPeriod",verifyPaymentEnrollment ,verifyIndexAcademic, verifyEnrollment);
+router.post("/inscription/:idUser/",verifyPaymentEnrollment ,verifyIndexAcademic, verifyEnrollment);
 // enpoint para matricular una clase
-router.post("/inscriptionCourse/:idUser/:idPeriod",verifyPaymentEnrollment , enrolmentCourse);
+router.post("/inscriptionCourse/:idUser",verifyPaymentEnrollment , enrolmentCourse);
 
 // enpoint para matricular una clase en lista de espera
-router.post("/inscriptionCourseWait/:idUser/:idPeriod",verifyPaymentEnrollment , enrolmentWaitCourse);
+router.post("/inscriptionCourseWait/:idUser",verifyPaymentEnrollment , enrolmentWaitCourse);
 // enpoint para cancelar una clase 
-router.put("/canceledInscription/:idEnrollment" , cancelledEnrollment);
+router.post("/canceledInscription/:idEnrollment" , cancelledEnrollment);
 
 // listar las areas en que matricula el estudiante
 router.get("/listAreas/:idUser", getEnrollmentAreas)
