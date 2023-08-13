@@ -14,6 +14,7 @@ const SectionDetails = () => {
   const [listaEspera, setListaEspera] = useState([]);
   const [check, setCheck] = useState(false);
   const [alerta, setAlerta] = useState({});
+  const [check2, setCheck2] = useState(false);
 
   useEffect(() => {
     const fetchSectionDetails = async () => {
@@ -34,7 +35,7 @@ const SectionDetails = () => {
       }
     };
     fetchSectionDetails();
-  }, [id]);
+  }, [id, check2]);
 
   const getIdMatriculados = async (id) => {
     try {
@@ -70,6 +71,7 @@ const SectionDetails = () => {
         error: false,
       });
       setCheck(!check);
+      setCheck2(!check2);
     } catch (error) {
       console.log(error);
     }
