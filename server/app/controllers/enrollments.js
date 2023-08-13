@@ -178,7 +178,7 @@ const listCoursesArea = async (req,res)=>{
     try {
         const {idCareer, idStudent} = req.params
         const career = await getCareer(idCareer);
-        const student = await getStudentById(idStudent)
+        const student = await getStudent(idStudent)
         const courseAproved = await getMyCourseAproved(idStudent)
         let coursesArea = await getServiceCourses(idCareer)
         if (career.NAME == student.CAREER.toUpperCase()) {
