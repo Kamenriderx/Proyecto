@@ -34,6 +34,9 @@ import Planificacion from "../views/Planificacion/Planificacion";
 import Period from "../views/Period/Period";
 import Matricula from "../views/Matricula/Matricula";
 import AdicionarClase from "../views/Matricula/AdicionarClase";
+import CancelarClase from "../views/Matricula/CancelarClase";
+import Forma03 from "../views/Matricula/Forma03";
+
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -214,6 +217,8 @@ const ContentNavbar = () => {
           <Route exact path="/addSections" element={<AddSections />} />
           <Route exact path="/matricula" element={<Matricula />} />
           <Route exact path="/matricula/adicionar-clase" element={<AdicionarClase />} />
+          <Route exact path="/matricula/cancelar-clase" element={<CancelarClase />} />
+          <Route exact path="/matricula/forma03" element={<Forma03 />} />
           <Route exact path="/solicitudes" element={<Requests />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
