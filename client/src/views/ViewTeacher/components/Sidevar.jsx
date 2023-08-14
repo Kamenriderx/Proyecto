@@ -9,6 +9,7 @@ import {
   PiComputerTowerFill,
   PiNotebookFill,
 } from "react-icons/pi";
+import { SiGoogleclassroom } from "react-icons/si";
 import { FaHistory } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AiOutlineUnorderedList } from "react-icons/ai";
@@ -148,6 +149,24 @@ const Sidevar = () => {
                 </span>
               </a>
             </li>
+            {state?.user?.ID_ROLE === 2 && (
+              <>
+                <li>
+                  <Link to="/secciones-Docente">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <SiGoogleclassroom className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Secciones
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+              </>
+            )}
 
             {state?.user?.ID_ROLE === 3 && (
               <>

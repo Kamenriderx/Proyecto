@@ -34,6 +34,7 @@ import Planificacion from "../views/Planificacion/Planificacion";
 import Period from "../views/Period/Period";
 import Matricula from "../views/Matricula/Matricula";
 import SectionDetails from "../views/Matricula/components/SectionDetails";
+import ClassTeacher from "../views/ClassTechers/ClassTeacher";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -244,6 +245,7 @@ const ContentNavbar = () => {
             path="/sections/:idSection"
             element={<SectionDetails />}
           />
+          <Route exact path="/secciones-Docente" element={<ClassTeacher />} />
           <Route exact path="/matricula-jefe" element={<Matricula />} />
           <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
           <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
