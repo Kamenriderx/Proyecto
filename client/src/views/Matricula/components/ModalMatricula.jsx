@@ -1,18 +1,128 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AlertThree from "../../../components/AlertThree";
+import { StoreContext } from "../../../store/ContextExample";
+import { httpRequests } from "../../../utils/helpers/httpRequests";
 
 const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
   if (!isOpen) {
     return null;
   }
+ 
+  //Data area
+  const [area, setArea] = useState({ tipo: "area" });
+  //Data calse
+  const [clase, setClase] = useState({ tipo: "clase" });
+  //Data seccion
+  const [seccion, setSeccion] = useState({ tipo: "seccion" });
+  //Data 
+  const [datos, setDatos] = useState({ tipo: "matricula" });
+
+  // console.log("area: ", area);
+  // console.log("clase: ", clase);
+  // console.log("seccion: ", seccion);
+
+  // console.log('area: ',datos.area, " ", 'clase: ', datos.clase, " ",'seccion: ', datos.seccion);
+
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+
+  //data de area
+  const [dataArea, setDataArea] = useState(null);
+  
+  const getArea = async (stateUser) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${stateUser.token}`,
+        },
+      };
+
+      const res = await httpRequests()["get"](
+        `http://localhost:3000/registro/enrollment/listAreas/${stateUser.user.ID_USER}`,
+        { ...config }
+      );
+
+      // console.log("GET_AREA: ", res.data.areas);
+      setDataArea(res.data.areas);
+
+      if (!res.status && res?.response?.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //data de clase
+  const [dataClase, setDataclase] = useState(null);
+
+  const getClase = async (stateUser) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${stateUser.token}`,
+        },
+      };
+
+      const res = await httpRequests()["get"](
+        `http://localhost:3000/registro/enrollment/listCoursesArea/${area.idArea}/${stateUser.user.ID_USER}`,
+        { ...config }
+      );
+
+      // console.log("GET_CLASE: ", res.data.courses);
+      setDataclase(res.data.courses);
+
+      if (!res.status && res?.response?.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //data de seccion
+  const [dataSeccion, setDataseccion] = useState(null);
+
+  const getSeccion = async (stateUser) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${stateUser.token}`,
+        },
+      };
+
+      const res = await httpRequests()["get"](
+        `http://localhost:3000/registro/enrollment/getCourseSections/${clase.idClase}`,
+        { ...config }
+      );
+
+      // console.log("GET_SECCION: ", res.data.sections);
+      setDataseccion(res.data.sections);
+
+      if (!res.status && res?.response?.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getArea(state);
+    getClase(state);
+    getSeccion(state);
+
+    setDatos({...datos, })
+  }, [state, area, clase]);
+
+  /////////////////////////
 
   //Alerta
   const [message, setMessage] = useState(false);
   const [alerta, setAlerta] = useState();
-
-  //Data
-  const [datos, setDatos] = useState({ tipo: 'matricula' });
-  console.log(datos.area, " ", datos.clase, " ", datos.seccion);
 
   //Enviar datos a componente Padre: TablaMatricula
   const handleClick = () => {
@@ -41,54 +151,62 @@ const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
             <tbody>
               <tr>
                 <td className="w-60">
-                  <select
-                    value={datos.area}
-                    onChange={(event) =>
-                      setDatos({ ...datos, area: event.target.value })
-                    }
-                    size="8"
-                    className="bg-gray-50 text-gray-900 text-md w-full border-none focus:border-none focus:ring-0"
-                  >
-                    <option>area 1</option>
-                    <option>area 2</option>
-                    <option>area 3</option>
-                    <option>area 4</option>
-                    <option>area 5</option>
-                  </select>
+                  {dataArea && (
+                    <select
+                      onChange={(event) =>
+                        setArea({ ...area, idArea: event.target.value })
+                      }
+                      size="8"
+                      className="bg-gray-50 text-gray-900 text-md w-full border-none focus:border-none focus:ring-0"
+                    >
+                      {dataArea.map((area) => (
+                        <option onClick={() => setDatos({...datos, area: area})} value={area.ID_CAREER} key={area.ID_CAREER}>
+                          {area.NAME}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </td>
                 <td className="w-60">
-                  <select
-                    value={datos.clase}
-                    onChange={(event) =>
-                      setDatos({ ...datos, clase: event.target.value })
-                    }
-                    size="8"
-                    className="bg-gray-50 text-gray-900 text-md w-full border-none focus:border-none focus:ring-0"
-                  >
-                    <option>clase 1</option>
-                    <option>clase 2</option>
-                    <option>clase 3</option>
-                    <option>clase 4</option>
-                    <option>clase 5</option>
-                    <option>clase 6</option>
-                  </select>
+                  {dataClase && (
+                    <select
+                      onChange={(event) =>
+                        setClase({ ...clase, idClase: event.target.value })
+                      }
+                      size="8"
+                      className="bg-gray-50 text-gray-900 text-md w-full border-none focus:border-none focus:ring-0"
+                    >
+                      {dataClase.map((clase) => (
+                        <option onClick={() => setDatos({...datos, clase: clase})} value={clase.ID_COURSE} key={clase.ID_COURSE}>
+                          {clase.NAME}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </td>
                 <td className="w-60">
-                  <select
-                    value={datos.seccion}
-                    onChange={(event) =>
-                      setDatos({ ...datos, seccion: event.target.value })
-                    }
-                    size="8"
-                    className="bg-gray-50 text-gray-900 text-md w-full border-none focus:border-none focus:ring-0"
-                  >
-                    <option>seccion 1</option>
-                    <option>seccion 2</option>
-                    <option>seccion 3</option>
-                    <option>seccion 4</option>
-                    <option>seccion 5</option>
-                    <option>seccion 6</option>
-                  </select>
+                  {dataSeccion && (
+                    <select
+                      onChange={(event) =>
+                        setSeccion({
+                          ...seccion,
+                          idSeccion: event.target.value,
+                        })
+                      }
+                      size="8"
+                      className="bg-gray-50 text-gray-900 text-md w-full border-none focus:border-none focus:ring-0"
+                    >
+                      {dataSeccion.map((seccion) => (
+                        <option
+                        onClick={() => setDatos({...datos, seccion: seccion})}
+                          value={seccion.ID_SECTION}
+                          key={seccion.ID_SECTION}
+                        >
+                          {seccion.START_TIME}-{seccion.DAYS}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </td>
               </tr>
             </tbody>

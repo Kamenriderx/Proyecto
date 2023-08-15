@@ -3,7 +3,7 @@ const { Op } = require("sequelize")
 const { Student, Request, Professor, User, Career, RequestCenter } = require("../models")
 
 const getStudent= async (id)=>{
-    return await Student.findOne({where:{ID_USER:id}, include:[{model:User, as:"user", attributes:["NAME","CENTER"]}]})
+    return await Student.findOne({where:{ID_USER:id}, include:[{model:User, as:"user", attributes:["NAME","CENTER","ACCOUNT_NUMBER"]}]})
 }
 const getStudentById= async (id)=>{
     return await Student.findOne({where:{ID_STUDENT:id}, include:[{model:User, as:"user", attributes:["NAME","CENTER"]}]})

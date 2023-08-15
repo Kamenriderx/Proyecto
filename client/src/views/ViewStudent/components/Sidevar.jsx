@@ -10,8 +10,39 @@ import {
 } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { StoreContext } from "../../../store/ContextExample";
+import { httpRequests } from "../../../utils/helpers/httpRequests";
 
 const Sidevar = () => {
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+  const [dataStudent, setdataStudent] = useState(null);
+
+  const handleMatricula = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`,
+        },
+      };
+
+      const res = await httpRequests()["get"](
+        `http://localhost:3000/registro/enrollment/inscription/${state.user.ID_USER}`,
+        { ...config }
+      );
+
+      setdataStudent(res.data);
+
+      if (!res.status && res?.response?.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <button
@@ -101,6 +132,7 @@ const Sidevar = () => {
             <li>
               <Link to="/matricula">
                 <div
+                  // onClick={handleMatricula}
                   className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
                 >

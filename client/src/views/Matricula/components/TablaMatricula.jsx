@@ -1,9 +1,76 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ModalCancelarClase from "./ModalCancelarClase";
 import ModalMatricula from "./ModalMatricula";
 import ModalSeccionEspera from "./ModalSeccionEspera";
+import { StoreContext } from "../../../store/ContextExample";
+import { httpRequests } from "../../../utils/helpers/httpRequests";
 
 const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+
+  //data de clases matriculadas
+  const [dataClasesMatriculadas, setDataClasesMatriculadas] = useState(null);
+  const getClasesMatriculadas = async (stateUser) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${stateUser.token}`,
+        },
+      };
+
+      const res = await httpRequests()["get"](
+        `http://localhost:3000/registro/enrollment/enrollmentCourses/${stateUser.user.ID_USER}`,
+        { ...config }
+      );
+
+      console.log("GET_CLASES_MATRICULADAS: ", res.data);
+      setDataClasesMatriculadas(res.data);
+
+      if (!res.status && res?.response?.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //data de clases en espera
+  const [dataClasesEnEspera, setDataClasesEnEspera] = useState(null);
+  const getClasesEnEspera = async (stateUser) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${stateUser.token}`,
+        },
+      };
+
+      const res = await httpRequests()["get"](
+        `http://localhost:3000/registro/enrollment/waitingCourses/${stateUser.user.ID_USER}`,
+        { ...config }
+      );
+
+      console.log("GET_CLASES_ESPERA: ", res.data);
+      setDataClasesEnEspera(res.data);
+
+      if (!res.status && res?.response?.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getClasesMatriculadas(state);
+    getClasesEnEspera(state);
+  }, [state]);
+
+
+
+  ////////////////////////////////////////////////////////////
   const dataClases = [
     {
       COD: "1",
@@ -31,12 +98,14 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
 
   const [data, setData] = useState(dataClases);
 
-  //Seleccionar una fila de la tabla
+  //Clase en espera para eliminar
   const [selectedRow, setSelectedRow] = useState(null);
   //Habilitar el boton
   const [enableButton, setEnableButton] = useState(true);
   const [indexRowSelected, setindexRowSelected] = useState(null);
   // console.log("indexRowSelected: ", indexRowSelected);
+    console.log("selectedRow: ", selectedRow);
+
 
   const handleRowClick = (index) => {
     setSelectedRow(index);
@@ -77,13 +146,48 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
     setIsModalOpenSeccionEspera(false);
   };
 
+  //datos recibidos
+  const [datosRecibidos, setDatosRecibidos] = useState(null)
+
   //Recibir datos de Ventanas Modales
-  const recibirDatoDelHijo = (datos) => {
+  const recibirDatoDelHijo = async (datos) => {
+    setDatosRecibidos(datos)
     console.log("tipo de dato: ", typeof datos);
     console.log("dato recibido: ", datos);
 
     //Cancelar clase
     if (datos === true) {
+
+        try {
+          const config = {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${state.token}`,
+            },
+          };
+    
+          const res = await httpRequests()["del"](
+            `http://localhost:3000/registro/enrollment/canceledInscription/idCourse`,
+            { ...config }
+          );
+    
+          console.log("Clase cancelada: ");
+          
+          if (res?.status === 200) {
+            alert("Clase cancelada exitosamente.");
+            return;
+          }
+    
+          if (!res.status && res?.response?.status !== 200) {
+            throw new Error(res.response.data.messagge);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      
+
+
+
       const nuevasClases = [...data];
       nuevasClases.splice(indexRowSelected, 1);
       setData(nuevasClases);
@@ -101,23 +205,37 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
           "Para matricular una clase debe seleccionar área, clase y sección."
         );
         return;
-      } else {
-        // alert("Clase matriculada exitosamente.");
+      }
+      if (datos.seccion.SPACE_AVAILABLE == 0) {
+        //seccion en espera
         openModalSeccionEspera();
+      } else {
+        //matricular clase
+        try {
+          const res = await httpRequests()["post"](
+            `http://localhost:3000/registro/enrollment/inscriptionCourse/${state.user.ID_USER}`,
+            { body: data }
+          );
+          console.log("Clase matriculada");
+
+          if (res?.status === 200) {
+            alert("Clase matriculada exitosamente.");
+            return;
+          }
+          if (res?.response.status !== 200) {
+            throw new Error(res.response.data.messagge);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
-    //Validacion Seccion en espera
-    if (datos.tipo === "seccionEspera") {
-      if (datos.seccion === undefined) {
-        alert("Debe de seleccionar una sección.");
-        return;
-      } 
-    }
+
   };
 
   return (
     <>
-      {(adicionar && !form03) && (
+      {adicionar && !form03 && (
         <button
           className="mb-4 py-3 px-3 bg-blue-700 hover:bg-blue-800 text-white font-semibold text-md shadow-md rounded"
           onClick={openModal}
@@ -217,6 +335,7 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
           isOpen={isModalOpenSeccionEspera}
           onClose={closeModalSeccionEspera}
           enviarDatoAlPadre={recibirDatoDelHijo}
+          seccionEspera = {datosRecibidos}
         />
       </div>
     </>

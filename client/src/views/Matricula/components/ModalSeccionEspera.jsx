@@ -1,17 +1,52 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { StoreContext } from "../../../store/ContextExample";
+import { httpRequests } from "../../../utils/helpers/httpRequests";
 
-const ModalSeccionEspera = ({ isOpen, onClose, enviarDatoAlPadre }) => {
+const ModalSeccionEspera = ({
+  isOpen,
+  onClose,
+  seccionEspera,
+  enviarDatoAlPadre,
+}) => {
   if (!isOpen) {
     return null;
   }
 
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+
   //Data
-  const [datos, setDatos] = useState({ tipo: 'seccionEspera' });
-  console.log(datos.seccion);
+  const [datos, setDatos] = useState({ tipo: "seccionEspera" });
+  console.log("Enviar datos: ", datos.seccion);
+  console.log("seccionEsperaSeleccionada: ", seccionEspera.seccion);
 
   //Enviar datos a componente Padre: TablaMatricula
-  const handleClick = () => {
-    enviarDatoAlPadre(datos);
+  //MATRICULAR SECCION EN ESPERA
+  const handleClick = async () => {
+    //Validacion Seccion en espera
+    if (datos.seccion === undefined) {
+      alert("Debe de seleccionar una sección.");
+      return;
+    }
+
+    try {
+      const res = await httpRequests()["post"](
+        `http://localhost:3000/registro/enrollment/inscriptionCourseWait/${state.user.ID_USER}`,
+        { body: data }
+      );
+
+      if (res?.status === 200) {
+        alert("Clase matriculada exitosamente en lista de espera.");
+        return;
+      }
+      if (res?.response.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    // enviarDatoAlPadre(datos);
     onClose();
   };
 
@@ -23,20 +58,17 @@ const ModalSeccionEspera = ({ isOpen, onClose, enviarDatoAlPadre }) => {
         </div>
         <div className="mb-4">
           <select
-            value={datos.seccion}
-            onChange={(event) =>
-              setDatos({ ...datos, seccion: event.target.value })
-            }
-            size="5"
+            size="2"
             className="bg-gray-50 text-gray-900 text-md w-full border-none focus:border-none focus:ring-0"
           >
-            <option>2016</option>
-            <option>2017</option>
-            <option>2018</option>
-            <option>2019</option>
-            <option>2020</option>
-            <option>2021</option>
-            <option>2022</option>
+            <option
+              onClick={() =>
+                setDatos({ ...datos, seccion: seccionEspera.seccion })
+              }
+              value={seccionEspera.seccion.ID_SECTION}
+            >
+              {seccionEspera.seccion.SECTION_CODE}-{seccionEspera.seccion.DAYS}
+            </option>
           </select>
         </div>
 

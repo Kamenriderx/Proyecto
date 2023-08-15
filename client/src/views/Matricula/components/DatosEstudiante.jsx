@@ -58,7 +58,7 @@ const DatosEstudiante = () => {
         </div>
         <div>
           <p className="font-bold text-xl">Número de Cuenta</p>
-          <p className="text-gray-700 text-lg">{dataStudent.indexAcademicPeriod}</p>
+          <p className="text-gray-700 text-lg">{dataStudent.accountNumber}</p>
         </div>
         <div>
           <p className="font-bold text-xl">Carrera</p>
@@ -70,11 +70,11 @@ const DatosEstudiante = () => {
         </div>
         <div>
           <p className="font-bold text-xl">Año</p>
-          <p className="text-gray-700 text-lg">{new Date().getFullYear()}</p>
+          <p className="text-gray-700 text-lg">{dataStudent.year}</p>
         </div>
         <div>
           <p className="font-bold text-xl">UV</p>
-          <p className="text-gray-700 text-lg">{dataStudent.indexAcademicPeriod}</p>
+          <p className="text-gray-700 text-lg">{dataStudent.uvAvailabe}</p>
         </div>
       </div>
     )}
