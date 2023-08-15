@@ -103,6 +103,8 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
   //Habilitar el boton
   const [enableButton, setEnableButton] = useState(true);
   const [indexRowSelected, setindexRowSelected] = useState(null);
+  const [idClaseCancelar, setidClaseCancelar] = useState(null);
+
   // console.log("indexRowSelected: ", indexRowSelected);
     console.log("selectedRow: ", selectedRow);
 
@@ -111,6 +113,7 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
     setSelectedRow(index);
     setEnableButton(false);
     setindexRowSelected(index);
+    setidClaseCancelar(data[index])
     // console.log('data row selected: ', data[index])
   };
 
