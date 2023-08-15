@@ -236,7 +236,7 @@ const getSectionsByIdCourse= async(req,res)=>{
         "SPACE_AVAILABLE"],where:{
             ID_COURSE:idCourse
         }, include:[
-            {model:Professor, as:"proffessor", attributes:["INSTITUTIONAL_EMAIL"], include:[{model:User, as:"user", attributes:["NAME"]}]},
+            {model:Professor, as:"Proffessor", attributes:["INSTITUTIONAL_EMAIL"], include:[{model:User, as:"user", attributes:["NAME"]}]},
             {model:Course, as:"course",attributes:["CODE_COURSE","NAME","UV"]},
             {model:PeriodAcademic, as:"period", required:true, where:{
                 STATUS:"En curso"

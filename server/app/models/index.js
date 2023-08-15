@@ -219,7 +219,7 @@ models.Professor.Section=models.Professor.hasMany(models.Section,{
 models.Section.Professor=models.Section.belongsTo(models.Professor,{
     foreignKey:"ID_PROFFERSSOR",
     unique:true,
-    as:"proffessor"
+    as:"Proffessor"
 });
 //  seccion - clase
 models.Course.Section=models.Course.hasMany(models.Section,{
