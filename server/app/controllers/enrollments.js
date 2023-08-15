@@ -261,9 +261,9 @@ const getInfoAcademicStudent = async (req,res)=>{
         const coursesPeriodPrev = await getMyCoursePeriodPrev(student.ID_STUDENT,previousPeriod)
         let indexAcademicGlobal = await getMyIndexAcademic(courses) || 0
         let indexAcademicPeriod = await getMyIndexAcademic(coursesPeriodPrev) || 0
-        
+        let currentYear = new Date().getFullYear()
 
-        res.status(200).json({indexAcademicGlobal, indexAcademicPeriod, name:student.user.NAME, career:student.CAREER, center:student.user.CENTER})
+        res.status(200).json({indexAcademicGlobal, indexAcademicPeriod, name:student.user.NAME, career:student.CAREER, center:student.user.CENTER, accountNumber:student.user.ACCOUNT_NUMBER, uvAvailabe : student.UV_AVAILABLE, year: currentYear  })
     } catch (error) {
         console.log({error})
         res.status(500).json({messagge:"ALGO SALIO MAL"})
