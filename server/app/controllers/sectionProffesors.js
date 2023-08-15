@@ -5,7 +5,7 @@ exports.getSectionsForProfessor = async function (req, res) {
         const { idUser, idPeriod } = req.params;
 
         const query = `
-            SELECT s.DAYS, s.SECTION_CODE, s.START_TIME, s.END_TIME, s.SPACE_AVAILABLE,
+            SELECT s.DAYS,s.ID_SECTION, s.SECTION_CODE, s.START_TIME, s.END_TIME, s.SPACE_AVAILABLE,
                    c.CODE_COURSE, c.NAME,
                    cl.NUMBER AS CLASSROOM_NUMBER
             FROM SECTION s
