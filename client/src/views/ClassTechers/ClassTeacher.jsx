@@ -8,6 +8,8 @@ const ClassTeacher = () => {
   const [classes, setClasses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [matriculados, setMatriculados] = useState([]);
+  const [selectedClassName, setSelectedClassName] = useState("");
+  const [code, setCode] = useState("");
 
   useEffect(() => {
     const getClassTeacher = async () => {
@@ -27,9 +29,11 @@ const ClassTeacher = () => {
 
   console.log("clases", classes);
 
-  const handleClick = (id) => {
+  const handleClick = async (id, className, code) => {
     setShowModal(true);
-    getIdMatriculados(id);
+    setSelectedClassName(className);
+    setCode(code);
+    await getIdMatriculados(id);
   };
 
   const getIdMatriculados = async (id) => {
@@ -66,7 +70,10 @@ const ClassTeacher = () => {
         <div className="mt-5 mx-3">
           <div className="text-center">
             <p className="text-sky-800 text-xl font-bold">
-              Estudiantes matriculados
+              Estudiantes matriculados en{" "}
+              <span className="text-gray-800 font-black text-base">
+                {selectedClassName} - {code}
+              </span>
             </p>
           </div>
           <div className="mt-5">
@@ -158,7 +165,13 @@ const ClassTeacher = () => {
                           <AiFillEye
                             size={25}
                             className="cursor-pointer"
-                            onClick={() => handleClick(clase.ID_SECTION)}
+                            onClick={() =>
+                              handleClick(
+                                clase.ID_SECTION,
+                                clase.NAME,
+                                clase.SECTION_CODE
+                              )
+                            }
                           />
                         </div>
                       </td>

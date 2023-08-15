@@ -56,6 +56,8 @@ exports.getEnrolledStudents = async function (req, res) {
     const query = `
       SELECT
         s.ID_STUDENT,
+        a.SECTION_CODE,
+        c.NAME,
         u.NAME AS STUDENT_NAME,
         u.ACCOUNT_NUMBER,
         s.INSTITUTIONAL_EMAIL,
@@ -67,7 +69,9 @@ exports.getEnrolledStudents = async function (req, res) {
       FROM
         ENROLLMENT e
         INNER JOIN STUDENT s ON e.ID_STUDENT = s.ID_STUDENT
-        INNER JOIN USER_ u ON s.ID_USER = u.ID_USER
+        INNER JOIN USER_ u ON s.ID_USER = u.ID_USER 
+        INNER JOIN SECTION a ON a.ID_SECTION = e.ID_SECTION
+        INNER JOIN COURSE c ON c.ID_COURSE = a.ID_COURSE
       WHERE
         e.ID_SECTION = :idSection
         AND e.STATE = 'Matriculada';
