@@ -257,15 +257,10 @@ const getInfoAcademicStudent = async (req,res)=>{
         const student = await getStudent(idUser)
         const courses = await getMyCourseEnded(student.ID_STUDENT)
         const currentPeriod= await getCurrentPeriod()
-        let indexAcademicGlobal =  0
-        let indexAcademicPeriod =  0
-        if(currentPeriod){
-            const {previousPeriod} = await getAcademicPeriodDetails(currentPeriod.ID_PERIOD)
-            const coursesPeriodPrev = await getMyCoursePeriodPrev(student.ID_STUDENT,previousPeriod)
-            
-            indexAcademicGlobal = await getMyIndexAcademic(courses) || 0
-            indexAcademicPeriod = await getMyIndexAcademic(coursesPeriodPrev) || 0
-        }
+        const {previousPeriod} = await getAcademicPeriodDetails(currentPeriod.ID_PERIOD)
+        const coursesPeriodPrev = await getMyCoursePeriodPrev(student.ID_STUDENT,previousPeriod)
+        let indexAcademicGlobal = await getMyIndexAcademic(courses) || 0
+        let indexAcademicPeriod = await getMyIndexAcademic(coursesPeriodPrev) || 0
         
 
         res.status(200).json({indexAcademicGlobal, indexAcademicPeriod, name:student.user.NAME, career:student.CAREER, center:student.user.CENTER})
