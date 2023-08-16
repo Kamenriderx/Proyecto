@@ -32,21 +32,21 @@ const ModalSeccionEspera = ({
     try {
       const res = await httpRequests()["post"](
         `http://localhost:3000/registro/enrollment/inscriptionCourseWait/${state.user.ID_USER}`,
-        { body: data }
+        { body: { ID_SECTION: datos.seccion.ID_SECTION } }
       );
 
       if (res?.status === 200) {
         alert("Clase matriculada exitosamente en lista de espera.");
-        return;
       }
       if (res?.response.status !== 200) {
+        alert(res.response.data.messagge);
         throw new Error(res.response.data.messagge);
       }
     } catch (error) {
       console.log(error);
     }
 
-    // enviarDatoAlPadre(datos);
+    enviarDatoAlPadre("espera");
     onClose();
   };
 

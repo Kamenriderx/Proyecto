@@ -115,7 +115,7 @@ const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
     getClase(state);
     getSeccion(state);
 
-    setDatos({...datos, })
+    setDatos({...datos, matricula:"matricula" })
   }, [state, area, clase]);
 
   /////////////////////////
@@ -212,7 +212,6 @@ const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
             </tbody>
           </table>
           <div className="flex justify-between">
-            <p>Obs:</p>
             <div className="flex gap-2">
               <button
                 onClick={handleClick}

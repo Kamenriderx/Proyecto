@@ -9,15 +9,26 @@ import {
   PiNotebookFill,
 } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { StoreContext } from "../../../store/ContextExample";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
+import axios from "axios";
+import AlertThree from "../../../components/AlertThree";
+import AlertTwo from "../../../components/AlertTwo";
+
+
+
 
 const Sidevar = () => {
   //contexto de usuario
   const { state } = useContext(StoreContext);
-  const [dataStudent, setdataStudent] = useState(null);
+
+  const [alerta, setAlerta] = useState({});
+  const [message1, setMessage1] = useState(false);
+  const navigate = useNavigate();
+  const {message} = alerta;
+
 
   const handleMatricula = async () => {
     try {
@@ -28,23 +39,36 @@ const Sidevar = () => {
         },
       };
 
-      const res = await httpRequests()["get"](
-        `http://localhost:3000/registro/enrollment/inscription/${state.user.ID_USER}`,
+      const res = await axios.post(
+        `http://localhost:3000/registro/enrollment/inscription/1`,
         { ...config }
       );
+      navigate("/matricula");
 
-      setdataStudent(res.data);
-
-      if (!res.status && res?.response?.status !== 200) {
-        throw new Error(res.response.data.messagge);
-      }
     } catch (error) {
+      setMessage1(true)
+      // alert('ahahah')
+      navigate("/perfil");
       console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true
+      });
     }
   };
 
+  const handleClick = () => {
+    handleMatricula()
+  }
+
+
   return (
     <>
+          {message1 && (
+        <>
+          <AlertTwo alerta={alerta} />
+        </>
+      )}
       <button
         data-drawer-target="default-sidebar"
         data-drawer-toggle="default-sidebar"
@@ -130,10 +154,9 @@ const Sidevar = () => {
             </li>
 
             <li>
-              <Link to="/matricula">
                 <div
-                  // onClick={handleMatricula}
-                  className="flex items-center p-2 text-gray-900 rounded-lg 
+                  onClick={ handleClick}
+                  className="flex items-center p-2 text-gray-900 rounded-lg cursor-pointer
                 hover:bg-orange-100 hover:font-bold"
                 >
                   <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
@@ -141,7 +164,6 @@ const Sidevar = () => {
                     Matricula
                   </span>
                 </div>
-              </Link>
             </li>
 
             <li>

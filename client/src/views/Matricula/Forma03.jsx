@@ -47,7 +47,7 @@ const Forma03 = () => {
             <div >
               <img
                 className="w-40 h-40 rounded-xl border border-black object-cover"
-                src={fondoPerfil}
+                src={dataStudent.multimedia.length === 0 ? fondoPerfil: dataStudent.multimedia[dataStudent.multimedia.length-1].URL}
                 alt="fondoPerfil"
               />
             </div>
@@ -66,7 +66,7 @@ const Forma03 = () => {
           </div>
         )}
 
-        <TablaMatricula cancelar={false} adicionar={true} form03={true} />
+        <TablaMatricula cancelarClaseMatriculada={false} cancelarClaseEspera={false} adicionar={true} form03={true} />
       </div>
     </>
   );

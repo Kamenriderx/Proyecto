@@ -1,5 +1,5 @@
 const { Op } = require("sequelize")
-const { getStudent, getStudentById } = require("../helpers/repositoryRequest")
+const { getStudent, getStudentById, getPhotos } = require("../helpers/repositoryRequest")
 const { Career, Course, Section, Professor, PeriodAcademic, User } = require("../models")
 const { getServiceCourses, getCareer, getMyCoursesArea, getServicesAreas } = require("../helpers/repositoryCourses")
 const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourseAproved } = require("../helpers/repositorySections")
@@ -256,6 +256,7 @@ const getInfoAcademicStudent = async (req,res)=>{
         const {idUser} = req.params
         const student = await getStudent(idUser)
         const courses = await getMyCourseEnded(student.ID_STUDENT)
+        const multimedia = await getPhotos(idUser) 
         const currentPeriod= await getCurrentPeriod()
         let indexAcademicGlobal = 0
         let indexAcademicPeriod = 0
@@ -269,7 +270,7 @@ const getInfoAcademicStudent = async (req,res)=>{
 
         let currentYear = new Date().getFullYear()
 
-        res.status(200).json({indexAcademicGlobal, indexAcademicPeriod, name:student.user.NAME, career:student.CAREER, center:student.user.CENTER, accountNumber:student.user.ACCOUNT_NUMBER, uvAvailabe : student.UV_AVAILABLE, year: currentYear  })
+        res.status(200).json({indexAcademicGlobal, indexAcademicPeriod, name:student.user.NAME, career:student.CAREER, center:student.user.CENTER, accountNumber:student.user.ACCOUNT_NUMBER, uvAvailabe : student.UV_AVAILABLE, year: currentYear, multimedia  })
         
     } catch (error) {
         console.log({error})

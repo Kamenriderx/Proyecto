@@ -45,14 +45,15 @@ const verifyIndexAcademic = async(req,res,next)=>{
         next()
         return
       }
-      
+      console.log(calendars)
       if (calendars[5].date == currentDayMonth && (student.TYPE =="Re-ingreso" && indexAcademicPeriod <70)) {
+        console.log('indexAcademicPeriod: ',indexAcademicPeriod)
         next()
         return
       }
-      
+      // console.log('indexAcademicPeriod: ',indexAcademicPeriod)
 
-      res.status(400).json({messagge:"No cumplés con los requisitos para matricular el dia de hoy", indexAcademicGlobal, indexAcademicPeriod})
+      res.status(400).json({messagge:"No cumplés con los requisitos para matricular el dia de hoy"})
     } catch (error) {
         console.log({error})
         res.status(500).json({messagge:"ALGO SALIO MAL"})

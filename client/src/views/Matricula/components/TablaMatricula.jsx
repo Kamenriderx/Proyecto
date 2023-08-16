@@ -4,8 +4,15 @@ import ModalMatricula from "./ModalMatricula";
 import ModalSeccionEspera from "./ModalSeccionEspera";
 import { StoreContext } from "../../../store/ContextExample";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
+import axios from "axios";
 
-const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
+const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicionar, form03 }) => {
+  //datos recibidos
+  const [datosRecibidos, setDatosRecibidos] = useState(null);
+
+  const [check, setCheck] = useState(false);
+  const [check1, setCheck1] = useState(false);
+
   //contexto de usuario
   const { state } = useContext(StoreContext);
 
@@ -25,8 +32,8 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
         { ...config }
       );
 
-      console.log("GET_CLASES_MATRICULADAS: ", res.data);
-      setDataClasesMatriculadas(res.data);
+      console.log("GET_CLASES_MATRICULADAS: ", res.data.courses);
+      setDataClasesMatriculadas(res.data.courses);
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);
@@ -52,8 +59,8 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
         { ...config }
       );
 
-      console.log("GET_CLASES_ESPERA: ", res.data);
-      setDataClasesEnEspera(res.data);
+      console.log("GET_CLASES_ESPERA: ", res.data.courses);
+      setDataClasesEnEspera(res.data.courses);
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);
@@ -66,9 +73,7 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
   useEffect(() => {
     getClasesMatriculadas(state);
     getClasesEnEspera(state);
-  }, [state]);
-
-
+  }, [state, check, check1]);
 
   ////////////////////////////////////////////////////////////
   const dataClases = [
@@ -106,14 +111,13 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
   const [idClaseCancelar, setidClaseCancelar] = useState(null);
 
   // console.log("indexRowSelected: ", indexRowSelected);
-    console.log("selectedRow: ", selectedRow);
+  console.log("idClaseCancelar: ", idClaseCancelar);
 
-
-  const handleRowClick = (index) => {
+  const handleRowClick = (index, iDEnrrolment) => {
     setSelectedRow(index);
     setEnableButton(false);
     setindexRowSelected(index);
-    setidClaseCancelar(data[index])
+    setidClaseCancelar(iDEnrrolment);
     // console.log('data row selected: ', data[index])
   };
 
@@ -149,51 +153,35 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
     setIsModalOpenSeccionEspera(false);
   };
 
-  //datos recibidos
-  const [datosRecibidos, setDatosRecibidos] = useState(null)
-
   //Recibir datos de Ventanas Modales
   const recibirDatoDelHijo = async (datos) => {
-    setDatosRecibidos(datos)
+    setDatosRecibidos(datos);
     console.log("tipo de dato: ", typeof datos);
-    console.log("dato recibido: ", datos);
+    //console.log("dato recibido: ", datos.seccion.ID_SECTION);
 
     //Cancelar clase
     if (datos === true) {
+      try {
+        const res = await axios.post(
+          `http://localhost:3000/registro/enrollment/canceledInscription/${idClaseCancelar}`
+        );
+        console.log("Clase cancelada");
+        setCheck1(!check1);
 
-        try {
-          const config = {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${state.token}`,
-            },
-          };
-    
-          const res = await httpRequests()["del"](
-            `http://localhost:3000/registro/enrollment/canceledInscription/idCourse`,
-            { ...config }
-          );
-    
-          console.log("Clase cancelada: ");
-          
-          if (res?.status === 200) {
-            alert("Clase cancelada exitosamente.");
-            return;
-          }
-    
-          if (!res.status && res?.response?.status !== 200) {
-            throw new Error(res.response.data.messagge);
-          }
-        } catch (error) {
-          console.log(error);
+        if (res?.status === 200) {
+          alert("Clase cancelada exitosamente.");
+          return;
         }
-      
 
-
-
-      const nuevasClases = [...data];
-      nuevasClases.splice(indexRowSelected, 1);
-      setData(nuevasClases);
+        if (res?.response.status !== 200) {
+          throw new Error(res.response.data.messagge);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      // const nuevasClases = [...dataClasesMatriculadas];
+      // nuevasClases.splice(indexRowSelected, 1);
+      // setDataClasesMatriculadas(nuevasClases);
       return;
     }
     //Adicionar clase
@@ -213,19 +201,21 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
         //seccion en espera
         openModalSeccionEspera();
       } else {
-        //matricular clase
+        // matricular clase
         try {
           const res = await httpRequests()["post"](
             `http://localhost:3000/registro/enrollment/inscriptionCourse/${state.user.ID_USER}`,
-            { body: data }
+            { body: { ID_SECTION: datos.seccion.ID_SECTION } }
           );
           console.log("Clase matriculada");
+          setCheck(!check);
 
           if (res?.status === 200) {
             alert("Clase matriculada exitosamente.");
             return;
           }
           if (res?.response.status !== 200) {
+            alert(res.response.data.messagge);
             throw new Error(res.response.data.messagge);
           }
         } catch (error) {
@@ -233,7 +223,6 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
         }
       }
     }
-
   };
 
   return (
@@ -274,9 +263,6 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
               {adicionar && (
                 <>
                   <th scope="col" className="px-6 py-3">
-                    OBS
-                  </th>
-                  <th scope="col" className="px-6 py-3">
                     PERIODO
                   </th>
                 </>
@@ -284,38 +270,133 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((arr, index) => (
-              <tr
-                key={arr.COD}
-                className={`${
-                  cancelar
-                    ? selectedRow === index
-                      ? "bg-sky-400 cursor-pointer"
-                      : "hover:bg-sky-200 cursor-pointer"
-                    : ""
-                }`}
-                onClick={() => handleRowClick(index)}
-              >
-                <td className="px-6 py-4">{arr.COD}</td>
-                <td className="px-6 py-4">{arr.ASIGNATURA}</td>
-                <td className="px-6 py-4">{arr.SECCIÓN}</td>
-                <td className="px-6 py-4">{arr.HI}</td>
-                <td className="px-6 py-4">{arr.HF}</td>
-                <td className="px-6 py-4">{arr.DIAS}</td>
-                <td className="px-6 py-4">{arr.UV}</td>
-                {adicionar && (
+            {adicionar && (
+              <>
+                {dataClasesMatriculadas && (
                   <>
-                    <td className="px-6 py-4">{arr.OBS}</td>
-                    <td className="px-6 py-4">{arr.PERIODO}</td>
+                    {dataClasesMatriculadas.map((arr, index) => (
+                      <tr
+                        key={arr.ID_ENROLLMENT}
+                        className={`${
+                          cancelarClaseEspera
+                            ? selectedRow === index
+                              ? "bg-sky-400 cursor-pointer"
+                              : "hover:bg-sky-200 cursor-pointer"
+                            : ""
+                        }`}
+                        onClick={() => handleRowClick(index, arr.ID_ENROLLMENT)}
+                      >
+                        <td className="px-6 py-4">
+                          {arr.seccion.course.CODE_COURSE}
+                        </td>
+                        <td className="px-6 py-4">{arr.seccion.course.NAME}</td>
+                        <td className="px-6 py-4">
+                          {arr.seccion.SECTION_CODE}
+                        </td>
+                        <td className="px-6 py-4">{arr.seccion.START_TIME}</td>
+                        <td className="px-6 py-4">{arr.seccion.END_TIME}</td>
+                        <td className="px-6 py-4">{arr.seccion.DAYS}</td>
+                        <td className="px-6 py-4">{arr.seccion.course.UV}</td>
+                        {adicionar && (
+                          <>
+                            <td className="px-6 py-4">
+                              {arr.seccion.period.PERIOD_NAME}
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    ))}
                   </>
                 )}
-              </tr>
-            ))}
+              </>
+            )}
+
+            {cancelarClaseMatriculada && (
+              <>
+                {dataClasesMatriculadas && (
+                  <>
+                    {dataClasesMatriculadas.map((arr, index) => (
+                      <tr
+                        key={arr.ID_ENROLLMENT}
+                        className={`${
+                          cancelarClaseMatriculada
+                            ? selectedRow === index
+                              ? "bg-sky-400 cursor-pointer"
+                              : "hover:bg-sky-200 cursor-pointer"
+                            : ""
+                        }`}
+                        onClick={() => handleRowClick(index, arr.ID_ENROLLMENT)}
+                      >
+                        <td className="px-6 py-4">
+                          {arr.seccion.course.CODE_COURSE}
+                        </td>
+                        <td className="px-6 py-4">{arr.seccion.course.NAME}</td>
+                        <td className="px-6 py-4">
+                          {arr.seccion.SECTION_CODE}
+                        </td>
+                        <td className="px-6 py-4">{arr.seccion.START_TIME}</td>
+                        <td className="px-6 py-4">{arr.seccion.END_TIME}</td>
+                        <td className="px-6 py-4">{arr.seccion.DAYS}</td>
+                        <td className="px-6 py-4">{arr.seccion.course.UV}</td>
+                        {adicionar && (
+                          <>
+                            <td className="px-6 py-4">
+                              {arr.seccion.period.PERIOD_NAME}
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    ))}
+                  </>
+                )}
+              </>
+            )}
+
+            {cancelarClaseEspera && (
+              <>
+                {dataClasesEnEspera && (
+                  <>
+                    {dataClasesEnEspera.map((arr, index) => (
+                      <tr
+                        key={arr.ID_ENROLLMENT}
+                        className={`${
+                          cancelarClaseEspera
+                            ? selectedRow === index
+                              ? "bg-sky-400 cursor-pointer"
+                              : "hover:bg-sky-200 cursor-pointer"
+                            : ""
+                        }`}
+                        onClick={() => handleRowClick(index, arr.ID_ENROLLMENT)}
+                      >
+                        <td className="px-6 py-4">
+                          {arr.seccion.course.CODE_COURSE}
+                        </td>
+                        <td className="px-6 py-4">{arr.seccion.course.NAME}</td>
+                        <td className="px-6 py-4">
+                          {arr.seccion.SECTION_CODE}
+                        </td>
+                        <td className="px-6 py-4">{arr.seccion.START_TIME}</td>
+                        <td className="px-6 py-4">{arr.seccion.END_TIME}</td>
+                        <td className="px-6 py-4">{arr.seccion.DAYS}</td>
+                        <td className="px-6 py-4">{arr.seccion.course.UV}</td>
+                        {adicionar && (
+                          <>
+                            <td className="px-6 py-4">
+                              {arr.seccion.period.PERIOD_NAME}
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    ))}
+                  </>
+                )}
+              </>
+            )}
           </tbody>
         </table>
       </div>
       <div>
-        {cancelar && (
+        {cancelarClaseEspera || cancelarClaseMatriculada && (
           <button
             disabled={enableButton}
             onClick={openModalCancelarClase}
@@ -338,7 +419,7 @@ const TablaMatricula = ({ cancelar, adicionar, form03 }) => {
           isOpen={isModalOpenSeccionEspera}
           onClose={closeModalSeccionEspera}
           enviarDatoAlPadre={recibirDatoDelHijo}
-          seccionEspera = {datosRecibidos}
+          seccionEspera={datosRecibidos}
         />
       </div>
     </>

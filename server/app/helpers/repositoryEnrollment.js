@@ -84,7 +84,7 @@ const getSectionEnrollmentStudent = async (idStudent) =>{
                 "END_TIME"
             ], as:"seccion", include:
             [
-                {model:Course, as:"course" , attributes:["ID_COURSE","CODE_COURSE","NAME"]},
+                {model:Course, as:"course" , attributes:["ID_COURSE","CODE_COURSE","NAME","UV"]},
                 {model:PeriodAcademic, as:"period", attributes:
                 [
                     "ID_PERIOD",

@@ -7,7 +7,7 @@ const AdicionarClase = () => {
   return (
     <div className="mx-16 mt-32 ">
     <DatosEstudiante />
-    <TablaMatricula cancelar={false} adicionar={true} form03={false}/>
+    <TablaMatricula adicionar={true} cancelarClaseMatriculada={false} cancelarClaseEspera={false} form03={false}/>
   </div>
   );
 };
