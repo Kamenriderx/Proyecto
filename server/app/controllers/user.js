@@ -61,10 +61,10 @@ async function  getInfo(id,role){
             user = await Student.findOne({where:{
                 ID_USER: id
         
-            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}})|| await Student.findOne({where:{
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}}) || await Student.findOne({where:{
                 ID_USER: id
         
-            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user"}})
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user", include:[{model:Multimedia, as:"multimedia"}]}})
             break;
         case 2 :
 
