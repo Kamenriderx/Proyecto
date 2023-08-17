@@ -36,7 +36,7 @@ const Sidevar = () => {
       };
 
       const res = await axios.post(
-        `http://localhost:3000/registro/enrollment/inscription/1`,
+        `http://localhost:3000/registro/enrollment/inscription/${state.user.ID_USER}`,
         { ...config }
       );
       navigate("/matricula");
