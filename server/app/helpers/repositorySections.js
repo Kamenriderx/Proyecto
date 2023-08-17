@@ -146,7 +146,7 @@ const getMyCourseAproved = async(idStudent) =>{
             OBS:"APR"
             
         }},{
-            model:Course, as:"course", attributes:[ "CODE_COURSE",
+            model:Course, as:"course", attributes:["ID_COURSE" ,"CODE_COURSE",
             "NAME",
             "IS_SERVICE",
             "UV"]
@@ -154,6 +154,10 @@ const getMyCourseAproved = async(idStudent) =>{
     }) 
 }
 const getMyCoursePeriodPrev = async(idStudent,previousPeriod) =>{
+    if (!previousPeriod) {
+        return null
+        
+    }
     return await Section.findAll({
         where:{
             ID_PERIOD: previousPeriod.ID_PERIOD
@@ -184,6 +188,11 @@ const getMyCoursePeriodPrev = async(idStudent,previousPeriod) =>{
 }
 
 const getMyIndexAcademic = (sections) =>{
+
+    if (!sections) {
+        return null
+        
+    }
     let sumPromUv =0
     let sumUv =0
 

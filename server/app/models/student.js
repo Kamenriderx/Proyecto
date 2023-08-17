@@ -27,6 +27,18 @@ const Student = connection.define(
         
         CAREER:{
             type:DataTypes.STRING
+        },
+        UV_AVAILABLE:{
+            type:DataTypes.INTEGER,
+            defaultValue: 25
+        },
+        TYPE:{
+            type:DataTypes.ENUM("Primer ingreso","Re-ingreso","Por egresar","Proseene","Condicionado","Representante"),
+            defaultValue: "Primer ingreso"
+        },
+        REGISTRATION_PAYMENT:{
+            type:DataTypes.INTEGER,
+            defaultValue: 0 
         }
 
 

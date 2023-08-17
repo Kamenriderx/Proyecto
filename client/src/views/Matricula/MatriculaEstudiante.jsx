@@ -140,4 +140,4 @@ const Matricula = () => {
   );
 };
 
-export default Matricula;
+export default MatriculaEstudiante;

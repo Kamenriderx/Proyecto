@@ -32,9 +32,18 @@ import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
 import Planificacion from "../views/Planificacion/Planificacion";
 import Period from "../views/Period/Period";
+<<<<<<< HEAD
 import Matricula from "../views/Matricula/Matricula";
 import SectionDetails from "../views/Matricula/components/SectionDetails";
 import ClassTeacher from "../views/ClassTechers/ClassTeacher";
+=======
+import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
+>>>>>>> 7a0569dbdaa3a33183287e8c3fa227cd0524750f
+import AdicionarClase from "../views/Matricula/AdicionarClase";
+import Forma03 from "../views/Matricula/Forma03";
+import CancelarClaseMatriculada from "../views/Matricula/CancelarClaseMatriculada";
+import CancelarClaseEnEspera from "../views/Matricula/CancelarClaseEnEspera";
+
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -213,6 +222,11 @@ const ContentNavbar = () => {
           <Route exact path="/chat" element={<ViewChat />} />
           <Route exact path="/contactos" element={<ListContacts />} />
           <Route exact path="/addSections" element={<AddSections />} />
+          <Route exact path="/matricula" element={<MatriculaEstudiante />} />
+          <Route exact path="/matricula/adicionar-clase" element={<AdicionarClase />} />
+          <Route exact path="/matricula/cancelar-clase-matriculada" element={<CancelarClaseMatriculada />} />
+          <Route exact path="/matricula/cancelar-clase-espera" element={<CancelarClaseEnEspera />} />
+          <Route exact path="/matricula/forma03" element={<Forma03 />} />
           <Route exact path="/solicitudes" element={<Requests />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
