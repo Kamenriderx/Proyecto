@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const {Student, User, Multimedia, Professor} = require('../models');
+
 const getStudents = async (req,res) =>{
     try{
         const students = await Student.findAll({include:{model: User, as:"user"}});
