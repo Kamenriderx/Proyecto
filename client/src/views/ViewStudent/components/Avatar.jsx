@@ -11,16 +11,14 @@ const Avatar = ({ user }) => {
   const [propAlert, setPropAlert] = useState({});
   const [error, setError] = useState(false);
 
-   //contexto de usuario
-   const { state } = useContext(StoreContext);
-   //contexto de estudiante
-   const {stateStudent, getStudent, putImage} = useContext(StudentContext)
-
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+  //contexto de estudiante
+  const { stateStudent, getStudent, putImage } = useContext(StudentContext);
 
   useEffect(() => {
-    getStudent(state)
-  },[state])
-
+    getStudent(state);
+  }, [state]);
 
   //este estado se le enviara al server
   // console.log("nameImageSelected: ", nameImageSelected);
@@ -34,7 +32,7 @@ const Avatar = ({ user }) => {
       setError(true);
 
       if (!selectedImage) {
-          setPropAlert({
+        setPropAlert({
           text: "Debe seleccionar un archivo.",
           icon: "error",
           title: "Error",
@@ -46,21 +44,19 @@ const Avatar = ({ user }) => {
           title: "Error",
         });
       }
-      return
+      return;
     }
 
     // console.log('stateStudent.user.user.multimedia.length: ', stateStudent.user.user.multimedia.length)
-    if(stateStudent?.user?.user?.multimedia?.length === 3){
-
-      alert('Solo puede subir como máximo tres imágenes.')
-
+    if (stateStudent?.user?.user?.multimedia?.length === 3) {
+      alert("Solo puede subir como máximo tres imágenes.");
     }
 
     setImage(URL.createObjectURL(e.target.files[0]));
     setError(false);
 
-    await putImage(state,e.target.files[0])
-    await getStudent(state) 
+    await putImage(state, e.target.files[0]);
+    await getStudent(state);
   };
 
   // console.log('multimedia: ',perfil.data.user.user.multimedia[perfil.data.user.user.multimedia.length - 1].URL)
@@ -114,7 +110,7 @@ const Avatar = ({ user }) => {
               <label htmlFor="avatar" className="cursor-pointer">
                 <img
                   src={
-                    stateStudent.user.user.hasOwnProperty("multimedia")
+                    stateStudent.user.user.multimedia.length > 0
                       ? stateStudent.user.user.multimedia[
                           stateStudent.user.user.multimedia.length - 1
                         ].URL
