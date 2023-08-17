@@ -99,7 +99,7 @@ const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
         { ...config }
       );
 
-      console.log("GET_SECCION: ", res.data.sections);
+      // console.log("GET_SECCION: ", res.data.sections);
       setDataseccion(res.data.sections);
 
       if (!res.status && res?.response?.status !== 200) {

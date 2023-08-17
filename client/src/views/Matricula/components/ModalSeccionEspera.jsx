@@ -18,8 +18,8 @@ const ModalSeccionEspera = ({
 
   //Data
   const [datos, setDatos] = useState({ tipo: "seccionEspera" });
-  console.log("Enviar datos: ", datos.seccion);
-  console.log("seccionEsperaSeleccionada: ", seccionEspera.seccion);
+  // console.log("Enviar datos: ", datos.seccion);
+  // console.log("seccionEsperaSeleccionada: ", seccionEspera.seccion);
   //alerta
   const [alerta, setAlerta] = useState({});
   const [message1, setMessage1] = useState(false);

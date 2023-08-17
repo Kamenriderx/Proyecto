@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../../store/ContextExample";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 
-const DatosEstudiante = () => {
+const DatosEstudiante = ({check}) => {
 
     //contexto de usuario
     const { state } = useContext(StoreContext);
@@ -24,7 +24,7 @@ const DatosEstudiante = () => {
         { ...config }
       );
 
-      console.log('GET_STUDENT: ',res.data)
+      // console.log('GET_STUDENT: ',res.data)
       setdataStudent(res.data)
 
       if (!res.status && res?.response?.status !== 200) {
@@ -37,7 +37,7 @@ const DatosEstudiante = () => {
 
   useEffect(() => {
     getStudent(state);
-  }, [state]);
+  }, [state, check]);
 
 
   return (

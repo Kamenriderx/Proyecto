@@ -6,12 +6,14 @@ import { StoreContext } from "../../../store/ContextExample";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 import axios from "axios";
 import AlertTwo from "../../../components/AlertTwo";
+import DatosEstudiante from "./DatosEstudiante";
 
 const TablaMatricula = ({
   cancelarClaseMatriculada,
   cancelarClaseEspera,
   adicionar,
   form03,
+  enviarDatoAlPadre
 }) => {
   //datos recibidos
   const [datosRecibidos, setDatosRecibidos] = useState(null);
@@ -38,7 +40,7 @@ const TablaMatricula = ({
         { ...config }
       );
 
-      console.log("GET_CLASES_MATRICULADAS: ", res.data.courses);
+      // console.log("GET_CLASES_MATRICULADAS: ", res.data.courses);
       setDataClasesMatriculadas(res.data.courses);
 
       if (!res.status && res?.response?.status !== 200) {
@@ -65,7 +67,7 @@ const TablaMatricula = ({
         { ...config }
       );
 
-      console.log("GET_CLASES_ESPERA: ", res.data.courses);
+      // console.log("GET_CLASES_ESPERA: ", res.data.courses);
       setDataClasesEnEspera(res.data.courses);
 
       if (!res.status && res?.response?.status !== 200) {
@@ -93,7 +95,7 @@ const TablaMatricula = ({
   const [idClaseCancelar, setidClaseCancelar] = useState(null);
 
   // console.log("indexRowSelected: ", indexRowSelected);
-  console.log("idClaseCancelar: ", idClaseCancelar);
+  // console.log("idClaseCancelar: ", idClaseCancelar);
 
   const handleRowClick = (index, iDEnrrolment) => {
     setSelectedRow(index);
@@ -135,11 +137,15 @@ const TablaMatricula = ({
     setIsModalOpenSeccionEspera(false);
   };
 
+
+  const [check3, setCheck3] = useState(0)
+
   //Recibir datos de Ventanas Modales
   const recibirDatoDelHijo = async (datos) => {
+    setCheck3(check3+1)
     setMessage1(false);
     setDatosRecibidos(datos);
-    console.log("tipo de dato: ", typeof datos);
+    // console.log("tipo de dato: ", typeof datos);
     //console.log("dato recibido: ", datos.seccion.ID_SECTION);
 
     //Cancelar clase
@@ -148,7 +154,7 @@ const TablaMatricula = ({
         const res = await axios.post(
           `http://localhost:3000/registro/enrollment/canceledInscription/${idClaseCancelar}`
         );
-        console.log("Clase cancelada");
+        // console.log("Clase cancelada");
         setCheck1(!check1);
 
         if (res?.status === 200) {
@@ -192,6 +198,7 @@ const TablaMatricula = ({
       if (datos.seccion.SPACE_AVAILABLE == 0) {
         //seccion en espera
         openModalSeccionEspera();
+        handleClick()
       } else {
         // matricular clase
         try {
@@ -199,7 +206,7 @@ const TablaMatricula = ({
             `http://localhost:3000/registro/enrollment/inscriptionCourse/${state.user.ID_USER}`,
             { body: { ID_SECTION: datos.seccion.ID_SECTION } }
           );
-          console.log("Clase matriculada:", res);
+          // console.log("Clase matriculada:", res);
           setCheck(!check);
 
           if (res?.status === 200) {
@@ -208,6 +215,7 @@ const TablaMatricula = ({
               message: "Clase matriculada exitosamente.",
               error: false,
             });
+            handleClick()
             return;
           }
           if (res?.response.status !== 200) {
@@ -224,7 +232,10 @@ const TablaMatricula = ({
       }
     }
   };
-
+    // Enviar datos a componente Padre: Adicionar Clase
+    const handleClick = () => {
+      enviarDatoAlPadre(check3);
+    };
   return (
     <>
       {message1 && (
@@ -241,8 +252,8 @@ const TablaMatricula = ({
         </button>
       )}
       <div className="relative overflow-x-auto rounded-xl">
-        <table className="w-full text-lg text-left text-gray-700">
-          <thead className="text-xl text-black uppercase bg-gray-200">
+        <table className="w-full text-lg text-left text-gray-700 ">
+          <thead className="text-xl text-black uppercase bg-gray-200 ">
             <tr>
               <th scope="col" className="px-6 py-3">
                 CÓDIGO
