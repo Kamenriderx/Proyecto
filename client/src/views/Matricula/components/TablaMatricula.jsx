@@ -5,8 +5,14 @@ import ModalSeccionEspera from "./ModalSeccionEspera";
 import { StoreContext } from "../../../store/ContextExample";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 import axios from "axios";
+import AlertTwo from "../../../components/AlertTwo";
 
-const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicionar, form03 }) => {
+const TablaMatricula = ({
+  cancelarClaseMatriculada,
+  cancelarClaseEspera,
+  adicionar,
+  form03,
+}) => {
   //datos recibidos
   const [datosRecibidos, setDatosRecibidos] = useState(null);
 
@@ -76,32 +82,8 @@ const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicion
   }, [state, check, check1]);
 
   ////////////////////////////////////////////////////////////
-  const dataClases = [
-    {
-      COD: "1",
-      ASIGNATURA: "202020",
-      SECCIÓN: "agua",
-      HI: "ahaajj",
-      HF: "cu",
-      DIAS: "202020",
-      UV: "agua",
-      OBS: "ahaajj",
-      PERIODO: "2",
-    },
-    {
-      COD: "2",
-      ASIGNATURA: "202020",
-      SECCIÓN: "agua",
-      HI: "ahaajj",
-      HF: "cu",
-      DIAS: "202020",
-      UV: "agua",
-      OBS: "ahaajj",
-      PERIODO: "2",
-    },
-  ];
-
-  const [data, setData] = useState(dataClases);
+  const [alerta, setAlerta] = useState({});
+  const [message1, setMessage1] = useState(false);
 
   //Clase en espera para eliminar
   const [selectedRow, setSelectedRow] = useState(null);
@@ -155,6 +137,7 @@ const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicion
 
   //Recibir datos de Ventanas Modales
   const recibirDatoDelHijo = async (datos) => {
+    setMessage1(false);
     setDatosRecibidos(datos);
     console.log("tipo de dato: ", typeof datos);
     //console.log("dato recibido: ", datos.seccion.ID_SECTION);
@@ -169,19 +152,25 @@ const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicion
         setCheck1(!check1);
 
         if (res?.status === 200) {
-          alert("Clase cancelada exitosamente.");
+          setMessage1(true);
+          setAlerta({
+            message: "Clase cancelada exitosamente.",
+            error: false,
+          });
           return;
         }
 
         if (res?.response.status !== 200) {
-          throw new Error(res.response.data.messagge);
+          setMessage1(true);
+          setAlerta({
+            message: res.response.data.messagge,
+            error: true,
+          });
+          return;
         }
       } catch (error) {
         console.log(error);
       }
-      // const nuevasClases = [...dataClasesMatriculadas];
-      // nuevasClases.splice(indexRowSelected, 1);
-      // setDataClasesMatriculadas(nuevasClases);
       return;
     }
     //Adicionar clase
@@ -192,9 +181,12 @@ const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicion
         datos.clase === undefined ||
         datos.seccion === undefined
       ) {
-        alert(
-          "Para matricular una clase debe seleccionar área, clase y sección."
-        );
+        setMessage1(true);
+        setAlerta({
+          message:
+            "Para matricular una clase debe seleccionar área, clase y sección.",
+          error: true,
+        });
         return;
       }
       if (datos.seccion.SPACE_AVAILABLE == 0) {
@@ -207,16 +199,24 @@ const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicion
             `http://localhost:3000/registro/enrollment/inscriptionCourse/${state.user.ID_USER}`,
             { body: { ID_SECTION: datos.seccion.ID_SECTION } }
           );
-          console.log("Clase matriculada");
+          console.log("Clase matriculada:", res);
           setCheck(!check);
 
           if (res?.status === 200) {
-            alert("Clase matriculada exitosamente.");
+            setMessage1(true);
+            setAlerta({
+              message: "Clase matriculada exitosamente.",
+              error: false,
+            });
             return;
           }
           if (res?.response.status !== 200) {
-            alert(res.response.data.messagge);
-            throw new Error(res.response.data.messagge);
+            setMessage1(true);
+            setAlerta({
+              message: res.response.data.messagge,
+              error: true,
+            });
+            return;
           }
         } catch (error) {
           console.log(error);
@@ -227,6 +227,11 @@ const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicion
 
   return (
     <>
+      {message1 && (
+        <>
+          <AlertTwo alerta={alerta} />
+        </>
+      )}
       {adicionar && !form03 && (
         <button
           className="mb-4 py-3 px-3 bg-blue-700 hover:bg-blue-800 text-white font-semibold text-md shadow-md rounded"
@@ -396,15 +401,15 @@ const TablaMatricula = ({ cancelarClaseMatriculada, cancelarClaseEspera, adicion
         </table>
       </div>
       <div>
-        {cancelarClaseEspera || cancelarClaseMatriculada && (
-          <button
-            disabled={enableButton}
-            onClick={openModalCancelarClase}
-            className="my-4 py-3 px-3 bg-blue-700 hover:bg-blue-800 text-white font-semibold text-md shadow-md rounded float-right disabled:bg-gray-400"
-          >
-            Cancelar Asignatura
-          </button>
-        )}
+        {(cancelarClaseEspera || cancelarClaseMatriculada) && (
+            <button
+              disabled={enableButton}
+              onClick={openModalCancelarClase}
+              className="my-4 py-3 px-3 bg-blue-700 hover:bg-blue-800 text-white font-semibold text-md shadow-md rounded float-right disabled:bg-gray-400"
+            >
+              Cancelar Asignatura
+            </button>
+          )}
         <ModalCancelarClase
           isOpen={isModalOpenCancelarClase}
           onClose={closeModalCancelarClase}

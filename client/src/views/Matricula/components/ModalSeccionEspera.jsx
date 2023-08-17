@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { StoreContext } from "../../../store/ContextExample";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
+import AlertTwo from "../../../components/AlertTwo";
 
 const ModalSeccionEspera = ({
   isOpen,
@@ -19,13 +20,22 @@ const ModalSeccionEspera = ({
   const [datos, setDatos] = useState({ tipo: "seccionEspera" });
   console.log("Enviar datos: ", datos.seccion);
   console.log("seccionEsperaSeleccionada: ", seccionEspera.seccion);
+  //alerta
+  const [alerta, setAlerta] = useState({});
+  const [message1, setMessage1] = useState(false);
 
   //Enviar datos a componente Padre: TablaMatricula
   //MATRICULAR SECCION EN ESPERA
   const handleClick = async () => {
+    setMessage1(false);
+
     //Validacion Seccion en espera
     if (datos.seccion === undefined) {
-      alert("Debe de seleccionar una sección.");
+      setMessage1(true);
+      setAlerta({
+        message:"Para matricular la clase en lista de espera, debe seleccionar la sección.",
+        error: true,
+      });
       return;
     }
 
@@ -36,11 +46,20 @@ const ModalSeccionEspera = ({
       );
 
       if (res?.status === 200) {
-        alert("Clase matriculada exitosamente en lista de espera.");
+        setMessage1(true);
+        setAlerta({
+          message: "Clase matriculada exitosamente en lista de espera.",
+          error: false,
+        });
+        return;
       }
       if (res?.response.status !== 200) {
-        alert(res.response.data.messagge);
-        throw new Error(res.response.data.messagge);
+        setMessage1(true);
+            setAlerta({
+              message: res.response.data.messagge,
+              error: true,
+            });
+            return;
       }
     } catch (error) {
       console.log(error);
@@ -51,6 +70,12 @@ const ModalSeccionEspera = ({
   };
 
   return (
+    <>
+      {message1 && (
+        <>
+          <AlertTwo alerta={alerta} />
+        </>
+      )}
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-md shadow-lg">
         <div className="mb-4 font-bold text-lg">
@@ -89,6 +114,7 @@ const ModalSeccionEspera = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 

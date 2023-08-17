@@ -99,7 +99,7 @@ const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
         { ...config }
       );
 
-      // console.log("GET_SECCION: ", res.data.sections);
+      console.log("GET_SECCION: ", res.data.sections);
       setDataseccion(res.data.sections);
 
       if (!res.status && res?.response?.status !== 200) {
@@ -167,7 +167,7 @@ const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
                     </select>
                   )}
                 </td>
-                <td className="w-60">
+                <td className="w-72">
                   {dataClase && (
                     <select
                       onChange={(event) =>
@@ -184,7 +184,7 @@ const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
                     </select>
                   )}
                 </td>
-                <td className="w-60">
+                <td className="w-72">
                   {dataSeccion && (
                     <select
                       onChange={(event) =>
@@ -202,7 +202,7 @@ const ModalMatricula = ({ isOpen, onClose, enviarDatoAlPadre }) => {
                           value={seccion.ID_SECTION}
                           key={seccion.ID_SECTION}
                         >
-                          {seccion.START_TIME}-{seccion.DAYS}
+                          {seccion.START_TIME}-{seccion.DAYS} - {seccion.SPACE_AVAILABLE} Cupos disponibles
                         </option>
                       ))}
                     </select>

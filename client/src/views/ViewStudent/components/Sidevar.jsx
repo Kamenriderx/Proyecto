@@ -17,9 +17,6 @@ import axios from "axios";
 import AlertThree from "../../../components/AlertThree";
 import AlertTwo from "../../../components/AlertTwo";
 
-
-
-
 const Sidevar = () => {
   //contexto de usuario
   const { state } = useContext(StoreContext);
@@ -27,8 +24,7 @@ const Sidevar = () => {
   const [alerta, setAlerta] = useState({});
   const [message1, setMessage1] = useState(false);
   const navigate = useNavigate();
-  const {message} = alerta;
-
+  const { message } = alerta;
 
   const handleMatricula = async () => {
     try {
@@ -44,27 +40,25 @@ const Sidevar = () => {
         { ...config }
       );
       navigate("/matricula");
-
     } catch (error) {
-      setMessage1(true)
+      setMessage1(!message1);
       // alert('ahahah')
       navigate("/perfil");
       console.log(error);
       setAlerta({
         message: error.response.data.messagge,
-        error: true
+        error: true,
       });
     }
   };
 
   const handleClick = () => {
-    handleMatricula()
-  }
-
+    handleMatricula();
+  };
 
   return (
     <>
-          {message1 && (
+      {message1 && (
         <>
           <AlertTwo alerta={alerta} />
         </>
@@ -154,16 +148,14 @@ const Sidevar = () => {
             </li>
 
             <li>
-                <div
-                  onClick={ handleClick}
-                  className="flex items-center p-2 text-gray-900 rounded-lg cursor-pointer
+              <div
+                onClick={handleClick}
+                className="flex items-center p-2 text-gray-900 rounded-lg cursor-pointer
                 hover:bg-orange-100 hover:font-bold"
-                >
-                  <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                  <span className="flex-1 ml-3 whitespace-nowrap">
-                    Matricula
-                  </span>
-                </div>
+              >
+                <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                <span className="flex-1 ml-3 whitespace-nowrap">Matricula</span>
+              </div>
             </li>
 
             <li>
