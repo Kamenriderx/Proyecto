@@ -118,14 +118,14 @@ const ReadCSV = () => {
         <>
           <AlertThree alerta = {alerta}/>
           <div className="flex justify-center my-10">
-            <DotSpinner size={50} speed={0.9} color="white" />
+            <DotSpinner size={50} speed={0.9} color="black" />
           </div>
         </>
       ) : mostrarTable ? (
         <TableStudents body={data} />
       ) : (
         <div className="flex justify-center my-10">
-          <DotSpinner size={50} speed={0.9} color="white" />
+          <DotSpinner size={50} speed={0.9} color="black" />
         </div>
       )}
 

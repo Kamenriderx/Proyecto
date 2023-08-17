@@ -44,11 +44,11 @@ app.use('/registro', require('./app/routes'));
 //Levantando servidor
 http.listen(3000, () => {
   console.log('API lista en el puerto ', 3000)
-  connection.query("UPDATE user_ SET ONLINE_STATUS = :NEW_STATE WHERE ONLINE_STATUS = :OLD_STATE",{
-    replacements:{
-      NEW_STATE: "offline",
-      OLD_STATE:"online"
-    }
-  })
+  // connection.query("UPDATE user_ SET ONLINE_STATUS = :NEW_STATE WHERE ONLINE_STATUS = :OLD_STATE",{
+  //   replacements:{
+  //     NEW_STATE: "offline",
+  //     OLD_STATE:"online"
+  //   }
+  // })
 
 });

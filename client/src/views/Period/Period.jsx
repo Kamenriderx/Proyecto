@@ -10,22 +10,21 @@ const Period = () => {
   const [state, setState] = useState({
     initDate: "",
     finalDate: "",
-    selectedYear: "I"
+    selectedYear: "I",
   });
-
 
   const handleChange = (event) => {
     const { value, name } = event.target;
     setState({ ...state, [name]: value });
   };
 
-  const handleSubmit = () =>{
-    httpRequests()["post"]("http://localhost:3000/registro/periodAcademic",{ body:{startDate:state.initDate,finishDate:state.finalDate}}).
-    then(res=>console.log(res));
-
-  }
-
-
+  const handleSubmit = () => {
+    httpRequests()
+      ["post"]("http://localhost:3000/registro/periodAcademic", {
+        body: { startDate: state.initDate, finishDate: state.finalDate },
+      })
+      .then((res) => console.log(res));
+  };
 
   return (
     <div className="flex w-full justify-center p-3 m-3">
@@ -62,7 +61,6 @@ const Period = () => {
               <button
                 onClick={() => setVisible(true)}
                 className="bg-red-600 text-white w-20 rounded-md h-6"
-                
               >
                 Descartar
               </button>
