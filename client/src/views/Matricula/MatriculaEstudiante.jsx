@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Matricula = () => {
+const MatriculaEstudiante = () => {
   return (
     <div className="container mx-auto">
       <div>
@@ -49,4 +49,4 @@ const Matricula = () => {
   );
 };
 
-export default Matricula;
+export default MatriculaEstudiante;
