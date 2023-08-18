@@ -20,17 +20,13 @@ const ViewStudent = () => {
         `http://localhost:3000?token=${localStorage.getItem("token")}`
       );
     }
-   
   }, [localStorage.getItem("token")]);
 
- 
   //contexto de usuario
   const { state } = useContext(StoreContext);
 
   //contexto de estudiante
   const { stateStudent, getStudent, putCorreo } = useContext(StudentContext);
-
-  
 
   const user = {
     visitante: false,
@@ -47,8 +43,6 @@ const ViewStudent = () => {
     getStudent(state);
   }, [state]);
 
-  
-
   const handleEmailChange = (e) => {
     setNewEmail({ EMAIL: e.target.value });
   };
@@ -63,8 +57,6 @@ const ViewStudent = () => {
     setEmail(newEmail);
     setshowModal(false);
 
-
-
     await putCorreo(state, newEmail.EMAIL);
     await getStudent(state);
   };
@@ -72,6 +64,8 @@ const ViewStudent = () => {
   const closeModal = () => {
     setshowModal(false);
   };
+
+  console.log("ESTADO ESTUDIANTE", stateStudent);
 
   return (
     <>
@@ -172,7 +166,9 @@ const ViewStudent = () => {
             <div className="animate__animated animate__fadeIn fixed inset-0 flex items-center justify-center z-50">
               <div className="absolute inset-0 bg-black opacity-50"></div>
               <div className="bg-white rounded-lg p-8 z-10 w-2/6">
-                <h2 className="text-xl font-bold mb-4">ACTUALIZAR CORREO PERSONAL</h2>
+                <h2 className="text-xl font-bold mb-4">
+                  ACTUALIZAR CORREO PERSONAL
+                </h2>
 
                 <div className="relative my-4">
                   <input
