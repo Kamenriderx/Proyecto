@@ -253,6 +253,31 @@ const getRequestChangeCenter = async (req,res)=>{
     
     }
 }
+const getRequestCancellationCourse = async (req,res)=>{
+    try {
+        const {idUser} = req.params
+        const professor = await getProfessor(idUser)
+        const request = await Request.findAll({
+            where:{
+                ID_COORDINATOR:professor.ID_PROFFERSSOR,
+                STATE: "Pendiente",
+                TYPE:"CANCELACION_CLASE",
+                CENTER:{[Op.like]:professor.user.CENTER}
+            }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:professor.CAREER}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCenter, as:"requestCenter"},
+        {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]},
+        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
 
 
 const getMyRequestsPaymentReplacements = async (req,res)=>{
@@ -486,7 +511,8 @@ module.exports = {
     getCareers,
     requestChangeCareer,
     getRequestChangeCareer, 
-    getRequestChangeCenter, 
+    getRequestChangeCenter,
+    getRequestCancellationCourse,
     responseRequest, 
     cancelledRequest,
     getMyRequestsChangeCareer,
@@ -497,5 +523,6 @@ module.exports = {
     getMyRequestsAcceptDenyCareer,
     getMyRequestsAcceptDenyCancellCourse,
     getMyRequestsPaymentReplacements,
-    requestExceptionalCancellation
+    requestExceptionalCancellation,
+    
 };
