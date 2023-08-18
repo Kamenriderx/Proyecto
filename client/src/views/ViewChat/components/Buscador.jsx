@@ -5,8 +5,6 @@ import StudentContext from "../../ViewStudent/context/StudentContext";
 import MessagesContext from "../context/Messages/MessagesContext";
 import fondoPerfil from "../../../assets/fondoPerfil.jpg";
 
-import fondoPerfil from "../../../assets/fondoPerfil.jpg";
-
 
 const Buscador = ({ chats, enviarDatoAlPadre, check }) => {
   const [users, setUsers] = useState([]);
