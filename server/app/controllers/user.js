@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const {Student, User, Multimedia, Professor} = require('../models');
+
 const getStudents = async (req,res) =>{
     try{
         const students = await Student.findAll({include:{model: User, as:"user"}});
@@ -60,12 +61,36 @@ async function  getInfo(id,role){
             user = await Student.findOne({where:{
                 ID_USER: id
         
-            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}})|| await Student.findOne({where:{
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}}) || await Student.findOne({where:{
                 ID_USER: id
         
-            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user"}})
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user", include:[{model:Multimedia, as:"multimedia"}]}})
             break;
-        case 2 || 3 || 4:
+        case 2 :
+
+            user = await Professor.findOne({where:{
+                ID_USER: id
+        
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}}) || await Professor.findOne({where:{
+                ID_USER: id
+        
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia"}]}})
+
+            
+            break;
+            case 3 :
+
+            user = await Professor.findOne({where:{
+                ID_USER: id
+        
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}}) || await Professor.findOne({where:{
+                ID_USER: id
+        
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia"}]}})
+
+            
+            break;
+            case 4 :
 
             user = await Professor.findOne({where:{
                 ID_USER: id

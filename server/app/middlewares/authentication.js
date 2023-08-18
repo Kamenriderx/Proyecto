@@ -1,5 +1,7 @@
 const {verifyToken} = require("../handlers/handleJwt.js");
+const { getPhotos } = require("../helpers/repositoryRequest.js");
 const { User, Multimedia } = require("../models");
+
 
 const authMiddleware =  async (req,res,next) =>{
     try {
@@ -22,8 +24,9 @@ const authMiddleware =  async (req,res,next) =>{
 
         const user = await User.findOne({attributes:["ID_USER","ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],where:{
             ID_USER:dataToken.userId
-        },include:{model:Multimedia, as:"multimedia"}})
+        }})
         req.user = user.dataValues
+        req.user.multimedia = await getPhotos(user.ID_USER)
         next()
 
 

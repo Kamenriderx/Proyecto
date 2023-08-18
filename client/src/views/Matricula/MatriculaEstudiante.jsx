@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-
 const MatriculaEstudiante = () => {
   return (
     <div className="container mx-auto">
