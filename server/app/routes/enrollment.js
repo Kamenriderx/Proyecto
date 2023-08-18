@@ -7,7 +7,7 @@ const {getEnrollmentAreas, enrolmentCourse, listCoursesArea, getSectionsByIdCour
 
 
 // enpoint para generar matricula
-router.post("/inscription/:idUser",verifyPaymentEnrollment , verifyEnrollment);
+router.post("/inscription/:idUser",verifyPaymentEnrollment , verifyIndexAcademic, verifyEnrollment);
 // enpoint para matricular una clase
 router.post("/inscriptionCourse/:idUser",verifyPaymentEnrollment , enrolmentCourse);
 
