@@ -47,10 +47,15 @@ const getPerfil = async (req,res)=>{
                 indexAcademicPeriod = await getMyIndexAcademic(coursesPeriodPrev) || 0
             }
 
-            user.indexAcademic = indexAcademicGlobal
-            user.indexAcademicPeriod = indexAcademicPeriod
-            user.quantityCourses = quantityCourses
-           
+            
+            res.status(200).json({
+                user,
+                role: req.user.ID_ROLE,
+                indexAcademicGlobal,
+                quantityCourses
+            })
+
+            return
 
             
         }
