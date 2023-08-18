@@ -253,6 +253,31 @@ const getRequestChangeCenter = async (req,res)=>{
     
     }
 }
+const getRequestCancellationCourse = async (req,res)=>{
+    try {
+        const {idUser} = req.params
+        const professor = await getProfessor(idUser)
+        const request = await Request.findAll({
+            where:{
+                ID_COORDINATOR:professor.ID_PROFFERSSOR,
+                STATE: "Pendiente",
+                TYPE:"CANCELACION_CLASE",
+                CENTER:{[Op.like]:professor.user.CENTER}
+            }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:professor.CAREER}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
+            }, {model:RequestCenter, as:"requestCenter"},
+        {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]},
+        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
 
 
 const getMyRequestsPaymentReplacements = async (req,res)=>{
@@ -426,6 +451,16 @@ const responseRequest = async(req,res)=>{
             return
             
         }
+        if (body.RESPONSE.toUpperCase() == "ACEPTADA" && request.TYPE == "CANCELACION_CLASE") {
+            
+            body.NEW_CENTER = request.requestCenter[0].dataValues.CENTER
+            body.OBS = "Tu solicitud de cancelacion de clase ha sido Aprobada"
+            await changeCenterStudent(body)
+            await changeStateRequest(body)
+            res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+            return
+            
+        }
         if (body.RESPONSE.toUpperCase() == "DENEGADA" && request.TYPE =="CARRERA") {
             body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
             await changeStateRequest(body)
@@ -434,6 +469,13 @@ const responseRequest = async(req,res)=>{
             
         }
         if (body.RESPONSE.toUpperCase() == "DENEGADA" && request.TYPE =="CENTRO") {
+            body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
+            await changeStateRequest(body)
+            res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+            return
+            
+        }
+        if (body.RESPONSE.toUpperCase() == "DENEGADA" && request.TYPE =="CANCELACION_CLASE") {
             body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
             await changeStateRequest(body)
             res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
@@ -469,7 +511,8 @@ module.exports = {
     getCareers,
     requestChangeCareer,
     getRequestChangeCareer, 
-    getRequestChangeCenter, 
+    getRequestChangeCenter,
+    getRequestCancellationCourse,
     responseRequest, 
     cancelledRequest,
     getMyRequestsChangeCareer,
@@ -480,5 +523,6 @@ module.exports = {
     getMyRequestsAcceptDenyCareer,
     getMyRequestsAcceptDenyCancellCourse,
     getMyRequestsPaymentReplacements,
-    requestExceptionalCancellation
+    requestExceptionalCancellation,
+    
 };

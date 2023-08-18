@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const {getCareers, requestChangeCareer, getRequestChangeCareer, responseRequest, cancelledRequest, getMyRequests, requestChangeCenter, getMyRequestsAcceptDenyCenter, getMyRequestsAcceptDenyCareer, getRequestChangeCenter, requestPaymentReplacement, getMyRequestsPaymentReplacements, getMyRequestsChangeCareer, getMyRequestsChangeCenter, requestExceptionalCancellation, getMyRequestsAcceptDenyCancellCourse} = require('../controllers/request.js');
+const {getCareers, requestChangeCareer, getRequestChangeCareer, responseRequest, cancelledRequest, requestChangeCenter, getMyRequestsAcceptDenyCenter, getMyRequestsAcceptDenyCareer, getRequestChangeCenter, requestPaymentReplacement, getMyRequestsPaymentReplacements, getMyRequestsChangeCareer, getMyRequestsChangeCenter, requestExceptionalCancellation, getMyRequestsAcceptDenyCancellCourse, getRequestCancellationCourse} = require('../controllers/request.js');
 const {checkRolCoordinador} = require('../middlewares/rol.js');
 const authMiddleware = require('../middlewares/authentication.js');
 const upload = require('../middlewares/uploadFiles.js');
@@ -10,6 +10,7 @@ const upload = require('../middlewares/uploadFiles.js');
 // coordinador
 router.get("/listRequestChangeCareer" ,authMiddleware,checkRolCoordinador,getRequestChangeCareer);
 router.get("/listRequestChangeCenter" ,authMiddleware,checkRolCoordinador,getRequestChangeCenter);
+router.get("/listRequestCancellationExceptional/:idUser" ,authMiddleware,checkRolCoordinador,getRequestCancellationCourse);
 router.put("/responseRequest", authMiddleware,checkRolCoordinador, responseRequest)
 
 // estudiante
