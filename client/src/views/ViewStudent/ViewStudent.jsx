@@ -108,13 +108,17 @@ const ViewStudent = () => {
                 <div className="border-2 border-gray-300 basis-1/5 m-4">
                   <div className="flex flex-col p-2 items-center bg-white">
                     <div className="text-sm">Clases</div>
-                    <div className="text-4xl font-bold">22</div>
+                    <div className="text-4xl font-bold">
+                      {stateStudent.quantityCourses}
+                    </div>
                   </div>
                 </div>
                 <div className="border-2 border-gray-300 basis-1/5 m-4">
                   <div className="flex flex-col p-2 items-center bg-white">
                     <div className="text-sm">Promedio</div>
-                    <div className="text-4xl font-bold">75%</div>
+                    <div className="text-4xl font-bold">
+                      {stateStudent.indexAcademicGlobal}
+                    </div>
                   </div>
                 </div>
               </div>
