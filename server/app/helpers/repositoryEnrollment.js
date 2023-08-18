@@ -172,13 +172,17 @@ const getCurrentPeriod = async ()=>{
 
 const cancelInscription=async (idEnrollment, idUser)=>{
     const student = await getStudent(idUser)
-
     const enrollment = await Enrollment.findOne({where:{ID_ENROLLMENT: idEnrollment}, include:[{model:Section, as:"seccion", include:[{model:Course, as:"course"}]}]});
-    student.UV_AVAILABLE += enrollment.seccion.course.UV;
-    enrollment.STATE = 'Cancelada'
-    await enrollment.save();  
-    await student.save();  
-    
+    const section = await getSectionById(enrollment.seccion.ID_SECTION);
+
+    if (enrollment.STATE !="Cancelada" ) {
+        student.UV_AVAILABLE += enrollment.seccion.course.UV;
+        section.SPACE_AVAILABLE +=1
+        enrollment.STATE = 'Cancelada'
+        await enrollment.save();  
+        await student.save();  
+        await section.save();    
+    }
 }
 
 const getSectionById= async (idSection)=> await Section.findOne({where:{ID_SECTION:idSection}, include:[{model:Course, as:"course"}]})

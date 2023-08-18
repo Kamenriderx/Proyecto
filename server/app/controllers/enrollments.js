@@ -69,7 +69,7 @@ const enrolmentCourse = async (req,res)=>{
                 }
 
                 if (data[0].STATE == "Matriculada" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
-                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
+                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
                     return    
                 }
 
@@ -130,6 +130,7 @@ const enrolmentWaitCourse = async (req,res)=>{
             data = await verifySections(enrollments, body.ID_SECTION)
             if (data.length >0 ) {
                 if (data[0].STATE == "En Espera" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
+                    
                     res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
                     return    
                 }
@@ -144,7 +145,7 @@ const enrolmentWaitCourse = async (req,res)=>{
                 }
 
                 if (data[0].STATE == "Matriculada" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
-                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
+                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
                     return    
                 }
 
