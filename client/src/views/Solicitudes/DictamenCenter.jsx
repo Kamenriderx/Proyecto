@@ -35,8 +35,6 @@ const DictamenCenter = () => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
-
-  console.log("RESPUESTA A SOLICITUDES", listRequest);
   return (
     <div className="container mx-auto mt-10">
       <div className="mt-5 text-center">
