@@ -50,7 +50,6 @@ const getPerfil = async (req,res)=>{
             user.indexAcademic = indexAcademicGlobal
             user.indexAcademicPeriod = indexAcademicPeriod
             user.quantityCourses = quantityCourses
-            console.log({indexAcademicGlobal, indexAcademicPeriod, quantityCourses})
            
 
             

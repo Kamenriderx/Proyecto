@@ -3,7 +3,7 @@ const { getStudent, getStudentById, getPhotos } = require("../helpers/repository
 const { Career, Course, Section, Professor, PeriodAcademic, User } = require("../models")
 const { getServiceCourses, getCareer, getMyCoursesArea, getServicesAreas } = require("../helpers/repositoryCourses")
 const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourseAproved } = require("../helpers/repositorySections")
-const { getQuantityEnrollmentsCourse, getSpaceAvailableAndUv, getSectionEnrollmentStudent, verifySections, saveEnrollment, getQuantityEnrollmentsWaitCourse, getCurrentPeriod, getSectionWaitingStudent, cancelInscription, getAllSectionsEnrollmentsStudent, getSectionById } = require("../helpers/repositoryEnrollment")
+const { getQuantityEnrollmentsCourse, getSpaceAvailableAndUv, getSectionEnrollmentStudent, verifySections, saveEnrollment, getQuantityEnrollmentsWaitCourse, getCurrentPeriod, getSectionWaitingStudent, cancelInscription, getAllSectionsEnrollmentsStudent, getSectionById, getEnrollmentByName } = require("../helpers/repositoryEnrollment")
 
 const { getAcademicPeriodDetails } = require("../middlewares/indexAcademic")
 
@@ -45,12 +45,22 @@ const enrolmentCourse = async (req,res)=>{
         const enrollments = await getAllSectionsEnrollmentsStudent(student.ID_STUDENT)
         const quantity = await getQuantityEnrollmentsCourse(body.ID_SECTION)
         const section = await getSectionById(body.ID_SECTION);
+
+        const enrollmentCurrent = await getEnrollmentByName(student.ID_STUDENT,section.course.NAME )
+
         body.ID_STUDENT = student.ID_STUDENT
         body.ARRIVAL_NUMBER = quantity + 1
         const {spaceAvailable,uvSection } = await getSpaceAvailableAndUv(body.ID_SECTION)
         let data = []
         
-        
+        if (enrollmentCurrent && enrollmentCurrent.STATE=="Matriculada") {
+            res.status(400).json({messagge:`ya tienes matriculada la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
+            return
+        }
+        if (enrollmentCurrent && enrollmentCurrent.STATE=="En Espera") {
+            res.status(400).json({messagge:`ya tienes Espera la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
+            return
+        }
         if (enrollments.length > 0) {
             data = await verifySections(enrollments, body.ID_SECTION)
             if (data.length >0 ) {
@@ -120,12 +130,21 @@ const enrolmentWaitCourse = async (req,res)=>{
         const student = await getStudent(idUser)
         const enrollments = await getAllSectionsEnrollmentsStudent(student.ID_STUDENT)
         const quantity = await getQuantityEnrollmentsWaitCourse(body.ID_SECTION)
+        const section = await getSectionById(body.ID_SECTION);
+        const enrollmentCurrent = await getEnrollmentByName(student.ID_STUDENT,section.course.NAME )
         body.ID_STUDENT = student.ID_STUDENT
         body.ARRIVAL_NUMBER = quantity + 1
         const {spaceAvailable,uvSection } = await getSpaceAvailableAndUv(body.ID_SECTION)
         let data = []
-        
-        
+
+        if (enrollmentCurrent && enrollmentCurrent.STATE=="Matriculada") {
+            res.status(400).json({messagge:`ya tienes matriculada la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
+            return
+        }
+        if (enrollmentCurrent && enrollmentCurrent.STATE=="En Espera") {
+            res.status(400).json({messagge:`ya tienes Espera la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
+            return
+        }
         if (enrollments.length > 0) {
             data = await verifySections(enrollments, body.ID_SECTION)
             if (data.length >0 ) {

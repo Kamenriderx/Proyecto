@@ -174,20 +174,47 @@ const cancelInscription=async (idEnrollment, idUser)=>{
     const student = await getStudent(idUser)
     const enrollment = await Enrollment.findOne({where:{ID_ENROLLMENT: idEnrollment}, include:[{model:Section, as:"seccion", include:[{model:Course, as:"course"}]}]});
     const section = await getSectionById(enrollment.seccion.ID_SECTION);
-
+    
     if (enrollment.STATE !="Cancelada" ) {
+        if (enrollment.STATE != "En Espera") {
+            section.SPACE_AVAILABLE +=1
+            await section.save();    
+            
+        }
         student.UV_AVAILABLE += enrollment.seccion.course.UV;
-        section.SPACE_AVAILABLE +=1
         enrollment.STATE = 'Cancelada'
         await enrollment.save();  
         await student.save();  
-        await section.save();    
+
     }
 }
 
 const getSectionById= async (idSection)=> await Section.findOne({where:{ID_SECTION:idSection}, include:[{model:Course, as:"course"}]})
 
-
+const getEnrollmentByName = async (idStudent, name) => await Enrollment.findOne({
+    attributes:[
+        "ID_ENROLLMENT",
+        "STATE",
+        "ARRIVAL_NUMBER"
+    ],where:{ID_STUDENT : idStudent,[Op.or]:[{STATE:"Matriculada"}, {STATE:"En Espera"}]}, include:[{model:Section,
+        attributes:
+        [
+            "ID_SECTION",
+            "DAYS",
+            "SECTION_CODE",
+            "START_TIME",
+            "END_TIME"
+        ], as:"seccion",required:true ,include:
+        [
+            {model:Course, as:"course" , required:true,attributes:["ID_COURSE","CODE_COURSE","NAME"], where:{NAME:name}},
+            {model:PeriodAcademic, as:"period", attributes:
+            [
+                "ID_PERIOD",
+                "PERIOD_NAME"
+            ] },
+        ]
+    }]
+})
 
 // START_TIME  
 // END_TIME
@@ -203,5 +230,6 @@ module.exports = {
     getSectionWaitingStudent,
     cancelInscription,
     getAllSectionsEnrollmentsStudent,
-    getSectionById
+    getSectionById,
+    getEnrollmentByName
 };
