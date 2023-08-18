@@ -37,10 +37,10 @@ const Requests = () => {
           </div>
           <div className="mt-10">
             <Link
-              to="/certificacion-estudios"
+              to="/cancelacion-excep"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Solicitud de Certificación de Estudios
+              Solicitud de Cancelacion Excepcional
             </Link>
           </div>
         </aside>
