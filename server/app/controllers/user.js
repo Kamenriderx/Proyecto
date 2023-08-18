@@ -1,5 +1,9 @@
 const { Op } = require('sequelize');
 const {Student, User, Multimedia, Professor} = require('../models');
+const { getCurrentPeriod } = require('../helpers/repositoryEnrollment');
+const { getAcademicPeriodDetails } = require('../middlewares/indexAcademic');
+const { getMyCoursePeriodPrev, getMyIndexAcademic, getMyCourseEnded } = require('../helpers/repositorySections');
+
 const getStudents = async (req,res) =>{
     try{
         const students = await Student.findAll({include:{model: User, as:"user"}});
@@ -13,28 +17,50 @@ const getStudents = async (req,res) =>{
 const getPerfil = async (req,res)=>{
     try {
         const {id} = req.params;
-        console.log(id)
-        let user ={}
+        let user ={};
+    
+
+        
         
 
         if (parseInt(id) === req.user.ID_USER) {    
             user = await getInfo(id,req.user.ID_ROLE);   
         };
 
-/*         if(parseInt(id) !== req.user.ID_USER) {
-            user = await getInfo(id,5);
-            // if ((req.user.ID_ROLE ==1 && user.dataValues.user.ID_ROLE == 1)) {
-            //     res.status(402).json({messagge:"NO PUEDES VER ESTE PERFIL"})
-            //     return
-            // }
-        }; */
-
-
         if (!user) {
             res.status(404).json({messagge:"EL USUARIO NO EXISTE"})
             return
             
         }
+        if (req.user.ID_ROLE == 1) {
+            
+            const courses = await getMyCourseEnded(user.ID_STUDENT)
+            const currentPeriod= await getCurrentPeriod()
+            let indexAcademicGlobal = 0
+            let indexAcademicPeriod = 0
+            let quantityCourses = courses.length
+            indexAcademicGlobal = await getMyIndexAcademic(courses) || 0
+            if(currentPeriod){
+                const {previousPeriod} = await getAcademicPeriodDetails(currentPeriod.ID_PERIOD)
+                const coursesPeriodPrev = await getMyCoursePeriodPrev(user.ID_STUDENT,previousPeriod)
+
+                indexAcademicPeriod = await getMyIndexAcademic(coursesPeriodPrev) || 0
+            }
+
+            
+            res.status(200).json({
+                user,
+                role: req.user.ID_ROLE,
+                indexAcademicGlobal,
+                quantityCourses
+            })
+
+            return
+
+            
+        }
+
+        
 
         res.status(200).json({
             user,
@@ -60,12 +86,36 @@ async function  getInfo(id,role){
             user = await Student.findOne({where:{
                 ID_USER: id
         
-            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}})|| await Student.findOne({where:{
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}}) || await Student.findOne({where:{
                 ID_USER: id
         
-            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user"}})
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user", include:[{model:Multimedia, as:"multimedia"}]}})
             break;
-        case 2 || 3 || 4:
+        case 2 :
+
+            user = await Professor.findOne({where:{
+                ID_USER: id
+        
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}}) || await Professor.findOne({where:{
+                ID_USER: id
+        
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia"}]}})
+
+            
+            break;
+            case 3 :
+
+            user = await Professor.findOne({where:{
+                ID_USER: id
+        
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}}) || await Professor.findOne({where:{
+                ID_USER: id
+        
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia"}]}})
+
+            
+            break;
+            case 4 :
 
             user = await Professor.findOne({where:{
                 ID_USER: id

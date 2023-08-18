@@ -68,8 +68,8 @@ const ViewChat = () => {
   const recibirDatoDelHijo = (id, chat) => {
     setIdConversation(id);
     setChatConversation(chat);
-    setContMessage(1)
-    
+    setContMessage(1);
+
     const getgetMessagesAsync = async () => {
       await getMessages(id, 1);
     };
@@ -129,7 +129,9 @@ const ViewChat = () => {
                     <>
                       <img
                         src={
-                          chatConversation?.USER_.hasOwnProperty("multimedia")
+                          chatConversation?.USER_.hasOwnProperty(
+                            "multimedia"
+                          ) && chatConversation?.USER_?.multimedia.length > 0
                             ? chatConversation?.USER_?.multimedia[
                                 chatConversation?.USER_?.multimedia?.length - 1
                               ].URL
@@ -158,7 +160,8 @@ const ViewChat = () => {
                             <div className="m-4 flex gap-2">
                               <img
                                 src={
-                                  mess.user?.hasOwnProperty("multimedia")
+                                  mess.user?.hasOwnProperty("multimedia") &&
+                                  mess.user?.multimedia.length > 0
                                     ? mess.user?.multimedia[
                                         mess.user?.multimedia?.length - 1
                                       ].URL
@@ -188,7 +191,8 @@ const ViewChat = () => {
                               </div>
                               <img
                                 src={
-                                  mess.user?.hasOwnProperty("multimedia")
+                                  mess.user?.hasOwnProperty("multimedia") &&
+                                  mess.user?.multimedia.length > 0
                                     ? mess.user?.multimedia[
                                         mess.user?.multimedia?.length - 1
                                       ].URL
@@ -201,14 +205,16 @@ const ViewChat = () => {
                           )}
                         </div>
                       ))}
-                      {
-                        messages.length === 15 ?
-                        (<div className="flex justify-center items-center p-1" 
-                        >
-                          <BsFillArrowUpCircleFill className=" text-blue-600 text-2xl  hover:text-blue-400 cursor-pointer"
-                          onClick={pagination}/>
-                        </div>) : '' 
-                      }
+                      {messages.length === 15 ? (
+                        <div className="flex justify-center items-center p-1">
+                          <BsFillArrowUpCircleFill
+                            className=" text-blue-600 text-2xl  hover:text-blue-400 cursor-pointer"
+                            onClick={pagination}
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
 
                     <div className="flex gap-4 items-center bg-gray-200 rounded-2xl">

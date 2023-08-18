@@ -9,11 +9,60 @@ import {
   PiNotebookFill,
 } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { StoreContext } from "../../../store/ContextExample";
+import { httpRequests } from "../../../utils/helpers/httpRequests";
+import axios from "axios";
+import AlertThree from "../../../components/AlertThree";
+import AlertTwo from "../../../components/AlertTwo";
 
 const Sidevar = () => {
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+
+  const [alerta, setAlerta] = useState({});
+  const [message1, setMessage1] = useState(false);
+  const navigate = useNavigate();
+  const { message } = alerta;
+
+  const handleMatricula = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`,
+        },
+      };
+
+      const res = await axios.post(
+        `http://localhost:3000/registro/enrollment/inscription/${state.user.ID_USER}`,
+        { ...config }
+      );
+      navigate("/matricula");
+    } catch (error) {
+      setMessage1(!message1);
+      // alert('ahahah')
+      navigate("/perfil");
+      console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
+    }
+  };
+
+  const handleClick = () => {
+    handleMatricula();
+  };
+
   return (
     <>
+      {message1 && (
+        <>
+          <AlertTwo alerta={alerta} />
+        </>
+      )}
       <button
         data-drawer-target="default-sidebar"
         data-drawer-toggle="default-sidebar"
@@ -71,8 +120,7 @@ const Sidevar = () => {
             </li>
             <li>
               <Link to="/contactos">
-                <a
-                  href="#"
+                <div
                   className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
                 >
@@ -81,7 +129,7 @@ const Sidevar = () => {
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Contactos
                   </span>
-                </a>
+                </div>
               </Link>
             </li>
             <li>
@@ -98,21 +146,21 @@ const Sidevar = () => {
             <li className="text-center">
               <span className="text-gray-600">Registro</span>
             </li>
+
             <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
+              <div
+                onClick={handleClick}
+                className="flex items-center p-2 text-gray-900 rounded-lg cursor-pointer
                 hover:bg-orange-100 hover:font-bold"
               >
                 <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Matricula</span>
-              </a>
+              </div>
             </li>
 
             <li>
               <Link to="/solicitudes">
-                <a
-                  href="#"
+                <div
                   className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
                 >
@@ -120,7 +168,7 @@ const Sidevar = () => {
                   <span className="flex-1 ml-3 whitespace-nowrap">
                     Solicitudes
                   </span>
-                </a>
+                </div>
               </Link>
             </li>
 

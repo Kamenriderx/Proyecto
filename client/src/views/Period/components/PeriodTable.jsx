@@ -19,7 +19,7 @@ const PeriodTable = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("");
 
   const handlePe = (value) => {
-    console.log("Valor seleccionado",selectedPeriod)
+    console.log("Valor seleccionado", selectedPeriod);
     httpRequests()
       ["get"](
         `http://localhost:3000/registro/section/getSectionsPeriod/${value}`,
@@ -37,7 +37,7 @@ const PeriodTable = () => {
 
   const handlePeriodChange = (event) => {
     const { value, name } = event.target;
-    console.log(value,name);
+    console.log(value, name);
     setSelectedPeriod(value);
     handlePe(value);
   };
@@ -49,8 +49,8 @@ const PeriodTable = () => {
         ["get"]("http://localhost:3000/registro/periodAcademic/allperiods", {})
 
         .then((res) => {
-          setState({...state,periods:res.data});
-          setSelectedPeriod()
+          setState({ ...state, periods: res.data });
+          setSelectedPeriod();
           httpRequests(res.data[0].ID_PERIOD)
             ["get"](
               `http://localhost:3000/registro/section/getSectionsPeriod/${selectedPeriod}`,
@@ -61,15 +61,13 @@ const PeriodTable = () => {
               }
             )
             .then((res2) => {
-              console.log("Valores",res,res2);
-              console.log("Valores",selectedPeriod);
+              console.log("Valores 1", res, res2);
+              console.log("Valores 2", selectedPeriod);
               setState({
                 ...state,
-                sections: res2.data.sections
+                sections: res2.data.sections,
               });
             });
-
-         
 
           console.log("Periodos", res);
         });
@@ -126,13 +124,12 @@ const PeriodTable = () => {
         <select
           name="selectedPeriod"
           value={selectedPeriod}
-          
           id="years"
           onChange={handlePeriodChange}
-          className="w-25 h-9 rounded-md w"
+          className="w-25 h-12 rounded-md"
         >
           {state.periods.map((p) => (
-            <option  key={p.ID_PERIOD} value={p.ID_PERIOD}>
+            <option key={p.ID_PERIOD} value={p.ID_PERIOD}>
               {p.PERIOD_NAME}
             </option>
           ))}

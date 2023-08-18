@@ -17,7 +17,9 @@ const models = {
     Request : require('./requests.js'),
     RequestCareer : require('./requestCareer.js'),
     RequestCenter : require('./requestCenter.js'),
-    PeriodAcademic: require('./periodAcademic.js')
+    PeriodAcademic: require('./periodAcademic.js'),
+    Enrollment: require('./enrollment.js'),
+    ServiceCourse : require('./serviceCourse.js')
     
 }
 
@@ -38,6 +40,27 @@ models.PeriodAcademic.Section=models.PeriodAcademic.hasMany(models.Section,{
 models.Section.PeriodAcademic=models.Section.belongsTo(models.PeriodAcademic,{
     foreignKey:"ID_PERIOD",
     as:"period"
+});
+
+// ESTUDIANTE - MATRICULA
+
+models.Student.Enrollment=models.Student.hasMany(models.Enrollment,{
+    foreignKey:"ID_STUDENT"
+});
+models.Enrollment.Student=models.Enrollment.belongsTo(models.Student,{
+    foreignKey:"ID_STUDENT",
+    as:"student"
+});
+// SECCIONES - MATRICULA
+
+models.Section.Enrollment=models.Section.hasMany(models.Enrollment,{
+    foreignKey:"ID_SECTION",
+    as:"enrollments"
+});
+models.Enrollment.Section=models.Enrollment.belongsTo(models.Section,{
+    foreignKey:"ID_SECTION",
+    unique:true,
+    as:"seccion"
 });
 
 
@@ -69,6 +92,17 @@ models.RequestCareer.Request=models.RequestCareer.belongsTo(models.Request,{
     foreignKey:"ID_REQUEST",
     as:"request"
 });
+// CARRERA - REQUERIMIENTOS DE LAS CLASES
+models.Career.RequerimentsCourse=models.Career.hasMany(models.RequerimentsCourse,{
+    foreignKey:"ID_CAREER"
+});
+models.RequerimentsCourse.Career=models.RequerimentsCourse.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    unique:true,
+    as:"career"
+});
+
+
 // solicitudes - cambioCentro
 
 models.Request.RequestCenter=models.Request.hasMany(models.RequestCenter,{
@@ -91,7 +125,15 @@ models.RequestCareer.Career=models.RequestCareer.belongsTo(models.Career,{
 
 // requerimientos clase
 models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'ID_COURSE',as:"course" });
-models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'REQUIREMENT_ID_COURSE', as:"requirement" });
+models.Course.RequerimentsCourse=models.Course.hasMany(models.RequerimentsCourse,{
+    foreignKey:"ID_COURSE",
+    as:"requirement"
+});
+models.RequerimentsCourse.belongsTo(models.Course, { foreignKey: 'REQUIREMENT_ID_COURSE', as:"requirementCourse" });
+models.Course.RequerimentsCourse2=models.Course.hasMany(models.RequerimentsCourse,{
+    foreignKey:"REQUIREMENT_ID_COURSE",
+});
+
 // carrera - departamento 
 
 models.Department.Career=models.Department.hasMany(models.Career,{
@@ -117,6 +159,29 @@ models.Classroom.Career=models.Classroom.belongsTo(models.Career,{
     as:"career"
 });
 
+// service - carrera
+
+models.Career.ServiceCourse=models.Career.hasMany(models.ServiceCourse,{
+    foreignKey:"ID_CAREER"
+});
+models.ServiceCourse.Career=models.ServiceCourse.belongsTo(models.Career,{
+    foreignKey:"ID_CAREER",
+    unique:true,
+    as:"career"
+});
+
+
+// service - clase
+
+models.Course.ServiceCourse=models.Course.hasMany(models.ServiceCourse,{
+    foreignKey:"ID_COURSE"
+});
+models.ServiceCourse.Course=models.ServiceCourse.belongsTo(models.Course,{
+    foreignKey:"ID_COURSE",
+    unique:true,
+    as:"course"
+});
+
 
 // clase - carrera
 models.Career.Course=models.Career.hasMany(models.Course,{
@@ -127,8 +192,6 @@ models.Course.Career=models.Course.belongsTo(models.Career,{
     unique:true,
     as:"career"
 });
-
-
 
 //  edificio - aula
 models.Building.Classroom=models.Building.hasMany(models.Classroom,{

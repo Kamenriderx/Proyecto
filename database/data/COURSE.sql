@@ -1,4 +1,14 @@
 SELECT * FROM test.course;
+/*nueva columna es llave foranea*/
+/*eliminar la llave foranea y la nueva columna*/
+ALTER TABLE `test`.`course` 
+DROP FOREIGN KEY `department_ibfk_1`;
+ALTER TABLE `test`.`course` 
+DROP COLUMN `ID_SERVICED_DEPARTMENT`,
+DROP INDEX `department_ibfk_1_idx` ;
+;
+
+
 /*CLASES DE SISTEMAS*/
 INSERT INTO `test`.`course` (`ID_COURSE`,`CODE_COURSE`, `NAME`,`ID_CAREER` , `UV`) VALUES (1,'IS-110', 'INTRODUCCION A LA INGENIERIA EN SISTEMAS',1, '3');
 INSERT INTO `test`.`course` (`ID_COURSE`,`CODE_COURSE`, `NAME`,`ID_CAREER` , `UV`) VALUES (2,'IS-210', 'PROGRAMACION II',1, '4');
@@ -57,6 +67,11 @@ INSERT INTO `test`.`course` (`ID_COURSE`,`CODE_COURSE`, `NAME`, `ID_CAREER` ,`IS
 
 
 
+/*GENERALES*/
+INSERT INTO `test`.`course` (`ID_COURSE`, `CODE_COURSE`, `NAME`, `ID_CAREER`, `UV`, `IS_SERVICE`) VALUES ('48', 'DQ-101', 'DIBUJO I', '6', '2', '1');
+INSERT INTO `test`.`course` (`ID_COURSE`, `CODE_COURSE`, `NAME`, `ID_CAREER`, `UV`, `IS_SERVICE`) VALUES ('49', 'DQ-102', 'DIBUJO 2', '6', '2', '1');
+INSERT INTO `test`.`course` (`ID_COURSE`, `CODE_COURSE`, `NAME`, `ID_CAREER`, `UV`, `IS_SERVICE`) VALUES ('50', 'SC-101', 'SOCIOLOGIA', '4', '4', '1');
+INSERT INTO `test`.`course` (`ID_COURSE`, `CODE_COURSE`, `NAME`, `ID_CAREER`, `UV`, `IS_SERVICE`) VALUES ('51', 'EG-01', 'ESPAÑOL GENERAL', '5', '4', '1');
 
 
 

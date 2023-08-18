@@ -17,6 +17,10 @@ const RequirementsCourse = connection.define(
         REQUIREMENT_ID_COURSE:{
             type:DataTypes.INTEGER
         },
+
+        ID_CAREER:{
+            type:DataTypes.INTEGER
+        },
         
         createdAt:{
             type:DataTypes.DATE

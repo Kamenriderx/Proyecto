@@ -32,6 +32,15 @@ import DictamenCenter from "../views/Solicitudes/DictamenCenter";
 import RequesStudentCenter from "../views/Solicitudes/RequesStudentCenter";
 import Planificacion from "../views/Planificacion/Planificacion";
 import Period from "../views/Period/Period";
+import SectionDetails from "../views/Matricula/components/SectionDetails";
+import ClassTeacher from "../views/ClassTechers/ClassTeacher";
+import AdicionarClase from "../views/Matricula/AdicionarClase";
+import Forma03 from "../views/Matricula/Forma03";
+import CancelarClaseMatriculada from "../views/Matricula/CancelarClaseMatriculada";
+import CancelarClaseEnEspera from "../views/Matricula/CancelarClaseEnEspera";
+import Matricula from "../views/MatriculaProffesor/Matricula";
+import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
+
 import RegisteredStudents from "../views/ViewStudent/RegisteredStudents";
 /* import InitialSession from "./components/InitialSession"; */
 
@@ -75,49 +84,19 @@ const ContentNavbar = () => {
               id="navbar-cta"
             >
               <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
-                <li>
-                  <Link to="/Periodos">
-                    <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                      Periodo
-                    </button>
-                  </Link>
-                </li>
                 {state?.user?.ID_ROLE === 4 && (
                   <>
                     <li>
-                      <Search />
-                    </li>
-                    <li>
-                      <Solicitud />
-                    </li>
-                    <li>
-                      <Link to="/solicitudes-coordinador-centro" />
-                    </li>
-                    <li>
-                      <Link to="/secciones">
-                        <button
-                          onClick={handleSession}
-                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
-                          Cerrar sesion
+                      <Link to="/solicitudes-coordinador-centro">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Centro
                         </button>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/">
-                        <button
-                          onClick={handleSession}
-                          className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700"
-                        >
-                          Cerrar sesión
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/ps">
-                        s
-                        <button className="p-2 rounded  hover:bg-gray-100 hover:text-blue-700">
-                          Periodos
+                      <Link to="/Periodos">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Secciones
                         </button>
                       </Link>
                     </li>
@@ -143,13 +122,6 @@ const ContentNavbar = () => {
                       <Link to="/Docentes">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
                           Docentes
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/Periodos">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Periodo
                         </button>
                       </Link>
                     </li>
@@ -249,6 +221,23 @@ const ContentNavbar = () => {
           <Route exact path="/chat" element={<ViewChat />} />
           <Route exact path="/contactos" element={<ListContacts />} />
           <Route exact path="/addSections" element={<AddSections />} />
+          <Route exact path="/matricula" element={<MatriculaEstudiante />} />
+          <Route
+            exact
+            path="/matricula/adicionar-clase"
+            element={<AdicionarClase />}
+          />
+          <Route
+            exact
+            path="/matricula/cancelar-clase-matriculada"
+            element={<CancelarClaseMatriculada />}
+          />
+          <Route
+            exact
+            path="/matricula/cancelar-clase-espera"
+            element={<CancelarClaseEnEspera />}
+          />
+          <Route exact path="/matricula/forma03" element={<Forma03 />} />
           <Route exact path="/solicitudes" element={<Requests />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
@@ -276,6 +265,13 @@ const ContentNavbar = () => {
             path="/solicitudes-coordinador-centro"
             element={<RequestCoordinatorCenter />}
           />
+          <Route
+            exact
+            path="/sections/:idSection"
+            element={<SectionDetails />}
+          />
+          <Route exact path="/secciones-Docente" element={<ClassTeacher />} />
+          <Route exact path="/matricula-jefe" element={<Matricula />} />
           <Route exact path="/dictamen-centro" element={<DictamenCenter />} />
           <Route exact path="/solicitudes-centro" element={<RequestCenter />} />
           <Route exact path="/pago-reposicion" element={<RequestRepo />} />

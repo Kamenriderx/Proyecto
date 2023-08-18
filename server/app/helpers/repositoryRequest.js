@@ -1,12 +1,22 @@
 
 const { Op } = require("sequelize")
-const { Student, Request, Professor, User, Career, RequestCenter } = require("../models")
+const { Student, Request, Professor, User, Career, RequestCenter, Multimedia } = require("../models")
 
 const getStudent= async (id)=>{
-    return await Student.findOne({where:{ID_USER:id}, include:[{model:User, as:"user", attributes:["CENTER"]}]})
+    return await Student.findOne({where:{ID_USER:id}, include:[{model:User, as:"user", attributes:["NAME","CENTER","ACCOUNT_NUMBER"]}]})
+}
+const getStudentById= async (id)=>{
+    return await Student.findOne({where:{ID_STUDENT:id}, include:[{model:User, as:"user", attributes:["NAME","CENTER"]}]})
 }
 const getProfessor= async (id)=>{
     return await Professor.findOne({where:{ID_USER:id}, include:[{model:User, as:"user", attributes:["CENTER"]}]})
+}
+
+const getPhotos = async (idUser) =>{
+    return await Multimedia.findAll({ where:{
+        ID_USER: idUser,
+        IS_PROFILE: 1
+    }})
 }
 
 const getCoordinator= async (center, career)=>{
@@ -56,5 +66,7 @@ module.exports = {
     getCareerChange,
     getRequestCurrent, 
     changeCenterStudent,
-    getRequestPaymentReplacement
+    getRequestPaymentReplacement,
+    getStudentById,
+    getPhotos
 };

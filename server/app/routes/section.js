@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router()
 const {createSection,listSections, getProfessorsByCenterAndCarrer, deleteSection, updateSection, listSectionsPeriod} = require("../controllers/section.js");
+const {detailsSection, getEnrolledStudents, getWaitingStudents, updateStudentStatus} =  require('../controllers/detailsSection.js');
+const {getSectionsForProfessor} = require("../controllers/sectionProffesors.js");
+
 const authMiddleware = require('../middlewares/authentication.js');
 const {checkRolJefe} = require('../middlewares/rol.js');
 
@@ -13,5 +16,21 @@ router.post("/createSection",authMiddleware, checkRolJefe,createSection);
 
 router.post("/deleteSection/:id",authMiddleware, checkRolJefe,deleteSection)
 router.put("/updateSection/:id",authMiddleware, checkRolJefe,updateSection)
+
+// Ruta para obtener detalles de una seccion por id
+router.get("/sections/:idSection", detailsSection);
+
+// Ruta que obtiene alumnos matriculados de una seccion
+router.get("/studentsEnrolled/:idSection", getEnrolledStudents)
+
+// Ruta que obtiene estudiantes en espera de una seccion
+router.get("/studentsWaiting/:idSection", getWaitingStudents)
+
+// Ruta para forzar matricula
+router.put("/updateState/:idStudent", updateStudentStatus)
+
+// Ruta para obtener las seccione de un docente
+router.get("/sectionsForProfessors/:idUser/:idPeriod" , getSectionsForProfessor)
+
 module.exports = router
 

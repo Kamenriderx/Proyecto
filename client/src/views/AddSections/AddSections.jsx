@@ -78,9 +78,6 @@ const AddSections = () => {
     fetchDocentes();
   }, []);
 
-  console.log("Todos los docentes de Sistemas :", docentes);
-  console.log("Estado de Sesion", state);
-
   useEffect(() => {
     const getListClass = async () => {
       try {
@@ -131,9 +128,6 @@ const AddSections = () => {
     getListAula();
   }, []);
 
-  console.log("Lista de Cursos", listCourses);
-  console.log("Listado de Aulas", listAulas);
-
   const handleEdit = (section) => {
     setShowModal(true);
     setSelectedSection(section);
@@ -146,7 +140,7 @@ const AddSections = () => {
     setSPACE_AVAILABLE(section.SPACE_AVAILABLE);
     setDAYS(section.DAYS);
     setDAYS_COUNT(section.course.UV);
-    setID_PERIOD(section.period.PERIOD_NAME);
+    setID_PERIOD(section.period.ID_PERIOD);
   };
 
   console.log("SELECTED SECTION", selectedSection);
@@ -631,7 +625,7 @@ const AddSections = () => {
             "Carrera" - "Nombre del Periodo"
           </span>
         </div>
-        <div className="flex justify-around mt-5 mb-5">
+        <div className="flex justify-start mt-5 mb-5">
           <div className="flex items-center">
             <button
               onClick={() => setShowModal(true)}
@@ -641,7 +635,7 @@ const AddSections = () => {
               <AiOutlineAppstoreAdd className="mr-2" size={30} />
             </button>
           </div>
-          <div className="flex justify-around gap-2">
+          {/*  <div className="flex justify-around gap-2">
             <div>
               <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
                 <option value="">Año</option>
@@ -657,7 +651,7 @@ const AddSections = () => {
                 <option value="">Clase</option>
               </select>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-10">
