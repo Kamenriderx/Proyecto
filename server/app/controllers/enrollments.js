@@ -282,11 +282,11 @@ const getInfoAcademicStudent = async (req,res)=>{
         const currentPeriod= await getCurrentPeriod()
         let indexAcademicGlobal = 0
         let indexAcademicPeriod = 0
+        indexAcademicGlobal = await getMyIndexAcademic(courses) || 0
         if(currentPeriod){
             const {previousPeriod} = await getAcademicPeriodDetails(currentPeriod.ID_PERIOD)
             const coursesPeriodPrev = await getMyCoursePeriodPrev(student.ID_STUDENT,previousPeriod)
 
-            indexAcademicGlobal = await getMyIndexAcademic(courses) || 0
             indexAcademicPeriod = await getMyIndexAcademic(coursesPeriodPrev) || 0
         }
 
