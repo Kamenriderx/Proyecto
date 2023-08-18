@@ -426,6 +426,16 @@ const responseRequest = async(req,res)=>{
             return
             
         }
+        if (body.RESPONSE.toUpperCase() == "ACEPTADA" && request.TYPE == "CANCELACION_CLASE") {
+            
+            body.NEW_CENTER = request.requestCenter[0].dataValues.CENTER
+            body.OBS = "Tu solicitud de cancelacion de clase ha sido Aprobada"
+            await changeCenterStudent(body)
+            await changeStateRequest(body)
+            res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+            return
+            
+        }
         if (body.RESPONSE.toUpperCase() == "DENEGADA" && request.TYPE =="CARRERA") {
             body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
             await changeStateRequest(body)
@@ -434,6 +444,13 @@ const responseRequest = async(req,res)=>{
             
         }
         if (body.RESPONSE.toUpperCase() == "DENEGADA" && request.TYPE =="CENTRO") {
+            body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
+            await changeStateRequest(body)
+            res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
+            return
+            
+        }
+        if (body.RESPONSE.toUpperCase() == "DENEGADA" && request.TYPE =="CANCELACION_CLASE") {
             body.OBS = `Lo sentimos, tu solicitud ha sido rechazada.`
             await changeStateRequest(body)
             res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
