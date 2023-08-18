@@ -1,5 +1,5 @@
-const { Career, Request, RequestCareer, User, Student, RequestCenter, Professor, PeriodAcademic } = require("../models");
-const {getStudent, changeStateRequest, changeCareerStudent, getProfessor, getCoordinator, getCareerChange, getRequestCurrent, changeCenterStudent} = require('../helpers/repositoryRequest');
+const { Career, Request, RequestCareer, User, Student, RequestCenter, Professor, PeriodAcademic, RequesCancellationExceptional } = require("../models");
+const {getStudent, changeStateRequest, changeCareerStudent, getProfessor, getCoordinator, getCareerChange, getRequestCurrent, changeCenterStudent, getCurrentPeriod} = require('../helpers/repositoryRequest');
 const { Op, fn, col} = require('sequelize');
 
 const getCareers = async (req,res)=>{
@@ -63,6 +63,7 @@ const requestChangeCareer = async (req,res)=>{
         res.status(500).json({messagge:"ALGO SALIO MAL"})
     }
 }
+
 const requestChangeCenter = async (req,res)=>{
     try {
         const {file, user, body}= req
@@ -100,6 +101,49 @@ const requestChangeCenter = async (req,res)=>{
 
 
         res.status(200).send({messagge:"solicitud de cambio de centro enviada"})
+
+
+        
+    } catch (error) {
+        console.log({error})
+        res.status(500).json({messagge:"ALGO SALIO MAL"})
+    }
+}
+
+const requestExceptionalCancellation = async (req,res)=>{
+    try {
+        const {file, body}= req
+        const {idUser} = req.params
+        const period = await getCurrentPeriod();
+        const student = await getStudent(idUser)
+        const coordinator = await getCoordinator(student.user.CENTER, student.CAREER)
+        
+        const request = await Request.findOne({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:"Pendiente",
+                TYPE:"CANCELACION_CLASE"
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"] }]
+            },{model:RequesCancellationExceptional, as:"requestCancellation", attributes:["URL"]}]
+
+
+        })
+
+        if (request) {
+            res.status(400).send({messagge:"Ya tiene una solicitud de cancelacion excepcional Pendiente"})
+            return
+        }
+
+        
+
+        const url = `http://localhost:3000/docs/${file.filename}`
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CANCELACION_CLASE",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:coordinator.user.CENTER,ID_PERIOD:period.ID_PERIOD,request:[ {URL:url}]},{include:{model:RequesCancellationExceptional, as:"requestCancellation" }})
+
+    
+
+
+
+        res.status(200).send({messagge:"solicitud de cambio de cancelacion excpecional enviada enviada"})
 
 
         
@@ -308,6 +352,7 @@ const getMyRequestsAcceptDenyCenter = async (req,res)=>{
 }
 const getMyRequestsAcceptDenyCareer = async (req,res)=>{
     try {
+
         const {user} = req;
         const student = await getStudent(user.ID_USER)
         const request = await Request.findAll({
@@ -317,6 +362,32 @@ const getMyRequestsAcceptDenyCareer = async (req,res)=>{
                     [Op.or]:['Aceptada', 'Denegada']
                 }, TYPE:"CARRERA"
             }, include:[  {model:RequestCareer, as:"requestCareer",attributes:["URL", "ID_CAREER"], include:[{model:Career, as:"career", attributes:["NAME"]}]},{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"],  }]
+            }, 
+            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
+
+
+        })
+        res.status(200).json({request})
+        
+    } catch (error) {
+        console.log({error});
+        res.status(500).json({message:"ALGO SALIO MAL"})
+    
+    }
+}
+
+const getMyRequestsAcceptDenyCancellCourse = async (req,res)=>{
+    try {
+
+        const {idUser}= req.params;
+        const student = await getStudent(idUser)
+        const request = await Request.findAll({
+            where:{
+                ID_STUDENT: student.ID_STUDENT,
+                STATE:{
+                    [Op.or]:['Aceptada', 'Denegada']
+                }, TYPE:"CANCELACION_CLASE"
+            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"],  }]
             }, 
             {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
@@ -407,5 +478,7 @@ module.exports = {
     requestPaymentReplacement,
     getMyRequestsAcceptDenyCenter,
     getMyRequestsAcceptDenyCareer,
-    getMyRequestsPaymentReplacements
+    getMyRequestsAcceptDenyCancellCourse,
+    getMyRequestsPaymentReplacements,
+    requestExceptionalCancellation
 };
