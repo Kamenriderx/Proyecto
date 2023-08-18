@@ -453,7 +453,7 @@ const responseRequest = async(req,res)=>{
         }
         if (body.RESPONSE.toUpperCase() == "ACEPTADA" && request.TYPE == "CANCELACION_CLASE") {
             
-            body.NEW_CENTER = request.requestCenter[0].dataValues.CENTER
+    
             body.OBS = "Tu solicitud de cancelacion de clase ha sido Aprobada"
             await changeCenterStudent(body)
             await changeStateRequest(body)
