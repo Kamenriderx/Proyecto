@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const { Enrollment, Section, PeriodAcademic, Course } = require("../models");
-const { getStudentById } = require("./repositoryRequest");
+const { getStudentById, getStudent } = require("./repositoryRequest");
 
 const saveEnrollment = async (body)=>{
     const student = await getStudentById(body.ID_STUDENT)
@@ -170,12 +170,18 @@ const getCurrentPeriod = async ()=>{
     }})
 }
 
-const cancelInscription=async (idEnrollment)=>{
-    const enrollment = await Enrollment.findOne({where:{ID_ENROLLMENT: idEnrollment}});  
+const cancelInscription=async (idEnrollment, idUser)=>{
+    const student = await getStudent(idUser)
+
+    const enrollment = await Enrollment.findOne({where:{ID_ENROLLMENT: idEnrollment}, include:[{model:Section, as:"seccion", include:[{model:Course, as:"course"}]}]});
+    student.UV_AVAILABLE += enrollment.seccion.course.UV;
     enrollment.STATE = 'Cancelada'
     await enrollment.save();  
-
+    await student.save();  
+    
 }
+
+const getSectionById= async (idSection)=> await Section.findOne({where:{ID_SECTION:idSection}, include:[{model:Course, as:"course"}]})
 
 
 
@@ -192,5 +198,6 @@ module.exports = {
     getSectionEnrollmentStudent,
     getSectionWaitingStudent,
     cancelInscription,
-    getAllSectionsEnrollmentsStudent
+    getAllSectionsEnrollmentsStudent,
+    getSectionById
 };

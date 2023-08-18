@@ -3,7 +3,7 @@ const { getStudent, getStudentById, getPhotos } = require("../helpers/repository
 const { Career, Course, Section, Professor, PeriodAcademic, User } = require("../models")
 const { getServiceCourses, getCareer, getMyCoursesArea, getServicesAreas } = require("../helpers/repositoryCourses")
 const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourseAproved } = require("../helpers/repositorySections")
-const { getQuantityEnrollmentsCourse, getSpaceAvailableAndUv, getSectionEnrollmentStudent, verifySections, saveEnrollment, getQuantityEnrollmentsWaitCourse, getCurrentPeriod, getSectionWaitingStudent, cancelInscription, getAllSectionsEnrollmentsStudent } = require("../helpers/repositoryEnrollment")
+const { getQuantityEnrollmentsCourse, getSpaceAvailableAndUv, getSectionEnrollmentStudent, verifySections, saveEnrollment, getQuantityEnrollmentsWaitCourse, getCurrentPeriod, getSectionWaitingStudent, cancelInscription, getAllSectionsEnrollmentsStudent, getSectionById } = require("../helpers/repositoryEnrollment")
 
 const { getAcademicPeriodDetails } = require("../middlewares/indexAcademic")
 
@@ -44,6 +44,7 @@ const enrolmentCourse = async (req,res)=>{
         const student = await getStudent(idUser)
         const enrollments = await getAllSectionsEnrollmentsStudent(student.ID_STUDENT)
         const quantity = await getQuantityEnrollmentsCourse(body.ID_SECTION)
+        const section = await getSectionById(body.ID_SECTION);
         body.ID_STUDENT = student.ID_STUDENT
         body.ARRIVAL_NUMBER = quantity + 1
         const {spaceAvailable,uvSection } = await getSpaceAvailableAndUv(body.ID_SECTION)
@@ -64,6 +65,11 @@ const enrolmentCourse = async (req,res)=>{
 
                 if (data[0].seccion.ID_SECTION == body.ID_SECTION && data[0].STATE == "Matriculada" ) {
                     res.status(400).json({messagge:`la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada`})
+                    return    
+                }
+
+                if (data[0].STATE == "Matriculada" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
+                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
                     return    
                 }
 
@@ -134,6 +140,11 @@ const enrolmentWaitCourse = async (req,res)=>{
 
                 if (data[0].seccion.ID_SECTION == body.ID_SECTION && data[0].STATE == "Matriculada" ) {
                     res.status(400).json({messagge:`la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada`})
+                    return    
+                }
+
+                if (data[0].STATE == "Matriculada" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
+                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
                     return    
                 }
 
@@ -228,20 +239,30 @@ const getSectionsByIdCourse= async(req,res)=>{
     try {
 
         const {idCourse}= req.params
-
-        const sections = await Section.findAll({attributes:["ID_SECTION","DAYS",
+        const {user} = req
+        
+        let sections = await Section.findAll({attributes:["ID_SECTION","DAYS",
         "SECTION_CODE",
         "START_TIME",
         "END_TIME",
         "SPACE_AVAILABLE"],where:{
             ID_COURSE:idCourse
         }, include:[
-            {model:Professor, as:"Proffessor", attributes:["INSTITUTIONAL_EMAIL"], include:[{model:User, as:"user", attributes:["NAME"]}]},
+            {model:Professor, as:"Proffessor", attributes:["INSTITUTIONAL_EMAIL"], include:[{model:User, as:"user", required: true,where:{
+                CENTER: {[Op.like]: user.CENTER}
+            }, attributes:["NAME","CENTER"]}]},
             {model:Course, as:"course",attributes:["CODE_COURSE","NAME","UV"]},
             {model:PeriodAcademic, as:"period", required:true, where:{
                 STATUS:"En curso"
             }}
         ]})
+
+
+        sections =sections.filter((seccion)=>{
+
+            return seccion.Proffessor != null
+
+        })
 
         res.status(200).json({sections})
         
@@ -304,8 +325,9 @@ const getStudentWaitingCourses = async (req,res)=>{
 }
 const cancelledEnrollment = async (req,res)=>{
     try {
-        const {idEnrollment} = req.params
-        await cancelInscription(idEnrollment)
+        const {idEnrollment, idUser} = req.params
+
+        await cancelInscription(idEnrollment, idUser)
         res.status(200).json({messagge:"matricula cancelada exitosamente"})
     } catch (error) {
         console.log({error})

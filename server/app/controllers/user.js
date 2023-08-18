@@ -14,8 +14,9 @@ const getStudents = async (req,res) =>{
 const getPerfil = async (req,res)=>{
     try {
         const {id} = req.params;
-        console.log(id)
         let user ={}
+
+        
         
 
         if (parseInt(id) === req.user.ID_USER) {    

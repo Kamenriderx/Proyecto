@@ -1,4 +1,4 @@
-const { Op } = require("sequelize")
+const { Op, fn, col, where } = require("sequelize")
 const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourseAproved } = require("../helpers/repositorySections")
 const DetailsPeriod = require("../models/detailsPeriod")
 const PeriodAcademic = require('../models/periodAcademic');
@@ -6,8 +6,43 @@ const verifyIndexAcademic = async(req,res,next)=>{
     try {
 
       const {student} = req
-      const periodAux = await PeriodAcademic.findOne({where:{STATUS: "En curso"}})
-      const idPeriod = periodAux.ID_PERIOD
+      let currentYear = new Date().getFullYear()
+      let currentMonth = new Date().getMonth()
+      let currentPeriod = await PeriodAcademic.findOne({attributes:["ID_PERIOD","PERIOD_NAME", 
+      [fn("YEAR", col("START_DATE")), "YEAR"],
+      [fn("MONTH", col("START_DATE")), "MONTH"],
+      [fn("DAY", col("START_DATE")), "DAY"]
+      ],where:{STATUS: "En curso"}})
+      //  no existe un periodo en curso
+      if (!currentPeriod) {
+        currentPeriod = await PeriodAcademic.findOne({
+          attributes: [
+            'ID_PERIOD',
+            'PERIOD_NAME',
+            [fn('YEAR', col('START_DATE')), 'YEAR'],
+            [fn('MONTH', col('START_DATE')), 'MONTH'],
+            [fn('DAY', col('START_DATE')), 'DAY'],
+          ],
+          where: {
+            [Op.and]: [
+              where(fn('YEAR', col('START_DATE')), {
+                [Op.gt]: currentYear,
+              }),
+              where(fn('MONTH', col('START_DATE')), {
+                [Op.gt]: currentMonth,
+              }),
+            ],
+          },
+        });
+        
+      }
+      if (!currentPeriod) {
+        res.status(400).json({messagge:"El siguiente período todavía no ha sido planificado."})
+        return   
+        
+      }
+
+      const idPeriod = currentPeriod.ID_PERIOD
       const courses = await getMyCourseEnded(student.ID_STUDENT)
       const {calendars, previousPeriod} = await getAcademicPeriodDetails(idPeriod)
       const coursesPeriodPrev = await getMyCoursePeriodPrev(student.ID_STUDENT,previousPeriod)
@@ -15,10 +50,25 @@ const verifyIndexAcademic = async(req,res,next)=>{
       let indexAcademicGlobal = await getMyIndexAcademic(courses) || 0
       let indexAcademicPeriod = await getMyIndexAcademic(coursesPeriodPrev) || 0
       let currentDayMonth = formatDate(new Date());
-      let currentYear = new Date().getFullYear()
-      let currentMonth = new Date().getMonth()
+      
       // indexAcademicPeriod = 84 
       
+      if (calendars[0].date != currentDayMonth && calendars[1].date != currentDayMonth && calendars[2].date != currentDayMonth && calendars[3].date != currentDayMonth && calendars[4].date != currentDayMonth && calendars[5].date != currentDayMonth ) {
+        if ( currentDayMonth > calendars[5].date) {
+          res.status(400).json({messagge:"El proceso de matricula ya pasó"})
+          return
+          
+        }
+        if (currentDayMonth < calendars[0].date) {
+          res.status(400).json({messagge:"El proceso de matricula no ha empezado"})
+          return
+          
+        }
+        
+        
+      }
+
+
       if (calendars[0].date == currentDayMonth && (student.TYPE == 'Primer ingreso' ||student.TYPE == 'Proseene' ||student.TYPE == 'Condicionado' || student.TYPE == 'Representante'|| (student.TYPE =="Re-ingreso" && indexAcademicGlobal >= 80 && coursesAproved.count >=10 )|| (student.TYPE =="Por egresar" && indexAcademicGlobal >= 80))) {
           
         next()
@@ -51,6 +101,8 @@ const verifyIndexAcademic = async(req,res,next)=>{
         next()
         return
       }
+
+
       // console.log('indexAcademicPeriod: ',indexAcademicPeriod)
 
       res.status(400).json({messagge:"No cumplés con los requisitos para matricular el dia de hoy"})
