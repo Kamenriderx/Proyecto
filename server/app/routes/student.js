@@ -5,7 +5,7 @@ const {getStudents, getStudentsEnrollmentPeriod, getEnrollmentsStudent} = requir
 router.get("/getStudents",getStudents);
 
 router.get("/getStudentsEnrollmentPeriod/:idPeriod/:idUser",getStudentsEnrollmentPeriod)
-router.get("/getEnrollmentsStudent/:idStudent",getEnrollmentsStudent)
+router.get("/getEnrollmentsStudent/:idStudent/:idUser",getEnrollmentsStudent)
 
 
 
