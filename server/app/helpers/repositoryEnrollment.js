@@ -190,7 +190,7 @@ const cancelInscription=async (idEnrollment, idUser)=>{
 }
 
 const specialCancelInscription= async(idEnrollment, idUser)=>{
-    const student = await getStudent(idUser)
+    const student = await getStudentById(idUser)
     const enrollment = await Enrollment.findOne({where:{ID_ENROLLMENT: idEnrollment}, include:[{model:Section, as:"seccion", include:[{model:Course, as:"course"}]}]});
     
     if (enrollment.STATE !="Cancelada" ) {
