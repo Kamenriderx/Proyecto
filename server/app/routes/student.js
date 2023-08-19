@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router()
-const {getStudents} = require("../controllers/student");
+const {getStudents, getStudentsEnrollmentPeriod} = require("../controllers/student");
 
 router.get("/getStudents",getStudents);
 
-
+router.get("/getStudentsEnrollmentPeriod/:idPeriod/:idUser",getStudentsEnrollmentPeriod)
 
 
 

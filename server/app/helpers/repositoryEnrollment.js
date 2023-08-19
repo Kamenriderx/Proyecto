@@ -189,6 +189,21 @@ const cancelInscription=async (idEnrollment, idUser)=>{
     }
 }
 
+const specialCancelInscription= async(idEnrollment, idUser)=>{
+    const student = await getStudent(idUser)
+    const enrollment = await Enrollment.findOne({where:{ID_ENROLLMENT: idEnrollment}, include:[{model:Section, as:"seccion", include:[{model:Course, as:"course"}]}]});
+    
+    if (enrollment.STATE !="Cancelada" ) {
+        
+        student.UV_AVAILABLE += enrollment.seccion.course.UV;
+        enrollment.STATE = 'Cancelada'
+        await enrollment.save();  
+        await student.save();  
+
+    }
+    
+
+}
 const getSectionById= async (idSection)=> await Section.findOne({where:{ID_SECTION:idSection}, include:[{model:Course, as:"course"}]})
 
 const getEnrollmentByName = async (idStudent, name) => await Enrollment.findOne({
@@ -216,6 +231,8 @@ const getEnrollmentByName = async (idStudent, name) => await Enrollment.findOne(
     }]
 })
 
+
+
 // START_TIME  
 // END_TIME
 module.exports = {
@@ -231,5 +248,6 @@ module.exports = {
     cancelInscription,
     getAllSectionsEnrollmentsStudent,
     getSectionById,
-    getEnrollmentByName
+    getEnrollmentByName,
+    specialCancelInscription
 };

@@ -59,6 +59,7 @@ const getRequestPaymentReplacement = async(student)=>{
 }
 
 const getCurrentPeriod = async ()=> await PeriodAcademic.findOne({where:{STATUS:"En curso"}, include:[{model:DetailsPeriod, as:"period"}]})
+const getPeriodById = async (idPeriod)=> await PeriodAcademic.findOne({where:{ID_PERIOD: idPeriod}, include:[{model:DetailsPeriod, as:"period"}]})
 
 module.exports = {
     getStudent, 
@@ -72,5 +73,6 @@ module.exports = {
     getRequestPaymentReplacement,
     getStudentById,
     getPhotos,
-    getCurrentPeriod
+    getCurrentPeriod,
+    getPeriodById
 };
