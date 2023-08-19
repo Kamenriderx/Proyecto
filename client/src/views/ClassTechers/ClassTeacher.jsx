@@ -4,7 +4,7 @@ import axios from "axios";
 import { AiFillEye } from "react-icons/ai";
 import Modal2 from "../../components/Modal2";
 const ClassTeacher = () => {
-  const { state, dispatch } = useContext(StoreContext);
+  const { state, dispatch, periodo } = useContext(StoreContext);
   const [classes, setClasses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [matriculados, setMatriculados] = useState([]);
@@ -15,9 +15,7 @@ const ClassTeacher = () => {
     const getClassTeacher = async () => {
       try {
         const response = await axios(
-          `http://localhost:3000/registro/section/sectionsForProfessors/${
-            state.user.ID_USER
-          }/${2}`
+          `http://localhost:3000/registro/section/sectionsForProfessors/${state.user.ID_USER}/${periodo.ID_PERIOD}`
         );
         setClasses(response.data);
       } catch (error) {

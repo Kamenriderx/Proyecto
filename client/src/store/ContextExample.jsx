@@ -1,4 +1,5 @@
-import { createContext, useReducer } from "react";
+import axios from "axios";
+import { createContext, useReducer, useState, useEffect } from "react";
 
 const StoreContext = createContext();
 
@@ -6,7 +7,7 @@ const initialState = {
   login: false,
   user: {},
   token: "",
-  socket:null
+  socket: null,
 };
 
 const reducer = (state, action) => {
@@ -44,9 +45,24 @@ const reducer = (state, action) => {
 
 const StoreProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  
+  const [periodo, setPeriodo] = useState([]);
+
+  useEffect(() => {
+    const getPeriodo = async () => {
+      try {
+        const response = await axios(
+          "http://localhost:3000/registro/period/getPeriodCurrent"
+        );
+        setPeriodo(response.data.period);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPeriodo();
+  }, []);
+
   return (
-    <StoreContext.Provider value={{ state, dispatch }}>
+    <StoreContext.Provider value={{ state, dispatch, periodo }}>
       {children}
     </StoreContext.Provider>
   );

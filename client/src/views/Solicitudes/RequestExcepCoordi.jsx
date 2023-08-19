@@ -101,7 +101,7 @@ const RequestExcepCoordi = () => {
         {message && <AlertTwo alerta={alerta} />}
         <div className="text-center mb-10">
           <p className="text-red-800 text-2xl font-bold">
-            Estado de solicitudes por cambio de centro
+            Estado de solicitudes Excepcionales
           </p>
         </div>
         {solicitudesExcepCoordi.length > 0 ? (
