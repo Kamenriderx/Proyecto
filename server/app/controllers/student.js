@@ -20,6 +20,7 @@ const getStudentsEnrollmentPeriod = async (req,res) =>{
         const enrrolmentStudents = await  Student.findAll({
             include: 
             [
+                {model:User, as:"user", attributes:["CENTER","ACCOUNT_NUMBER"]},
                 {model:Enrollment, required: true,where:{STATE:"Matriculada"},include:
                     [
                         {model:Section, as:"seccion",required:true, where:{ID_PERIOD:idPeriod} ,include:
