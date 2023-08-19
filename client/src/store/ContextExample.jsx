@@ -61,6 +61,8 @@ const StoreProvider = ({ children }) => {
     getPeriodo();
   }, []);
 
+  console.log("PERIODO DESDE EL CONTEXT", periodo);
+
   return (
     <StoreContext.Provider value={{ state, dispatch, periodo }}>
       {children}

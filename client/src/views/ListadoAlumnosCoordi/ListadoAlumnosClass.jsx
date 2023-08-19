@@ -14,6 +14,8 @@ const ListadoAlumnosClass = () => {
   const [check2, setCheck2] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [AlumnosPerPage] = useState(20);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const indexOfLastTeacher = currentPage * AlumnosPerPage;
   const indexOfFirstTeacher = indexOfLastTeacher - AlumnosPerPage;
@@ -31,6 +33,18 @@ const ListadoAlumnosClass = () => {
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleSearch = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+
+    // Filtra los alumnos que coincidan con la cadena de búsqueda
+    const filteredAlumnos = listAlumnos.filter((alumno) =>
+      alumno.user.ACCOUNT_NUMBER.includes(value)
+    );
+
+    setSearchResults(filteredAlumnos);
   };
 
   useEffect(() => {
@@ -60,7 +74,7 @@ const ListadoAlumnosClass = () => {
   const getMatriculadosCoordi = async (ID_STUDENT) => {
     try {
       const response = await axios(
-        `http://localhost:3000/registro/student/getEnrollmentsStudent/${ID_STUDENT}`
+        `http://localhost:3000/registro/student/getEnrollmentsStudent/${ID_STUDENT}/${state.user.ID_USER}`
       );
       setMatriculadas(response.data.coursesEnrollments);
       console.log("MATRICULADAS", response.data.coursesEnrollments);
@@ -97,6 +111,8 @@ const ListadoAlumnosClass = () => {
     setShowModal(true);
     getMatriculadosCoordi(id);
   };
+
+  console.log("PERIODO", periodo);
 
   const { message } = alerta;
 
@@ -182,68 +198,129 @@ const ListadoAlumnosClass = () => {
               {periodo.PERIOD_NAME}
             </span>
           </p>
-        </div>
-        {listAlumnos.length > 0 ? (
-          <>
-            <table className="w-full bg-white shadow-md table-auto">
-              <thead className="bg-blue-800 text-white">
-                <tr className="">
-                  <th className="p-2">Carrera</th>
-                  <th className="p-2">Correo Institucional</th>
-                  <th className="p-2">Cuenta</th>
-                  <th className="p-2">Ver Clases Matriculadas</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentAlumnos.map((solicitudes) => (
-                  <tr className="border-b" key={solicitudes.ID_STUDENT}>
-                    <td className="border px-4 py-2 text-md font-bold r">
-                      {solicitudes.CAREER}
-                    </td>
-                    <td className="border px-4 py-2 text-md font-bold r">
-                      {solicitudes.INSTITUTIONAL_EMAIL}
-                    </td>
-                    <td className="border px-4 py-2 text-md font-bold r">
-                      {solicitudes.user.ACCOUNT_NUMBER}
-                    </td>
-                    <td className="text-center border px-4 py-2 text-sm font-medium r">
-                      <div className="flex justify-center">
-                        <AiFillEye
-                          size={25}
-                          className="cursor-pointer"
-                          onClick={() => handleClick(solicitudes.ID_STUDENT)}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="flex flex-col">
-              {/* ... */}
-              <div className="flex justify-center mt-4">
-                {pageNumbers.map((number) => (
-                  <button
-                    key={number}
-                    onClick={() => paginate(number)}
-                    className={`mx-1 px-2 py-1 rounded ${
-                      currentPage === number
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200"
-                    }`}
-                  >
-                    {number}
-                  </button>
-                ))}
-              </div>
+          <div className="mt-10 w-full flex justify-center">
+            <div className="w-3/6">
+              <input
+                type="text"
+                placeholder="Buscar por número de cuenta"
+                value={searchTerm}
+                onChange={handleSearch}
+                className="w-full border rounded-full text-center"
+              />
             </div>
+          </div>
+        </div>
+        {searchTerm ? (
+          <>
+            <p className="text-xl font-bold mb-5">Resultados de la búsqueda:</p>
+            {searchResults.length > 0 ? (
+              <table className="w-full bg-white shadow-md table-auto">
+                <thead className="bg-blue-800 text-white">
+                  <tr className="">
+                    <th className="p-2">Carrera</th>
+                    <th className="p-2">Correo Institucional</th>
+                    <th className="p-2">Cuenta</th>
+                    <th className="p-2">Ver Clases Matriculadas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {searchResults.map((solicitudes) => (
+                    <tr className="border-b" key={solicitudes.ID_STUDENT}>
+                      <td className="border px-4 py-2 text-md font-bold r">
+                        {solicitudes.CAREER}
+                      </td>
+                      <td className="border px-4 py-2 text-md font-bold r">
+                        {solicitudes.INSTITUTIONAL_EMAIL}
+                      </td>
+                      <td className="border px-4 py-2 text-md font-bold r">
+                        {solicitudes.user.ACCOUNT_NUMBER}
+                      </td>
+                      <td className="text-center border px-4 py-2 text-sm font-medium r">
+                        <div className="flex justify-center">
+                          <AiFillEye
+                            size={25}
+                            className="cursor-pointer"
+                            onClick={() => handleClick(solicitudes.ID_STUDENT)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-red-800 text-2xl font-black">
+                No se encontraron resultados en la busqueda
+              </p>
+            )}
           </>
         ) : (
-          <div className="text-center">
-            <p className="text-black font-bold text-2xl">
-              Sin Alumnos Matriculados
-            </p>
-          </div>
+          <>
+            {listAlumnos.length > 0 ? (
+              <>
+                <table className="w-full bg-white shadow-md table-auto">
+                  <thead className="bg-blue-800 text-white">
+                    <tr className="">
+                      <th className="p-2">Carrera</th>
+                      <th className="p-2">Correo Institucional</th>
+                      <th className="p-2">Cuenta</th>
+                      <th className="p-2">Ver Clases Matriculadas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentAlumnos.map((solicitudes) => (
+                      <tr className="border-b" key={solicitudes.ID_STUDENT}>
+                        <td className="border px-4 py-2 text-md font-bold r">
+                          {solicitudes.CAREER}
+                        </td>
+                        <td className="border px-4 py-2 text-md font-bold r">
+                          {solicitudes.INSTITUTIONAL_EMAIL}
+                        </td>
+                        <td className="border px-4 py-2 text-md font-bold r">
+                          {solicitudes.user.ACCOUNT_NUMBER}
+                        </td>
+                        <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          <div className="flex justify-center">
+                            <AiFillEye
+                              size={25}
+                              className="cursor-pointer"
+                              onClick={() =>
+                                handleClick(solicitudes.ID_STUDENT)
+                              }
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="flex flex-col">
+                  {/* ... */}
+                  <div className="flex justify-center mt-4">
+                    {pageNumbers.map((number) => (
+                      <button
+                        key={number}
+                        onClick={() => paginate(number)}
+                        className={`mx-1 px-2 py-1 rounded ${
+                          currentPage === number
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200"
+                        }`}
+                      >
+                        {number}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center">
+                <p className="text-black font-bold text-2xl">
+                  Sin Alumnos Matriculados
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
