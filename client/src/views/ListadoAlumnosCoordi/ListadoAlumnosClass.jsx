@@ -9,6 +9,7 @@ const ListadoAlumnosClass = () => {
   const [listAlumnos, setListAlumnos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [matriculadas, setMatriculadas] = useState([]);
+  const [alerta, setAlerta] = useState({});
 
   useEffect(() => {
     const getListAlumnos = async () => {
@@ -53,6 +54,10 @@ const ListadoAlumnosClass = () => {
       const response = await axios.put(
         `http://localhost:3000/registro/enrollment/canceledInscriptionSpecial/${ID_ENROLLMENT}/${ID_STUDENT}`
       );
+      setAlerta({
+        message: "Clase Cancelada Exitosamente",
+        error: false,
+      });
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -63,6 +68,8 @@ const ListadoAlumnosClass = () => {
     setShowModal(true);
     getMatriculadosCoordi(id);
   };
+
+  const { message } = alerta;
 
   return (
     <div className="flex mt-10">
@@ -110,7 +117,12 @@ const ListadoAlumnosClass = () => {
                             <td className="text-center border px-4 py-2 text-sm font-medium r">
                               <div className="flex justify-center">
                                 <button
-                                  onClick={() => cancelarAsignatura()}
+                                  onClick={() =>
+                                    cancelarAsignatura(
+                                      mat.ID_ENROLLMENT,
+                                      mat.ID_STUDENT
+                                    )
+                                  }
                                   className="py-2 px-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded shadow"
                                 >
                                   Cancelar Asignatura
@@ -133,7 +145,7 @@ const ListadoAlumnosClass = () => {
             </div>
           </div>
         </Modal3>
-        {/* {message && <AlertTwo alerta={alerta} />} */}
+        {message && <AlertTwo alerta={alerta} />}
         <div className="text-center mb-10">
           <p className="text-red-800 text-2xl font-bold">
             Listado de Alumnos Matriculados en el{" "}
