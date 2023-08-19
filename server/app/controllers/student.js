@@ -49,7 +49,7 @@ const getEnrollmentsStudent = async (req,res) =>{
         
         const {idStudent} = req.params
         
-        const coursesEnrollments = await Enrollment.findAll({attributes:["ID_ENROLLMENT", "STATE"],where:{
+        const coursesEnrollments = await Enrollment.findAll({attributes:["ID_ENROLLMENT", "STATE","ID_STUDENT"],where:{
             ID_STUDENT: idStudent,
             STATE:"Matriculada"
         }, include:
