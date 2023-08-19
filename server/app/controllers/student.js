@@ -18,7 +18,10 @@ const getStudentsEnrollmentPeriod = async (req,res) =>{
         const {idUser, idPeriod} = req.params
         const coordinador = await  getProfessor(idUser);
 
-        const enrrolmentStudents = await  Student.findAll({
+        const enrrolmentStudents = await  Student.findAll({ 
+            where:{
+                CAREER: {[Op.like]:  `${coordinador.CAREER}`}
+            },
             include: 
             [
                 {model:User, as:"user", attributes:["CENTER","ACCOUNT_NUMBER"],where:{
@@ -26,12 +29,7 @@ const getStudentsEnrollmentPeriod = async (req,res) =>{
                 }},
                 {model:Enrollment, required: true, attributes:[],where:{STATE:"Matriculada"},include:
                     [
-                        {model:Section, as:"seccion",required:true, where:{ID_PERIOD:idPeriod}, include:
-                        [
-                            {model:Course, as:"course",required: true,include:[{model:Career, as:"career", where:{
-                                NAME: {[Op.like]:  `${coordinador.CAREER}`}
-                            }}] }
-                        ] 
+                        {model:Section, as:"seccion",required:true, where:{ID_PERIOD:idPeriod}
                     }
                     ]
                 }
