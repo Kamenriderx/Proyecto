@@ -43,6 +43,7 @@ import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
 import CancelacionExcep from "../views/Solicitudes/CancelacionExcep";
 import ViewDictamenExcep from "../views/Solicitudes/ViewDictamenExcep";
 import RequestExcepCoordi from "../views/Solicitudes/RequestExcepCoordi";
+import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosClass";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -256,6 +257,11 @@ const ContentNavbar = () => {
             exact
             path="/solicitudesExcepcionales-coordinador"
             element={<RequestExcepCoordi />}
+          />
+          <Route
+            exact
+            path="/listAlumnos-coordi"
+            element={<ListadoAlumnosClass />}
           />
           <Route exact path="/dictamenExcep" element={<ViewDictamenExcep />} />
           <Route exact path="/secciones-Docente" element={<ClassTeacher />} />

@@ -223,7 +223,7 @@ const Sidevar = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/Periodos">
+                  <Link to="/listAlumnos-coordi">
                     <a
                       href="#"
                       className="flex items-center p-2 text-gray-900 rounded-lg 
