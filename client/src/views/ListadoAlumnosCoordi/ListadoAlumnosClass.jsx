@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { StoreContext } from "../../store/ContextExample";
-import Modal3 from "../../components/Modal";
+import Modal3 from "../../components/Modal3";
 import { AiFillEye } from "react-icons/ai";
+import AlertTwo from "../../components/AlertTwo";
 
 const ListadoAlumnosClass = () => {
   const { periodo, state } = useContext(StoreContext);
@@ -10,6 +11,27 @@ const ListadoAlumnosClass = () => {
   const [showModal, setShowModal] = useState(false);
   const [matriculadas, setMatriculadas] = useState([]);
   const [alerta, setAlerta] = useState({});
+  const [check2, setCheck2] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [AlumnosPerPage] = useState(20);
+
+  const indexOfLastTeacher = currentPage * AlumnosPerPage;
+  const indexOfFirstTeacher = indexOfLastTeacher - AlumnosPerPage;
+  const currentAlumnos = listAlumnos.slice(
+    indexOfFirstTeacher,
+    indexOfLastTeacher
+  );
+
+  const totalPages = Math.ceil(listAlumnos.length / AlumnosPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   useEffect(() => {
     const getListAlumnos = async () => {
@@ -33,7 +55,7 @@ const ListadoAlumnosClass = () => {
       }
     };
     getListAlumnos();
-  }, []);
+  }, [check2]);
 
   const getMatriculadosCoordi = async (ID_STUDENT) => {
     try {
@@ -51,14 +73,21 @@ const ListadoAlumnosClass = () => {
 
   const cancelarAsignatura = async (ID_ENROLLMENT, ID_STUDENT) => {
     try {
-      const response = await axios.put(
+      const response = await axios.post(
         `http://localhost:3000/registro/enrollment/canceledInscriptionSpecial/${ID_ENROLLMENT}/${ID_STUDENT}`
       );
+      console.log(response);
+      setMatriculadas((prevMatriculadas) => {
+        const updatedMatriculadas = prevMatriculadas.filter(
+          (mat) => mat.ID_ENROLLMENT !== ID_ENROLLMENT
+        );
+        return updatedMatriculadas;
+      });
       setAlerta({
         message: "Clase Cancelada Exitosamente",
         error: false,
       });
-      console.log(response);
+      setCheck2(!check2);
     } catch (error) {
       console.log(error);
     }
@@ -155,40 +184,60 @@ const ListadoAlumnosClass = () => {
           </p>
         </div>
         {listAlumnos.length > 0 ? (
-          <table className="w-full bg-white shadow-md table-auto">
-            <thead className="bg-blue-800 text-white">
-              <tr className="">
-                <th className="p-2">Carrera</th>
-                <th className="p-2">Correo Institucional</th>
-                <th className="p-2">Cuenta</th>
-                <th className="p-2">Ver Clases Matriculadas</th>
-              </tr>
-            </thead>
-            <tbody>
-              {listAlumnos.map((solicitudes) => (
-                <tr className="border-b" key={solicitudes.ID_STUDENT}>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    {solicitudes.CAREER}
-                  </td>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    {solicitudes.INSTITUTIONAL_EMAIL}
-                  </td>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    {solicitudes.user.ACCOUNT_NUMBER}
-                  </td>
-                  <td className="text-center border px-4 py-2 text-sm font-medium r">
-                    <div className="flex justify-center">
-                      <AiFillEye
-                        size={25}
-                        className="cursor-pointer"
-                        onClick={() => handleClick(solicitudes.ID_STUDENT)}
-                      />
-                    </div>
-                  </td>
+          <>
+            <table className="w-full bg-white shadow-md table-auto">
+              <thead className="bg-blue-800 text-white">
+                <tr className="">
+                  <th className="p-2">Carrera</th>
+                  <th className="p-2">Correo Institucional</th>
+                  <th className="p-2">Cuenta</th>
+                  <th className="p-2">Ver Clases Matriculadas</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {currentAlumnos.map((solicitudes) => (
+                  <tr className="border-b" key={solicitudes.ID_STUDENT}>
+                    <td className="border px-4 py-2 text-md font-bold r">
+                      {solicitudes.CAREER}
+                    </td>
+                    <td className="border px-4 py-2 text-md font-bold r">
+                      {solicitudes.INSTITUTIONAL_EMAIL}
+                    </td>
+                    <td className="border px-4 py-2 text-md font-bold r">
+                      {solicitudes.user.ACCOUNT_NUMBER}
+                    </td>
+                    <td className="text-center border px-4 py-2 text-sm font-medium r">
+                      <div className="flex justify-center">
+                        <AiFillEye
+                          size={25}
+                          className="cursor-pointer"
+                          onClick={() => handleClick(solicitudes.ID_STUDENT)}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="flex flex-col">
+              {/* ... */}
+              <div className="flex justify-center mt-4">
+                {pageNumbers.map((number) => (
+                  <button
+                    key={number}
+                    onClick={() => paginate(number)}
+                    className={`mx-1 px-2 py-1 rounded ${
+                      currentPage === number
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
         ) : (
           <div className="text-center">
             <p className="text-black font-bold text-2xl">
