@@ -40,6 +40,8 @@ import CancelarClaseMatriculada from "../views/Matricula/CancelarClaseMatriculad
 import CancelarClaseEnEspera from "../views/Matricula/CancelarClaseEnEspera";
 import Matricula from "../views/MatriculaProffesor/Matricula";
 import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
+import Calificaciones from "../views/Calificaciones/Calificaciones";
+import CalificacionesIngresadas from "../views/Calificaciones/CalificacionesIngresadas";
 
 /* import InitialSession from "./components/InitialSession"; */
 
@@ -236,6 +238,8 @@ const ContentNavbar = () => {
             element={<CancelarClaseEnEspera />}
           />
           <Route exact path="/matricula/forma03" element={<Forma03 />} />
+          <Route exact path="/calificaciones" element={<Calificaciones />} />
+          <Route exact path="/calificaciones-ingresadas" element={<CalificacionesIngresadas />} />
           <Route exact path="/solicitudes" element={<Requests />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route

@@ -13,25 +13,6 @@ const ClassTeacher = () => {
 
   /////////////////////////////////////////
   const [calificaciones, setCalificaciones] = useState(false);
-  const [notas, setNotas] = useState([]);
-  const [arregloCalificaciones, setArregloCalificaciones] = useState([]);
-
-  const enviarNotas = () => {
-    console.log("notas: ",notas);
-// setArregloCalificaciones([...arregloCalificaciones, notas])
-
-
-};
-
-console.log("arregloCalificaciones: ",arregloCalificaciones);
-//   useEffect(() =>(
-//     setArregloCalificaciones([...arregloCalificaciones, notas])
-//   )
-// ,[notas])
-
-  const agua = () => {
-    console.log('click en selecyt')
-  }
 
   useEffect(() => {
     const getClassTeacher = async () => {
@@ -115,7 +96,7 @@ console.log("arregloCalificaciones: ",arregloCalificaciones);
                     </tr>
                   </thead>
                   <tbody>
-                    {matriculados.map((mat,index) => (
+                    {matriculados.map((mat, index) => (
                       <tr className="border-b" key={mat.ID_STUDENT}>
                         <td className="border px-4 py-2 text-sm font-medium r">
                           {mat.STUDENT_NAME}
@@ -133,66 +114,15 @@ console.log("arregloCalificaciones: ",arregloCalificaciones);
                                 min="0"
                                 max="100"
                                 required
-                                onChange={(e) =>
-                                  {
-                                  setNotas(...notas, {ID_STUDENT: mat.ID_STUDENT, nota: e.target.value})
-
-                                  console.log(notas)
-                                  setNotas(prevData => {
-                                    const newData = prevData.map((objeto) =>
-                                    objeto.ID_STUDENT === mat.ID_STUDENT
-                                        ? { ...objeto, ID_STUDENT: mat.ID_STUDENT, nota: e.target.value }
-                                        : objeto
-                                    );
-                                    return newData;
-                                  })
-                                  
-                                }
-                                  
-                              }
-                              
-                            
-                                
                               />
                             </td>
                             <td className="text-center border px-4 py-2 text-sm font-medium r">
                               <select
-                              
-                              onClick={(e) =>
-                                  {     
-                                    console.log(e.target.value)
-                                    setNotas(
-                                      {...notas, 
-                                        ID_STUDENT: mat.ID_STUDENT,
-                                        obs: e.target.value,
-                                      }
-                                    )
-                                    // setNotas(prevData => {
-                                    //   const newData = prevData.map((objeto, index) =>
-                                    //     index === notas?.length-1
-                                    //       ? { ...objeto, obs: e.target.value}
-                                    //       : objeto
-                                    //   );
-                                    //   setNotas(newData);
-                                    // });
-                                    // setArregloCalificaciones([...arregloCalificaciones, notas])
-                                  }
-                                }
                                 id="countries"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                               >
                                 <option selected>SELECCIONAR</option>
-                                <option
-                                  // onClick={ () => {
-                                  
-                                  //   setNotas[notas.length-1] = { ...notas[indice], obs: 1 };
-                                  //   setArregloCalificaciones([...arregloCalificaciones, notas])
-                                  // }
-                                  // }
-                                  value="1"
-                                >
-                                  APR
-                                </option>
+                                <option value="1">APR</option>
                                 <option value="2">RPB</option>
                                 <option value="3">ABB</option>
                                 <option value="4">NSP</option>

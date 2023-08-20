@@ -223,8 +223,8 @@ const Sidevar = () => {
             </li>
 
             <li>
-              <a
-                href="#"
+              <Link to="/calificaciones">
+              <div
                 className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
               >
@@ -232,7 +232,8 @@ const Sidevar = () => {
                 <span className="flex-1 ml-3 whitespace-nowrap">
                   Calificaciones
                 </span>
-              </a>
+              </div>
+              </Link>
             </li>
           </ul>
         </div>
