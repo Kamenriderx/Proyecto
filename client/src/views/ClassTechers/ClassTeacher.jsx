@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import axios from "axios";
-import { AiFillEye } from "react-icons/ai";
+import { AiFillEye, AiFillEdit } from "react-icons/ai";
 import Modal2 from "../../components/Modal2";
 const ClassTeacher = () => {
   const { state, dispatch } = useContext(StoreContext);
@@ -10,6 +10,28 @@ const ClassTeacher = () => {
   const [matriculados, setMatriculados] = useState([]);
   const [selectedClassName, setSelectedClassName] = useState("");
   const [code, setCode] = useState("");
+
+  /////////////////////////////////////////
+  const [calificaciones, setCalificaciones] = useState(false);
+  const [notas, setNotas] = useState([]);
+  const [arregloCalificaciones, setArregloCalificaciones] = useState([]);
+
+  const enviarNotas = () => {
+    console.log("notas: ",notas);
+// setArregloCalificaciones([...arregloCalificaciones, notas])
+
+
+};
+
+console.log("arregloCalificaciones: ",arregloCalificaciones);
+//   useEffect(() =>(
+//     setArregloCalificaciones([...arregloCalificaciones, notas])
+//   )
+// ,[notas])
+
+  const agua = () => {
+    console.log('click en selecyt')
+  }
 
   useEffect(() => {
     const getClassTeacher = async () => {
@@ -84,10 +106,16 @@ const ClassTeacher = () => {
                     <tr>
                       <th className="p-2">Nombre</th>
                       <th className="p-2">Numero de cuenta</th>
+                      {calificaciones && (
+                        <>
+                          <th className="p-2">Calificación</th>
+                          <th className="p-2">Observación</th>
+                        </>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
-                    {matriculados.map((mat) => (
+                    {matriculados.map((mat,index) => (
                       <tr className="border-b" key={mat.ID_STUDENT}>
                         <td className="border px-4 py-2 text-sm font-medium r">
                           {mat.STUDENT_NAME}
@@ -95,6 +123,83 @@ const ClassTeacher = () => {
                         <td className="text-center border px-4 py-2 text-sm font-medium r">
                           {mat.ACCOUNT_NUMBER}
                         </td>
+                        {calificaciones && (
+                          <>
+                            <td className="text-center border px-4 py-2 text-sm font-medium r">
+                              <input
+                                type="number"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                placeholder="Nota"
+                                min="0"
+                                max="100"
+                                required
+                                onChange={(e) =>
+                                  {
+                                  setNotas(...notas, {ID_STUDENT: mat.ID_STUDENT, nota: e.target.value})
+
+                                  console.log(notas)
+                                  setNotas(prevData => {
+                                    const newData = prevData.map((objeto) =>
+                                    objeto.ID_STUDENT === mat.ID_STUDENT
+                                        ? { ...objeto, ID_STUDENT: mat.ID_STUDENT, nota: e.target.value }
+                                        : objeto
+                                    );
+                                    return newData;
+                                  })
+                                  
+                                }
+                                  
+                              }
+                              
+                            
+                                
+                              />
+                            </td>
+                            <td className="text-center border px-4 py-2 text-sm font-medium r">
+                              <select
+                              
+                              onClick={(e) =>
+                                  {     
+                                    console.log(e.target.value)
+                                    setNotas(
+                                      {...notas, 
+                                        ID_STUDENT: mat.ID_STUDENT,
+                                        obs: e.target.value,
+                                      }
+                                    )
+                                    // setNotas(prevData => {
+                                    //   const newData = prevData.map((objeto, index) =>
+                                    //     index === notas?.length-1
+                                    //       ? { ...objeto, obs: e.target.value}
+                                    //       : objeto
+                                    //   );
+                                    //   setNotas(newData);
+                                    // });
+                                    // setArregloCalificaciones([...arregloCalificaciones, notas])
+                                  }
+                                }
+                                id="countries"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                              >
+                                <option selected>SELECCIONAR</option>
+                                <option
+                                  // onClick={ () => {
+                                  
+                                  //   setNotas[notas.length-1] = { ...notas[indice], obs: 1 };
+                                  //   setArregloCalificaciones([...arregloCalificaciones, notas])
+                                  // }
+                                  // }
+                                  value="1"
+                                >
+                                  APR
+                                </option>
+                                <option value="2">RPB</option>
+                                <option value="3">ABB</option>
+                                <option value="4">NSP</option>
+                              </select>
+                            </td>
+                          </>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -109,12 +214,21 @@ const ClassTeacher = () => {
             )}
           </div>
           <div className="mt-5 flex justify-end mb-2">
-            <button
-              onClick={downloadCSV}
-              className="bg-green-600 hover:bg-green-700 text-white font-bold shadow rounded cursor-pointer text-base py-2 px-3"
-            >
-              Descargar Lista
-            </button>
+            {calificaciones ? (
+              <button
+                onClick={enviarNotas}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold shadow rounded cursor-pointer text-base py-2 px-3"
+              >
+                Guardar
+              </button>
+            ) : (
+              <button
+                onClick={downloadCSV}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold shadow rounded cursor-pointer text-base py-2 px-3"
+              >
+                Descargar Lista
+              </button>
+            )}
           </div>
         </div>
       </Modal2>
@@ -137,6 +251,7 @@ const ClassTeacher = () => {
                     <th className="p-2">HI</th>
                     <th className="p-2">HF</th>
                     <th className="p-2">Ver alumnos</th>
+                    <th className="p-2">Calificar alumnos</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -165,15 +280,30 @@ const ClassTeacher = () => {
                           <AiFillEye
                             size={25}
                             className="cursor-pointer"
-                            onClick={() =>
+                            onClick={() => {
+                              setCalificaciones(false);
                               handleClick(
                                 clase.ID_SECTION,
                                 clase.NAME,
                                 clase.SECTION_CODE
-                              )
-                            }
+                              );
+                            }}
                           />
                         </div>
+                      </td>
+                      <td className="text-center border px-4 py-2 text-sm font-medium">
+                        <AiFillEdit
+                          size={25}
+                          className="cursor-pointer m-auto text-green-600"
+                          onClick={() => {
+                            setCalificaciones(true);
+                            handleClick(
+                              clase.ID_SECTION,
+                              clase.NAME,
+                              clase.SECTION_CODE
+                            );
+                          }}
+                        />
                       </td>
                     </tr>
                   ))}
