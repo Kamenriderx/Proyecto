@@ -152,7 +152,7 @@ const TablaMatricula = ({
     if (datos === true) {
       try {
         const res = await axios.post(
-          `http://localhost:3000/registro/enrollment/canceledInscription/${idClaseCancelar}`
+          `http://localhost:3000/registro/enrollment/canceledInscription/${idClaseCancelar}/${state.user.ID_USER}`
         );
         // console.log("Clase cancelada");
         setCheck1(!check1);

@@ -7,14 +7,14 @@ const {getEnrollmentAreas, enrolmentCourse, listCoursesArea, getSectionsByIdCour
 
 
 // enpoint para generar matricula
-router.post("/inscription/:idUser",verifyPaymentEnrollment ,verifyIndexAcademic, verifyEnrollment);
+router.post("/inscription/:idUser",verifyPaymentEnrollment, verifyIndexAcademic , verifyEnrollment);
 // enpoint para matricular una clase
 router.post("/inscriptionCourse/:idUser",verifyPaymentEnrollment , enrolmentCourse);
 
 // enpoint para matricular una clase en lista de espera
 router.post("/inscriptionCourseWait/:idUser",verifyPaymentEnrollment , enrolmentWaitCourse);
 // enpoint para cancelar una clase 
-router.post("/canceledInscription/:idEnrollment" , cancelledEnrollment);
+router.post("/canceledInscription/:idEnrollment/:idUser" ,cancelledEnrollment);
 
 // listar las areas en que matricula el estudiante
 router.get("/listAreas/:idUser", getEnrollmentAreas)
@@ -23,7 +23,7 @@ router.get("/listAreas/:idUser", getEnrollmentAreas)
 router.get("/listCoursesArea/:idCareer/:idStudent",listCoursesArea )
 
 // obtener secciones de una clase
-router.get("/getCourseSections/:idCourse", getSectionsByIdCourse )
+router.get("/getCourseSections/:idCourse", authMiddleware ,getSectionsByIdCourse )
 // obtener info basica del estudiante
 router.get("/infoStudent/:idUser", getInfoAcademicStudent )
 // obtener clases matriculadas 
