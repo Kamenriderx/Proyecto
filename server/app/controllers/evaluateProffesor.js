@@ -76,9 +76,9 @@ exports.classStudent = async function (req, res) {
       });
   
       if (existingEvaluation) {
-        return res.status(400).json({ error: "Evaluación completada con exito" });
+        return res.status(400).json({ error: "Ya existe una evaluacion." });
       }
-      
+
   // Verifica que todas las preguntas esten
   const requiredFields = [
     ID_STUDENT,
