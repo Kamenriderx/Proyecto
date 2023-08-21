@@ -71,7 +71,7 @@ exports.createEnrollment =  async function (req, res) {
                     return res.status(400).json({ error: "Para calificación mayor o igual a 65, observacion tiene que ser 'APR'." });
                 }
                 STATE = "Finalizada";
-            } else if (CALIFICATION === 0) {
+            } else if (CALIFICATION == 0) {
                 if (OBS === "APR") {
                     return res.status(400).json({ error: "Para calificación igual a 0, observación no puede ser 'APR'" });
                 }
