@@ -1,7 +1,8 @@
 const connection = require('../../config/database');
 const Evaluation = require('../models/evaluateProfessor');
+const { Op } = require('sequelize');
 
-// Controlador que obtiene las secciones matriculadas de un estudiante en específico
+//! Controlador que obtiene las secciones matriculadas de un estudiante en específico
 exports.classStudent = async function (req, res) {
     const idStudent = req.params.idStudent;
   
@@ -98,5 +99,21 @@ exports.classStudent = async function (req, res) {
   }
 };
 
+//! Evaluaciones hechas por estudiante
+exports.getEvaluationsByStudentId = async (req, res) => {
+  const { idStudent } = req.params;
 
+  try {
+    const evaluations = await Evaluation.findAll({
+      where: {
+        ID_STUDENT: idStudent,
+      },
+    });
+
+    res.status(200).json(evaluations);
+  } catch (error) {
+    console.error('Error al obtener evaluaciones:', error);
+    res.status(500).json({ message: 'Error al obtener evaluaciones' });
+  }
+};
 
