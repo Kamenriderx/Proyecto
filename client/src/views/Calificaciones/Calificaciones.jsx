@@ -18,7 +18,7 @@ const Calificaciones = () => {
   const [datosRecibidos, setDatosRecibidos] = useState([]);
 
   const [dataStudent, setdataStudent] = useState(null);
-  console.log("idStudent: ", stateStudent.user.ID_STUDENT);
+  // console.log("idStudent: ", stateStudent.user.ID_STUDENT);
 
   const [secciones, setSecciones] = useState(null);
   const getSeccion = async () => {

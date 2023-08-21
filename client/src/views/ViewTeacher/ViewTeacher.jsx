@@ -6,7 +6,8 @@ import Sidevar from "./components/Sidevar";
 import axios from "axios";
 
 const ViewTeacher = () => {
-  const { state, dispatch } = useContext(StoreContext);
+  const { state, dispatch, periodo } = useContext(StoreContext);
+
   const [classes, setClasses] = useState([]);
 
 
@@ -32,7 +33,7 @@ const ViewTeacher = () => {
     <>
 <Sidevar/>
 
-      <div className="grid grid-cols-3 gap-6 p-4 sm:ml-64 -mt-10">
+      <div className="grid grid-cols-3 gap-6 p-4 sm:ml-64 -mt-4">
         <div className="col-span-2">
           <div className="bg-gray-200 m-8 rounded-xl w-auto h-96  ">
             <Video />
@@ -60,14 +61,7 @@ const ViewTeacher = () => {
         
           </div>
         </div>
-        <div className="col-span-3 ml-4">
-          <div className="flex ">
-            <div className="basis-1/4 bg-gray-200 m-4 rounded-xl w-auto h-36"></div>
-            <div className="basis-1/4 bg-gray-200 m-4 rounded-xl w-auto h-36"></div>
-            <div className="basis-1/4 bg-gray-200 m-4 rounded-xl w-auto h-36"></div>
-            <div className="basis-1/4 bg-gray-200 m-4 mr-8 rounded-xl w-auto h-36"></div>
-          </div>
-        </div>
+     
       </div>
     </>
   );

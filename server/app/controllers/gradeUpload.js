@@ -104,7 +104,7 @@ exports.createEnrollment = async function (req, res) {
             });
         }
         STATE = "Finalizada";
-      } else if (CALIFICATION === 0) {
+      } else if (CALIFICATION == 0) {
         if (OBS === "APR") {
           return res
             .status(400)
