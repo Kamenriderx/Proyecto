@@ -92,5 +92,3 @@ exports.createEnrollment =  async function (req, res) {
         return res.status(500).json({ error: "Error interno sel servidor." });
     }
 };
-
-//! Controlador para la edicion de los campos OBS y CALIFICATION
