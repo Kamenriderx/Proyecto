@@ -53,7 +53,7 @@ exports.classStudent = async function (req, res) {
     RESP_25, RESP_26, RESP_27, RESP_28
   } = req.body;
 
-  // Verifica que todas las preguntas y el ID_STUDENT estén presentes en el cuerpo de la solicitud
+  // Verifica que todas las preguntas esten
   const requiredFields = [
     ID_STUDENT,
     RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
