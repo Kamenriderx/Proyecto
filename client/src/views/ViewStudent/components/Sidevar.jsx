@@ -142,6 +142,18 @@ const Sidevar = () => {
                 <span className="flex-1 ml-3 whitespace-nowrap">Chat</span>
               </Link>
             </li>
+            <li>
+              <Link to="/perfil-docente">
+              <div
+                className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+              >
+                <IoMdContact className="flex-shrink-0 w-6 h-6 text-gray-500" />
+
+                <span className="flex-1 ml-3 whitespace-nowrap">Docentes</span>
+              </div>
+              </Link>
+            </li>
             <hr />
             <li className="text-center">
               <span className="text-gray-600">Registro</span>

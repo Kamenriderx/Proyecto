@@ -42,6 +42,7 @@ import Matricula from "../views/MatriculaProffesor/Matricula";
 import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
 import Calificaciones from "../views/Calificaciones/Calificaciones";
 import CalificacionesIngresadas from "../views/Calificaciones/CalificacionesIngresadas";
+import PerfilDocentes from "../views/ViewStudent/PerfilDocentes";
 
 /* import InitialSession from "./components/InitialSession"; */
 
@@ -219,6 +220,7 @@ const ContentNavbar = () => {
           <Route exact path="/perfil" element={<Profile />} />
           <Route exact path="/list-teachers" element={<ListTeachers />} />
           <Route exact path="/chat" element={<ViewChat />} />
+          <Route exact path="/perfil-docente" element={<PerfilDocentes />} />
           <Route exact path="/contactos" element={<ListContacts />} />
           <Route exact path="/addSections" element={<AddSections />} />
           <Route exact path="/matricula" element={<MatriculaEstudiante />} />
