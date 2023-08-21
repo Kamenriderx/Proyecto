@@ -56,7 +56,7 @@ exports.getEnrolledStudents = async function (req, res) {
     const query = `
       SELECT
         e.ID_ENROLLMENT,
-        e.ID_SECTION,
+        a.ID_SECTION,
         s.ID_STUDENT,
         a.SECTION_CODE,
         c.NAME,
