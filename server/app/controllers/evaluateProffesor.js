@@ -9,6 +9,8 @@ exports.classStudent = async function (req, res) {
     try {
       const query = `
         SELECT
+          p.ID_PROFFERSSOR,
+          p.ID_USER AS ID_USER_PROFFESOR,
           a.ID_SECTION,
           c.CODE_COURSE,
           c.NAME AS COURSE_NAME,
