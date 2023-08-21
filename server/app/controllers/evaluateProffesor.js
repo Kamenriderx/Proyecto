@@ -65,7 +65,7 @@ exports.classStudent = async function (req, res) {
   const missingFields = requiredFields.filter(field => field === undefined);
 
     if (missingFields.length > 0) {
-        return res.status(400).json({ error: `Faltan campos requeridos en la solicitud: ${missingFields.join(', ')}` });
+        return res.status(400).json({ error: `Faltan campos requeridos en la solicitud:}` });
     }
 
   try {
