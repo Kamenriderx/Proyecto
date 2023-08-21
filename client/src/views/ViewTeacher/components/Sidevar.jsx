@@ -2,8 +2,18 @@ import { useContext } from "react";
 import "flowbite";
 import { AiFillHome } from "react-icons/ai";
 import { IoMdContact } from "react-icons/io";
-import { BiSolidContact, BiSolidKey, BiNotepad } from "react-icons/Bi";
-import { BsFillChatDotsFill, BsQuestionCircleFill } from "react-icons/bs";
+import {
+  BiSolidContact,
+  BiSolidKey,
+  BiNotepad,
+  BiSolidSchool,
+} from "react-icons/Bi";
+import {
+  BsFillChatDotsFill,
+  BsQuestionCircleFill,
+  BsCardChecklist,
+  BsUniversalAccessCircle,
+} from "react-icons/bs";
 import {
   PiNotebookBold,
   PiComputerTowerFill,
@@ -14,6 +24,7 @@ import { FaHistory } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { StoreContext } from "../../../store/ContextExample";
+import { FcPlanner, FcCancel } from "react-icons/fc";
 
 const Sidevar = () => {
   const { state, dispatch } = useContext(StoreContext);
@@ -161,6 +172,80 @@ const Sidevar = () => {
                       <SiGoogleclassroom className="flex-shrink-0 w-6 h-6 text-gray-500" />
                       <span className="flex-1 ml-3 whitespace-nowrap">
                         Secciones
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+              </>
+            )}
+            {state?.user?.ID_ROLE === 4 && (
+              <>
+                <li>
+                  <Link to="/solicitudes-coordinador-centro">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <BiSolidSchool className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Solicitudes de Centro
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/solicitudes-coordinador">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <BsUniversalAccessCircle className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Solicitudes de Carrera
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Periodos">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <FcPlanner className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Descargar Planificacion
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/listAlumnos-coordi">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <BsCardChecklist className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Listado Alumnos
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/solicitudesExcepcionales-coordinador">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <FcCancel className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Solicitudes Excepcionales
                       </span>
                     </a>
                   </Link>

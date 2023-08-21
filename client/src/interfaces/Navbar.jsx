@@ -40,7 +40,10 @@ import CancelarClaseMatriculada from "../views/Matricula/CancelarClaseMatriculad
 import CancelarClaseEnEspera from "../views/Matricula/CancelarClaseEnEspera";
 import Matricula from "../views/MatriculaProffesor/Matricula";
 import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
-import Calificaciones from "../views/Calificaciones/Calificaciones";
+import CancelacionExcep from "../views/Solicitudes/CancelacionExcep";
+import ViewDictamenExcep from "../views/Solicitudes/ViewDictamenExcep";
+import RequestExcepCoordi from "../views/Solicitudes/RequestExcepCoordi";
+import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosClass";import Calificaciones from "../views/Calificaciones/Calificaciones";
 import CalificacionesIngresadas from "../views/Calificaciones/CalificacionesIngresadas";
 import PerfilDocentes from "../views/ViewStudent/PerfilDocentes";
 
@@ -86,31 +89,6 @@ const ContentNavbar = () => {
               id="navbar-cta"
             >
               <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
-                {state?.user?.ID_ROLE === 4 && (
-                  <>
-                    <li>
-                      <Link to="/solicitudes-coordinador-centro">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Solicitudes Centro
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/Periodos">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Secciones
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/solicitudes-coordinador">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Solicitudes Carrera
-                        </button>
-                      </Link>
-                    </li>
-                  </>
-                )}
                 {state?.user?.ID_ROLE === 5 && (
                   <>
                     <li>
@@ -188,6 +166,8 @@ const ContentNavbar = () => {
         ) : state?.user?.ID_ROLE === 2 ? (
           <ViewTeacher />
         ) : state?.user?.ID_ROLE === 3 ? (
+          <ViewTeacher />
+        ) : state?.user?.ID_ROLE === 4 ? (
           <ViewTeacher />
         ) : (
           <h2>Admin</h2>
@@ -274,6 +254,22 @@ const ContentNavbar = () => {
             path="/sections/:idSection"
             element={<SectionDetails />}
           />
+          <Route
+            exact
+            path="/cancelacion-excep"
+            element={<CancelacionExcep />}
+          />
+          <Route
+            exact
+            path="/solicitudesExcepcionales-coordinador"
+            element={<RequestExcepCoordi />}
+          />
+          <Route
+            exact
+            path="/listAlumnos-coordi"
+            element={<ListadoAlumnosClass />}
+          />
+          <Route exact path="/dictamenExcep" element={<ViewDictamenExcep />} />
           <Route exact path="/secciones-Docente" element={<ClassTeacher />} />
           <Route exact path="/matricula-jefe" element={<Matricula />} />
           <Route exact path="/dictamen-centro" element={<DictamenCenter />} />

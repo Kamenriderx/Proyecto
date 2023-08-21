@@ -50,16 +50,15 @@ const StudentState = (props) => {
 
       const res = await httpRequests()["put"](
         `http://localhost:3000/registro/user/updateEmail/${stateUser.user.ID_USER}`,
-        {body:{EMAIL:email}, ...config }
+        { body: { EMAIL: email }, ...config }
       );
 
-      console.log('PUT_CORREO: ',res)
+      console.log("PUT_CORREO: ", res);
 
       dispatch({
         type: "PUT_CORREO",
         payload: res.data,
       });
-
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);
@@ -101,8 +100,8 @@ const StudentState = (props) => {
     }
   };
 
-  const deleteImage = async (stateUser,id) => {
-    console.log(id)
+  const deleteImage = async (stateUser, id) => {
+    console.log(id);
     try {
       const config = {
         headers: {
@@ -119,9 +118,9 @@ const StudentState = (props) => {
       console.log("resDeleteImage: ", res);
 
       dispatch({
-        type: 'DELETE_IMAGE',
-        payload: res.data
-      })
+        type: "DELETE_IMAGE",
+        payload: res.data,
+      });
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);
