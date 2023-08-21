@@ -1,20 +1,78 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { httpRequests } from "../../../utils/helpers/httpRequests";
+import AlertTwo from "../../../components/AlertTwo";
 
-const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
+const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar, idSeccion,idStudent }) => {
   if (!isOpen) {
     return null;
   }
+  //alerta
+const [alerta, setAlerta] = useState({});
+const [message, setMessage] = useState(false);
 
-  const [preguntas, setPreguntas] = useState({});
-  console.log(preguntas);
 
-  const handleClick = (e) => {
-    // e.preventDefault();
-    enviarDatoAlPadre(preguntas);
+  const [preguntas, setPreguntas] = useState({ID_STUDENT:idStudent });
+  console.log("preguntas: ", preguntas);
+
+  console.log("idSeccion: ", idSeccion);
+
+  const [dataPadre, setDataPadre] = useState({});
+
+
+  const handleClick = async (e) => {
+    setMessage(false);
+    e.preventDefault();
+
+    try {
+      const res = await httpRequests()["post"](
+        `http://localhost:3000/registro/evaluateProffesor/evaluate/${idSeccion}`,
+        { body: preguntas }
+      );
+      console.log("Preguntas enviadas:", res);
+      enviarDatoAlPadre(res.data);
+
+      setDataPadre(res.data)
+
+      if (res?.status === 201) {
+        // alert('Sección evaluada correctamente.')
+        setMessage(true);
+        setAlerta({
+          message: "Sección evaluada exitosamente.",
+          error: false,
+        });
+        // onClose();
+        return;
+      }
+      if (res?.response.status == 400) {
+        // alert('Esta sección ya está evaluada.')
+        setMessage(true);
+        setAlerta({
+          message: res.response.data.error,
+          error: true,
+        });
+        // onClose();
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
     onClose();
   };
 
+  // useEffect(() => {
+  //   enviarDatoAlPadre(dataPadre);
+  //   console.log("dataPadre: ", dataPadre)
+  // },[dataPadre])
+  
+
   return (
+    <>
+       {message && (
+        <>
+          <AlertTwo alerta={alerta} />
+        </>
+      )}
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-md shadow-lg">
         {calificar ? (
@@ -35,7 +93,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 1: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_1: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -59,7 +117,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 2: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_2: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -83,7 +141,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 3: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_3: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -110,7 +168,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 4: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_4: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -134,7 +192,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 5: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_5: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -158,7 +216,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 6: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_6: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -182,7 +240,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 7: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_7: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -206,7 +264,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 8: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_8: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -232,7 +290,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 9: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_9: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -257,7 +315,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 10: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_10: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -280,7 +338,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 11: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_11: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -303,7 +361,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 12: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_12: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -326,7 +384,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 13: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_13: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -349,7 +407,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 14: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_14: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -373,7 +431,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 15: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_15: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -397,7 +455,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 16: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_16: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -421,7 +479,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 17: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_17: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -445,7 +503,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 18: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_18: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -469,7 +527,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 19: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_19: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -495,7 +553,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 20: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_20: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -520,7 +578,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 21: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_21: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -544,7 +602,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 22: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_22: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -568,7 +626,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 23: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_23: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -590,9 +648,10 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                   </div>
                   <div>
                     <select required
+                    // value={preguntas.RESP_24}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 24: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_24: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -616,7 +675,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                     <select required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                       onChange={(event) =>
-                        setPreguntas({ ...preguntas, 25: event.target.value })
+                        setPreguntas({ ...preguntas, RESP_25: event.target.value })
                       }
                     >
                       <option value="" selected>
@@ -640,7 +699,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                 <div>
                   <textarea required
                     onChange={(event) =>
-                      setPreguntas({ ...preguntas, 26: event.target.value })
+                      setPreguntas({ ...preguntas, RESP_26: event.target.value })
                     }
                     className="p-2.5 max-h-16 w-full  text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
                     placeholder="Escribe tu respuesta aqui..."
@@ -657,7 +716,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                 <div>
                   <textarea required
                     onChange={(event) =>
-                      setPreguntas({ ...preguntas, 27: event.target.value })
+                      setPreguntas({ ...preguntas, RESP_27: event.target.value })
                     }
                     className="p-2.5 max-h-16 w-full  text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
                     placeholder="Escribe tu respuesta aqui..."
@@ -674,7 +733,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
                 <div>
                   <textarea required
                     onChange={(event) =>
-                      setPreguntas({ ...preguntas, 28: event.target.value })
+                      setPreguntas({ ...preguntas, RESP_28: event.target.value })
                     }
                     className="p-2.5 max-h-16 w-full  text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
                     placeholder="Escribe tu respuesta aqui..."
@@ -716,6 +775,7 @@ const Modal = ({ isOpen, onClose, enviarDatoAlPadre, calificar }) => {
         )}
       </div>
     </div>
+      </>
   );
 };
 

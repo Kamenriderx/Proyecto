@@ -1,9 +1,86 @@
 import { BsCheckCircleFill } from "react-icons/bs";
 import Modal from "./components/Modal.jsx";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { httpRequests } from "../../utils/helpers/httpRequests.js";
+import StudentContext from "../ViewStudent/context/StudentContext.jsx";
+import { StoreContext } from "../../store/ContextExample.jsx";
 
 const Calificaciones = () => {
+  //contexto de usuario
+  const { state } = useContext(StoreContext);
+  //contexto de estudiante
+  const { stateStudent, getStudent } = useContext(StudentContext);
+  //id Seccion
+  const [idSeccion, setIdSeccion] = useState(null);
+
+  //datos recibidos
+  const [datosRecibidos, setDatosRecibidos] = useState([]);
+
+  const [dataStudent, setdataStudent] = useState(null);
+  console.log("idStudent: ", stateStudent.user.ID_STUDENT);
+
+  const [secciones, setSecciones] = useState(null);
+  const getSeccion = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`,
+        },
+      };
+
+      const res = await httpRequests()["get"](
+        `http://localhost:3000/registro/evaluateProffesor/${stateStudent.user.ID_STUDENT}`,
+        { ...config }
+      );
+
+      console.log("GET_SECCION: ", res.data);
+      setSecciones(res.data);
+
+      if (!res.status && res?.response?.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [evaluacion, setEvaluacion] = useState(null);
+  const getEvaluacion = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`,
+        },
+      };
+
+      const res = await httpRequests()["get"](
+        `http://localhost:3000/registro/evaluateProffesor/evaluations/${stateStudent.user.ID_STUDENT}`,
+        { ...config }
+      );
+
+      console.log("GET_EVALUACION: ", res.data);
+      setEvaluacion(res.data);
+
+      if (!res.status && res?.response?.status !== 200) {
+        throw new Error(res.response.data.messagge);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getStudent(state);
+    getSeccion();
+  }, [state]);
+
+  useEffect(() => {
+    getEvaluacion();
+  }, [datosRecibidos]);
+
   //modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
@@ -15,22 +92,20 @@ const Calificaciones = () => {
 
   const navigate = useNavigate();
 
-  //datos recibidos
-  const [datosRecibidos, setDatosRecibidos] = useState(null);
-
   const [check, setCheck] = useState(false);
   const [calificar, setCalificar] = useState(false);
 
   //Recibir datos de Ventana Modal
   const recibirDatoDelHijo = (datos) => {
-    console.log("datos: ", datos);
+    console.log("datos recibidos: ", datos);
+    setDatosRecibidos([...datosRecibidos, datos]);
   };
 
   const handleClick = () => {
-    if (check) {
+    if (evaluacion.length >= 1 && evaluacion.length == secciones.length) {
       navigate("/calificaciones-ingresadas");
     } else {
-      setCalificar(false)
+      setCalificar(false);
       openModal();
     }
   };
@@ -59,31 +134,39 @@ const Calificaciones = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="px-6 py-4">arr.seccion.course.CODE_COURSE</td>
-              <td className="px-6 py-4">arr.seccion.course.NAME</td>
-              <td className="px-6 py-4">
-                <BsCheckCircleFill className="text-3xl text-green-500 hidden" />{" "}
-                <button
-                  className="p-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold text-md shadow-md rounded"
-                  onClick={() => {
-                    setCalificar(true);
-                    openModal();
-                  }}
-                >
-                  Calificar
-                </button>
-              </td>
-            </tr>
+            {secciones && (
+              <>
+                {secciones.map((seccion, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4">{seccion.COURSE_NAME}</td>
+                    <td className="px-6 py-4">{seccion.SECTION_CODE}</td>
+                    <td className="px-6 py-4">
+                      <button
+                        className="p-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold text-md shadow-md rounded"
+                        onClick={() => {
+                          setIdSeccion(seccion.ID_SECTION);
+                          setCalificar(true);
+                          openModal();
+                        }}
+                      >
+                        Calificar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </>
+            )}
           </tbody>
         </table>
       </div>
-      
+
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
         enviarDatoAlPadre={recibirDatoDelHijo}
         calificar={calificar}
+        idSeccion={idSeccion}
+        idStudent={stateStudent.user.ID_STUDENT}
       />
     </div>
   );

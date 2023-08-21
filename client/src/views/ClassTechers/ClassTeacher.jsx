@@ -146,7 +146,6 @@ const ClassTeacher = () => {
           <div className="mt-5 flex justify-end mb-2">
             {calificaciones ? (
               <button
-                onClick={enviarNotas}
                 className="bg-green-600 hover:bg-green-700 text-white font-bold shadow rounded cursor-pointer text-base py-2 px-3"
               >
                 Guardar
