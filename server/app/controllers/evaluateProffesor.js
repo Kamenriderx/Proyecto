@@ -53,21 +53,6 @@ exports.classStudent = async function (req, res) {
     RESP_25, RESP_26, RESP_27, RESP_28
   } = req.body;
 
-  // Verifica que todas las preguntas esten
-  const requiredFields = [
-    ID_STUDENT,
-    RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
-    RESP_9, RESP_10, RESP_11, RESP_12, RESP_13, RESP_14, RESP_15, RESP_16,
-    RESP_17, RESP_18, RESP_19, RESP_20, RESP_21, RESP_22, RESP_23, RESP_24,
-    RESP_25, RESP_26, RESP_27, RESP_28
-];
-
-  const missingFields = requiredFields.filter(field => field === undefined);
-
-    if (missingFields.length > 0) {
-        return res.status(400).json({ error: `Faltan campos requeridos en la solicitud:}` });
-    }
-
   try {
     // Consulta la tabla Section para obtener los valores necesarios
     const sectionData = await connection.query(
@@ -93,7 +78,21 @@ exports.classStudent = async function (req, res) {
       if (existingEvaluation) {
         return res.status(400).json({ error: "Evaluación completada con exito" });
       }
+      
+  // Verifica que todas las preguntas esten
+  const requiredFields = [
+    ID_STUDENT,
+    RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
+    RESP_9, RESP_10, RESP_11, RESP_12, RESP_13, RESP_14, RESP_15, RESP_16,
+    RESP_17, RESP_18, RESP_19, RESP_20, RESP_21, RESP_22, RESP_23, RESP_24,
+    RESP_25, RESP_26, RESP_27, RESP_28
+];
 
+  const missingFields = requiredFields.filter(field => field === undefined);
+
+    if (missingFields.length > 0) {
+        return res.status(400).json({ error: `Faltan campos requeridos en la solicitud:}` });
+    }
     // Crea una nueva evaluación
     const createdEvaluation = await Evaluation.create({
       ID_PERIOD: sectionData[0].ID_PERIOD,
