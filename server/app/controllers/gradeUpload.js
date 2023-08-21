@@ -86,9 +86,11 @@ exports.createEnrollment =  async function (req, res) {
             );
         }
 
-        return res.status(200).json({ message: "Matricula realizada exitosamente." });
+        return res.status(200).json({ message: "Subida de notas con exito." });
     } catch (error) {
         console.error("Error al subir la matricula:", error);
         return res.status(500).json({ error: "Error interno sel servidor." });
     }
 };
+
+//! Controlador para la edicion de los campos OBS y CALIFICATION

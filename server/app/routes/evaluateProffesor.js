@@ -4,4 +4,5 @@ const {classStudent, updateEvaluation} = require("../controllers/evaluateProffes
 
 router.get("/:idStudent", classStudent)
 router.post("/evaluate/:idSection", updateEvaluation)
+
 module.exports = router;

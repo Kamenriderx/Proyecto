@@ -23,6 +23,10 @@ const Evaluation = connection.define('Evaluation', {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    ID_STUDENT: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     RESP_1: DataTypes.TEXT,
     RESP_2: DataTypes.TEXT,
     RESP_3: DataTypes.TEXT,
@@ -59,6 +63,7 @@ const Evaluation = connection.define('Evaluation', {
     tableName: 'Evaluation', 
     timestamps: false, 
   });
+  
 Evaluation.sync({ force: false })
   .then(() => {
     console.log("Tabla de Evaluacion sincronizada");
