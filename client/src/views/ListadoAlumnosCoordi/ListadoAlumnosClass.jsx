@@ -85,7 +85,7 @@ const ListadoAlumnosClass = () => {
 
   console.log("CLASES MATRICULADAS POR ESTUDIANTE", matriculadas);
 
-  const cancelarAsignatura = async (ID_ENROLLMENT, ID_STUDENT) => {
+  /*   const cancelarAsignatura = async (ID_ENROLLMENT, ID_STUDENT) => {
     try {
       const response = await axios.post(
         `http://localhost:3000/registro/enrollment/canceledInscriptionSpecial/${ID_ENROLLMENT}/${ID_STUDENT}`
@@ -105,7 +105,7 @@ const ListadoAlumnosClass = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }; */
 
   const handleClick = (id) => {
     setShowModal(true);
@@ -138,7 +138,6 @@ const ListadoAlumnosClass = () => {
                           <th className="p-2">Seccion</th>
                           <th className="p-2">UV</th>
                           <th className="p-2">Dias</th>
-                          <th className="p-2">Cancelar Asignatura</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -159,7 +158,7 @@ const ListadoAlumnosClass = () => {
                             <td className="border px-4 py-2 text-md font-bold r">
                               {mat.seccion.DAYS}
                             </td>
-                            <td className="text-center border px-4 py-2 text-sm font-medium r">
+                            {/*  <td className="text-center border px-4 py-2 text-sm font-medium r">
                               <div className="flex justify-center">
                                 <button
                                   onClick={() =>
@@ -173,7 +172,7 @@ const ListadoAlumnosClass = () => {
                                   Cancelar Asignatura
                                 </button>
                               </div>
-                            </td>
+                            </td> */}
                           </tr>
                         ))}
                       </tbody>

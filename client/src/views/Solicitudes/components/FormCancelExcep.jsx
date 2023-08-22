@@ -9,6 +9,7 @@ const FormCancelExcep = ({ setShowModal }) => {
   const { state, dispatch } = useContext(StoreContext);
   const [mensaje, setMensaje] = useState("");
   const [comprobante, setComprobante] = useState(null);
+  const [clases, setClases] = useState([]);
   const [alerta, setAlerta] = useState({});
 
   const handlePdfChange = (event) => {
@@ -97,6 +98,22 @@ const FormCancelExcep = ({ setShowModal }) => {
               value={mensaje}
               onChange={(e) => setMensaje(e.target.value)}
             />
+          </div>
+        </div>
+        <div className="w-full mt-5">
+          <div>
+            <div className="mb-3">
+              <p className="text-gray-800 text-base font-bold">
+                Ingresa la clase que deseas cancelar:
+              </p>
+            </div>
+          </div>
+          <div className="w-full flex justify-center">
+            <select className="py-2 border focus:border-blue-600 w-3/5 font-semibold text-center">
+              <option value="">Selecciona una Clase</option>
+              <option value="">MATEMATICAS</option>
+              <option value="">ESPANOL</option>
+            </select>
           </div>
         </div>
         <div className="mt-5">

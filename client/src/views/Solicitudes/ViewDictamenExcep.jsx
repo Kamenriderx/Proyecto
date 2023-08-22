@@ -49,10 +49,10 @@ const ViewDictamenExcep = () => {
           </p>
         </div>
         {listRequest.length > 0 ? (
-          <div className="w-3/5 mx-auto bg-gray-200 shadow rounded-md p-2 mt-3">
+          <div className="w-3/4 mx-auto bg-gray-100 shadow rounded-md p-2 mt-3">
             {listRequest.map((request) => (
-              <div className="bg-white p-2 mt-3 shadow rounded-md">
-                <div className="mt-2 block">
+              <div className="bg-white py-2 px-3 mt-3 shadow rounded-md">
+                <div className="mt-2 block mb-2">
                   <p className="text-gray-800 font-bold text-md">
                     ID SOLICITUD:{" "}
                     <span className="font-semibold">
@@ -67,7 +67,8 @@ const ViewDictamenExcep = () => {
                     </span>
                   </p>
                 </div>
-                <div className="mt-3">
+                <hr />
+                <div className="mt-3 mb-2">
                   <p className="text-gray-800 font-bold text-md uppercase">
                     dictamen:{" "}
                     <span className="text-red-800 font-semibold">
@@ -75,6 +76,7 @@ const ViewDictamenExcep = () => {
                     </span>
                   </p>
                 </div>
+                <hr />
                 <div className="mt-3">
                   <p className="text-red-800 text-md font-bold uppercase">
                     fundamentacion :
