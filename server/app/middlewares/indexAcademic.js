@@ -1,39 +1,27 @@
-const { Op, fn, col, where } = require("sequelize")
+const { Op } = require("sequelize")
 const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourseAproved } = require("../helpers/repositorySections")
 const DetailsPeriod = require("../models/detailsPeriod")
 const PeriodAcademic = require('../models/periodAcademic');
+const { getPeriodicAcademicCurrent, getNextPeriodicAcademic, getDetailsDatesPeriodAcademic } = require("../helpers/repositoryPeriodicAcademic");
+
+
 const verifyIndexAcademic = async(req,res,next)=>{
     try {
 
       const {student} = req
+      const hourIni = "09:00:00"
+      const hourFin = "23:59:59"
+      const currentHour = new Date().toTimeString().slice(0, 8);
       let currentYear = new Date().getFullYear()
       let currentMonth = new Date().getMonth()
-      let currentPeriod = await PeriodAcademic.findOne({attributes:["ID_PERIOD","PERIOD_NAME", 
-      [fn("YEAR", col("START_DATE")), "YEAR"],
-      [fn("MONTH", col("START_DATE")), "MONTH"],
-      [fn("DAY", col("START_DATE")), "DAY"]
-      ],where:{STATUS: "En curso"}})
+      let currentPeriod = await getPeriodicAcademicCurrent()
+      const now = new Date();
+      const offset = now.getTimezoneOffset() * 60 * 1000; // Offset en milisegundos
+      const localDate = new Date(now.getTime() - offset);
+      const currentDate = localDate.toISOString().slice(0, 10);
       //  no existe un periodo en curso
       if (!currentPeriod) {
-        currentPeriod = await PeriodAcademic.findOne({
-          attributes: [
-            'ID_PERIOD',
-            'PERIOD_NAME',
-            [fn('YEAR', col('START_DATE')), 'YEAR'],
-            [fn('MONTH', col('START_DATE')), 'MONTH'],
-            [fn('DAY', col('START_DATE')), 'DAY'],
-          ],
-          where: {
-            [Op.and]: [
-              where(fn('YEAR', col('START_DATE')), {
-                [Op.gt]: currentYear,
-              }),
-              where(fn('MONTH', col('START_DATE')), {
-                [Op.gt]: currentMonth,
-              }),
-            ],
-          },
-        });
+        currentPeriod = await getNextPeriodicAcademic(currentYear,currentMonth)
         
       }
       if (!currentPeriod) {
@@ -44,66 +32,105 @@ const verifyIndexAcademic = async(req,res,next)=>{
 
       const idPeriod = currentPeriod.ID_PERIOD
       const courses = await getMyCourseEnded(student.ID_STUDENT)
-      const {calendars, previousPeriod} = await getAcademicPeriodDetails(idPeriod)
+
+      const {calendars, previousPeriod} = await getAcademicPeriodDetails(idPeriod);
+      const calendarPreRegistration = await getPreRegistrationPeriodDetails(idPeriod);
+  
       const coursesPeriodPrev = await getMyCoursePeriodPrev(student.ID_STUDENT,previousPeriod)
       const coursesAproved = await getMyCourseAproved(student.ID_STUDENT)
       let indexAcademicGlobal = await getMyIndexAcademic(courses) || 0
       let indexAcademicPeriod = await getMyIndexAcademic(coursesPeriodPrev) || 0
       let currentDayMonth = formatDate(new Date());
-      
+      const {ADD_CAN_DATE_INI, ADD_CAN_DATE_END, RE_DATE_INI,
+        RE_DATE_TWO,
+        RE_DATE_TRHEE,
+        RE_DATE_FOUR,
+        RE_DATE_FIVE,
+        RE_DATE_END,
+    
+        } = calendarPreRegistration.dataValues
       // indexAcademicPeriod = 84 
+
       
-      if (calendars[0].date != currentDayMonth && calendars[1].date != currentDayMonth && calendars[2].date != currentDayMonth && calendars[3].date != currentDayMonth && calendars[4].date != currentDayMonth && calendars[5].date != currentDayMonth ) {
-        if ( currentDayMonth > calendars[5].date) {
-          res.status(400).json({messagge:"El proceso de matricula ya pasó"})
-          return
-          
-        }
-        if (currentDayMonth < calendars[0].date) {
-          res.status(400).json({messagge:"El proceso de matricula no ha empezado"})
-          return
-          
-        }
-        
-        
-      }
+     
 
-
-      if (calendars[0].date == currentDayMonth && (student.TYPE == 'Primer ingreso' ||student.TYPE == 'Proseene' ||student.TYPE == 'Condicionado' || student.TYPE == 'Representante'|| (student.TYPE =="Re-ingreso" && indexAcademicGlobal >= 80 && coursesAproved.count >=10 )|| (student.TYPE =="Por egresar" && indexAcademicGlobal >= 80))) {
+      if ((currentDate == RE_DATE_INI || currentDate == calendarPreRegistration.dataValues.PRE_DATE_INI ) && currentHour >= hourIni && currentHour <= hourFin && (student.TYPE == 'Primer ingreso' ||student.TYPE == 'Proseene' ||student.TYPE == 'Condicionado' || student.TYPE == 'Representante'|| (student.TYPE =="Re-ingreso" && indexAcademicGlobal >= 80 && coursesAproved.count >=10 )|| (student.TYPE =="Por egresar" && indexAcademicGlobal >= 80))) {
           
         next()
         return
       }
-      if (calendars[1].date == currentDayMonth && ((student.TYPE == 'Por egresar' && indexAcademicGlobal < 80) || (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 91))) {
+      if ((currentDate == RE_DATE_TWO || currentDate == calendarPreRegistration.dataValues.PRE_DATE_TWO ) &&  currentHour >= hourIni && currentHour <= hourFin && ((student.TYPE == 'Por egresar' && indexAcademicGlobal < 80) || (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 91))) {
         
         next()
         return
       }
-      if (calendars[2].date === currentDayMonth && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 91 && indexAcademicPeriod <= 100 )) {
+      if ((currentDate == RE_DATE_TRHEE || currentDate == calendarPreRegistration.dataValues.PRE_DATE_THREE) &&  currentHour >= hourIni && currentHour <= hourFin && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 91 && indexAcademicPeriod <= 100 )) {
         
         next()
         return
       }
-      if (calendars[3].date == currentDayMonth && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 80 && indexAcademicPeriod <=90)) {
+      if ((currentDate == RE_DATE_FOUR|| currentDate == calendarPreRegistration.dataValues.PRE_DATE_FOUR) &&  currentHour >= hourIni && currentHour <= hourFin && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 80 && indexAcademicPeriod <=90)) {
         
         next()
         return
       }
       
-      if (calendars[4].date == currentDayMonth && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 70 && indexAcademicPeriod < 80)) {
+      if ((currentDate == RE_DATE_FIVE|| currentDate == calendarPreRegistration.dataValues.PRE_DATE_FIVE) &&  currentHour >= hourIni && currentHour <= hourFin && (student.TYPE =="Re-ingreso" && indexAcademicPeriod >= 70 && indexAcademicPeriod < 80)) {
         
         next()
         return
       }
-      console.log(calendars)
-      if (calendars[5].date == currentDayMonth && (student.TYPE =="Re-ingreso" && indexAcademicPeriod <70)) {
-        console.log('indexAcademicPeriod: ',indexAcademicPeriod)
+    
+      if ((currentDate == RE_DATE_END || currentDate == calendarPreRegistration.dataValues.PRE_DATE_END) &&  currentHour >= hourIni && currentHour <= hourFin && (student.TYPE =="Re-ingreso" && indexAcademicPeriod <70)) {
         next()
         return
       }
 
+      if (currentDate >=  ADD_CAN_DATE_INI && currentDate <= ADD_CAN_DATE_END && currentHour >= hourIni && currentHour <= hourFin) {
+        next()
+        return
+      }
 
-      // console.log('indexAcademicPeriod: ',indexAcademicPeriod)
+      
+      if (currentDate < calendarPreRegistration.dataValues.PRE_DATE_INI) {
+        res.status(400).json({messagge:"El proceso de pre-matricula no ha comenzado"})
+        return
+      }
+
+
+      if (currentDate > calendarPreRegistration.dataValues.PRE_DATE_END && currentDate < RE_DATE_END) {
+        res.status(400).json({messagge:"El proceso de matricula no ha comenzado"})
+        return
+      }
+      if (currentDate > RE_DATE_END && currentDate <   ADD_CAN_DATE_INI) {
+          res.status(400).json({messagge:"El proceso de adciones y cancelacion no ha comenzado"})
+          return
+      }
+
+      
+      if ( currentDate >   ADD_CAN_DATE_END) {
+          res.status(400).json({messagge:"El proceso de adciones y cancelacion ya ha finalizado"})
+          return
+      }
+
+      
+
+      if (currentHour < hourIni &&   currentDate >= calendarPreRegistration.dataValues.PRE_DATE_INI && currentDate <= calendarPreRegistration.dataValues.PRE_DATE_INI ) {
+        res.status(400).json({messagge:"la pre-matricula comienza las 09:00:00 y finaliza a las 23:59:59 "})
+        return
+        
+      }
+      if (currentHour < hourIni &&   currentDate >= RE_DATE_INI && currentDate <= RE_DATE_END ) {
+        res.status(400).json({messagge:"la matricula comienza las 09:00:00 y finaliza a las 23:59:59 "})
+        return
+        
+      }
+      
+
+
+
+
+
 
       res.status(400).json({messagge:"No cumplés con los requisitos para matricular el dia de hoy"})
     } catch (error) {
@@ -111,6 +138,21 @@ const verifyIndexAcademic = async(req,res,next)=>{
         res.status(500).json({messagge:"ALGO SALIO MAL"})
     }
 }
+const getPreRegistrationPeriodDetails = async (id) => {
+    try {
+      // Obtiene el período académico por ID
+      const detailsPeriod = await getDetailsDatesPeriodAcademic(id)
+      if (!detailsPeriod) {
+        return { error: 'No se encontró información para el período académico especificado' };
+      }
+      return detailsPeriod;
+    } catch (error) {
+      console.error('Error al obtener detalles del período académico:', error);
+      return { error: 'Ocurrió un error al obtener detalles del período académico' };
+    }
+  };
+
+
 
 const getAcademicPeriodDetails = async (id) => {
     try {

@@ -4,10 +4,13 @@ const authMiddleware = require('../middlewares/authentication.js');
 const { verifyPaymentEnrollment } = require('../middlewares/paymentEnrrollment.js');
 const { verifyIndexAcademic } = require('../middlewares/indexAcademic.js');
 const {getEnrollmentAreas, enrolmentCourse, listCoursesArea, getSectionsByIdCourse, enrolmentWaitCourse, getInfoAcademicStudent, getStudentEnrollmentCourses, getStudentWaitingCourses, cancelledEnrollment, verifyEnrollment, specialCancelledEnrollment} = require('../controllers/enrollments.js');
+const { verifyAddCancelation } = require('../middlewares/addCancelation.js');
 
 
 // enpoint para generar matricula
 router.post("/inscription/:idUser",verifyPaymentEnrollment, verifyIndexAcademic , verifyEnrollment);
+// enpoint para cancelaciones normales
+router.post("/addCancelation/:idUser",verifyPaymentEnrollment,verifyAddCancelation , verifyEnrollment);
 // enpoint para matricular una clase
 router.post("/inscriptionCourse/:idUser",verifyPaymentEnrollment , enrolmentCourse);
 

@@ -71,9 +71,7 @@ const getEnrollmentsStudent = async (req,res) =>{
                 include:
                 [
                     {
-                        model:Career,as:"career",attributes:[], required:true, where:{
-                            NAME:{[Op.like]:`${coordinador.CAREER}` }
-                        }
+                        model:Career,as:"career",attributes:[], required:true
                     }
                 ]
             }

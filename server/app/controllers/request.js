@@ -1,6 +1,7 @@
-const { Career, Request, RequestCareer, User, Student, RequestCenter, Professor, PeriodAcademic, RequesCancellationExceptional } = require("../models");
+const { Career, Request, RequestCareer, User, Student, RequestCenter, Professor, PeriodAcademic, RequesCancellationExceptional, Enrollment, Section, Course } = require("../models");
 const {getStudent, changeStateRequest, changeCareerStudent, getProfessor, getCoordinator, getCareerChange, getRequestCurrent, changeCenterStudent, getCurrentPeriod} = require('../helpers/repositoryRequest');
 const { Op, fn, col} = require('sequelize');
+const { getEnrollmentCourse, specialCancelInscription } = require("../helpers/repositoryEnrollment");
 
 const getCareers = async (req,res)=>{
     try {
@@ -115,8 +116,9 @@ const requestExceptionalCancellation = async (req,res)=>{
         const {file, body}= req
         const {idUser} = req.params
         const period = await getCurrentPeriod();
-        const student = await getStudent(idUser)
-        const coordinator = await getCoordinator(student.user.CENTER, student.CAREER)
+        const student = await getStudent(idUser);
+        const courseEnrollment = await getEnrollmentCourse(body.ID_ENROLLMENT)
+        const coordinator = await getCoordinator(student.user.CENTER, courseEnrollment.seccion.course.career.NAME)
         
         const request = await Request.findOne({
             where:{
@@ -137,9 +139,9 @@ const requestExceptionalCancellation = async (req,res)=>{
         
 
         const url = `http://localhost:3000/docs/${file.filename}`
-        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CANCELACION_CLASE",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:coordinator.user.CENTER,ID_PERIOD:period.ID_PERIOD,request:[ {URL:url}]},{include:{model:RequesCancellationExceptional, as:"requestCancellation" }})
+        await Request.create({JUSTIFY:body.JUSTIFY,ID_STUDENT:student.ID_STUDENT,TYPE:"CANCELACION_CLASE",ID_COORDINATOR:coordinator.ID_PROFFERSSOR,CENTER:coordinator.user.CENTER,ID_PERIOD:period.ID_PERIOD,requestCancellation:[ {URL:url, ID_ENROLLMENT: courseEnrollment.ID_ENROLLMENT}]},{include:{model:RequesCancellationExceptional, as:"requestCancellation" }})
 
-    
+        
 
 
 
@@ -264,7 +266,7 @@ const getRequestCancellationCourse = async (req,res)=>{
                 TYPE:"CANCELACION_CLASE",
                 CENTER:{[Op.like]:professor.user.CENTER}
             }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:professor.CAREER}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
-            }, {model:RequestCenter, as:"requestCenter"},
+            },
         {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]},
         {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
 
@@ -412,9 +414,21 @@ const getMyRequestsAcceptDenyCancellCourse = async (req,res)=>{
                 STATE:{
                     [Op.or]:['Aceptada', 'Denegada']
                 }, TYPE:"CANCELACION_CLASE"
-            }, include:[{model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"],  }]
+            }, include:[
+                {model:Student, as:"student", include:[{model:User, as:"user", attributes:["CENTER", "ACCOUNT_NUMBER"],  }]
             }, 
-            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
+            {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]},
+            {model:RequesCancellationExceptional, as:"requestCancellation", include:
+            [
+                {model:Enrollment, as:"enrollment",attributes:["ID_ENROLLMENT","OBS","STATE"], include:
+                [
+                    {model:Section, as:"seccion", attributes:["ID_SECTION","SECTION_CODE","START_TIME","END_TIME"],include:
+                    [
+                        {model:Course, as:"course", attributes:["ID_COURSE","CODE_COURSE","NAME"]}
+                    ]}
+                ]}
+            ]}
+        ]
 
 
         })
@@ -455,7 +469,7 @@ const responseRequest = async(req,res)=>{
             
     
             body.OBS = "Tu solicitud de cancelacion de clase ha sido Aprobada"
-            await changeCenterStudent(body)
+            await specialCancelInscription(request.requestCancellation[0].dataValues.ID_ENROLLMENT,body.ID_STUDENT)
             await changeStateRequest(body)
             res.status(200).json({messagge:`La solicitud ha sido ${body.RESPONSE}`})
             return

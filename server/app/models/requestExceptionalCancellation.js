@@ -22,6 +22,13 @@ const RequesCancellationExceptional = connection.define(
         },
 
         
+        ID_ENROLLMENT:{
+            type:DataTypes.INTEGER
+        },
+
+        
+
+        
         
         createdAt:{
             type:DataTypes.DATE

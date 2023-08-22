@@ -129,6 +129,15 @@ models.RequesCancellationExceptional.Request=models.RequesCancellationExceptiona
     foreignKey:"ID_REQUEST",
     as:"request"
 });
+// seccion Matriculada - cancelacion excepcional
+models.Enrollment.RequesCancellationExceptional=models.Enrollment.hasMany(models.RequesCancellationExceptional,{
+    foreignKey:"ID_ENROLLMENT",
+    as:"requestCancellation"
+});
+models.RequesCancellationExceptional.Enrollment=models.RequesCancellationExceptional.belongsTo(models.Enrollment,{
+    foreignKey:"ID_ENROLLMENT",
+    as:"enrollment"
+});
 // cambioCarrera - carrera
 
 models.Career.RequestCareer=models.Career.hasMany(models.RequestCareer,{
