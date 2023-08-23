@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -9,6 +9,7 @@ const FormCancelExcep = ({ setShowModal }) => {
   const { state, dispatch } = useContext(StoreContext);
   const [mensaje, setMensaje] = useState("");
   const [comprobante, setComprobante] = useState(null);
+  const [enrollment, setEnrollment] = useState("");
   const [clases, setClases] = useState([]);
   const [alerta, setAlerta] = useState({});
 
@@ -26,7 +27,7 @@ const FormCancelExcep = ({ setShowModal }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ([mensaje].includes("")) {
+    if ([mensaje, clases].includes("")) {
       setAlerta({
         message: "Todos los Campos son obligatorios",
         error: true,
@@ -54,6 +55,7 @@ const FormCancelExcep = ({ setShowModal }) => {
 
       const formData = new FormData();
       formData.append("JUSTIFY", mensaje);
+      formData.append("ID_ENROLLMENT", enrollment);
       formData.append("pdfFile", comprobante);
 
       const response = await axios.post(
@@ -72,11 +74,36 @@ const FormCancelExcep = ({ setShowModal }) => {
         progress: undefined,
       });
       setMensaje("");
+      setClases("");
       setComprobante(null);
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const getClases = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios(
+          `http://localhost:3000/registro/enrollment/enrollmentCourses/${state.user.ID_USER}`,
+          config
+        );
+        setClases(response.data.courses);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getClases();
+  }, []);
 
   const { message } = alerta;
 
@@ -109,10 +136,17 @@ const FormCancelExcep = ({ setShowModal }) => {
             </div>
           </div>
           <div className="w-full flex justify-center">
-            <select className="py-2 border focus:border-blue-600 w-3/5 font-semibold text-center">
+            <select
+              value={enrollment}
+              onChange={(e) => setEnrollment(e.target.value)}
+              className="py-2 border focus:border-blue-600 w-3/5 font-semibold text-center"
+            >
               <option value="">Selecciona una Clase</option>
-              <option value="">MATEMATICAS</option>
-              <option value="">ESPANOL</option>
+              {clases.map((clase) => (
+                <option key={clase.ID_ENROLLMENT} value={clase.ID_ENROLLMENT}>
+                  {clase.seccion.course.NAME}
+                </option>
+              ))}
             </select>
           </div>
         </div>
