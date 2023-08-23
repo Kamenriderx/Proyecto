@@ -5,6 +5,27 @@ import { Link } from "react-router-dom";
 const ViewDocentesJefe = () => {
   const { state } = useContext(StoreContext);
   const [maestros, setMaestros] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [teachersPerPage] = useState(10);
+
+  const indexOfLastTeacher = currentPage * teachersPerPage;
+  const indexOfFirstTeacher = indexOfLastTeacher - teachersPerPage;
+  const currentTeachers = maestros.slice(
+    indexOfFirstTeacher,
+    indexOfLastTeacher
+  );
+
+  const totalPages = Math.ceil(maestros.length / teachersPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   useEffect(() => {
     const getDocentesJefe = async () => {
       try {
@@ -56,7 +77,7 @@ const ViewDocentesJefe = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {maestros.map((master) => (
+                  {currentTeachers.map((master) => (
                     <tr className="border-b" key={master.ID_PROFFERSSOR}>
                       <td className="border px-4 py-2 text-sm font-medium r">
                         {master.CAREER}
@@ -84,6 +105,24 @@ const ViewDocentesJefe = () => {
                   ))}
                 </tbody>
               </table>
+              <div className="flex flex-col">
+                {/* ... */}
+                <div className="flex justify-center mt-4">
+                  {pageNumbers.map((number) => (
+                    <button
+                      key={number}
+                      onClick={() => paginate(number)}
+                      className={`mx-1 px-2 py-1 rounded ${
+                        currentPage === number
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-200"
+                      }`}
+                    >
+                      {number}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </>
           ) : (
             <p className="text-2xl text-center uppercase font-bold ">
