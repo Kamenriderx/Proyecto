@@ -89,7 +89,6 @@ const FormCancelExcep = ({ setShowModal }) => {
 
         const config = {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         };
@@ -98,6 +97,7 @@ const FormCancelExcep = ({ setShowModal }) => {
           config
         );
         setClases(response.data.courses);
+        console.log("CLASESESES", response.data.courses);
       } catch (error) {
         console.log(error);
       }
@@ -105,6 +105,7 @@ const FormCancelExcep = ({ setShowModal }) => {
     getClases();
   }, []);
 
+  console.log("CLASES", clases);
   const { message } = alerta;
 
   return (
@@ -139,11 +140,11 @@ const FormCancelExcep = ({ setShowModal }) => {
             <select
               value={enrollment}
               onChange={(e) => setEnrollment(e.target.value)}
-              className="py-2 border focus:border-blue-600 w-3/5 font-semibold text-center"
+              className="text-center block appearance-none w-full bg-white border border-gray-300 px-4 py-2 pr-8 rounded leading-tight focus:outline-none focus:border-blue-500"
             >
-              <option value="">Selecciona una Clase</option>
+              <option>-- Seleccion la Clase --</option>
               {clases.map((clase) => (
-                <option key={clase.ID_ENROLLMENT} value={clase.ID_ENROLLMENT}>
+                <option value={clase.ID_ENROLLMENT} key={clase.ID_ENROLLMENT}>
                   {clase.seccion.course.NAME}
                 </option>
               ))}
@@ -167,7 +168,10 @@ const FormCancelExcep = ({ setShowModal }) => {
         </div>
         <div className="flex justify-end gap-3 mt-5">
           <div>
-            <button className="px-3 py-2 shadow text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded">
+            <button
+              type="submit"
+              className="px-3 py-2 shadow text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded"
+            >
               Enviar Solicitud
             </button>
           </div>

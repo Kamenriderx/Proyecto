@@ -113,6 +113,8 @@ const RequestExcepCoordi = () => {
                 <th className="p-2">Correo Institucional</th>
                 <th className="p-2">Numero de Cuenta</th>
                 <th className="p-2">Justificacion</th>
+                <th className="p-2">Clase a cancelar</th>
+                <th className="p-2">Documento</th>
                 <th className="p-2">Obs</th>
               </tr>
             </thead>
@@ -133,6 +135,20 @@ const RequestExcepCoordi = () => {
                   </td>
                   <td className="border px-4 py-2 text-md font-bold r">
                     {solicitudes.JUSTIFY}
+                  </td>
+                  <td className="border px-4 py-2 text-md font-bold r">
+                    {solicitudes.requestCancellation.map((req) => (
+                      <div key={req.ID_ENROLLMENT}>
+                        <p>{req.enrollment.seccion.course.NAME}</p>
+                      </div>
+                    ))}
+                  </td>
+                  <td className="border px-4 py-2 text-md font-bold r">
+                    {solicitudes.requestCancellation.map((req) => (
+                      <div key={req.ID_ENROLLMENT}>
+                        <p>{req.URL}</p>
+                      </div>
+                    ))}
                   </td>
                   <td className="border px-4 py-2 text-lg font-bold r">
                     <div className="flex justify-around gap-2">

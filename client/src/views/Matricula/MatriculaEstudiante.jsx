@@ -42,6 +42,14 @@ const MatriculaEstudiante = () => {
               Forma 03
             </Link>
           </div>
+          <div className="mt-10">
+            <Link
+              to=""
+              className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
+            >
+              Estado de Cuenta
+            </Link>
+          </div>
         </aside>
       </div>
     </div>
