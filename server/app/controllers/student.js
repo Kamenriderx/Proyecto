@@ -1,5 +1,5 @@
 const {Student, User, Multimedia, Enrollment, Section, Course, Career, Classroom, Building, PeriodAcademic} = require('../models');
-const { getProfessor} = require('../helpers/repositoryRequest');
+const { getProfessor, getStudent} = require('../helpers/repositoryRequest');
 const { Op } = require('sequelize');
 
 
@@ -45,6 +45,7 @@ const getStudentsEnrollmentPeriod = async (req,res) =>{
         res.status(500).json({messagge:"Error al cargar estudiantes"});
     }
 }
+
 const getEnrollmentsStudent = async (req,res) =>{
     try{
         
@@ -89,8 +90,35 @@ const getEnrollmentsStudent = async (req,res) =>{
     }
 }
 
+const getInfoAccount = async (req,res) =>{
+    try{
+        
+        const { idUser} = req.params
+        
+        const studentInfo = await Student.findOne({
+            where:{
+                ID_USER: idUser
+            },attributes:[
+                "CAREER",
+                "REGISTRATION_PAYMENT",
+                "CHANGE_CENTER_PAYMENT",
+                "CHANGE_CAREER_PAYMENT",
+            ], include:[{model:User, as:"user",attributes:["ACCOUNT_NUMBER","CENTER","NAME"]}]
+        })
+
+        
+
+    
+        res.status(200).json({studentInfo})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({messagge:"Error al cargar estudiantes"});
+    }
+}
+
 module.exports = {
     getStudents,
     getStudentsEnrollmentPeriod,
-    getEnrollmentsStudent
+    getEnrollmentsStudent,
+    getInfoAccount
 };

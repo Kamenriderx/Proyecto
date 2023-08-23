@@ -261,7 +261,7 @@ const getRequestCancellationCourse = async (req,res)=>{
     try {
         const {idUser} = req.params
         const professor = await getProfessor(idUser)
-        const request = await Request.findAll({attributes:[
+        const requests = await Request.findAll({attributes:[
             "ID_REQUEST",
             "JUSTIFY",
             "STATE",
@@ -277,7 +277,7 @@ const getRequestCancellationCourse = async (req,res)=>{
             },
         {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]},
         {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]},
-        {model:RequesCancellationExceptional, as:"requestCancellation", include:[
+        {model:RequesCancellationExceptional, as:"requestCancellation" ,include:[
             {
                 model:Enrollment, as:"enrollment", attributes:["ID_ENROLLMENT","STATE"],include:
                 [
@@ -288,11 +288,13 @@ const getRequestCancellationCourse = async (req,res)=>{
                     ],include:[{model:Course,as:"course",attributes:["CODE_COURSE","NAME"]}]}
                 ]
             }]}
-    ]
+        ]
 
 
-        })
-        res.status(200).json({request})
+        });
+
+        
+        res.status(200).json({requests})
         
     } catch (error) {
         console.log({error});
