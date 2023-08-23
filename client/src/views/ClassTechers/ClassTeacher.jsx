@@ -15,18 +15,24 @@ const ClassTeacher = () => {
 
   /////////////////////////////////////////
   const [calificaciones, setCalificaciones] = useState(false);
-  const [notes, setNotes] = useState([]);
   const [save, setSave] = useState(false);
 
   //alerta
   const [alerta, setAlerta] = useState({});
   const [message, setMessage] = useState(false);
 
+  const [recibirDatos, setRecibirDatos] = useState(false);
+  const recibir = (dato) => {
+    setRecibirDatos(dato);
+  };
+
   useEffect(() => {
     const getClassTeacher = async () => {
       try {
         const response = await axios(
-          `http://localhost:3000/registro/section/sectionsForProfessors/${state.user.ID_USER}/${periodo.ID_PERIOD}`
+          `http://localhost:3000/registro/section/sectionsForProfessors/${
+            state.user.ID_USER
+          }/${2}`
         );
         setClasses(response.data);
       } catch (error) {
@@ -36,12 +42,15 @@ const ClassTeacher = () => {
     getClassTeacher();
   }, [state.user.ID_USER]);
 
-  console.log("clases", classes);
+  // console.log("clases", classes);
+
+  const [idMatriculados, setIdMatriculados] = useState(null);
 
   const handleClick = async (id, className, code) => {
     setShowModal(true);
     setSelectedClassName(className);
     setCode(code);
+    setIdMatriculados(id);
     await getIdMatriculados(id);
   };
 
@@ -55,6 +64,10 @@ const ClassTeacher = () => {
       console.log(error);
     }
   };
+
+  if (recibirDatos) {
+    getIdMatriculados(idMatriculados);
+  }
 
   const handleSubmit = () => {
     setSave(!save);
@@ -75,7 +88,7 @@ const ClassTeacher = () => {
     link.click();
   };
 
-  console.log("LOS MATRICULADOS", matriculados);
+  // console.log("LOS MATRICULADOS", matriculados);
   return (
     <>
       <div className="container mx-auto">
@@ -108,11 +121,11 @@ const ClassTeacher = () => {
                     <tbody>
                       {matriculados.map((mat, index) => (
                         <Rows
-                          setNotes={setNotes}
                           mat={mat}
                           calificaciones={calificaciones}
                           key={mat.ID_STUDENT}
                           save={save}
+                          recibir={recibir}
                         />
                       ))}
                     </tbody>

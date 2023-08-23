@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 
-const Rows = ({mat, calificaciones,save}) => {
+const Rows = ({mat, calificaciones,save, recibir}) => {
   const[notas, setNotas] = useState({
     ID_ENROLLMENT: mat.ID_ENROLLMENT,
     OBS: "",
@@ -9,12 +9,18 @@ const Rows = ({mat, calificaciones,save}) => {
   });
   const[changed,setChanged] = useState(false);
   
+ 
+
   useEffect(() => {
     if(changed){
+      console.log('notas:', notas)
       axios.put(
         `http://localhost:3000/registro/gradeUpload/${mat.ID_SECTION}`,[notas]
       ).then(res=>{
         console.log(res)
+      }).catch(error=> {
+        console.log(error.response.data.error)
+        alert(error.response.data.error)
       });
       setChanged(false);
     }
@@ -28,9 +34,10 @@ const Rows = ({mat, calificaciones,save}) => {
       [name]:value
     });
     setChanged(true);
+    recibir(true)
+    }
 
-    console.log('notas:', notas)
-  }
+
   
   return (
     <tr className="border-b" key={mat.ID_STUDENT}>

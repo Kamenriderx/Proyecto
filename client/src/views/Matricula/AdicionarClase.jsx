@@ -8,7 +8,7 @@ const AdicionarClase = () => {
     console.log("datos: ", datos);
     setCheck(datos);
   };
-
+ 
   return (
     <div className="mx-16 mt-32 ">
       <DatosEstudiante check={check}/>
