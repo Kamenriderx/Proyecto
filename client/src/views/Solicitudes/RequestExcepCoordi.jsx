@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AlertTwo from "../../components/AlertTwo";
 import { StoreContext } from "../../store/ContextExample";
+import { Link } from "react-router-dom";
 const RequestExcepCoordi = () => {
   const { state, dispatch } = useContext(StoreContext);
   const [solicitudesExcepCoordi, setSolicitudesExcepCoordi] = useState([]);
@@ -24,14 +25,14 @@ const RequestExcepCoordi = () => {
           `http://localhost:3000/registro/request/listRequestCancellationExceptional/${state.user.ID_USER}`,
           config
         );
-        setSolicitudesExcepCoordi(response.data.request);
-        console.log(response.data.request);
+        setSolicitudesExcepCoordi(response.data.requests);
+        console.log(response.data.requests);
       } catch (error) {
         console.log(error);
       }
     };
     getSolicitudes();
-  }, [check]);
+  }, [state.user.ID_USER, check]);
 
   console.log("SOLICITUDES EXCEPCIONALES", solicitudesExcepCoordi);
 
@@ -104,12 +105,10 @@ const RequestExcepCoordi = () => {
             Estado de solicitudes Excepcionales
           </p>
         </div>
-        {solicitudesExcepCoordi.length > 0 ? (
+        {solicitudesExcepCoordi?.length > 0 ? (
           <table className="w-full bg-white shadow-md table-auto">
             <thead className="bg-blue-800 text-white">
               <tr className="">
-                <th className="p-2">Centro</th>
-                <th className="p-2">Carrera</th>
                 <th className="p-2">Correo Institucional</th>
                 <th className="p-2">Numero de Cuenta</th>
                 <th className="p-2">Justificacion</th>
@@ -121,12 +120,6 @@ const RequestExcepCoordi = () => {
             <tbody>
               {solicitudesExcepCoordi.map((solicitudes) => (
                 <tr className="border-b" key={solicitudes.ID_REQUEST}>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    {solicitudes.student.user.CENTER}
-                  </td>
-                  <td className="border px-4 py-2 text-md font-bold r">
-                    {solicitudes.student.CAREER}
-                  </td>
                   <td className="border px-4 py-2 text-md font-bold r">
                     {solicitudes.student.INSTITUTIONAL_EMAIL}
                   </td>
@@ -145,8 +138,14 @@ const RequestExcepCoordi = () => {
                   </td>
                   <td className="border px-4 py-2 text-md font-bold r">
                     {solicitudes.requestCancellation.map((req) => (
-                      <div key={req.ID_ENROLLMENT}>
-                        <p>{req.URL}</p>
+                      <div className="text-center" key={req.ID_ENROLLMENT}>
+                        <Link
+                          className="text-blue-700 underline hover:text-blue-800 hover:underline"
+                          target="_blank"
+                          to={req.URL}
+                        >
+                          Ver Comprobante
+                        </Link>
                       </div>
                     ))}
                   </td>

@@ -3,6 +3,7 @@ const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourse
 const DetailsPeriod = require("../models/detailsPeriod")
 const PeriodAcademic = require('../models/periodAcademic');
 const { getPeriodicAcademicCurrent, getNextPeriodicAcademic, getDetailsDatesPeriodAcademic } = require("../helpers/repositoryPeriodicAcademic");
+const { log } = require("winston");
 
 
 const verifyIndexAcademic = async(req,res,next)=>{

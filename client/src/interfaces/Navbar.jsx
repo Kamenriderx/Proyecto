@@ -44,6 +44,8 @@ import CancelacionExcep from "../views/Solicitudes/CancelacionExcep";
 import ViewDictamenExcep from "../views/Solicitudes/ViewDictamenExcep";
 import RequestExcepCoordi from "../views/Solicitudes/RequestExcepCoordi";
 import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosClass";
+import ViewDocentesJefe from "../views/viewDocentesJefe/ViewDocentesJefe";
+import { NavigateSections } from "../views/viewDocentesJefe/components/NavigateSections";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -262,6 +264,16 @@ const ContentNavbar = () => {
             exact
             path="/listAlumnos-coordi"
             element={<ListadoAlumnosClass />}
+          />
+          <Route
+            exact
+            path="/docentes-jefe-calif"
+            element={<ViewDocentesJefe />}
+          />
+          <Route
+            exact
+            path="/seccionesmatriculadas/:id"
+            element={<NavigateSections />}
           />
           <Route exact path="/dictamenExcep" element={<ViewDictamenExcep />} />
           <Route exact path="/secciones-Docente" element={<ClassTeacher />} />

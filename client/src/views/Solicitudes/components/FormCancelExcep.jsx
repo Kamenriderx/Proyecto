@@ -27,7 +27,7 @@ const FormCancelExcep = ({ setShowModal }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ([mensaje, clases].includes("")) {
+    if ([mensaje, enrollment].includes("")) {
       setAlerta({
         message: "Todos los Campos son obligatorios",
         error: true,
@@ -74,7 +74,7 @@ const FormCancelExcep = ({ setShowModal }) => {
         progress: undefined,
       });
       setMensaje("");
-      setClases("");
+      setEnrollment("");
       setComprobante(null);
     } catch (error) {
       console.log(error);
