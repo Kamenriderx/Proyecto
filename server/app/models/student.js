@@ -39,6 +39,15 @@ const Student = connection.define(
         REGISTRATION_PAYMENT:{
             type:DataTypes.INTEGER,
             defaultValue: 0 
+        },
+       
+        CHANGE_CENTER_PAYMENT:{
+            type:DataTypes.INTEGER,
+            defaultValue: 0 
+        },
+        CHANGE_CAREER_PAYMENT:{
+            type:DataTypes.INTEGER,
+            defaultValue: 0 
         }
 
 
