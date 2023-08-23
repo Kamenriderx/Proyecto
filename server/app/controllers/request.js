@@ -217,7 +217,8 @@ const getRequestChangeCareer = async (req,res)=>{
                     CENTER: user.CENTER} }]
             }, {model:RequestCareer, as:"requestCareer", include:[{model:Career, as:"career"}]},
         {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]}, 
-        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
+        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]},
+        {model:RequestCareer , as:"requestCareer"}]
 
 
         })
@@ -243,7 +244,8 @@ const getRequestChangeCenter = async (req,res)=>{
             }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:professor.CAREER}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
             }, {model:RequestCenter, as:"requestCenter"},
         {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]},
-        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
+        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]},
+        {model:RequestCenter, as:"requestCenter"}]
 
 
         })
@@ -259,7 +261,13 @@ const getRequestCancellationCourse = async (req,res)=>{
     try {
         const {idUser} = req.params
         const professor = await getProfessor(idUser)
-        const request = await Request.findAll({
+        const request = await Request.findAll({attributes:[
+            "ID_REQUEST",
+            "JUSTIFY",
+            "STATE",
+            "TYPE",
+            "OBS"
+        ],
             where:{
                 ID_COORDINATOR:professor.ID_PROFFERSSOR,
                 STATE: "Pendiente",
@@ -268,7 +276,19 @@ const getRequestCancellationCourse = async (req,res)=>{
             }, include:[{model:Student, as:"student",required: true, where:{CAREER:{[Op.like]:professor.CAREER}} , include:[{model:User, as:"user", attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]
             },
         {model:Professor, as:"coordinator", include:[{model:User, as:"user",  attributes:["CENTER","NAME", "ACCOUNT_NUMBER"] }]},
-        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}]
+        {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]},
+        {model:RequesCancellationExceptional, as:"requestCancellation", include:[
+            {
+                model:Enrollment, as:"enrollment", attributes:["ID_ENROLLMENT","STATE"],include:
+                [
+                    {model:Section, as:"seccion", attributes:["ID_SECTION",
+                        "SECTION_CODE",
+                        "START_TIME",
+                        "END_TIME"
+                    ],include:[{model:Course,as:"course",attributes:["CODE_COURSE","NAME"]}]}
+                ]
+            }]}
+    ]
 
 
         })
