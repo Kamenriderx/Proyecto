@@ -88,7 +88,7 @@ const getNotesByProfessor = async (req,res)=>{
             
             where:{
                 ID_SECTION:idSection,
-                [Op.or]:[{STATE:"Matriculada"},{STATE:"Finalizada"}]
+                STATE:"Finalizada"
             }, include:[
                 {model:Student, as:"student", attributes:[
                     "INSTITUTIONAL_EMAIL",
