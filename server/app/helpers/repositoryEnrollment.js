@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Enrollment, Section, PeriodAcademic, Course } = require("../models");
+const { Enrollment, Section, PeriodAcademic, Course, Career } = require("../models");
 const { getStudentById, getStudent } = require("./repositoryRequest");
 
 const saveEnrollment = async (body)=>{
@@ -82,10 +82,10 @@ const getSectionEnrollmentStudent = async (idStudent) =>{
                 "SECTION_CODE",
                 "START_TIME",
                 "END_TIME"
-            ], as:"seccion", include:
+            ], as:"seccion", required:true, include:
             [
-                {model:Course, as:"course" , attributes:["ID_COURSE","CODE_COURSE","NAME","UV"]},
-                {model:PeriodAcademic, as:"period", attributes:
+                {model:Course, as:"course" , required: true,attributes:["ID_COURSE","CODE_COURSE","NAME","UV"]},
+                {model:PeriodAcademic, as:"period",required:true ,where:{STATUS:"En curso"},attributes:
                 [
                     "ID_PERIOD",
                     "PERIOD_NAME"
@@ -189,6 +189,21 @@ const cancelInscription=async (idEnrollment, idUser)=>{
     }
 }
 
+const specialCancelInscription= async(idEnrollment, idUser)=>{
+    const student = await getStudentById(idUser)
+    const enrollment = await Enrollment.findOne({where:{ID_ENROLLMENT: idEnrollment}, include:[{model:Section, as:"seccion", include:[{model:Course, as:"course"}]}]});
+    
+    if (enrollment.STATE !="Cancelada" ) {
+        
+        student.UV_AVAILABLE += enrollment.seccion.course.UV;
+        enrollment.STATE = 'Cancelada'
+        await enrollment.save();  
+        await student.save();  
+
+    }
+    
+
+}
 const getSectionById= async (idSection)=> await Section.findOne({where:{ID_SECTION:idSection}, include:[{model:Course, as:"course"}]})
 
 const getEnrollmentByName = async (idStudent, name) => await Enrollment.findOne({
@@ -216,6 +231,28 @@ const getEnrollmentByName = async (idStudent, name) => await Enrollment.findOne(
     }]
 })
 
+
+const getEnrollmentCourse = async (id) => await Enrollment.findOne({
+    attributes:[
+        "ID_ENROLLMENT",
+        "STATE",
+    ],where:{ID_ENROLLMENT: id}, include:[{model:Section,
+        attributes:
+        [
+            "ID_SECTION",
+            
+        ], as:"seccion", include:
+        [
+            {model:Course, as:"course" , attributes:["ID_COURSE","CODE_COURSE","NAME","UV"], include:
+            [
+                {model:Career, as:"career", attributes:["ID_CAREER","NAME"]}
+            ]
+        },
+        ]
+    }]
+})
+
+
 // START_TIME  
 // END_TIME
 module.exports = {
@@ -231,5 +268,7 @@ module.exports = {
     cancelInscription,
     getAllSectionsEnrollmentsStudent,
     getSectionById,
-    getEnrollmentByName
+    getEnrollmentByName,
+    specialCancelInscription,
+    getEnrollmentCourse
 };

@@ -1,3 +1,5 @@
+
+
 const models = {
     User: require("./user.js"),
     Admin: require("./admin"),
@@ -17,9 +19,11 @@ const models = {
     Request : require('./requests.js'),
     RequestCareer : require('./requestCareer.js'),
     RequestCenter : require('./requestCenter.js'),
+    RequesCancellationExceptional: require('./requestExceptionalCancellation.js'),
     PeriodAcademic: require('./periodAcademic.js'),
     Enrollment: require('./enrollment.js'),
-    ServiceCourse : require('./serviceCourse.js')
+    ServiceCourse : require('./serviceCourse.js'),
+    DetailsPeriod: require('./detailsPeriod.js')
     
 }
 
@@ -62,7 +66,10 @@ models.Enrollment.Section=models.Enrollment.belongsTo(models.Section,{
     unique:true,
     as:"seccion"
 });
+// Periodo - detalles del periodo
+models.PeriodAcademic.DetailsPeriod= models.PeriodAcademic.hasOne(models.DetailsPeriod, { foreignKey: 'ID_PERIOD', as: 'period' });
 
+models.DetailsPeriod.PeriodAcademic = models.DetailsPeriod.belongsTo(models.PeriodAcademic, { foreignKey: 'ID_PERIOD' });
 
 // ESTUDIANTE - SOLICITUDES
 
@@ -112,6 +119,24 @@ models.Request.RequestCenter=models.Request.hasMany(models.RequestCenter,{
 models.RequestCenter.Request=models.RequestCenter.belongsTo(models.Request,{
     foreignKey:"ID_REQUEST",
     as:"request"
+});
+// solicitudes - cancelacion excepcional
+models.Request.RequesCancellationExceptional=models.Request.hasMany(models.RequesCancellationExceptional,{
+    foreignKey:"ID_REQUEST",
+    as:"requestCancellation"
+});
+models.RequesCancellationExceptional.Request=models.RequesCancellationExceptional.belongsTo(models.Request,{
+    foreignKey:"ID_REQUEST",
+    as:"request"
+});
+// seccion Matriculada - cancelacion excepcional
+models.Enrollment.RequesCancellationExceptional=models.Enrollment.hasMany(models.RequesCancellationExceptional,{
+    foreignKey:"ID_ENROLLMENT",
+    as:"requestCancellation"
+});
+models.RequesCancellationExceptional.Enrollment=models.RequesCancellationExceptional.belongsTo(models.Enrollment,{
+    foreignKey:"ID_ENROLLMENT",
+    as:"enrollment"
 });
 // cambioCarrera - carrera
 

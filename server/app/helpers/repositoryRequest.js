@@ -1,6 +1,7 @@
 
 const { Op } = require("sequelize")
-const { Student, Request, Professor, User, Career, RequestCenter, Multimedia } = require("../models")
+const { Student, Request, Professor, User, Career, RequestCenter, Multimedia, PeriodAcademic, RequesCancellationExceptional } = require("../models")
+const DetailsPeriod = require("../models/detailsPeriod")
 
 const getStudent= async (id)=>{
     return await Student.findOne({where:{ID_USER:id}, include:[{model:User, as:"user", attributes:["NAME","CENTER","ACCOUNT_NUMBER"]}]})
@@ -42,7 +43,7 @@ const changeCenterStudent=async(body)=>{
 }
 
 const getRequestCurrent = async (id)=>{
-    return await Request.findOne({where:{ID_REQUEST:id}, include:[{model:RequestCenter, as:"requestCenter"}]})
+    return await Request.findOne({where:{ID_REQUEST:id}, include:[{model:RequestCenter, as:"requestCenter"},{model:RequesCancellationExceptional, as:"requestCancellation"}]})
 }
 const getRequestPaymentReplacement = async(student)=>{
     return await Request.findOne({
@@ -57,6 +58,9 @@ const getRequestPaymentReplacement = async(student)=>{
     })
 }
 
+const getCurrentPeriod = async ()=> await PeriodAcademic.findOne({where:{STATUS:"En curso"}, include:[{model:DetailsPeriod, as:"period"}]})
+const getPeriodById = async (idPeriod)=> await PeriodAcademic.findOne({where:{ID_PERIOD: idPeriod}, include:[{model:DetailsPeriod, as:"period"}]})
+
 module.exports = {
     getStudent, 
     changeStateRequest,
@@ -68,5 +72,7 @@ module.exports = {
     changeCenterStudent,
     getRequestPaymentReplacement,
     getStudentById,
-    getPhotos
+    getPhotos,
+    getCurrentPeriod,
+    getPeriodById
 };

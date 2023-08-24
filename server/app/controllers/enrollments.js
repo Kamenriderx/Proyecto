@@ -3,7 +3,7 @@ const { getStudent, getStudentById, getPhotos } = require("../helpers/repository
 const { Career, Course, Section, Professor, PeriodAcademic, User } = require("../models")
 const { getServiceCourses, getCareer, getMyCoursesArea, getServicesAreas } = require("../helpers/repositoryCourses")
 const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourseAproved } = require("../helpers/repositorySections")
-const { getQuantityEnrollmentsCourse, getSpaceAvailableAndUv, getSectionEnrollmentStudent, verifySections, saveEnrollment, getQuantityEnrollmentsWaitCourse, getCurrentPeriod, getSectionWaitingStudent, cancelInscription, getAllSectionsEnrollmentsStudent, getSectionById, getEnrollmentByName } = require("../helpers/repositoryEnrollment")
+const { getQuantityEnrollmentsCourse, getSpaceAvailableAndUv, getSectionEnrollmentStudent, verifySections, saveEnrollment, getQuantityEnrollmentsWaitCourse, getCurrentPeriod, getSectionWaitingStudent, cancelInscription, getAllSectionsEnrollmentsStudent, getSectionById, getEnrollmentByName, specialCancelInscription } = require("../helpers/repositoryEnrollment")
 
 const { getAcademicPeriodDetails } = require("../middlewares/indexAcademic")
 const connection = require("../../config/database")
@@ -355,6 +355,17 @@ const cancelledEnrollment = async (req,res)=>{
         res.status(500).json({messagge:"ALGO SALIO MAL"})
     }
 }
+const specialCancelledEnrollment = async (req,res)=>{
+    try {
+        const {idEnrollment, idUser} = req.params
+
+        await specialCancelInscription(idEnrollment,idUser)
+        res.status(200).json({messagge:"matricula cancelada exitosamente"})
+    } catch (error) {
+        console.log({error})
+        res.status(500).json({messagge:"ALGO SALIO MAL"})
+    }
+}
 const verifyEnrollment = async (req,res)=>{
     try {
         
@@ -387,5 +398,6 @@ module.exports = {
     getStudentWaitingCourses,
     cancelledEnrollment,
     verifyEnrollment,
-    enrollmentPayment
+    enrollmentPayment,
+    specialCancelledEnrollment
 };

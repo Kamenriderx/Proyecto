@@ -4,11 +4,14 @@ const authMiddleware = require('../middlewares/authentication.js');
 const authToken = require("../middlewares/authToken.js");
 const { verifyPaymentEnrollment } = require('../middlewares/paymentEnrrollment.js');
 const { verifyIndexAcademic } = require('../middlewares/indexAcademic.js');
-const {getEnrollmentAreas,enrollmentPayment, enrolmentCourse, listCoursesArea, getSectionsByIdCourse, enrolmentWaitCourse, getInfoAcademicStudent, getStudentEnrollmentCourses, getStudentWaitingCourses, cancelledEnrollment, verifyEnrollment} = require('../controllers/enrollments.js');
+const {getEnrollmentAreas,enrollmentPayment, enrolmentCourse, listCoursesArea, getSectionsByIdCourse, enrolmentWaitCourse, getInfoAcademicStudent, getStudentEnrollmentCourses, getStudentWaitingCourses, cancelledEnrollment, verifyEnrollment, specialCancelledEnrollment} = require('../controllers/enrollments.js');
+const { verifyAddCancelation } = require('../middlewares/addCancelation.js');
 
 
 // enpoint para generar matricula
 router.post("/inscription/:idUser",verifyPaymentEnrollment, verifyIndexAcademic , verifyEnrollment);
+// enpoint para cancelaciones normales
+router.post("/addCancelation/:idUser",verifyPaymentEnrollment,verifyAddCancelation , verifyEnrollment);
 // enpoint para matricular una clase
 router.post("/inscriptionCourse/:idUser",verifyPaymentEnrollment , enrolmentCourse);
 
@@ -16,6 +19,7 @@ router.post("/inscriptionCourse/:idUser",verifyPaymentEnrollment , enrolmentCour
 router.post("/inscriptionCourseWait/:idUser",verifyPaymentEnrollment , enrolmentWaitCourse);
 // enpoint para cancelar una clase 
 router.post("/canceledInscription/:idEnrollment/:idUser" ,cancelledEnrollment);
+router.post("/canceledInscriptionSpecial/:idEnrollment/:idUser" ,specialCancelledEnrollment);
 
 // listar las areas en que matricula el estudiante
 router.get("/listAreas/:idUser", getEnrollmentAreas)
