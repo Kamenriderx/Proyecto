@@ -27,6 +27,10 @@ const Evaluation = connection.define('Evaluation', {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    PROFESSOR_CAREER: {
+      type: DataTypes.STRING(255),
+    allowNull: false
+  },
     RESP_1: DataTypes.TEXT,
     RESP_2: DataTypes.TEXT,
     RESP_3: DataTypes.TEXT,
