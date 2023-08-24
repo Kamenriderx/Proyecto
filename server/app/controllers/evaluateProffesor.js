@@ -7,6 +7,7 @@ const User = require("../models/user");
 const Student = require("../models/student");
 const Course = require("../models/course");
 const Section = require("../models/section.js");
+const Multimedia = require("../models/multimedia");
 
 //! Controlador que obtiene las secciones matriculadas de un estudiante en específico
 exports.classStudent = async function (req, res) {
@@ -254,4 +255,28 @@ exports.getProfessorEvaluations = async function (req, res) {
   }
 };
 
+//! Video del perfil
+exports.getProfessorProfilePicture = async function (req, res) {
+  try {
+    const { idUser } = req.params;
 
+    // Buscar la multimedia con IS_PROFILE igual a 1 y ID_USER igual al idUser
+    const profileImage = await Multimedia.findOne({
+      where: {
+        ID_USER: idUser,
+        IS_PROFILE: 1,
+      },
+    });
+
+    if (!profileImage) {
+      return res.status(404).json({ message: 'Imagen de perfil no encontrada' });
+    }
+
+    const imageUrl = profileImage.URL;
+
+    res.json({ imageUrl });
+  } catch (error) {
+    console.error('Error al obtener la imagen de perfil:', error);
+    res.status(500).json({ message: 'Error al obtener la imagen de perfil' });
+  }
+};
