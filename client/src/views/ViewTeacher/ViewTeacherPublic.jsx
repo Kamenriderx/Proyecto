@@ -23,19 +23,12 @@ const ViewTeacherPublic = ({ ID_USER_PROFFESOR }) => {
 
   const [teacher, setTeacher] = useState([]);
 
-  const getTeacher = async () => {
+  const getVideo = async () => {
     try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${state.token}`,
-        },
-      };
-
       const res = await httpRequests()["get"](
-        `http://localhost:3000/registro/user/getPerfil/${ID_USER_PROFFESOR}`,
-        { ...config }
+        `http://localhost:3000/registro/evaluateProffesor/video/${9}`,{}
       );
+      console.log("GET_VIDEO: ", res)
       setTeacher(res.data);
     } catch (error) {
       console.log(error);
@@ -44,7 +37,7 @@ const ViewTeacherPublic = ({ ID_USER_PROFFESOR }) => {
 
   useEffect(() => {
     getClassTeacher();
-    getTeacher();
+    getVideo();
   }, [ID_USER_PROFFESOR]);
 
   console.log("clases", classes);
