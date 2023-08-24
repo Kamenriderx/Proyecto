@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router()
 const authMiddleware = require('../middlewares/authentication.js');
+const authToken = require("../middlewares/authToken.js");
 const { verifyPaymentEnrollment } = require('../middlewares/paymentEnrrollment.js');
 const { verifyIndexAcademic } = require('../middlewares/indexAcademic.js');
-const {getEnrollmentAreas, enrolmentCourse, listCoursesArea, getSectionsByIdCourse, enrolmentWaitCourse, getInfoAcademicStudent, getStudentEnrollmentCourses, getStudentWaitingCourses, cancelledEnrollment, verifyEnrollment} = require('../controllers/enrollments.js');
+const {getEnrollmentAreas,enrollmentPayment, enrolmentCourse, listCoursesArea, getSectionsByIdCourse, enrolmentWaitCourse, getInfoAcademicStudent, getStudentEnrollmentCourses, getStudentWaitingCourses, cancelledEnrollment, verifyEnrollment} = require('../controllers/enrollments.js');
 
 
 // enpoint para generar matricula
@@ -30,6 +31,7 @@ router.get("/infoStudent/:idUser", getInfoAcademicStudent )
 router.get("/enrollmentCourses/:idUser", getStudentEnrollmentCourses )
 // obtener clases en lista de espera
 router.get("/waitingCourses/:idUser", getStudentWaitingCourses )
+router.get("/getListPayment", authToken,enrollmentPayment )
 
 
 module.exports = router

@@ -42,6 +42,8 @@ import Matricula from "../views/MatriculaProffesor/Matricula";
 import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
 
 import RegisteredStudents from "../views/ViewStudent/RegisteredStudents";
+import History from "../views/History/History";
+import Statistics from "../views/Statistics/Statistics";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -111,6 +113,13 @@ const ContentNavbar = () => {
                 )}
                 {state?.user?.ID_ROLE === 5 && (
                   <>
+                    <li>
+                      <Link to="/Estadisticas">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Estadisticas
+                        </button>
+                      </Link>
+                    </li>
                     <li>
                       <Link to="/Estudiantes">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
@@ -208,6 +217,7 @@ const ContentNavbar = () => {
           <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
           <Route exact path="/periodos" element={<Period />} />
+          <Route exact path="/Estadisticas" element={<Statistics />} />
           <Route exact path="/proffessor" />
           <Route
             exact
@@ -239,6 +249,7 @@ const ContentNavbar = () => {
           />
           <Route exact path="/matricula/forma03" element={<Forma03 />} />
           <Route exact path="/solicitudes" element={<Requests />} />
+          <Route exact path="/history" element={<History />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
             exact
