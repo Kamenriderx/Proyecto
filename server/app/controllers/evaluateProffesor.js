@@ -5,6 +5,8 @@ const Op = require('sequelize');
 const Professor = require("../models/professor");
 const User = require("../models/user");
 const Student = require("../models/student");
+const Course = require("../models/course");
+const Section = require("../models/section.js");
 
 //! Controlador que obtiene las secciones matriculadas de un estudiante en específico
 exports.classStudent = async function (req, res) {
@@ -85,7 +87,7 @@ exports.classStudent = async function (req, res) {
       return res.status(400).json({ error: "Ya existe una evaluacion." });
     }
 
-    // Verifica que todas las preguntas estén presentes
+    // Verifica que todas las preguntas estén llenas
     const requiredFields = [
       ID_STUDENT,
       RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
@@ -123,7 +125,7 @@ exports.classStudent = async function (req, res) {
       RESP_9, RESP_10, RESP_11, RESP_12, RESP_13, RESP_14, RESP_15, RESP_16,
       RESP_17, RESP_18, RESP_19, RESP_20, RESP_21, RESP_22, RESP_23, RESP_24,
       RESP_25, RESP_26, RESP_27, RESP_28,
-      PROFESSOR_CAREER, // Agrega la carrera del profesor
+      PROFESSOR_CAREER,
       EVALUATED: true
     });
 
@@ -157,17 +159,17 @@ exports.getProfessorEvaluations = async function (req, res) {
   try {
     const { idPeriod, idUser } = req.params;
 
-    // Busca al profesor por ID_USER
+    // Buscar al profesor por ID_USER en la tabla Professor
     const professor = await Professor.findOne({ where: { ID_USER: idUser } });
 
     if (!professor) {
       return res.status(404).json({ message: 'Profesor no encontrado' });
     }
 
-    // Obtener el career del profesor
+    // Career del profesor
     const professorCareer = professor.CAREER;
 
-    // Obtener evaluaciones 
+    // Evaluaciones del profesor en el periodo y carrera
     const evaluations = await Evaluation.findAll({
       where: {
         ID_PERIOD: idPeriod,
@@ -175,7 +177,7 @@ exports.getProfessorEvaluations = async function (req, res) {
       },
     });
 
-    // Nombre del maestro
+    // Nombre del profesor
     const evaluationsWithProfessorName = await Promise.all(
       evaluations.map(async (evaluation) => {
         const professorRecord = await Professor.findByPk(evaluation.ID_PROFFERSSOR);
@@ -193,7 +195,7 @@ exports.getProfessorEvaluations = async function (req, res) {
       })
     );
 
-    // Nombre del estudiante
+    // Nombre del estudiante 
     const evaluationsWithStudentNames = await Promise.all(
       evaluationsWithProfessorName.map(async (evaluation) => {
         const student = await Student.findOne({ where: { ID_STUDENT: evaluation.ID_STUDENT } });
@@ -210,10 +212,46 @@ exports.getProfessorEvaluations = async function (req, res) {
         };
       })
     );
-    
-    res.json(evaluationsWithStudentNames);
+
+    // Nombre del curso
+    const evaluationsWithCourseNames = await Promise.all(
+      evaluationsWithStudentNames.map(async (evaluation) => {
+        const course = await Course.findByPk(evaluation.ID_COURSE);
+        if (!course) {
+          return {
+            ...evaluation,
+            COURSE_NAME: 'Nombre del curso no encontrado',
+          };
+        }
+        return {
+          ...evaluation,
+          COURSE_NAME: course.NAME,
+        };
+      })
+    );
+
+    // Código de la sección 
+    const evaluationsWithSectionCode = await Promise.all(
+      evaluationsWithCourseNames.map(async (evaluation) => {
+        const section = await Section.findByPk(evaluation.ID_SECTION);
+        if (!section || section.ID_COURSE !== evaluation.ID_COURSE) {
+          return {
+            ...evaluation,
+            SECTION_CODE: 'Código de la sección no encontrado',
+          };
+        }
+        return {
+          ...evaluation,
+          SECTION_CODE: section.SECTION_CODE,
+        };
+      })
+    );
+
+    res.json(evaluationsWithSectionCode); 
   } catch (error) {
     console.error('Error al obtener las evaluaciones:', error);
     res.status(500).json({ message: 'Error al obtener las evaluaciones' });
   }
 };
+
+
