@@ -1,6 +1,10 @@
 const connection = require('../../config/database');
 const Evaluation = require('../models/evaluateProfessor');
-const { Op } = require('sequelize');
+const Sequelize = require('sequelize');
+const Op = require('sequelize');
+const Professor = require("../models/professor");
+const User = require("../models/user");
+const Student = require("../models/student");
 
 //! Controlador que obtiene las secciones matriculadas de un estudiante en específico
 exports.classStudent = async function (req, res) {
@@ -49,7 +53,7 @@ exports.classStudent = async function (req, res) {
   exports.updateEvaluation = async function (req, res) {
     const { idSection } = req.params;
   const {
-    ID_STUDENT,RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
+    ID_STUDENT, RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
     RESP_9, RESP_10, RESP_11, RESP_12, RESP_13, RESP_14, RESP_15, RESP_16,
     RESP_17, RESP_18, RESP_19, RESP_20, RESP_21, RESP_22, RESP_23, RESP_24,
     RESP_25, RESP_26, RESP_27, RESP_28
@@ -69,43 +73,58 @@ exports.classStudent = async function (req, res) {
       return res.status(404).json({ error: "La sección no existe" });
     }
 
-    // Verifica si ya se a evaluado 
+    // Verifica si ya se ha evaluado
     const existingEvaluation = await Evaluation.findOne({
-        where: {
-          ID_SECTION: idSection,
-          EVALUATED: true 
-        }
-      });
-  
-      if (existingEvaluation) {
-        return res.status(400).json({ error: "Ya existe una evaluacion." });
+      where: {
+        ID_SECTION: idSection,
+        EVALUATED: true
       }
+    });
 
-  // Verifica que todas las preguntas esten
-  const requiredFields = [
-    ID_STUDENT,
-    RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
-    RESP_9, RESP_10, RESP_11, RESP_12, RESP_13, RESP_14, RESP_15, RESP_16,
-    RESP_17, RESP_18, RESP_19, RESP_20, RESP_21, RESP_22, RESP_23, RESP_24,
-    RESP_25, RESP_26, RESP_27, RESP_28
-];
+    if (existingEvaluation) {
+      return res.status(400).json({ error: "Ya existe una evaluacion." });
+    }
 
-  const missingFields = requiredFields.filter(field => field === undefined);
+    // Verifica que todas las preguntas estén presentes
+    const requiredFields = [
+      ID_STUDENT,
+      RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
+      RESP_9, RESP_10, RESP_11, RESP_12, RESP_13, RESP_14, RESP_15, RESP_16,
+      RESP_17, RESP_18, RESP_19, RESP_20, RESP_21, RESP_22, RESP_23, RESP_24,
+      RESP_25, RESP_26, RESP_27, RESP_28
+    ];
+
+    const missingFields = requiredFields.filter(field => field === undefined);
 
     if (missingFields.length > 0) {
-        return res.status(400).json({ error: `Faltan campos requeridos en la solicitud.` });
+      return res.status(400).json({ error: `Faltan campos requeridos en la solicitud.` });
     }
+
+    // Obtiene el ID_PROFFESSOR de los valores de la sección
+    const ID_PROFFESSOR = sectionData[0].ID_PROFFERSSOR;
+
+    // Busca la carrera del profesor en la tabla Professor
+    const professor = await Professor.findByPk(ID_PROFFESSOR);
+
+    if (!professor) {
+      return res.status(404).json({ error: "No se encontró el profesor." });
+    }
+
+    // Obtiene la carrera del profesor
+    const PROFESSOR_CAREER = professor.CAREER;
+
     // Crea una nueva evaluación
     const createdEvaluation = await Evaluation.create({
       ID_PERIOD: sectionData[0].ID_PERIOD,
-      ID_PROFFERSSOR: sectionData[0].ID_PROFFERSSOR,
+      ID_PROFFERSSOR: ID_PROFFESSOR,
       ID_COURSE: sectionData[0].ID_COURSE,
       ID_SECTION: idSection,
-      ID_STUDENT,RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
+      ID_STUDENT, RESP_1, RESP_2, RESP_3, RESP_4, RESP_5, RESP_6, RESP_7, RESP_8,
       RESP_9, RESP_10, RESP_11, RESP_12, RESP_13, RESP_14, RESP_15, RESP_16,
       RESP_17, RESP_18, RESP_19, RESP_20, RESP_21, RESP_22, RESP_23, RESP_24,
       RESP_25, RESP_26, RESP_27, RESP_28,
-      EVALUATED: true 
+      PROFESSOR_CAREER, // Agrega la carrera del profesor
+      EVALUATED: true
     });
 
     return res.status(201).json(createdEvaluation);
@@ -133,3 +152,68 @@ exports.getEvaluationsByStudentId = async (req, res) => {
   }
 };
 
+//! Obtiene evaluaciones de docentes por Jefe de Departamento
+exports.getProfessorEvaluations = async function (req, res) {
+  try {
+    const { idPeriod, idUser } = req.params;
+
+    // Busca al profesor por ID_USER
+    const professor = await Professor.findOne({ where: { ID_USER: idUser } });
+
+    if (!professor) {
+      return res.status(404).json({ message: 'Profesor no encontrado' });
+    }
+
+    // Obtener el career del profesor
+    const professorCareer = professor.CAREER;
+
+    // Obtener evaluaciones 
+    const evaluations = await Evaluation.findAll({
+      where: {
+        ID_PERIOD: idPeriod,
+        PROFESSOR_CAREER: { [Sequelize.Op.like]: `%${professorCareer}%` },
+      },
+    });
+
+    // Nombre del maestro
+    const evaluationsWithProfessorName = await Promise.all(
+      evaluations.map(async (evaluation) => {
+        const professorRecord = await Professor.findByPk(evaluation.ID_PROFFERSSOR);
+        if (!professorRecord) {
+          return {
+            ...evaluation.toJSON(),
+            PROFESSOR_NAME: 'Nombre del profesor no encontrado',
+          };
+        }
+        const professorUser = await User.findOne({ where: { ID_USER: professorRecord.ID_USER } });
+        return {
+          ...evaluation.toJSON(),
+          PROFESSOR_NAME: professorUser ? professorUser.NAME : 'Nombre del profesor no encontrado',
+        };
+      })
+    );
+
+    // Nombre del estudiante
+    const evaluationsWithStudentNames = await Promise.all(
+      evaluationsWithProfessorName.map(async (evaluation) => {
+        const student = await Student.findOne({ where: { ID_STUDENT: evaluation.ID_STUDENT } });
+        if (!student) {
+          return {
+            ...evaluation,
+            STUDENT_NAME: 'Nombre del estudiante no encontrado',
+          };
+        }
+        const studentUser = await User.findOne({ where: { ID_USER: student.ID_USER } });
+        return {
+          ...evaluation,
+          STUDENT_NAME: studentUser ? studentUser.NAME : 'Nombre del estudiante no encontrado',
+        };
+      })
+    );
+    
+    res.json(evaluationsWithStudentNames);
+  } catch (error) {
+    console.error('Error al obtener las evaluaciones:', error);
+    res.status(500).json({ message: 'Error al obtener las evaluaciones' });
+  }
+};
