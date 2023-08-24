@@ -47,9 +47,9 @@ import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosCla
 import CalificacionesIngresadas from "../views/Calificaciones/CalificacionesIngresadas";
 import PerfilDocentes from "../views/ViewStudent/PerfilDocentes";
 
-import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosClass";
 import ViewDocentesJefe from "../views/viewDocentesJefe/ViewDocentesJefe";
 import { NavigateSections } from "../views/viewDocentesJefe/components/NavigateSections";
+import Evaluaciones from "../views/Evaluaciones/Evaluaciones";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -290,6 +290,8 @@ const ContentNavbar = () => {
           <Route exact path="/pago-reposicion" element={<RequestRepo />} />
           <Route exact path="/planificacion" element={<Planificacion />} />
           <Route exact path="/Docentes" element={<Docentes />} />
+          <Route exact path="/ver-evaluaciones" element={<Evaluaciones />} />
+
         </Routes>
       </BrowserRouter>
     </>
