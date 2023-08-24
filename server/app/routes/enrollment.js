@@ -11,6 +11,7 @@ const { verifyAddCancelation } = require('../middlewares/addCancelation.js');
 router.post("/inscription/:idUser",verifyPaymentEnrollment, verifyIndexAcademic , verifyEnrollment);
 // enpoint para cancelaciones normales
 router.post("/addCancelation/:idUser",verifyPaymentEnrollment,verifyAddCancelation , verifyEnrollment);
+router.post("/form003/:idUser",verifyPaymentEnrollment , verifyEnrollment);
 // enpoint para matricular una clase
 router.post("/inscriptionCourse/:idUser",verifyPaymentEnrollment , enrolmentCourse);
 
