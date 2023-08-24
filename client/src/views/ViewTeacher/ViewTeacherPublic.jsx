@@ -5,8 +5,11 @@ import { useContext, useEffect, useState } from "react";
 import Sidevar from "./components/Sidevar";
 import axios from "axios";
 import { httpRequests } from "../../utils/helpers/httpRequests";
+import ReactPlayer from "react-player";
+import { BsCameraVideoOffFill } from 'react-icons/bs';
 
-const ViewTeacherPublic = ({ ID_USER_PROFFESOR }) => {
+
+const ViewTeacherPublic = ({ ID_USER_PROFFESOR, chek}) => {
   const { state, dispatch, periodo } = useContext(StoreContext);
 
   const [classes, setClasses] = useState([]);
@@ -21,34 +24,50 @@ const ViewTeacherPublic = ({ ID_USER_PROFFESOR }) => {
     }
   };
 
-  const [teacher, setTeacher] = useState([]);
+  const [video, setVideo] = useState(null);
 
   const getVideo = async () => {
     try {
       const res = await httpRequests()["get"](
-        `http://localhost:3000/registro/evaluateProffesor/video/${9}`,{}
+        `http://localhost:3000/registro/evaluateProffesor/video/${ID_USER_PROFFESOR}`,
+        {}
       );
-      console.log("GET_VIDEO: ", res)
-      setTeacher(res.data);
+      console.log("GET_VIDEO: ", res.data.imageUrl);
+      setVideo(res.data.imageUrl);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
+    setVideo(null)
+  }, [chek]);
+
+  useEffect(() => {
     getClassTeacher();
     getVideo();
   }, [ID_USER_PROFFESOR]);
-
-  console.log("clases", classes);
-  console.log("teacher", teacher);
 
   return (
     <>
       <div className="grid grid-cols-3 gap-6 p-4 ">
         <div className="col-span-2">
-          <div className="bg-gray-200 my-8 rounded-xl h-96  ">
-            {/* <Video /> */}
+          <div className="bg-gray-200 my-8 rounded-xl h-96">
+            {video ? (
+              <div className="h-80">
+                <ReactPlayer
+                  url={video}
+                  controls={true}
+                  width="100%"
+                  height="100%"
+                />
+
+            </div>
+            ) : (
+              <div className="flex justify-center">
+                <BsCameraVideoOffFill size={50}/>
+              </div>
+            )}
           </div>
         </div>
         <div className="overflow-hidden hover:overflow-auto h-96 mt-8 ">

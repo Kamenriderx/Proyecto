@@ -8,6 +8,7 @@ import { httpRequests } from "../../utils/helpers/httpRequests";
 import ViewTeacherPublic from "../ViewTeacher/ViewTeacherPublic";
 import { DotSpinner } from "@uiball/loaders";
 
+
 const PerfilDocentes = () => {
   //contexto de usuario
   const { state } = useContext(StoreContext);
@@ -47,12 +48,16 @@ const PerfilDocentes = () => {
 
   const [idUserProfesor, setIdUserProfesor] = useState(null);
   const [showPerfil, setShowPerfil] = useState(false);
+  
+  const [chek, setChek] = useState(false)
 
   const handleClick = (ID_USER_PROFFESOR) => {
     console.log(ID_USER_PROFFESOR);
     setIdUserProfesor(ID_USER_PROFFESOR);
     setShowPerfil(true);
+    setChek(!chek)
   };
+
 
   return (
     <>
@@ -92,7 +97,7 @@ const PerfilDocentes = () => {
 
           <div>
             {showPerfil ? (
-              <ViewTeacherPublic ID_USER_PROFFESOR={idUserProfesor} />
+              <ViewTeacherPublic ID_USER_PROFFESOR={idUserProfesor} chek={chek}/>
             ) : (
               <div className="flex justify-center mt-72">
                 <DotSpinner size={60} speed={0.9} color="blue" />
