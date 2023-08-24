@@ -6,6 +6,7 @@ const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourse
 const { getQuantityEnrollmentsCourse, getSpaceAvailableAndUv, getSectionEnrollmentStudent, verifySections, saveEnrollment, getQuantityEnrollmentsWaitCourse, getCurrentPeriod, getSectionWaitingStudent, cancelInscription, getAllSectionsEnrollmentsStudent, getSectionById, getEnrollmentByName, specialCancelInscription } = require("../helpers/repositoryEnrollment")
 
 const { getAcademicPeriodDetails } = require("../middlewares/indexAcademic")
+const connection = require("../../config/database")
 
 const getEnrollmentAreas = async (req,res)=>{
     try {
@@ -375,6 +376,17 @@ const verifyEnrollment = async (req,res)=>{
     }
 }
  
+const enrollmentPayment = async (req,res) =>{
+    const enrollmentStudents = await connection.query(`
+        SELECT NAME,CENTER,ACCOUNT_NUMBER
+        FROM professor
+            JOIN student ON student.CAREER = professor.CAREER
+            JOIN user_ ON user_.ID_USER = student.ID_USER
+        WHERE professor.ID_USER = ${req.token.userId} AND REGISTRATION_PAYMENT = 0
+    `)
+    const response = enrollmentStudents[0]
+    res.status(200).json({enrollmentStudents:response});
+}
 module.exports = {
     getEnrollmentAreas,
     enrolmentCourse,
@@ -386,5 +398,6 @@ module.exports = {
     getStudentWaitingCourses,
     cancelledEnrollment,
     verifyEnrollment,
+    enrollmentPayment,
     specialCancelledEnrollment
 };

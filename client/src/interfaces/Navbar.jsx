@@ -40,6 +40,10 @@ import CancelarClaseMatriculada from "../views/Matricula/CancelarClaseMatriculad
 import CancelarClaseEnEspera from "../views/Matricula/CancelarClaseEnEspera";
 import Matricula from "../views/MatriculaProffesor/Matricula";
 import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
+
+import RegisteredStudents from "../views/ViewStudent/RegisteredStudents";
+import History from "../views/History/History";
+import Statistics from "../views/Statistics/Statistics";
 import CancelacionExcep from "../views/Solicitudes/CancelacionExcep";
 import ViewDictamenExcep from "../views/Solicitudes/ViewDictamenExcep";
 import RequestExcepCoordi from "../views/Solicitudes/RequestExcepCoordi";
@@ -92,8 +96,40 @@ const ContentNavbar = () => {
               id="navbar-cta"
             >
               <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
+                {state?.user?.ID_ROLE === 4 && (
+                  <>
+                     <li>
+                      <Link to="/solicitudes-coordinador-centro">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Centro
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Periodos">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Secciones
+                        </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/solicitudes-coordinador">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Solicitudes Carrera
+                        </button>
+                      </Link>
+                    </li>
+                  </>
+                )}
                 {state?.user?.ID_ROLE === 5 && (
                   <>
+                    <li>
+                      <Link to="/Estadisticas">
+                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
+                          Estadisticas
+                        </button>
+                      </Link>
+                    </li>
                     <li>
                       <Link to="/Estudiantes">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
@@ -189,9 +225,11 @@ const ContentNavbar = () => {
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/students" element={<RegisteredStudents />} />
           <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
           <Route exact path="/periodos" element={<Period />} />
+          <Route exact path="/Estadisticas" element={<Statistics />} />
           <Route exact path="/proffessor" />
           <Route
             exact
@@ -226,6 +264,7 @@ const ContentNavbar = () => {
           <Route exact path="/calificaciones" element={<Calificaciones />} />
           <Route exact path="/calificaciones-ingresadas" element={<CalificacionesIngresadas />} />
           <Route exact path="/solicitudes" element={<Requests />} />
+          <Route exact path="/history" element={<History />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
             exact
