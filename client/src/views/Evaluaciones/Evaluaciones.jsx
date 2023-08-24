@@ -8,21 +8,21 @@ const Evaluaciones = () => {
 
   const [dataEvaluacion, setdataEvaluacion] = useState(null);
 
-  const getStudent = async (stateUser) => {
+  const getEvaluacion = async (stateUser) => {
     try {
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${stateUser.token}`,
+          Authorization: `Bearer {stateUser.token}`,
         },
       };
 
       const res = await httpRequests()["get"](
-        `http://localhost:3000/registro/evaluateProffesor/department/:idPeriod/${stateUser.user.ID_USER}`,
+        `http://localhost:3000/registro/evaluateProffesor/department/{2}/{stateUser.user.ID_USER}`,
         { ...config }
       );
 
-      console.log("GET_STUDENT: ", res.data);
+      console.log("GET_EVALUACION: ", res.data);
       setdataEvaluacion(res.data);
 
       if (!res.status && res?.response?.status !== 200) {
@@ -34,7 +34,7 @@ const Evaluaciones = () => {
   };
 
   useEffect(() => {
-    getStudent(state);
+    getEvaluacion(state);
   }, [state]);
 
   return (
@@ -261,40 +261,47 @@ const Evaluaciones = () => {
             </tr>
           </thead>
           <tbody>
-            <tr class="bg-white border-b hover:bg-gray-100">
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
+            {dataEvaluacion && (
+              <>
+              {dataEvaluacion.map((evaluacion) => (
+
+            <tr key={evaluacion.ID_EVALUATION} className="bg-white border-b hover:bg-gray-100">
+              <td className="px-6 py-4">evaluacion.PROFESSOR_CAREER</td>
+              <td className="px-6 py-4">evaluacion</td>
+              <td className="px-6 py-4">evaluacion</td>
+              <td className="px-6 py-4">evaluacion.STUDENT_NAME</td>
+              <td className="px-6 py-4">evaluacion.RESP_1</td>
+              <td className="px-6 py-4">evaluacion.RESP_2</td>
+              <td className="px-6 py-4">evaluacion.RESP_3</td>
+              <td className="px-6 py-4">evaluacion.RESP_4</td>
+              <td className="px-6 py-4">evaluacion.RESP_5</td>
+              <td className="px-6 py-4">evaluacion.RESP_6</td>
+              <td className="px-6 py-4">evaluacion.RESP_7</td>
+              <td className="px-6 py-4">evaluacion.RESP_8</td>
+              <td className="px-6 py-4">evaluacion.RESP_9</td>
+              <td className="px-6 py-4">evaluacion.RESP_10</td>
+              <td className="px-6 py-4">evaluacion.RESP_11</td>
+              <td className="px-6 py-4">evaluacion.RESP_12</td>
+              <td className="px-6 py-4">evaluacion.RESP_13</td>
+              <td className="px-6 py-4">evaluacion.RESP_14</td>
+              <td className="px-6 py-4">evaluacion.RESP_15</td>
+              <td className="px-6 py-4">evaluacion.RESP_16</td>
+              <td className="px-6 py-4">evaluacion.RESP_17</td>
+              <td className="px-6 py-4">evaluacion.RESP_18</td>
+              <td className="px-6 py-4">evaluacion.RESP_19</td>
+              <td className="px-6 py-4">evaluacion.RESP_20</td>
+              <td className="px-6 py-4">evaluacion.RESP_21</td>
+              <td className="px-6 py-4">evaluacion.RESP_22</td>
+              <td className="px-6 py-4">evaluacion.RESP_23</td>
+              <td className="px-6 py-4">evaluacion.RESP_24</td>
+              <td className="px-6 py-4">evaluacion.RESP_25</td>
+              <td className="px-6 py-4">evaluacion.RESP_26</td>
+              <td className="px-6 py-4">evaluacion.RESP_27</td>
+              <td className="px-6 py-4">evaluacion.RESP_28</td>
             </tr>
+              ))}
+              </>
+            )}
           </tbody>
         </table>
       </div>
