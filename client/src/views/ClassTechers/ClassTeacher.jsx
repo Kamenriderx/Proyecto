@@ -32,7 +32,7 @@ const ClassTeacher = () => {
         const response = await axios(
           `http://localhost:3000/registro/section/sectionsForProfessors/${
             state.user.ID_USER
-          }/${2}`
+          }/${periodo.ID_PERIOD}`
         );
         setClasses(response.data);
       } catch (error) {
