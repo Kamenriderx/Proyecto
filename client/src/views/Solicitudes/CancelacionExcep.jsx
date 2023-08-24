@@ -28,7 +28,7 @@ const CancelacionExcep = () => {
               </span>
             </p>
             <p className="text-gray-500 font-semibold text-md">
-              Solicitudes de cambio de Cancelacion Excepcional
+              Solicitudes de Cancelacion Excepcional
             </p>
           </div>
           <aside className="md:w-80 lg:w-96 px-5 py-10">

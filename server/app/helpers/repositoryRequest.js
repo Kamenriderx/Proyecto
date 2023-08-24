@@ -1,6 +1,6 @@
 
 const { Op } = require("sequelize")
-const { Student, Request, Professor, User, Career, RequestCenter, Multimedia, PeriodAcademic } = require("../models")
+const { Student, Request, Professor, User, Career, RequestCenter, Multimedia, PeriodAcademic, RequesCancellationExceptional } = require("../models")
 const DetailsPeriod = require("../models/detailsPeriod")
 
 const getStudent= async (id)=>{
@@ -43,7 +43,7 @@ const changeCenterStudent=async(body)=>{
 }
 
 const getRequestCurrent = async (id)=>{
-    return await Request.findOne({where:{ID_REQUEST:id}, include:[{model:RequestCenter, as:"requestCenter"}]})
+    return await Request.findOne({where:{ID_REQUEST:id}, include:[{model:RequestCenter, as:"requestCenter"},{model:RequesCancellationExceptional, as:"requestCancellation"}]})
 }
 const getRequestPaymentReplacement = async(student)=>{
     return await Request.findOne({

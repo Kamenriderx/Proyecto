@@ -4,6 +4,7 @@ const {getCareers, requestChangeCareer, getRequestChangeCareer, responseRequest,
 const {checkRolCoordinador} = require('../middlewares/rol.js');
 const authMiddleware = require('../middlewares/authentication.js');
 const upload = require('../middlewares/uploadFiles.js');
+const {verifyPaymentChangeCenter, verifyPaymentChangeCareer} = require('../middlewares/paymentEnrrollment.js');
 
 
 
@@ -25,8 +26,8 @@ router.get("/getMyDictamenCareer" ,authMiddleware,getMyRequestsAcceptDenyCareer)
 router.get("/getMyDictamenExceptionalCancellation/:idUser" ,authMiddleware,getMyRequestsAcceptDenyCancellCourse);
 
 // solcitudes que hace el estudiante 
-router.post("/requestChangeCareer",authMiddleware, upload.single("pdfFile") ,requestChangeCareer);
-router.post("/requestChangeCenter",authMiddleware, upload.single("pdfFile"), requestChangeCenter);
+router.post("/requestChangeCareer",authMiddleware, verifyPaymentChangeCareer ,upload.single("pdfFile") ,requestChangeCareer);
+router.post("/requestChangeCenter",authMiddleware, verifyPaymentChangeCenter,upload.single("pdfFile"), requestChangeCenter);
 router.post("/requestExceptionalCancellation/:idUser",authMiddleware, upload.single("pdfFile"), requestExceptionalCancellation);
 router.post("/requestPaymentReplacements",authMiddleware, requestPaymentReplacement);
 

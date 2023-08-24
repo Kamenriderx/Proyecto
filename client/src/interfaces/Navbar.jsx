@@ -47,6 +47,9 @@ import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosCla
 import CalificacionesIngresadas from "../views/Calificaciones/CalificacionesIngresadas";
 import PerfilDocentes from "../views/ViewStudent/PerfilDocentes";
 
+import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosClass";
+import ViewDocentesJefe from "../views/viewDocentesJefe/ViewDocentesJefe";
+import { NavigateSections } from "../views/viewDocentesJefe/components/NavigateSections";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -268,6 +271,16 @@ const ContentNavbar = () => {
             exact
             path="/listAlumnos-coordi"
             element={<ListadoAlumnosClass />}
+          />
+          <Route
+            exact
+            path="/docentes-jefe-calif"
+            element={<ViewDocentesJefe />}
+          />
+          <Route
+            exact
+            path="/seccionesmatriculadas/:id"
+            element={<NavigateSections />}
           />
           <Route exact path="/dictamenExcep" element={<ViewDictamenExcep />} />
           <Route exact path="/secciones-Docente" element={<ClassTeacher />} />
