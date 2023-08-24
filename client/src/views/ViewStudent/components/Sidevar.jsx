@@ -67,26 +67,15 @@ const Sidevar = () => {
               <span className="text-gray-600">Menú</span>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
               >
                 <AiFillHome className="flex-shrink-0 w-6 h-6 text-gray-500" />
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Inicio</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-              >
-                <IoMdContact className="flex-shrink-0 w-6 h-6 text-gray-500" />
-
-                <span className="flex-1 ml-3 whitespace-nowrap">Perfil</span>
-              </a>
+              </Link>
             </li>
             <li>
               <Link to="/contactos">
