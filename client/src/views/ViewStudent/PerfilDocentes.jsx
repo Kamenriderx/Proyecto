@@ -69,7 +69,7 @@ const PerfilDocentes = () => {
                     <div key={seccion.ID_SECTION} className="w-60">
                       <img
                         src={fondoPerfil}
-                        alt="jhajha"
+                        alt="fondoPerfil"
                         className="rounded-full w-48 h-48 object-cover cursor-pointer shadow-xl
                         border-4 
                         active:ring-blue-500 active:border-blue-500"
@@ -95,7 +95,6 @@ const PerfilDocentes = () => {
               <ViewTeacherPublic ID_USER_PROFFESOR={idUserProfesor} />
             ) : (
               <div className="flex justify-center mt-72">
-
                 <DotSpinner size={60} speed={0.9} color="blue" />
               </div>
             )}
