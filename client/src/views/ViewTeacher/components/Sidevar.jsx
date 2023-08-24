@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import "flowbite";
-import { AiFillHome } from "react-icons/ai";
+import { AiFillHome, AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoMdContact } from "react-icons/io";
 import {
   BiSolidContact,
@@ -13,15 +13,16 @@ import {
   BsQuestionCircleFill,
   BsCardChecklist,
   BsUniversalAccessCircle,
+  BsGraphUp,
 } from "react-icons/bs";
 import {
   PiNotebookBold,
   PiComputerTowerFill,
   PiNotebookFill,
-  PiStudentFill
+  PiStudentFill,
 } from "react-icons/pi";
 import { SiGoogleclassroom } from "react-icons/si";
-import { FaHistory } from "react-icons/fa";
+import { FaHistory, FaAddressCard } from "react-icons/fa";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { StoreContext } from "../../../store/ContextExample";
 import { FcPlanner, FcCancel, FcRatings } from "react-icons/fc";
@@ -129,7 +130,9 @@ const Sidevar = () => {
                 hover:bg-orange-100 hover:font-bold"
               >
                 <PiStudentFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">Estudiantes</span>
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Estudiantes
+                </span>
               </Link>
             </li>
 
@@ -329,6 +332,52 @@ const Sidevar = () => {
                       <FcRatings className="flex-shrink-0 w-6 h-6 text-gray-500" />
                       <span className="flex-1 ml-3 whitespace-nowrap">
                         Calificaciones Docentes
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+              </>
+            )}
+            {state?.user?.ID_ROLE === 5 && (
+              <>
+                <li>
+                  <Link to="/Docentes">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <AiOutlineUsergroupAdd className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Agregar Docentes
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Estudiantes">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <FaAddressCard className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Agregar Estudiante
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Estadisticas">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <BsGraphUp className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Estadisticas
                       </span>
                     </a>
                   </Link>
