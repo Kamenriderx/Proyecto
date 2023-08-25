@@ -27,13 +27,14 @@ const getHistory = async (req, res) => {
             uv,
             section_code,
             calification,
+            state,
             YEAR(start_date) as year
         FROM enrollment
             JOIN section on enrollment.id_section = section.id_section
             JOIN periodacademic on periodacademic.id_period = section.id_period 
             JOIN course on course.id_course = section.id_course
             JOIN student on enrollment.id_student = student.id_student
-        where id_user = '${req.token.userId} AND calification>0'
+        where id_user = '${req.token.userId} AND calification>0 AND state = Finalizada'
         `
     );
     const basicInformation = await USER.findAll({
