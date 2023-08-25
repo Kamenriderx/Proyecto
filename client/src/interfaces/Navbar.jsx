@@ -50,6 +50,7 @@ import RequestExcepCoordi from "../views/Solicitudes/RequestExcepCoordi";
 import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosClass";
 import ViewDocentesJefe from "../views/viewDocentesJefe/ViewDocentesJefe";
 import { NavigateSections } from "../views/viewDocentesJefe/components/NavigateSections";
+import ConfirmAccountForm from "../views/Auth/components/ConfirmAccountForm";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -259,6 +260,7 @@ const ContentNavbar = () => {
           <Route exact path="/solicitudes" element={<Requests />} />
           <Route exact path="/history" element={<History />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
+          <Route exact path="/RecuperarContrasena" element={<ConfirmAccountForm />} />
           <Route
             exact
             path="/solicitudes-estudiantes"

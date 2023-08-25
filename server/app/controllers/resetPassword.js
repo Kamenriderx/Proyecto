@@ -45,19 +45,18 @@ const sendRestoreEmail = async (req, res, next) => {
         const user = await USER.findOne(
             {where:{ ACCOUNT_NUMBER }}
         );
-            
         if (!user) {
           return res.status(404).json({ message: "No existe un usuario con ese numero de cuenta" });
         }
-
+        
         user.VERIFICATION_CODE = VERIFICATION_CODE;
         await user.save();
-
+        
         const token = generateAuthToken({
-            ACCOUNT_NUMBER:user.ACCOUNT_NUMBER,
-            VERIFICATION_CODE
+          ACCOUNT_NUMBER:user.ACCOUNT_NUMBER,
+          VERIFICATION_CODE
         },"5m");
-
+        
         const options = {
             subject:"Recuperacion de contraseña",
         };
