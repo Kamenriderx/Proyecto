@@ -40,6 +40,7 @@ const Docentes = () => {
     };
     axiosCall();
   }, [check]);
+
   return (
     <>
       <div className="md:flex md:justify-center gap-40 h-auto mt-5">

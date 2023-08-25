@@ -4,10 +4,12 @@ import FormularioDocente from "./FormularioDocente";
 import Modal from "../../../components/Modal";
 import { useState } from "react";
 import axios from "axios";
+import AlertTwo from "../../../components/AlertTwo";
 
 const PreviewDocente = ({ docente }) => {
   const [docenteToEdit, setDocenteToEdit] = useState(null);
   const [showModal1, setShowModal1] = useState(false);
+  const [alerta, setAlerta] = useState({});
   const handleEdit = (docente) => {
     setDocenteToEdit(docente);
     setShowModal1(true);
@@ -21,17 +23,24 @@ const PreviewDocente = ({ docente }) => {
       const response = await axios.delete(
         `http://localhost:3000/registro/admin/deleteProfessor/${id}`
       );
+      setAlerta({
+        message: "Docente Eliminado Correctamente",
+        error: false,
+      });
       console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const { message } = alerta;
+
   return (
     <>
       <Modal Visible={showModal1} Close={() => setShowModal1(false)}>
         {docenteToEdit && <FormularioDocente docente={docenteToEdit} />}
       </Modal>
+      {message && <AlertTwo alerta={alerta} />}
       <tr className="border-b">
         <td className="border px-4 py-2 text-lg font-bold r">
           {docente.user.NAME}

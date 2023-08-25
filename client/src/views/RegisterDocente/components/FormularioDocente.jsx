@@ -25,6 +25,7 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
       setROL(docente.user.rol.ID_ROLE);
       setCARRER(docente.CAREER);
       setEMAIL(docente.user.EMAIL);
+      setIMAGE(docente.PROFILE_PHOTO);
     }
   }, [docente]);
 
