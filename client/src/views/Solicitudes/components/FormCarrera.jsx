@@ -98,7 +98,10 @@ const FormCarrera = ({ setShowModal }) => {
       setMensaje("");
       setComprobante(null);
     } catch (error) {
-      console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
     }
   };
 
@@ -123,7 +126,7 @@ const FormCarrera = ({ setShowModal }) => {
           className="text-center block appearance-none w-full bg-white border border-gray-300 px-4 py-2 pr-8 rounded leading-tight focus:outline-none focus:border-blue-500"
         >
           <option>-- Seleccion la Carrera --</option>
-          {carreras.map((carrera) => (
+          {carreras.slice(1).map((carrera) => (
             <option value={carrera.ID_CAREER} key={carrera.ID_CAREER}>
               {carrera.NAME}
             </option>

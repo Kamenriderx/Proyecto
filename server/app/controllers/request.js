@@ -26,7 +26,7 @@ const requestChangeCareer = async (req,res)=>{
         const coordinator = await getCoordinator(student.user.CENTER, career.NAME)
 
         if (career.NAME.toUpperCase() == student.CAREER.toUpperCase()) {
-            res.status(400).json({messagge:"TU CARRERA ACTUAL Y A LA QUE TE QUIERES CAMBIAR ES LAL MISMA"})
+            res.status(400).json({messagge:"TU CARRERA ACTUAL Y A LA QUE TE QUIERES CAMBIAR ES LA MISMA"})
             return 
             
         }
