@@ -114,6 +114,7 @@ const requestChangeCenter = async (req,res)=>{
 const requestExceptionalCancellation = async (req,res)=>{
     try {
         const {file, body}= req
+        console.log({body});
         const {idUser} = req.params
         const period = await getCurrentPeriod();
         const student = await getStudent(idUser);
