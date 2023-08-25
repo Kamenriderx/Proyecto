@@ -103,6 +103,8 @@ const TableStudents = ({ body }) => {
           icon: 'success',
           title: 'Éxito'
         });
+
+        setData([])
         return;
       }
       if(res?.response.status!==200 ){
@@ -118,6 +120,7 @@ const TableStudents = ({ body }) => {
         icon: 'warning',
         title: 'Advertencia'
       });
+
     }
  
     //res.data.messagge y res.status == 200
