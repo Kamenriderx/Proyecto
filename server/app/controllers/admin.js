@@ -146,11 +146,11 @@ const deleteProfessor = async(req, res)=>{
 const updateProfessor = async (req,res)=>{
     try {
         
-        const {file} = req;
+        
         const {idUser} = req.params
-        const url = `http://localhost:3000/images/${file.filename}`
+        
         const body = matchedData(req);
-        body.URL = url
+        
        
         if(body.NAME.split(" ").length == 1){
             res.status(401).json({messagge:"El nombre es incorrecto"})
@@ -205,7 +205,7 @@ const updateProfessor = async (req,res)=>{
 
         await Professor.update({
             
-            PROFILE_PHOTO: body.URL, 
+             
             CAREER: body.CAREER,
             user:{
                 NAME: body.NAME,
