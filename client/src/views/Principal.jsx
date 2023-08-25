@@ -5,7 +5,19 @@ import {
   AiFillInstagram,
 } from "react-icons/ai";
 import { BsFillPhoneFill } from "react-icons/bs";
+import { httpRequests } from "../utils/helpers/httpRequests";
+import { useEffect, useState } from "react";
 const Principal = () => {
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    httpRequests()["get"]("http://localhost:3000/registro/periodAcademic/getCalendar",{}).then(res=>{
+      setUrl(res.data.url.CALENDAR_REGISTRATION);
+    })
+  
+    
+  }, [])
+  
+
   const images = [
     "https://s3.amazonaws.com/prod-wp-tunota/wp-content/uploads/2023/01/inicio-clases-unah-2023-maxima-casa-estudios-enfoca-educacion-linea.jpg",
     "https://www.elheraldo.hn/binrepository/1200x874/0c0/0d0/none/45933/QEPA/dos.433_EH979501_MG118373181.jpg",
@@ -105,6 +117,14 @@ const Principal = () => {
             src="https://tiempo.hn/wp-content/uploads/2022/03/WhatsApp-Image-2022-03-18-at-4.10.06-PM-1.jpeg"
             alt="img8"
           />
+        </div>
+        <div className="h-[600px] flex justify-center flex-col items-center">
+          <h2 className="font-bold text-4xl my-14 ">Calendario academico</h2>
+
+          <div className="h-5/6 mr-3">
+            <img src={url?url:""} alt="" />
+
+          </div>
         </div>
       </div>
     </div>

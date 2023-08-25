@@ -40,12 +40,21 @@ import CancelarClaseMatriculada from "../views/Matricula/CancelarClaseMatriculad
 import CancelarClaseEnEspera from "../views/Matricula/CancelarClaseEnEspera";
 import Matricula from "../views/MatriculaProffesor/Matricula";
 import MatriculaEstudiante from "../views/Matricula/MatriculaEstudiante";
+
+import RegisteredStudents from "../views/ViewStudent/RegisteredStudents";
+import History from "../views/History/History";
+import Statistics from "../views/Statistics/Statistics";
 import CancelacionExcep from "../views/Solicitudes/CancelacionExcep";
 import ViewDictamenExcep from "../views/Solicitudes/ViewDictamenExcep";
 import RequestExcepCoordi from "../views/Solicitudes/RequestExcepCoordi";
 import ListadoAlumnosClass from "../views/ListadoAlumnosCoordi/ListadoAlumnosClass";
+import Calificaciones from "../views/Calificaciones/Calificaciones";
+import CalificacionesIngresadas from "../views/Calificaciones/CalificacionesIngresadas";
+import PerfilDocentes from "../views/ViewStudent/PerfilDocentes";
+
 import ViewDocentesJefe from "../views/viewDocentesJefe/ViewDocentesJefe";
 import { NavigateSections } from "../views/viewDocentesJefe/components/NavigateSections";
+import Evaluaciones from "../views/Evaluaciones/Evaluaciones";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -88,26 +97,26 @@ const ContentNavbar = () => {
               id="navbar-cta"
             >
               <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
-                {state?.user?.ID_ROLE === 5 && (
+                {state?.user?.ID_ROLE === 4 && (
                   <>
                     <li>
-                      <Link to="/Estudiantes">
+                      <Link to="/solicitudes-coordinador-centro">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Estudiantes
+                          Solicitudes Centro
                         </button>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/Docentes">
+                      <Link to="/Periodos">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Docentes
+                          Secciones
                         </button>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/planificacion">
+                      <Link to="/solicitudes-coordinador">
                         <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Planificacion
+                          Solicitudes Carrera
                         </button>
                       </Link>
                     </li>
@@ -168,6 +177,8 @@ const ContentNavbar = () => {
           <ViewTeacher />
         ) : state?.user?.ID_ROLE === 4 ? (
           <ViewTeacher />
+        ) : state?.user?.ID_ROLE === 5 ? (
+          <ViewTeacher />
         ) : (
           <h2>Admin</h2>
         )}
@@ -185,9 +196,11 @@ const ContentNavbar = () => {
           <Route exact path="/" element={<Principal />} />
           <Route exact path="/recuperar-teacher" element={<ConfirTeachers />} />
           <Route exact path="/login" element={<Auth />} />
+          <Route exact path="/students" element={<RegisteredStudents />} />
           <Route exact path="/period" element={<Period />} />
           <Route exact path="/search" element={<ResultsSearch />} />
           <Route exact path="/periodos" element={<Period />} />
+          <Route exact path="/Estadisticas" element={<Statistics />} />
           <Route exact path="/proffessor" />
           <Route
             exact
@@ -199,6 +212,7 @@ const ContentNavbar = () => {
           <Route exact path="/perfil" element={<Profile />} />
           <Route exact path="/list-teachers" element={<ListTeachers />} />
           <Route exact path="/chat" element={<ViewChat />} />
+          <Route exact path="/perfil-docente" element={<PerfilDocentes />} />
           <Route exact path="/contactos" element={<ListContacts />} />
           <Route exact path="/addSections" element={<AddSections />} />
           <Route exact path="/matricula" element={<MatriculaEstudiante />} />
@@ -218,7 +232,14 @@ const ContentNavbar = () => {
             element={<CancelarClaseEnEspera />}
           />
           <Route exact path="/matricula/forma03" element={<Forma03 />} />
+          <Route exact path="/calificaciones" element={<Calificaciones />} />
+          <Route
+            exact
+            path="/calificaciones-ingresadas"
+            element={<CalificacionesIngresadas />}
+          />
           <Route exact path="/solicitudes" element={<Requests />} />
+          <Route exact path="/history" element={<History />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
             exact
@@ -283,6 +304,7 @@ const ContentNavbar = () => {
           <Route exact path="/pago-reposicion" element={<RequestRepo />} />
           <Route exact path="/planificacion" element={<Planificacion />} />
           <Route exact path="/Docentes" element={<Docentes />} />
+          <Route exact path="/ver-evaluaciones" element={<Evaluaciones />} />
         </Routes>
       </BrowserRouter>
     </>

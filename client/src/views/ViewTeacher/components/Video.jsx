@@ -84,9 +84,10 @@ const Video = () => {
                   onChange={(e) => {
                     handleFileChange(e);
                   }}
-                  className="rounded-full "
+                  className="rounded-full"
                 />
-                <br />
+                <div className="h-80">
+                  <>
                 {stateTeacher?.user?.user?.multimedia?.length  == 1 && (
                   <ReactPlayer
                     url={stateTeacher?.user?.user?.multimedia[0].URL}
@@ -95,6 +96,8 @@ const Video = () => {
                     height="100%"
                   />
                 )}
+                  </>
+                </div>
               </div>
             </>
           )}
