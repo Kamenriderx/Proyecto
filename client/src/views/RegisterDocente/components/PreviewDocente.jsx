@@ -27,6 +27,7 @@ const PreviewDocente = ({ docente, check2, setCheck2 }) => {
         message: "Docente Eliminado Correctamente",
         error: false,
       });
+      setCheck2(!check2);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -71,9 +72,7 @@ const PreviewDocente = ({ docente, check2, setCheck2 }) => {
             <FiEdit onClick={() => handleEdit(docente)} />
           </div>
           <div className="cursor-pointer px-4 py-2 text-2xl font-bold">
-            <AiFillDelete
-              onClick={() => deleteTeacher(docente.ID_PROFFERSSOR)}
-            />
+            <AiFillDelete onClick={() => deleteTeacher(docente.ID_USER)} />
           </div>
         </td>
       </tr>

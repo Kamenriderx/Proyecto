@@ -119,7 +119,9 @@ const requestExceptionalCancellation = async (req,res)=>{
         const student = await getStudent(idUser);
         const courseEnrollment = await getEnrollmentCourse(body.ID_ENROLLMENT)
         const coordinator = await getCoordinator(student.user.CENTER, courseEnrollment.seccion.course.career.NAME)
-        
+        console.log("COORDINADOR",coordinator);
+        console.log(student.user.CENTER);
+        console.log(courseEnrollment.seccion.course.career.NAME);
         const request = await Request.findOne({
             where:{
                 ID_STUDENT: student.ID_STUDENT,
