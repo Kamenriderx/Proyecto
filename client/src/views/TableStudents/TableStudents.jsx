@@ -92,17 +92,20 @@ const TableStudents = ({ body }) => {
     e.preventDefault();
     setMessage(true);
     setbuttonDisabled(true);
+    let datav = []
 
     try {
       const res = await httpRequests()["post"]("http://localhost:3000/registro/admin/registerStudents",{ body: data });
       console.log('respuesta correcta')
-
+      datav =res
       if(res?.status===200){
         setAlerta({
           text: res.messagge,
           icon: 'success',
           title: 'Éxito'
         });
+
+        setData([])
         return;
       }
       if(res?.response.status!==200 ){
@@ -118,6 +121,9 @@ const TableStudents = ({ body }) => {
         icon: 'warning',
         title: 'Advertencia'
       });
+
+      setData(datav.response.data.data)
+      
     }
  
     //res.data.messagge y res.status == 200

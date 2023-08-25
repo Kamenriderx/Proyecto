@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import "flowbite";
-import { AiFillHome } from "react-icons/ai";
+import { AiFillHome, AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoMdContact } from "react-icons/io";
 import {
   BiSolidContact,
@@ -13,15 +13,16 @@ import {
   BsQuestionCircleFill,
   BsCardChecklist,
   BsUniversalAccessCircle,
+  BsGraphUp,
 } from "react-icons/bs";
 import {
   PiNotebookBold,
   PiComputerTowerFill,
   PiNotebookFill,
-  PiStudentFill
+  PiStudentFill,
 } from "react-icons/pi";
 import { SiGoogleclassroom } from "react-icons/si";
-import { FaHistory } from "react-icons/fa";
+import { FaHistory, FaAddressCard } from "react-icons/fa";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { StoreContext } from "../../../store/ContextExample";
 import { FcPlanner, FcCancel, FcRatings } from "react-icons/fc";
@@ -64,7 +65,7 @@ const Sidevar = () => {
             <li className="text-center">
               <span className="text-gray-600">Menú</span>
             </li>
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -74,8 +75,8 @@ const Sidevar = () => {
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Inicio</span>
               </a>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -85,8 +86,8 @@ const Sidevar = () => {
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Perfil</span>
               </a>
-            </li>
-            <li>
+            </li> */}
+            {/*        <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -96,8 +97,8 @@ const Sidevar = () => {
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Contactos</span>
               </a>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -107,12 +108,12 @@ const Sidevar = () => {
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Chat</span>
               </a>
-            </li>
+            </li> */}
             <hr />
-            <li className="text-center">
+            {/* <li className="text-center">
               <span className="text-gray-600">Registro</span>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -121,19 +122,8 @@ const Sidevar = () => {
                 <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Matricula</span>
               </a>
-            </li>
-            <li>
-              <Link
-                to="/students"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-              >
-                <PiStudentFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">Estudiantes</span>
-              </Link>
-            </li>
-
-            <li>
+            </li> */}
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -144,9 +134,9 @@ const Sidevar = () => {
                   Solicitudes
                 </span>
               </a>
-            </li>
+            </li> */}
 
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -155,9 +145,9 @@ const Sidevar = () => {
                 <FaHistory className="flex-shrink-0 w-6 h-6 text-gray-500" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Historial</span>
               </a>
-            </li>
+            </li> */}
 
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -168,9 +158,9 @@ const Sidevar = () => {
                   Laboratorios
                 </span>
               </a>
-            </li>
+            </li> */}
 
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -181,7 +171,7 @@ const Sidevar = () => {
                   Cambio de clave
                 </span>
               </a>
-            </li>
+            </li> */}
             {state?.user?.ID_ROLE === 2 && (
               <>
                 <li>
@@ -272,6 +262,18 @@ const Sidevar = () => {
                     </a>
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="/students"
+                    className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                  >
+                    <PiStudentFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                    <span className="flex-1 ml-3 whitespace-nowrap">
+                      Estudiantes
+                    </span>
+                  </Link>
+                </li>
               </>
             )}
 
@@ -333,10 +335,67 @@ const Sidevar = () => {
                     </a>
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="/students"
+                    className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                  >
+                    <PiStudentFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                    <span className="flex-1 ml-3 whitespace-nowrap">
+                      Estudiantes
+                    </span>
+                  </Link>
+                </li>
               </>
             )}
-
-            <li>
+            {state?.user?.ID_ROLE === 5 && (
+              <>
+                <li>
+                  <Link to="/Docentes">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <AiOutlineUsergroupAdd className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Agregar Docentes
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Estudiantes">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <FaAddressCard className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Agregar Estudiante
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Estadisticas">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <BsGraphUp className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Estadisticas
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+              </>
+            )}
+            {/*   <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
@@ -347,7 +406,24 @@ const Sidevar = () => {
                   Calificaciones
                 </span>
               </a>
-            </li>
+            </li> */}
+            {state?.user?.ID_ROLE === 3 && (
+              <>
+                <li>
+                  <Link to="/ver-evaluaciones">
+                    <div
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <SiGoogleclassroom className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Evaluaciones
+                      </span>
+                    </div>
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </aside>

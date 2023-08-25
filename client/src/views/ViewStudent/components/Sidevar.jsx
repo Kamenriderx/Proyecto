@@ -23,38 +23,8 @@ const Sidevar = () => {
 
   const [alerta, setAlerta] = useState({});
   const [message1, setMessage1] = useState(false);
-  const navigate = useNavigate();
   const { message } = alerta;
 
-  const handleMatricula = async () => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${state.token}`,
-        },
-      };
-
-      const res = await axios.post(
-        `http://localhost:3000/registro/enrollment/inscription/${state.user.ID_USER}`,
-        { ...config }
-      );
-      navigate("/matricula");
-    } catch (error) {
-      setMessage1(!message1);
-      // alert('ahahah')
-      navigate("/perfil");
-      console.log(error);
-      setAlerta({
-        message: error.response.data.messagge,
-        error: true,
-      });
-    }
-  };
-
-  const handleClick = () => {
-    handleMatricula();
-  };
 
   return (
     <>
@@ -97,26 +67,15 @@ const Sidevar = () => {
               <span className="text-gray-600">Menú</span>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/"
                 className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
               >
                 <AiFillHome className="flex-shrink-0 w-6 h-6 text-gray-500" />
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Inicio</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-              >
-                <IoMdContact className="flex-shrink-0 w-6 h-6 text-gray-500" />
-
-                <span className="flex-1 ml-3 whitespace-nowrap">Perfil</span>
-              </a>
+              </Link>
             </li>
             <li>
               <Link to="/contactos">
@@ -142,20 +101,33 @@ const Sidevar = () => {
                 <span className="flex-1 ml-3 whitespace-nowrap">Chat</span>
               </Link>
             </li>
+            <li>
+              <Link to="/perfil-docente">
+              <div
+                className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+              >
+                <IoMdContact className="flex-shrink-0 w-6 h-6 text-gray-500" />
+
+                <span className="flex-1 ml-3 whitespace-nowrap">Docentes</span>
+              </div>
+              </Link>
+            </li>
             <hr />
             <li className="text-center">
               <span className="text-gray-600">Registro</span>
             </li>
 
             <li>
+              <Link to="/matricula">
               <div
-                onClick={handleClick}
                 className="flex items-center p-2 text-gray-900 rounded-lg cursor-pointer
                 hover:bg-orange-100 hover:font-bold"
               >
                 <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Matricula</span>
               </div>
+              </Link>
             </li>
 
             <li>
@@ -195,36 +167,9 @@ const Sidevar = () => {
                 </span>
               </a>
             </li>
-
             <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-              >
-                <BiSolidKey className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Cambio de clave
-                </span>
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-              >
-                <PiNotebookFill className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Programación
-                </span>
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#"
+              <Link to="/calificaciones">
+              <div
                 className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
               >
@@ -232,7 +177,8 @@ const Sidevar = () => {
                 <span className="flex-1 ml-3 whitespace-nowrap">
                   Calificaciones
                 </span>
-              </a>
+              </div>
+              </Link>
             </li>
           </ul>
         </div>

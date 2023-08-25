@@ -10,6 +10,7 @@ const Docentes = () => {
   const [showModal, setShowModal] = useState(false);
   const [docentes, setDocentes] = useState([]);
   const [check, setCheck] = useState(false);
+  const [check2, setCheck2] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [teachersPerPage] = useState(10);
 
@@ -30,6 +31,7 @@ const Docentes = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
   useEffect(() => {
     const axiosCall = async () => {
       const res = await axios(
@@ -38,7 +40,8 @@ const Docentes = () => {
       setDocentes(res.data.professors);
     };
     axiosCall();
-  }, [check]);
+  }, [check, check2]);
+
   return (
     <>
       <div className="md:flex md:justify-center gap-40 h-auto mt-5">
@@ -72,7 +75,12 @@ const Docentes = () => {
               </thead>
               <tbody>
                 {currentTeachers.map((docente, index) => (
-                  <PreviewDocente docente={docente} key={index} />
+                  <PreviewDocente
+                    check2={check2}
+                    setCheck2={setCheck2}
+                    docente={docente}
+                    key={index}
+                  />
                 ))}
               </tbody>
             </table>

@@ -72,7 +72,10 @@ const FormCenter = ({ setShowModal }) => {
       setMensaje("");
       setComprobante(null);
     } catch (error) {
-      console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
     }
   };
 

@@ -522,7 +522,7 @@ exports.getYears = (req, res) => {
 exports.getCalendar = async (req,res) => {
 
   const url = await connection.query(`
-    SELECT CALENDAR_REGISTRATION  FROM periodacademic ORDER BY ID_PERIOD DESC LIMIT 1;
+    SELECT CALENDAR_REGISTRATION  FROM periodacademic where status = 'En curso' LIMIT 1;
   `);
   res.status(200).json({url:url[0][0]});
 }

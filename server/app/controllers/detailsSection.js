@@ -55,6 +55,8 @@ exports.getEnrolledStudents = async function (req, res) {
   try {
     const query = `
       SELECT
+        e.ID_ENROLLMENT,
+        a.ID_SECTION,
         s.ID_STUDENT,
         a.SECTION_CODE,
         c.NAME,
@@ -100,6 +102,7 @@ exports.getWaitingStudents = async function (req, res) {
   try {
     const query = `
       SELECT
+        e.ID_ENROLLMENT,
         s.ID_STUDENT,
         u.NAME AS STUDENT_NAME,
         u.ACCOUNT_NUMBER,
