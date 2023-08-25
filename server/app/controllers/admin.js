@@ -1,6 +1,6 @@
 const {Rol, User, Professor, Student} = require('../models');
 const {matchedData} = require("express-validator"); 
-const {Op} = require('sequelize');
+const {Op, where} = require('sequelize');
 const {encrypt, generatePassword} = require("../../utils/handlePassword");
 const {verifyData, isDuplicate} = require("../handlers/handleData");
 const {generateEmail, generateRandomCaracters} = require("../handlers/handleGenerate");
@@ -36,12 +36,12 @@ const registerProfessorCtrl = async (req,res)=>{
         const body = matchedData(req);
         body.URL = url
         if(body.NAME.split(" ").length == 1){
-            res.status(401).json({messagge:"EL NOMBRE ES INVALIDO"})
+            res.status(401).json({messagge:"El nombre es incorrecto"})
         }
 
         let ACCOUNT_NUMBER = generateRandomCaracters(5)
 
-        const profesor  = await User.findOne({where:{
+        let profesor  = await User.findOne({where:{
             [Op.or]:[
                 {ACCOUNT_NUMBER: ACCOUNT_NUMBER},
                 {EMAIL: body.EMAIL}
@@ -52,13 +52,42 @@ const registerProfessorCtrl = async (req,res)=>{
         if(profesor){
             
             if(profesor.EMAIL === body.EMAIL){
-                res.status(409).json({messagge:"EL CORREO DEL USUARIO YA EXISTE"})
+                res.status(409).json({messagge:"El correo del usuario ya existe"})
                 return 
             }
 
             ACCOUNT_NUMBER = (profesor.ACCOUNT_NUMBER== ACCOUNT_NUMBER) ? parseInt(profesor.ACCOUNT_NUMBER) +1: ACCOUNT_NUMBER;
             
         }
+        if (body.ROLE != 2) {
+            
+            profesor = await Professor.findOne({
+                where:{
+                    CAREER: {[Op.like]:body.CAREER}
+                }, include:[
+                    {
+                        model:User, as:"user", where:{
+                            [Op.and]:[
+                                { CENTER: {[Op.like]:body.CENTER}},
+                                { ID_ROLE: body.ROLE},
+                            ]
+                        }
+                    }
+                ]
+            })
+
+            if (body.ROLE == 3) {
+                res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
+                return                
+            }
+            if (body.ROLE == 4) {
+                res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
+                return                
+            }
+        }
+
+
+
         body.INSTITUTIONAL_EMAIL = generateEmail(body.NAME,2 )
 
         
@@ -100,6 +129,108 @@ const registerProfessorCtrl = async (req,res)=>{
     }
 
 }
+
+const deleteProfessor = async(req, res)=>{
+    try {
+        const {idUser} = req.params
+        await Professor.destroy({where:{ID_USER: idUser }})
+        res.status(200).json({messagge:"El docente ha sido eliminado exitosamente"})
+        
+    } catch (error) {
+        console.log({error})
+        res.status(500).json({messagge:"Algo salio mal"})
+    }
+}
+
+
+const updateProfessor = async (req,res)=>{
+    try {
+        
+        const {file} = req;
+        const {idUser} = req.params
+        const url = `http://localhost:3000/images/${file.filename}`
+        const body = matchedData(req);
+        body.URL = url
+       
+        if(body.NAME.split(" ").length == 1){
+            res.status(401).json({messagge:"El nombre es incorrecto"})
+        }
+
+    
+        let profesor  = await User.findOne({where:{
+        
+                
+            EMAIL: body.EMAIL
+
+         
+            
+        },include: Professor})
+
+
+        
+            
+        if(profesor.EMAIL === body.EMAIL && profesor.ID_USER != idUser){
+            res.status(409).json({messagge:"El correo del usuario ya existe"})
+            return 
+        }
+
+            
+        
+        if (body.ROLE != 2 ) {
+            
+            profesor = await Professor.findOne({
+                where:{
+                    CAREER: {[Op.like]:body.CAREER}
+                }, include:[
+                    {
+                        model:User, as:"user", where:{
+                            [Op.and]:[
+                                { CENTER: {[Op.like]:body.CENTER}},
+                                { ID_ROLE: body.ROLE},
+                            ]
+                        }
+                    }
+                ]
+            })
+
+            if (body.ROLE == 3 && profesor.ID_USER != idUser) {
+                res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
+                return                
+            }
+            if (body.ROLE == 4 && profesor.ID_USER != idUser) {
+                res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
+                return                
+            }
+        }
+
+        await Professor.update({
+            
+            PROFILE_PHOTO: body.URL, 
+            CAREER: body.CAREER,
+            user:{
+                NAME: body.NAME,
+                CENTER: body.CENTER,
+                EMAIL: body.EMAIL
+            }
+            
+            
+        }, { where:{
+            ID_USER:idUser
+        }})
+
+        
+        
+        res.status(200).json({messagge:"Docente actualizado de forma exitosa"});
+        
+    } catch (error) {
+        console.log(error)
+        res.status(403).json({messagge:"ALGO SALIO MAL"})
+        
+    }
+
+}
+
+
 
 
 
@@ -268,6 +399,8 @@ module.exports = {
     getProfessorsCtrl,
     registerProfessorCtrl,
     registerStudentsCtrl,
-    getStudents
+    getStudents,
+    updateProfessor,
+    deleteProfessor
     
 };
