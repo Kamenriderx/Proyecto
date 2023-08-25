@@ -151,7 +151,7 @@ const updateProfessor = async (req,res)=>{
         
         const {body} = req;
         
-       
+        console.log({body})
         if(body.NAME.split(" ").length == 1){
             res.status(401).json({messagge:"El nombre es incorrecto"})
         }
@@ -176,7 +176,7 @@ const updateProfessor = async (req,res)=>{
 
             
         
-        if (body.ROLE != 2 ) {
+        if (body.ROL != 2 ) {
             
             profesor = await Professor.findOne({
                 where:{
@@ -186,18 +186,18 @@ const updateProfessor = async (req,res)=>{
                         model:User, as:"user", where:{
                             [Op.and]:[
                                 { CENTER: {[Op.like]:body.CENTER}},
-                                { ID_ROLE: body.ROLE},
+                                { ID_ROLE: body.ROL},
                             ]
                         }
                     }
                 ]
             })
 
-            if (body.ROLE == 3 && profesor.ID_USER != idUser) {
+            if (body.ROL == 3 && profesor.ID_USER != idUser) {
                 res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
                 return                
             }
-            if (body.ROLE == 4 && profesor.ID_USER != idUser) {
+            if (body.ROL == 4 && profesor.ID_USER != idUser) {
                 res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
                 return                
             }
@@ -211,7 +211,7 @@ const updateProfessor = async (req,res)=>{
                 NAME: body.NAME,
                 CENTER: body.CENTER,
                 EMAIL: body.EMAIL,
-                ID_ROLE : body.ROLE
+                ID_ROLE : body.ROL
             }
             
             

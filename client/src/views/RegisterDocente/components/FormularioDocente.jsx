@@ -152,13 +152,13 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
 
       const config = {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
       const res = await axios.post(
         `http://localhost:3000/registro/admin/updateProfessor/${idP}`,
-        { body: { NAME, CENTER, CARRER, ROL, EMAIL }, ...config }
+        { NAME, CENTER, CARRER, ROL, EMAIL }, config
       );
       console.log(res);
 
