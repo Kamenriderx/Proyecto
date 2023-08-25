@@ -151,7 +151,7 @@ const updateProfessor = async (req,res)=>{
         
         const {body} = req;
         
-        console.log({body})
+
         if(body.NAME.split(" ").length == 1){
             res.status(401).json({messagge:"El nombre es incorrecto"})
         }
@@ -207,17 +207,19 @@ const updateProfessor = async (req,res)=>{
             
              
             CAREER: body.CAREER,
-            user:{
-                NAME: body.NAME,
-                CENTER: body.CENTER,
-                EMAIL: body.EMAIL,
-                ID_ROLE : body.ROL
-            }
+            
             
             
         }, { where:{
             ID_USER:idUser
-        }})
+        }});
+
+        await User.update({
+            NAME: body.NAME,
+            CENTER: body.CENTER,
+            EMAIL: body.EMAIL,
+            ID_ROLE : body.ROL
+        },{where:{ID_USER:idUser}})
 
         
         
