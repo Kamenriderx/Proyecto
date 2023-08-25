@@ -65,6 +65,75 @@ const MatriculaEstudiante = () => {
     }
   };
 
+  const handleCancelacion = async (dato) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`,
+        },
+      };
+
+      const res = await axios.post(
+        `http://localhost:3000/registro/enrollment/addCancelation/${state.user.ID_USER}`,
+        { ...config }
+      );
+      
+      if (dato == 2) {
+        navigate("/matricula/cancelar-clase-matriculada");
+      }
+      if (dato == 3) {
+        navigate("/matricula/cancelar-clase-espera");
+      }
+    } catch (error) {
+      setMessage1(true);
+      // alert('ahahah')
+      navigate("/matricula");
+      console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
+    }
+  };
+  const handleInfoForm = async (dato) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`,
+        },
+      };
+
+      const res = await axios.post(
+        `http://localhost:3000/registro/enrollment/form003/${state.user.ID_USER}`,
+        { ...config }
+      );
+      
+      
+      if (dato == 4) {
+        navigate("/matricula/forma03");
+      }
+    } catch (error) {
+      setMessage1(true);
+      // alert('ahahah')
+      navigate("/matricula");
+      console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
+    }
+  };
+
+  const handleClickInfo = (dato)=>{
+    handleInfoForm(dato)
+  }
+
+  const handleClickCancelacion = (dato)=>{
+    handleCancelacion(dato)
+  };
+
   const handleClick = (dato) => {
     handleMatricula(dato);
   };
@@ -172,21 +241,21 @@ const MatriculaEstudiante = () => {
                 Adicionar clase
               </Link>
             </div>
-            <div className="mt-10" onClick={() => handleClick(2)}>
+            <div className="mt-10" onClick={() => handleClickCancelacion(2)}>
               <Link
                 className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
               >
                 Cancelar clase matrículada
               </Link>
             </div>
-            <div className="mt-10" onClick={() => handleClick(3)}>
+            <div className="mt-10" onClick={() => handleClickCancelacion(3)}>
               <Link
                 className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
               >
                 Cancelar clase en espera
               </Link>
             </div>
-            <div className="mt-10">
+            <div className="mt-10" onClick={()=> handleClickInfo(4)}>
               <Link
                 to="/matricula/forma03"
                 className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
