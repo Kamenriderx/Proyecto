@@ -210,7 +210,8 @@ const updateProfessor = async (req,res)=>{
             user:{
                 NAME: body.NAME,
                 CENTER: body.CENTER,
-                EMAIL: body.EMAIL
+                EMAIL: body.EMAIL,
+                ID_ROLE : body.ROLE
             }
             
             
