@@ -92,11 +92,12 @@ const TableStudents = ({ body }) => {
     e.preventDefault();
     setMessage(true);
     setbuttonDisabled(true);
+    let datav = []
 
     try {
       const res = await httpRequests()["post"]("http://localhost:3000/registro/admin/registerStudents",{ body: data });
       console.log('respuesta correcta')
-
+      datav =res
       if(res?.status===200){
         setAlerta({
           text: res.messagge,
@@ -121,6 +122,8 @@ const TableStudents = ({ body }) => {
         title: 'Advertencia'
       });
 
+      setData(datav.response.data.data)
+      
     }
  
     //res.data.messagge y res.status == 200
