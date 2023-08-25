@@ -30,6 +30,7 @@ const Docentes = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
   useEffect(() => {
     const axiosCall = async () => {
       const res = await axios(

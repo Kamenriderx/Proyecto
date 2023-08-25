@@ -3,8 +3,9 @@ import { AiOutlineFileImage } from "react-icons/ai";
 import { FaUserTie } from "react-icons/fa";
 import AlertTwo from "../../../components/AlertTwo";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
+import { useEffect } from "react";
 
-const FormularioDocente = ({ check, setCheck }) => {
+const FormularioDocente = ({ check, setCheck, docente }) => {
   const [NAME, setNAME] = useState("");
   const [CENTER, setCENTER] = useState("");
   const [ROL, setROL] = useState("");
@@ -12,6 +13,20 @@ const FormularioDocente = ({ check, setCheck }) => {
   const [EMAIL, setEMAIL] = useState("");
   const [IMAGE, setIMAGE] = useState(null);
   const [alerta, setAlerta] = useState({});
+  const [selectedD, setselectedD] = useState(null);
+  const [idP, setIdP] = useState("");
+
+  useEffect(() => {
+    if (docente) {
+      setIdP(docente.ID_USER);
+      setselectedD(docente);
+      setNAME(docente.user.NAME);
+      setCENTER(docente.user.CENTER);
+      setROL(docente.user.rol.ID_ROLE);
+      setCARRER(docente.CAREER);
+      setEMAIL(docente.user.EMAIL);
+    }
+  }, [docente]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,19 +85,35 @@ const FormularioDocente = ({ check, setCheck }) => {
       formData.append("EMAIL", EMAIL);
       formData.append("file", IMAGE);
 
-      const res = await httpRequests()["post"](
-        "http://localhost:3000/registro/admin/registerProfessor",
-        { body: formData, ...config }
-      );
-      console.log(res);
+      if (selectedD) {
+        const res = await httpRequests()["put"](
+          `http://localhost:3000/registro/admin/updateProfessor/${idP}`,
+          { body: formData, ...config }
+        );
+        console.log(res);
 
-      if (!res.status && res?.response?.status !== 200) {
-        throw new Error(res.response.data.messagge);
+        if (!res.status && res?.response?.status !== 200) {
+          throw new Error(res.response.data.messagge);
+        }
+        setAlerta({
+          message: "Docente Actualizado Correctamente",
+          error: false,
+        });
+      } else {
+        const res = await httpRequests()["post"](
+          "http://localhost:3000/registro/admin/registerProfessor",
+          { body: formData, ...config }
+        );
+        console.log(res);
+
+        if (!res.status && res?.response?.status !== 200) {
+          throw new Error(res.response.data.messagge);
+        }
+        setAlerta({
+          message: "Docente Creado Correctamente",
+          error: false,
+        });
       }
-      setAlerta({
-        message: "Docente Creado Correctament",
-        error: false,
-      });
       setCheck(!check);
       setNAME("");
       setCENTER("");
@@ -261,17 +292,27 @@ const FormularioDocente = ({ check, setCheck }) => {
               className="sr-only"
               onChange={handleImageChange}
             />
-            <span className="bg-green-500 text-white px-36 py-2 rounded hover:bg-green-600">
+            <span
+              className={
+                !IMAGE
+                  ? "bg-red-500 text-white px-36 py-2 rounded hover:bg-red-600"
+                  : "bg-blue-500 text-white px-36 py-2 rounded hover:bg-blue-600"
+              }
+            >
               <AiOutlineFileImage className="inline-block" />
-              Subir imagen
+              {!IMAGE ? "Subir Imagen" : "Cargada"}
             </span>
           </label>
         </div>
 
         <input
           type="submit"
-          value="Registrar Docente"
-          className="p-2 bg-sky-600 shadow w-full rounded-lg text-sm uppercase font-bold text-white hover:cursor-pointer hover:bg-sky-900 transition-colors"
+          value={!selectedD ? "Registrar Docente" : "Actualizar Docente"}
+          className={
+            !selectedD
+              ? "p-2 bg-sky-600 shadow w-full rounded-lg text-sm uppercase font-bold text-white hover:cursor-pointer hover:bg-sky-900 transition-colors"
+              : "p-2 bg-green-600 shadow w-full rounded-lg text-sm uppercase font-bold text-white hover:cursor-pointer hover:bg-green-800 transition-colors"
+          }
         />
       </form>
     </>
