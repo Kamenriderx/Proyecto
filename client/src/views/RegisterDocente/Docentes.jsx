@@ -30,6 +30,7 @@ const Docentes = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
   useEffect(() => {
     const axiosCall = async () => {
       const res = await axios(
@@ -39,6 +40,7 @@ const Docentes = () => {
     };
     axiosCall();
   }, [check]);
+
   return (
     <>
       <div className="md:flex md:justify-center gap-40 h-auto mt-5">
