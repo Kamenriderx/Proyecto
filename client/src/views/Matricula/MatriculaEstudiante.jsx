@@ -65,6 +65,38 @@ const MatriculaEstudiante = () => {
     }
   };
 
+  const handleMatricula1 = async (dato1) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`,
+        },
+      };
+
+      const res = await axios.post(
+        `http://localhost:3000/registro/enrollment/inscription/${state.user.ID_USER}`,
+        { ...config }
+      );
+      if (dato1 == 2) {
+        navigate("/matricula/cancelar-clase-matriculada");
+      }
+    } catch (error) {
+      setMessage1(true);
+      // alert('ahahah')
+      navigate("/matricula");
+      console.log(error);
+      setAlerta({
+        message: error.response.data.messagge,
+        error: true,
+      });
+    }
+  };
+
+  const handleClick1 = (dato1) => {
+    handleMatricula1(dato1);
+  };
+
   const handleClick = (dato) => {
     handleMatricula(dato);
   };
@@ -172,17 +204,13 @@ const MatriculaEstudiante = () => {
                 Adicionar clase
               </Link>
             </div>
-            <div className="mt-10" onClick={() => handleClick(2)}>
-              <Link
-                className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
-              >
+            <div className="mt-10" onClick={() => handleClick1(2)}>
+              <Link className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded">
                 Cancelar clase matrículada
               </Link>
             </div>
             <div className="mt-10" onClick={() => handleClick(3)}>
-              <Link
-                className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
-              >
+              <Link className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded">
                 Cancelar clase en espera
               </Link>
             </div>
