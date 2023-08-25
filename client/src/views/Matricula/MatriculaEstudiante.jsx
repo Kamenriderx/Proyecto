@@ -257,7 +257,7 @@ const MatriculaEstudiante = () => {
             </div>
             <div className="mt-10" onClick={()=> handleClickInfo(4)}>
               <Link
-                to="/matricula/forma03"
+
                 className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
               >
                 Forma 03
