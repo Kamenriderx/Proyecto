@@ -20,7 +20,7 @@ router.get("/getStudents",getStudents);
 
 router.post("/registerProfessor",upload.single("file"),validatorRegisterProfessor,registerProfessorCtrl)
 router.post("/registerStudents",registerStudentsCtrl);
-router.post("/updateProfessor/:idUser",validatorRegisterProfessor,updateProfessor)
+router.post("/updateProfessor/:idUser",updateProfessor)
 router.delete("/deleteProfessor/:idUser",deleteProfessor)
 
 module.exports = router

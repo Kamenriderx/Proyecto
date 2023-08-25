@@ -149,7 +149,7 @@ const updateProfessor = async (req,res)=>{
         
         const {idUser} = req.params
         
-        const body = matchedData(req);
+        const {body} = req;
         
        
         if(body.NAME.split(" ").length == 1){
