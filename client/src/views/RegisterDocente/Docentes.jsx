@@ -10,6 +10,7 @@ const Docentes = () => {
   const [showModal, setShowModal] = useState(false);
   const [docentes, setDocentes] = useState([]);
   const [check, setCheck] = useState(false);
+  const [check2, setCheck2] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [teachersPerPage] = useState(10);
 
@@ -39,7 +40,7 @@ const Docentes = () => {
       setDocentes(res.data.professors);
     };
     axiosCall();
-  }, [check]);
+  }, [check, check2]);
 
   return (
     <>
@@ -74,7 +75,12 @@ const Docentes = () => {
               </thead>
               <tbody>
                 {currentTeachers.map((docente, index) => (
-                  <PreviewDocente docente={docente} key={index} />
+                  <PreviewDocente
+                    check2={check2}
+                    setCheck2={setCheck2}
+                    docente={docente}
+                    key={index}
+                  />
                 ))}
               </tbody>
             </table>

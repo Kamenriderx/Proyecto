@@ -6,7 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import AlertTwo from "../../../components/AlertTwo";
 
-const PreviewDocente = ({ docente }) => {
+const PreviewDocente = ({ docente, check2, setCheck2 }) => {
   const [docenteToEdit, setDocenteToEdit] = useState(null);
   const [showModal1, setShowModal1] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -38,7 +38,13 @@ const PreviewDocente = ({ docente }) => {
   return (
     <>
       <Modal Visible={showModal1} Close={() => setShowModal1(false)}>
-        {docenteToEdit && <FormularioDocente docente={docenteToEdit} />}
+        {docenteToEdit && (
+          <FormularioDocente
+            check2={check2}
+            setCheck2={setCheck2}
+            docente={docenteToEdit}
+          />
+        )}
       </Modal>
       {message && <AlertTwo alerta={alerta} />}
       <tr className="border-b">

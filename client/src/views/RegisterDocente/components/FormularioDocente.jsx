@@ -6,7 +6,7 @@ import { httpRequests } from "../../../utils/helpers/httpRequests";
 import { useEffect } from "react";
 import axios from "axios";
 
-const FormularioDocente = ({ check, setCheck, docente }) => {
+const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
   const [NAME, setNAME] = useState("");
   const [CENTER, setCENTER] = useState("");
   const [ROL, setROL] = useState("");
@@ -156,11 +156,12 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const res = await axios.post(
+      const res = await axios.put(
         `http://localhost:3000/registro/admin/updateProfessor/${idP}`,
-        { NAME, CENTER, CARRER, ROL, EMAIL }, config
+        { NAME, CENTER, CARRER, ROL, EMAIL },
+        config
       );
-      console.log(res);
+      console.log(res.data);
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);
@@ -169,7 +170,7 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
         message: "Docente Actualizado Correctamente",
         error: false,
       });
-      setCheck(!check);
+      setCheck2(!check2);
       setNAME("");
       setCARRER("");
       setCENTER("");
