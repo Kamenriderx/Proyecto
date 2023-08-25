@@ -261,16 +261,26 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
           >
             <option value="">-- Seleccione un Centro --</option>
             <option value="Ciudad Universitaria">UNAH-CU</option>
-            <option value="UNAH-VS">UNAH-VS</option>
+            <option value="UNAH Valle de Sula">UNAH-VS</option>
             <option value="CENTRO UNIVERSITARIO REGIONAL DEL CENTRO">
               UNAH-CURC
             </option>
-            <option value="UNAH-CURLA">UNAH-CURLA</option>
-            <option value="UNAH-CURLP">UNAH-CURLP</option>
-            <option value="UNAH-CUROC">UNAH-CUROC</option>
-            <option value="UNAH-CURNO">UNAH-CURNO</option>
-            <option value="UNAH-TEC Danli">UNAH-TEC Danli</option>
-            <option value="UNAH-TEC Aguan">UNAH-TEC Aguan</option>
+            <option value="Centro Universitario Regional de Litoral Atlantico">
+              UNAH-CURLA
+            </option>
+            <option value="Centro Universitario Regional del Litoral Pacífico">
+              UNAH-CURLP
+            </option>
+            <option value="Centro Universitario Regional de Occidente">
+              UNAH-CUROC
+            </option>
+            <option value="Centro Universitario Regional Nororiental">
+              UNAH-CURNO
+            </option>
+            <option value="Centro Tecnológico de Danlí">UNAH-TEC Danli</option>
+            <option value="Centro Tecnológico del Valle del Aguán">
+              UNAH-TEC Aguan
+            </option>
           </select>
         </div>
         <div className="my-3">
@@ -317,6 +327,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
               <option value="Ingenieria Mecanica Industrial">
                 Ingenieria Mecanica Industrial
               </option>
+              <option value="Arquitectura">Arquitectura</option>
               <option value="Licenciatura en Derecho">
                 Licenciatura en Derecho
               </option>
@@ -338,6 +349,19 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
                 Licenciatura en Astronomía y Astrofísica
               </option>
               <option value="Medicina">Medicina</option>
+              <option value="Odontología">Odontología</option>
+              <option value="Licenciatura en Historia">
+                Licenciatura en Historia
+              </option>
+              <option value="Licenciatura en Letras">
+                Licenciatura en Letras
+              </option>
+              <option value="Licenciatura en Sociología">
+                Licenciatura en Sociología
+              </option>
+              <option value="Licenciatura en Sociología">
+                Licenciatura en Sociología
+              </option>
             </select>
           </div>
         )}
