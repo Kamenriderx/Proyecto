@@ -250,7 +250,7 @@ const registerStudentsCtrl = async (req,res)=>{
     try {
         
         if (req.body.length <= 0) {
-            res.status(400).json({messagge:"No se enviaron los datos"})
+            res.status(400).json({messagge:"No se ha recibido ningún dato"})
             
         }
 
@@ -268,7 +268,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"No todos los estudiantes fueron registrados, algunos estudiantes ya habian sido registrados",data:dataDuplicate})    
+            res.status(409).json({messagge:"No todos los estudiantes fueron registrados, algunos estudiantes ya habian sido registrados en el sistema",data:dataDuplicate})    
             return
         
         }
@@ -278,7 +278,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"No todos los Estudiantes fueron registrados, algunos datos contienen errores",data:dataError})    
+            res.status(409).json({messagge:"No todos los Estudiantes fueron registrados, porque la información de algunos estudiantes contiene errores",data:dataError})    
             return
         
         }
@@ -288,19 +288,19 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"No todos los Estudiantes fueron registrados, algunos estudiantes ya habian sido registrados y otros contienen errores en sus datos",data:dataDuplicate.concat(dataError)})    
+            res.status(409).json({messagge:"No todos los estudiantes fueron registrados, porque algunos estudiantes ya habian sido registrados en el sistema y otros tienen errores en su información",data:dataDuplicate.concat(dataError)})    
             return
         
         }
         if (dataDuplicate.length > 0 && newDataValidate.length == 0 && dataError.length >0 ) {
             
-            res.status(409).json({messagge:"No se ha registrado ningun estudiante, ya que algunos registros contienen errores en sus datos y otros ya han sido registrados",data:dataDuplicate.concat(dataError)})    
+            res.status(409).json({messagge:"No se ha registrado ningún estudiante, porque algunos estudiantes tienen errores en su información y otros ya habian sido registrados en el sistema",data:dataDuplicate.concat(dataError)})    
             return
         
         }
 
         if (dataDuplicate.length > 0 && newDataValidate.length ==0 && dataError.length ==0) {
-            res.status(409).json({messagge:"Estos estudiantes ya han sido registrados",data:dataDuplicate})    
+            res.status(409).json({messagge:"Estos estudiantes ya habian sido registrados en el sistema",data:dataDuplicate})    
             return
         
         }
@@ -311,13 +311,13 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(406).json({messagge:"No se han registrado todos los estudiantes, algunos contienen errores en sus datos",data:dataError})
+            res.status(406).json({messagge:"No se han registrado todos los estudiantes, porque la información de algunos estudiantes contiene errores",data:dataError})
             return 
         }
         
 
         if(dataError.length>0 && newDataValidate.length==0 && dataDuplicate.length ==0){            
-            res.status(406).json({messagge:"No se ha registrado ningun estudiante, los datos contienen errores",data:dataError})
+            res.status(406).json({messagge:"No se ha registrado ningún estudiante, porque su información contiene errores",data:dataError})
             return 
         }
         

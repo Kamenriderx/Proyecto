@@ -187,7 +187,7 @@ const isDuplicate = async (data)=>{
                     
             }else{
                 
-                throw new Error("duplicado");
+                throw new Error("existe");
             }
                 
         } catch (error) {
