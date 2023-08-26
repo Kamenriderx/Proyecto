@@ -92,7 +92,7 @@ const listSections = async (req,res)=>{
             currentPeriod = period[0]
         }
         if (!currentPeriod) {
-            res.status(400).json({messagge:"no hay periodos academicos en curso ni por empezar"})
+            res.status(400).json({messagge:"No hay periodos académicos en curso ni por empezar"})
             return
         }
 
@@ -202,7 +202,7 @@ const updateSection = async (req,res)=>{
 
         if (currentDate > dates.ADD_CAN_DATE_END ) {
             
-            res.status(200).json({messagge:"No se puede actualizar la sección porque el proceso de adiciones y cancelaciones de clases ha finalizado"})
+            res.status(200).json({messagge:"No se puede actualizar la sección porque el proceso de adiciones y cancelaciones de clases ha finalizado."})
             
         }
         
