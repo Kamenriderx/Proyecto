@@ -1,6 +1,10 @@
 const {getCourse, getClassroom, sectionRange, sectionExists,createSectionCode, getProfessor, validateSchedule, getSectionsProffessor} = require('../handlers/handleCreateSection');
-const { Section, Professor, User } = require('../models');
-const {getProfessorIdUser, getSectionsByCenterAndCareer,getSection, sectionExistsHourClassroom,sectionbyProffessor, getSectionsByCenterAndCareerPeriod} = require('../helpers/repositorySections');
+const { Section, Professor, User, Enrollment } = require('../models');
+const {getProfessorIdUser, getSectionsByCenterAndCareer,getSection, sectionExistsHourClassroom,sectionbyProffessor, getSectionsByCenterAndCareerPeriod, getSectionsByCenterAndCareerPeriods, getSectionById} = require('../helpers/repositorySections');
+const {  getPeriodicAcademicCurrent,getNextPeriodicAcademic, getDetailsDatesPeriodAcademic, periodToStart, getTheLastPeriodAcademic } = require("../helpers/repositoryPeriodicAcademic");
+
+
+
 
 
 
@@ -8,6 +12,7 @@ const {getProfessorIdUser, getSectionsByCenterAndCareer,getSection, sectionExist
 const createSection = async(req,res)=>{
     try {
         const {body} = req
+        body.DAYS_COUNT = body.DAYS.split(/[A-Z]/).slice(1).length
         const course = await getCourse(body.ID_COURSE);
         const classroom = await getClassroom(body);
         const professor = await getProfessor(body);
@@ -15,16 +20,16 @@ const createSection = async(req,res)=>{
         body.SPACE_AVAILABLE = (body.SPACE_AVAILABLE == null || body.SPACE_AVAILABLE==0) ? classroom.AMOUNT_PEOPLE : body.SPACE_AVAILABLE
 
         if (parseInt(body.START_TIME) > parseInt(body.END_TIME)) {
-            res.status(400).json({messagge:"LA HORA DE INICIO DEBE SER MAYOR A LA HORA DE FINALIZACION"});
+            res.status(400).json({messagge:"La hora de inicio debe ser mayor a la hora de finalización"});
             return
             
         }
         if (section  && (section.DAYS.includes(body.DAYS) || body.DAYS.includes(section.DAYS))) {
-            res.status(400).json({messagge:"EL AULA ESTA OCUPADA EN ESE HORARIO"});
+            res.status(400).json({messagge:"El aula seleccionada está ocupada en ese horario"});
             return    
         }
         if (section && section.DAYS == body.DAYS) {
-            res.status(400).json({messagge:"EL AULA ESTA OCUPADA EN ESE HORARIO Y ESOS DIAS"});
+            res.status(400).json({messagge:"El aula seleccionada está ocupada en ese horario y los dias seleccionados"});
             return    
         }
         
@@ -32,32 +37,31 @@ const createSection = async(req,res)=>{
         section = await sectionExists(body);
 
         if (section && section.DAYS == body.DAYS ) {
-            res.status(400).json({messagge:"YA EXISTE UNA SECCION CON ESE MISMO HORARIO Y ESOS MISMOS DIAS EN ESTA AULA"});
+            res.status(400).json({messagge:"El aula está ocupada en ese horario y esos días"});
             return    
         }
         let diff = (parseInt(body.END_TIME) - parseInt(body.START_TIME))/100
         if(course.UV != body.DAYS_COUNT && diff < course.UV  ){
-            res.status(400).json({messagge:"EL HORARIO NO CUMPLE LA TOTALIDAD DE UNIDADES VALORATIVAS"});
+            res.status(400).json({messagge:"El horario no cubre totalmente la cantidad de unidades valorativas"});
             return
 
 
         }
         if(course.UV != body.DAYS_COUNT && diff > course.UV  ){
-            res.status(400).json({messagge:"LAS HORAS ASIGNADAS SON MAS DE LAS QUE LA ASIGNATURA NECESITA"});
+            res.status(400).json({messagge:"Las horas asignadas es mayor a la cantidad necesaria para la clase"});
             return
-
 
         }
         const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR);
         professor.sections = sections.rows
         if (professor.sections != null && professor.sections.length == 5 ) {
-            res.status(400).json({messagge:"EL DOCENTE YA TIENE ASIGNADAS 5 SECCIONES"});
+            res.status(400).json({messagge:"El docente ya tiene asignadas 5 secciones"});
             return
         }
         const sectionPro = await sectionbyProffessor(body)
         if (await validateSchedule(body) || (sectionPro && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
          
-            res.status(400).json({messagge:"EL DOCENTE YA TIENE UNA SECCION A ESA HORA Y ESOS DIAS"});
+            res.status(400).json({messagge:"El docente ya tiene una sección asiganada a esa hora y esos días"});
             return
             
         }
@@ -70,7 +74,7 @@ const createSection = async(req,res)=>{
         await Section.create(body)
 
 
-        res.status(200).json({messagge:"SECCIÓN CREADA DE FORMA CORRECTA"})
+        res.status(200).json({messagge:"Sección creada exitosamente"})
     } catch (error) {
         console.log(error)
         res.status(500).json({error})
@@ -80,7 +84,20 @@ const createSection = async(req,res)=>{
 const listSections = async (req,res)=>{
     try {
         const {user} = req
-        const sections = await getSectionsByCenterAndCareer(user)
+        const currentYear = new Date().getFullYear()
+        const currentMonth = new Date().getMonth()
+        let currentPeriod = await getPeriodicAcademicCurrent()
+        if (!currentPeriod) {
+            let period = await periodToStart(currentMonth, currentYear)
+            currentPeriod = period[0]
+        }
+
+        
+       
+        const nextPeriod = await getNextPeriodicAcademic(currentPeriod.dataValues.YEAR, currentPeriod.dataValues.MONTH)
+        const periodCurrentID = currentPeriod.ID_PERIOD || 0
+        const nextPeriodID = nextPeriod.ID_PERIOD || 0
+        const sections = await getSectionsByCenterAndCareerPeriods(user,periodCurrentID,nextPeriodID)
         res.status(200).json({sections})
     } catch (error) {
         console.log({error})
@@ -91,8 +108,21 @@ const listSectionsPeriod = async (req,res)=>{
     try {
         const {user} = req
         const {id} = req.params
+       
         const sections = await getSectionsByCenterAndCareerPeriod(user,id)
         res.status(200).json({sections})
+    } catch (error) {
+        console.log({error})
+        res.status(500).json({messagge:"Algo salio mal"})
+    }
+}
+const getPeriods = async (req,res)=>{
+    try {
+        const currentYear = new Date().getFullYear()
+
+        const periods = await getTheLastPeriodAcademic( currentYear)
+
+        res.status(200).json({periods})
     } catch (error) {
         console.log({error})
         res.status(500).json({messagge:"Algo salio mal"})
@@ -130,8 +160,19 @@ const deleteSection = async (req,res)=>{
     try {
         const {id} = req.params
         const {body}= req
+        let section = await getSectionById(id);
+        const dates = await getDetailsDatesPeriodAcademic(section.ID_PERIOD)
+        const currentDate = new Date().toISOString().slice(0, 10);
+
+        if (currentDate > dates.ADD_CAN_DATE_END ) {
+            
+            res.status(200).json({messagge:"No se puede eliminar la sección porque el proceso de adiciones y cancelaciones de clases ha finalizado"})
+            
+        }
         
+
         await Section.update({DELETED:1,JUSTIFY: body.JUSTIFY},{where:{ID_SECTION:id}})
+        await Enrollment.update({STATE:"Eliminada"}, {where:{ID_SECTION:id}})
 
         res.status(200).json({messagge:"Sección eliminada"})
 
@@ -147,10 +188,20 @@ const updateSection = async (req,res)=>{
     try {
         const {body}= req
         body.ID_SECTION = req.params.id
+        body.DAYS_COUNT = body.DAYS.split(/[A-Z]/).slice(1).length
         const professor = await getProfessor(body);
         let section = await getSection(body);
         const course = await getCourse(body.ID_COURSE);
         const classroom = await getClassroom(body);
+        const dates = await getDetailsDatesPeriodAcademic(section.ID_PERIOD)
+        const currentDate = new Date().toISOString().slice(0, 10);
+
+        if (currentDate > dates.ADD_CAN_DATE_END ) {
+            
+            res.status(200).json({messagge:"No se puede actualizar la sección porque el proceso de adiciones y cancelaciones de clases ha finalizado"})
+            
+        }
+        
         body.SPACE_AVAILABLE = (body.SPACE_AVAILABLE == null || body.SPACE_AVAILABLE==0) ? classroom.AMOUNT_PEOPLE : body.SPACE_AVAILABLE
         
         const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR);
@@ -202,9 +253,9 @@ const updateSection = async (req,res)=>{
 
         }
         
-        sectionPro = await sectionbyProffessor(body)
+        const sectionPro = await sectionbyProffessor(body)
         let validate = await validateSchedule(body)
-        if ( validate && sectionPro.ID_PROFFERSSOR != body.ID_PROFFERSSOR  || (sectionPro && sectionPro.ID_PROFFERSSOR != body.ID_PROFFERSSOR && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
+        if ( validate && sectionPro && sectionPro.ID_PROFFERSSOR != body.ID_PROFFERSSOR  || (sectionPro && sectionPro.ID_PROFFERSSOR != body.ID_PROFFERSSOR && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
          
             res.status(400).json({messagge:"El docente ya tiene asignada una sección a esa hora y en esos días"});
             return
@@ -242,6 +293,7 @@ module.exports = {
     listSectionsPeriod,
     getProfessorsByCenterAndCarrer,
     deleteSection,
-    updateSection
+    updateSection,
+    getPeriods
     
 };
