@@ -7,7 +7,7 @@ const authMiddleware =  async (req,res,next) =>{
     try {
 
         if (!req.headers.authorization) {
-            res.status(401).json({messagge:"NECESITAS INICIAR SESION"})
+            res.status(401).json({messagge:"Necesitas Iniciar Sesión"})
             return
         }
 
@@ -17,7 +17,7 @@ const authMiddleware =  async (req,res,next) =>{
         const dataToken = await verifyToken(token);
 
         if(!dataToken){
-            res.status(401).json({messagge:"NOT_PAYLOAD_DATA"})
+            res.status(401).json({messagge:"No tienes un token"})
             return
 
         }
@@ -33,7 +33,7 @@ const authMiddleware =  async (req,res,next) =>{
         
     } catch (error) {
         console.log(error)
-        res.status(401).json({messagge:"NOT_SESSION"})
+        res.status(401).json({messagge:"No hay sesión"})
     }
 }
 

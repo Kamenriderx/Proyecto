@@ -124,7 +124,7 @@ const registerProfessorCtrl = async (req,res)=>{
         
     } catch (error) {
         console.log(error)
-        res.status(403).json({messagge:"ALGO SALIO MAL"})
+        res.status(403).json({messagge:"Algo salio mal"})
         
     }
 
@@ -227,7 +227,7 @@ const updateProfessor = async (req,res)=>{
         
     } catch (error) {
         console.log(error)
-        res.status(403).json({messagge:"ALGO SALIO MAL"})
+        res.status(403).json({messagge:"Algo salio mal"})
         
     }
 
@@ -250,14 +250,14 @@ const registerStudentsCtrl = async (req,res)=>{
     try {
         
         if (req.body.length <= 0) {
-            res.status(400).json({messagge:"NO SE HA ENVIADO DATA"})
+            res.status(400).json({messagge:"No se enviaron los datos"})
             
         }
 
     
         
         
-        let {dataError,dataValidate} = verifyData(req.body);
+        let {dataError,dataValidate} = await  verifyData(req.body);
         let {dataDuplicate,newDataValidate} =  await isDuplicate(dataValidate);
         
 
@@ -268,7 +268,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"ALGUNOS REGISTROS ESTAN DUPLICADOS",data:dataDuplicate})    
+            res.status(409).json({messagge:"No todos los estudiantes fueron registrados, algunos estudiantes ya habian sido registrados",data:dataDuplicate})    
             return
         
         }
@@ -278,7 +278,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"ALGUNOS REGISTROS ESTAN DUPLICADOS",data:dataError})    
+            res.status(409).json({messagge:"No todos los Estudiantes fueron registrados, algunos datos contienen errores",data:dataError})    
             return
         
         }
@@ -288,19 +288,19 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"ALGUNOS REGISTROS ESTAN DUPLICADOS Y OTROS TIENEN ERRORES",data:dataDuplicate.concat(dataError)})    
+            res.status(409).json({messagge:"No todos los Estudiantes fueron registrados, algunos estudiantes ya habian sido registrados y otros contienen errores en sus datos",data:dataDuplicate.concat(dataError)})    
             return
         
         }
         if (dataDuplicate.length > 0 && newDataValidate.length == 0 && dataError.length >0 ) {
             
-            res.status(409).json({messagge:"LOS REGISTROS NO SON ACEPTABLES, ALGUNOS ESTAN DUPLICADOS Y OTROS TIENEN ERRORES",data:dataDuplicate.concat(dataError)})    
+            res.status(409).json({messagge:"No se ha registrado ningun estudiante, ya que algunos registros contienen errores en sus datos y otros ya han sido registrados",data:dataDuplicate.concat(dataError)})    
             return
         
         }
 
         if (dataDuplicate.length > 0 && newDataValidate.length ==0 && dataError.length ==0) {
-            res.status(409).json({messagge:"TODOS LOS REGISTROS ESTAN DUPLICADOS",data:dataDuplicate})    
+            res.status(409).json({messagge:"Estos estudiantes ya han sido registrados",data:dataDuplicate})    
             return
         
         }
@@ -311,13 +311,13 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(406).json({messagge:"ALGUNOS REGISTROS TIENEN ERRORES",data:dataError})
+            res.status(406).json({messagge:"No se han registrado todos los estudiantes, algunos contienen errores en sus datos",data:dataError})
             return 
         }
         
 
         if(dataError.length>0 && newDataValidate.length==0 && dataDuplicate.length ==0){            
-            res.status(406).json({messagge:"TODOS LOS REGISTROS TIENEN ERRORES",data:dataError})
+            res.status(406).json({messagge:"No se ha registrado ningun estudiante, los datos contienen errores",data:dataError})
             return 
         }
         
@@ -327,7 +327,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(200).json({messagge:"LOS ESTUDIANTES HAN SIDO REGISTRADOS DE FORMA EXITOSA"})
+            res.status(200).json({messagge:"Los estudiantes se han registrado de forma correcta"})
             return 
         
         }
@@ -339,7 +339,7 @@ const registerStudentsCtrl = async (req,res)=>{
         
     } catch (error) {
         console.log(error);
-        res.status(403).send({messagge:"ERROR_UPLOAD_DATA"})
+        res.status(403).send({messagge:"Error al cargar los datos"})
         
     }
 }

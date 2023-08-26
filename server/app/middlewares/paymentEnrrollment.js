@@ -18,7 +18,7 @@ const verifyPaymentEnrollment = async (req,res, next)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 
 }
@@ -40,7 +40,7 @@ const verifyPaymentChangeCenter = async (req,res, next)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 
 }
@@ -62,7 +62,7 @@ const verifyPaymentChangeCareer = async (req,res, next)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 
 }

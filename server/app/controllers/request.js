@@ -13,7 +13,7 @@ const getCareers = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"SALIO ALGO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -61,7 +61,7 @@ const requestChangeCareer = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -108,7 +108,7 @@ const requestChangeCenter = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -155,7 +155,7 @@ const requestExceptionalCancellation = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -230,7 +230,7 @@ const getRequestChangeCareer = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -257,7 +257,7 @@ const getRequestChangeCenter = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -302,7 +302,7 @@ const getRequestCancellationCourse = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -327,7 +327,7 @@ const getMyRequestsPaymentReplacements = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -351,7 +351,7 @@ const getMyRequestsChangeCareer = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -375,7 +375,7 @@ const getMyRequestsChangeCenter = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -399,7 +399,7 @@ const getMyRequestsAcceptDenyCenter = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -424,7 +424,7 @@ const getMyRequestsAcceptDenyCareer = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -462,7 +462,7 @@ const getMyRequestsAcceptDenyCancellCourse = async (req,res)=>{
         
     } catch (error) {
         console.log({error});
-        res.status(500).json({message:"ALGO SALIO MAL"})
+        res.status(500).json({message:"Algo salio mal"})
     
     }
 }
@@ -526,7 +526,7 @@ const responseRequest = async(req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -541,7 +541,7 @@ const cancelledRequest = async(req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 

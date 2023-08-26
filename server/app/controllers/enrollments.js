@@ -33,7 +33,7 @@ const getEnrollmentAreas = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 
 }
@@ -119,7 +119,7 @@ const enrolmentCourse = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
     
 }
@@ -200,7 +200,7 @@ const enrolmentWaitCourse = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
     
 }
@@ -250,7 +250,7 @@ const listCoursesArea = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
     
 }
@@ -289,7 +289,7 @@ const getSectionsByIdCourse= async(req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -316,7 +316,7 @@ const getInfoAcademicStudent = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
  
@@ -329,7 +329,7 @@ const getStudentEnrollmentCourses = async (req,res)=>{
         res.status(200).json({courses})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const getStudentWaitingCourses = async (req,res)=>{
@@ -341,7 +341,7 @@ const getStudentWaitingCourses = async (req,res)=>{
         res.status(200).json({courses})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const cancelledEnrollment = async (req,res)=>{
@@ -352,7 +352,7 @@ const cancelledEnrollment = async (req,res)=>{
         res.status(200).json({messagge:"matricula cancelada exitosamente"})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const specialCancelledEnrollment = async (req,res)=>{
@@ -363,7 +363,7 @@ const specialCancelledEnrollment = async (req,res)=>{
         res.status(200).json({messagge:"matricula cancelada exitosamente"})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const verifyEnrollment = async (req,res)=>{
@@ -372,7 +372,7 @@ const verifyEnrollment = async (req,res)=>{
         res.status(200).json({messagge:"acceso concedido"})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
  

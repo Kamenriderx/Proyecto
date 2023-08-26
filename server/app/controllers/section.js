@@ -84,7 +84,7 @@ const listSections = async (req,res)=>{
         res.status(200).json({sections})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const listSectionsPeriod = async (req,res)=>{
@@ -95,7 +95,7 @@ const listSectionsPeriod = async (req,res)=>{
         res.status(200).json({sections})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -121,7 +121,7 @@ const getProfessorsByCenterAndCarrer = async(req,res)=>{
         res.status(200).json({professors})    
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -133,13 +133,13 @@ const deleteSection = async (req,res)=>{
         
         await Section.update({DELETED:1,JUSTIFY: body.JUSTIFY},{where:{ID_SECTION:id}})
 
-        res.status(200).json({messagge:"SECCION ELIMINADA CORRECTAMENTE"})
+        res.status(200).json({messagge:"Sección eliminada"})
 
 
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -159,7 +159,7 @@ const updateSection = async (req,res)=>{
         if (parseInt(section.Proffessor.ID_PROFFERSSOR) != parseInt(body.ID_PROFFERSSOR)) {
             if (professor.sections.length == 5 ) {
                 
-                res.status(400).json({messagge:"EL DOCENTE YA TIENE ASIGNADAS 5 SECCIONES"});
+                res.status(400).json({messagge:"El docente ya tiene asignada 5 secciones"});
                 return
             }
 
@@ -168,35 +168,35 @@ const updateSection = async (req,res)=>{
         }
         
         if (parseInt(body.START_TIME) > parseInt(body.END_TIME)) {
-            res.status(400).json({messagge:"LA HORA DE INICIO DEBE SER MAYOR A LA HORA DE FINALIZACION"});
+            res.status(400).json({messagge:"La hora de inicio debe ser mayor que la hora de finalización"});
             return
             
         }
         section = await sectionExistsHourClassroom(body);
         if (section &&  (section.DAYS.includes(body.DAYS) || body.DAYS.includes(section.DAYS))) {
-            res.status(400).json({messagge:"EL AULA ESTA OCUPADA EN ESE HORARIO"});
+            res.status(400).json({messagge:"El aula está ocupada en ese horario"});
             return    
         }
         if (section &&  section.DAYS == body.DAYS) {
-            res.status(400).json({messagge:"EL AULA ESTA OCUPADA EN ESE HORARIO Y ESOS DIAS"});
+            res.status(400).json({messagge:"El aula está ocupada a esa hora y en ese horario"});
             return    
         }
         
             
 
         if (section && section.DAYS == body.DAYS ) {
-            res.status(400).json({messagge:"YA EXISTE UNA SECCION CON ESE MISMO HORARIO Y ESOS MISMOS DIAS EN ESTA AULA"});
+            res.status(400).json({messagge:"Ya existe una sección con ese mismo horario y esos mismos días en esta aula"});
             return    
         }
         let diff = (parseInt(body.END_TIME) - parseInt(body.START_TIME))/100
         if(course.UV != body.DAYS_COUNT && diff < course.UV  ){
-            res.status(400).json({messagge:"EL HORARIO NO CUMPLE LA TOTALIDAD DE UNIDADES VALORATIVAS"});
+            res.status(400).json({messagge:"El horario no cumple con la totalidad de unidades valorativas"});
             return
 
 
         }
         if(course.UV != body.DAYS_COUNT && diff > course.UV  ){
-            res.status(400).json({messagge:"LAS HORAS ASIGNADAS SON MAS DE LAS QUE LA ASIGNATURA NECESITA"});
+            res.status(400).json({messagge:"Las horas asignadas son más de las que la asignatura necesita"});
             return
 
 
@@ -206,7 +206,7 @@ const updateSection = async (req,res)=>{
         let validate = await validateSchedule(body)
         if ( validate && sectionPro.ID_PROFFERSSOR != body.ID_PROFFERSSOR  || (sectionPro && sectionPro.ID_PROFFERSSOR != body.ID_PROFFERSSOR && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
          
-            res.status(400).json({messagge:"EL DOCENTE YA TIENE UNA SECCION A ESA HORA Y ESOS DIAS"});
+            res.status(400).json({messagge:"El docente ya tiene asignada una sección a esa hora y en esos días"});
             return
             
         }
@@ -226,13 +226,13 @@ const updateSection = async (req,res)=>{
 
 
 
-        res.status(200).json({messagge:"SECCION ACTUALIZADA CORRECTAMENTE"})
+        res.status(200).json({messagge:"Sección actualizada"})
 
 
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
