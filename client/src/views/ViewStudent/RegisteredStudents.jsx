@@ -3,31 +3,29 @@ import Pagination from "./components/Pagination";
 import Table from "./components/Table";
 import History from "./History";
 
-
 const style = {
-    button: {
-      width: "33%",
-      height:"100%",
-      cursor: "pointer",
-    },
-    buttonContainer:{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      top:0,
-      height:"50px",
-      width: "50%",
-      marginBottom: "20px",
-    },
-    loginForm:{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      flexDirection: "column",
-      width: "70%",
-    }
-  
-  };
+  button: {
+    width: "33%",
+    height: "100%",
+    cursor: "pointer",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    top: 0,
+    height: "50px",
+    width: "50%",
+    marginBottom: "20px",
+  },
+  loginForm: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    width: "70%",
+  },
+};
 const students = [
   {
     name: "Anibal Alejandro Reyes Maradiaga",
@@ -57,8 +55,7 @@ const students = [
 ];
 
 const RegisteredStudents = () => {
-
-    const [view, setView] = useState("matriculados");
+  const [view, setView] = useState("matriculados");
   const [className, setClassName] = useState({
     matriculados: {
       className: "",
@@ -83,8 +80,7 @@ const RegisteredStudents = () => {
       },
       historial: {
         className: "",
-      }
-
+      },
     };
 
     defaultState[value].className =
@@ -98,7 +94,6 @@ const RegisteredStudents = () => {
 
   return (
     <div className="w-full flex flex-col pt-14   items-center h-full">
-      
       <div style={style.buttonContainer}>
         <button
           style={style.button}
@@ -118,27 +113,16 @@ const RegisteredStudents = () => {
         >
           Historial
         </button>
-
       </div>
-        <div className="w-full flex justify-center flex-col items-center">
-
-        {
-        view==="matriculados" &&
-        <>
-        <Table />
-        <Pagination page={page} setPage={setPage} pages={pages}/>
-        </>
-    }
-      {
-        view==="historial" &&
-        <History />
-                
-
-       }
-
-
-        </div>
-      
+      <div className="w-full flex justify-center flex-col items-center">
+        {view === "matriculados" && (
+          <>
+            <Table />
+            <Pagination page={page} setPage={setPage} pages={pages} />
+          </>
+        )}
+        {view === "historial" && <History />}
+      </div>
     </div>
   );
 };

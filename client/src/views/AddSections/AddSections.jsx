@@ -1,8 +1,14 @@
-import { AiOutlineAppstoreAdd, AiFillDelete, AiFillEdit } from "react-icons/ai";
+import {
+  AiOutlineAppstoreAdd,
+  AiFillDelete,
+  AiFillEdit,
+  AiOutlineBackward,
+} from "react-icons/ai";
 import Modal from "../../components/Modal";
 import { useState, useContext, useEffect } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AlertTwo from "../../components/AlertTwo";
@@ -20,7 +26,6 @@ const AddSections = () => {
   const [ID_PROFFERSSOR, setID_PROFFERSSOR] = useState("");
   const [ID_CLASSROOM, setID_CLASSROOM] = useState("");
   const [SPACE_AVAILABLE, setSPACE_AVAILABLE] = useState("");
-  const [DAYS_COUNT, setDAYS_COUNT] = useState("");
   const [sections, setSections] = useState([]);
   const [check, setCheck] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -30,14 +35,17 @@ const AddSections = () => {
   const [ID_PERIOD, setID_PERIOD] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sectionsPerPage] = useState(4);
+  const [filteredPeriodo, setFilteredPeriodo] = useState([]);
+  const [periodName, setPeriodName] = useState("");
+  const [filterUV, setFilterUV] = useState("");
   const indexOfLastTeacher = currentPage * sectionsPerPage;
   const indexOfFirstTeacher = indexOfLastTeacher - sectionsPerPage;
-  const currentSections = sections.slice(
+  const currentSections = filteredPeriodo.slice(
     indexOfFirstTeacher,
     indexOfLastTeacher
   );
 
-  const totalPages = Math.ceil(sections.length / sectionsPerPage);
+  const totalPages = Math.ceil(filteredPeriodo.length / sectionsPerPage);
 
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -48,9 +56,26 @@ const AddSections = () => {
     setCurrentPage(pageNumber);
   };
 
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     setIsEditMode(selectedSection !== null);
   }, [selectedSection]);
+
+  useEffect(() => {
+    if (periodName) {
+      const filtered = sections.filter(
+        (section) => section.period.PERIOD_NAME === periodName
+      );
+      setFilteredPeriodo(filtered);
+    } else {
+      setFilteredPeriodo(sections);
+    }
+    setCurrentPage(1); // Reiniciar a la primera página cuando cambia el filtro
+  }, [periodName, sections]);
 
   useEffect(() => {
     const fetchDocentes = async () => {
@@ -139,7 +164,6 @@ const AddSections = () => {
     setID_PROFFERSSOR(section.ID_PROFFERSSOR);
     setSPACE_AVAILABLE(section.SPACE_AVAILABLE);
     setDAYS(section.DAYS);
-    setDAYS_COUNT(section.course.UV);
     setID_PERIOD(section.period.ID_PERIOD);
   };
 
@@ -157,7 +181,6 @@ const AddSections = () => {
         ID_COURSE,
         ID_PROFFERSSOR,
         SPACE_AVAILABLE,
-        DAYS_COUNT,
         ID_PERIOD,
       ].includes("")
     ) {
@@ -195,7 +218,6 @@ const AddSections = () => {
         ID_PROFFERSSOR,
         SPACE_AVAILABLE,
         ID_COURSE,
-        DAYS_COUNT,
         ID_PERIOD,
       };
 
@@ -242,7 +264,6 @@ const AddSections = () => {
       setID_PROFFERSSOR("");
       setSPACE_AVAILABLE("");
       setDAYS("");
-      setDAYS_COUNT("");
       setID_PERIOD("");
 
       resetForm();
@@ -323,7 +344,6 @@ const AddSections = () => {
     setID_PROFFERSSOR("");
     setSPACE_AVAILABLE("");
     setDAYS("");
-    setDAYS_COUNT("");
     setID_PERIOD("");
   };
 
@@ -387,11 +407,22 @@ const AddSections = () => {
   }, []);
 
   console.log("TODOS LOS PERIODOS", allPeriodos);
+  console.log("clases", listCourses);
 
   const { message } = alerta;
 
   return (
     <div className="container mx-auto">
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <AiOutlineBackward color="#F7F9F7" />
+          </button>
+        </div>
+      </div>
       {message && <AlertTwo alerta={alerta} />}
       <ToastContainer position="top-right" />
       <Modal Visible={showModal} Close={handleClick}>
@@ -582,18 +613,6 @@ const AddSections = () => {
                 <option value="Sa">Sa</option>
               </select>
             </div>
-            <div className="">
-              <label className="mx-2 text-black font-bold text-md block">
-                Unidades Valorativas:
-              </label>
-              <input
-                type="number"
-                placeholder="UV"
-                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 w-36"
-                value={DAYS_COUNT}
-                onChange={(e) => setDAYS_COUNT(e.target.value)}
-              />
-            </div>
           </div>
           <div className="flex justify-around mt-8 mb-5">
             <button
@@ -625,7 +644,7 @@ const AddSections = () => {
             "Carrera" - "Nombre del Periodo"
           </span>
         </div>
-        <div className="flex justify-start mt-5 mb-5">
+        <div className="flex justify-around mt-5 mb-5">
           <div className="flex items-center">
             <button
               onClick={() => setShowModal(true)}
@@ -635,130 +654,220 @@ const AddSections = () => {
               <AiOutlineAppstoreAdd className="mr-2" size={30} />
             </button>
           </div>
-          {/*  <div className="flex justify-around gap-2">
-            <div>
-              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
-                <option value="">Año</option>
-              </select>
-            </div>
-            <div>
-              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
-                <option value="">Periodo</option>
-              </select>
-            </div>
-            <div>
-              <select className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold">
-                <option value="">Clase</option>
-              </select>
-            </div>
-          </div> */}
+          <div className="flex">
+            <select
+              onChange={(e) => setPeriodName(e.target.value)}
+              value={periodName}
+              className="px-3 py-2 focus:border focus:border-white rounded font-bold bg-sky-600 text-white"
+            >
+              <option value="">Selecciona un periodo</option>
+              {allPeriodos.map((periodo) => (
+                <option value={periodo.PERIOD_NAME} key={periodo.ID_PERIOD}>
+                  {periodo.PERIOD_NAME}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-
-        <div className="mt-10">
-          {sections?.length > 0 ? (
-            <>
-              <table className="w-full bg-white shadow-md table-auto">
-                <thead className="bg-blue-800 text-white">
-                  <tr>
-                    <th className="p-2">Periodo</th>
-                    <th className="p-2">HI</th>
-                    <th className="p-2">HF</th>
-                    <th className="p-2">Edif</th>
-                    <th className="p-2">Aula</th>
-                    <th className="p-2">Maestro</th>
-                    <th className="p-2">Asignatura</th>
-                    <th className="p-2">UV</th>
-                    <th className="p-2">Cupos</th>
-                    <th className="p-2">Seccion</th>
-                    <th className="p-2">Dias</th>
-                    <th className="p-2">Accion</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentSections.map((section) => (
-                    <tr className="border-b" key={section.ID_SECTION}>
-                      <td className="border px-4 py-2 text-sm font-medium r">
-                        <p>{section.period.PERIOD_NAME}</p>
-                      </td>
-                      <td className="border px-4 py-2 text-sm font-medium r">
-                        <p>{section.START_TIME}</p>
-                      </td>
-                      <td className="border px-4 py-2 text-sm font-medium r">
-                        {section.END_TIME}
-                      </td>
-                      <td className="border px-4 py-2 text-sm font-medium r">
-                        {section.classroom.building.NAME}
-                      </td>
-                      <td className="border px-4 py-2 text-sm font-medium r">
-                        {section.classroom.NUMBER}
-                      </td>
-                      <td className="text-center border px-4 py-2 text-sm font-medium r">
-                        {section.Proffessor.user.NAME}
-                      </td>
-                      <td className="text-center border px-4 py-2 text-sm font-medium r">
-                        {section.course.NAME}
-                      </td>
-                      <td className="text-center border px-4 py-2 text-sm font-medium r">
-                        {section.course.UV}
-                      </td>
-                      <td className="text-center border px-4 py-2 text-sm font-medium r">
-                        {section.SPACE_AVAILABLE}
-                      </td>
-                      <td className="text-center border px-4 py-2 text-sm font-medium r">
-                        {section.SECTION_CODE}
-                      </td>
-                      <td className="text-center border px-4 py-2 text-sm font-medium r">
-                        {section.DAYS}
-                      </td>
-                      <td className="border px-4 py-2 text-lg font-medium r">
-                        <div className="flex items-center gap-8">
-                          <div className="mx-auto">
-                            <AiFillDelete
-                              className="cursor-pointer text-gray-600"
-                              onClick={() => handleDelete(section.ID_SECTION)}
-                              size={20}
-                            ></AiFillDelete>
-                            <span className="-mx-3 text-xs">Eliminar</span>
-                          </div>
-                          <div className="mx-auto">
-                            <AiFillEdit
-                              className="cursor-pointer text-gray-600"
-                              onClick={() => handleEdit(section)}
-                              size={20}
-                            ></AiFillEdit>
-                            <span className="-mx-1 text-xs">Editar</span>
-                          </div>
-                        </div>
-                      </td>
+        {filteredPeriodo ? (
+          <>
+            <div className="mt-10">
+              {currentSections?.length > 0 ? (
+                <>
+                  <table className="w-full bg-white shadow-md table-auto">
+                    <thead className="bg-blue-800 text-white">
+                      <tr>
+                        <th className="p-2">Periodo</th>
+                        <th className="p-2">HI</th>
+                        <th className="p-2">HF</th>
+                        <th className="p-2">Edif</th>
+                        <th className="p-2">Aula</th>
+                        <th className="p-2">Maestro</th>
+                        <th className="p-2">Asignatura</th>
+                        <th className="p-2">UV</th>
+                        <th className="p-2">Cupos</th>
+                        <th className="p-2">Seccion</th>
+                        <th className="p-2">Dias</th>
+                        <th className="p-2">Accion</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentSections.map((section) => (
+                        <tr className="border-b" key={section.ID_SECTION}>
+                          <td className="border px-4 py-2 text-sm font-medium r">
+                            <p>{section.period.PERIOD_NAME}</p>
+                          </td>
+                          <td className="border px-4 py-2 text-sm font-medium r">
+                            <p>{section.START_TIME}</p>
+                          </td>
+                          <td className="border px-4 py-2 text-sm font-medium r">
+                            {section.END_TIME}
+                          </td>
+                          <td className="border px-4 py-2 text-sm font-medium r">
+                            {section.classroom.building.NAME}
+                          </td>
+                          <td className="border px-4 py-2 text-sm font-medium r">
+                            {section.classroom.NUMBER}
+                          </td>
+                          <td className="text-center border px-4 py-2 text-sm font-medium r">
+                            {section.Proffessor.user.NAME}
+                          </td>
+                          <td className="text-center border px-4 py-2 text-sm font-medium r">
+                            {section.course.NAME}
+                          </td>
+                          <td className="text-center border px-4 py-2 text-sm font-medium r">
+                            {section.course.UV}
+                          </td>
+                          <td className="text-center border px-4 py-2 text-sm font-medium r">
+                            {section.SPACE_AVAILABLE}
+                          </td>
+                          <td className="text-center border px-4 py-2 text-sm font-medium r">
+                            {section.SECTION_CODE}
+                          </td>
+                          <td className="text-center border px-4 py-2 text-sm font-medium r">
+                            {section.DAYS}
+                          </td>
+                          <td className="border px-4 py-2 text-lg font-medium r">
+                            <div className="flex items-center gap-8">
+                              <div className="mx-auto">
+                                <AiFillDelete
+                                  className="cursor-pointer text-gray-600"
+                                  onClick={() =>
+                                    handleDelete(section.ID_SECTION)
+                                  }
+                                  size={20}
+                                ></AiFillDelete>
+                                <span className="-mx-3 text-xs">Eliminar</span>
+                              </div>
+                              <div className="mx-auto">
+                                <AiFillEdit
+                                  className="cursor-pointer text-gray-600"
+                                  onClick={() => handleEdit(section)}
+                                  size={20}
+                                ></AiFillEdit>
+                                <span className="-mx-1 text-xs">Editar</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="flex flex-col">
+                    {/* ... */}
+                    <div className="flex justify-center mt-4">
+                      {pageNumbers.map((number) => (
+                        <button
+                          key={number}
+                          onClick={() => paginate(number)}
+                          className={`mx-1 px-2 py-1 rounded ${
+                            currentPage === number
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-200"
+                          }`}
+                        >
+                          {number}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <p className="text-2xl text-center uppercase font-bold ">
+                  La Planificacion esta Vacia
+                </p>
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="mt-10">
+            {filteredPeriodo?.length > 0 ? (
+              <>
+                <table className="w-full bg-white shadow-md table-auto">
+                  <thead className="bg-blue-800 text-white">
+                    <tr>
+                      <th className="p-2">Periodo</th>
+                      <th className="p-2">HI</th>
+                      <th className="p-2">HF</th>
+                      <th className="p-2">Edif</th>
+                      <th className="p-2">Aula</th>
+                      <th className="p-2">Maestro</th>
+                      <th className="p-2">Asignatura</th>
+                      <th className="p-2">UV</th>
+                      <th className="p-2">Cupos</th>
+                      <th className="p-2">Seccion</th>
+                      <th className="p-2">Dias</th>
+                      <th className="p-2">Accion</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="flex flex-col">
-                {/* ... */}
-                <div className="flex justify-center mt-4">
-                  {pageNumbers.map((number) => (
-                    <button
-                      key={number}
-                      onClick={() => paginate(number)}
-                      className={`mx-1 px-2 py-1 rounded ${
-                        currentPage === number
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-200"
-                      }`}
-                    >
-                      {number}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </>
-          ) : (
-            <p className="text-2xl text-center uppercase font-bold ">
-              La Planificacion esta Vacia
-            </p>
-          )}
-        </div>
+                  </thead>
+                  <tbody>
+                    {filteredPeriodo.map((section) => (
+                      <tr className="border-b" key={section.ID_SECTION}>
+                        <td className="border px-4 py-2 text-sm font-medium r">
+                          <p>{section.period.PERIOD_NAME}</p>
+                        </td>
+                        <td className="border px-4 py-2 text-sm font-medium r">
+                          <p>{section.START_TIME}</p>
+                        </td>
+                        <td className="border px-4 py-2 text-sm font-medium r">
+                          {section.END_TIME}
+                        </td>
+                        <td className="border px-4 py-2 text-sm font-medium r">
+                          {section.classroom.building.NAME}
+                        </td>
+                        <td className="border px-4 py-2 text-sm font-medium r">
+                          {section.classroom.NUMBER}
+                        </td>
+                        <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          {section.Proffessor.user.NAME}
+                        </td>
+                        <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          {section.course.NAME}
+                        </td>
+                        <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          {section.course.UV}
+                        </td>
+                        <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          {section.SPACE_AVAILABLE}
+                        </td>
+                        <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          {section.SECTION_CODE}
+                        </td>
+                        <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          {section.DAYS}
+                        </td>
+                        <td className="border px-4 py-2 text-lg font-medium r">
+                          <div className="flex items-center gap-8">
+                            <div className="mx-auto">
+                              <AiFillDelete
+                                className="cursor-pointer text-gray-600"
+                                onClick={() => handleDelete(section.ID_SECTION)}
+                                size={20}
+                              ></AiFillDelete>
+                              <span className="-mx-3 text-xs">Eliminar</span>
+                            </div>
+                            <div className="mx-auto">
+                              <AiFillEdit
+                                className="cursor-pointer text-gray-600"
+                                onClick={() => handleEdit(section)}
+                                size={20}
+                              ></AiFillEdit>
+                              <span className="-mx-1 text-xs">Editar</span>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            ) : (
+              <p className="text-2xl text-center uppercase font-bold ">
+                La Planificacion esta Vacia
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

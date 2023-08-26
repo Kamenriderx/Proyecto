@@ -158,21 +158,6 @@ const ListadoAlumnosClass = () => {
                             <td className="border px-4 py-2 text-md font-bold r">
                               {mat.seccion.DAYS}
                             </td>
-                            {/*  <td className="text-center border px-4 py-2 text-sm font-medium r">
-                              <div className="flex justify-center">
-                                <button
-                                  onClick={() =>
-                                    cancelarAsignatura(
-                                      mat.ID_ENROLLMENT,
-                                      mat.ID_STUDENT
-                                    )
-                                  }
-                                  className="py-2 px-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded shadow"
-                                >
-                                  Cancelar Asignatura
-                                </button>
-                              </div>
-                            </td> */}
                           </tr>
                         ))}
                       </tbody>

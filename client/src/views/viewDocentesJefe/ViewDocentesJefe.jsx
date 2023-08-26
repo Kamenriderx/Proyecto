@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { StoreContext } from "../../store/ContextExample";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AiOutlineBackward } from "react-icons/ai";
 const ViewDocentesJefe = () => {
   const { state } = useContext(StoreContext);
   const [maestros, setMaestros] = useState([]);
@@ -24,6 +25,12 @@ const ViewDocentesJefe = () => {
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
   };
 
   useEffect(() => {
@@ -54,6 +61,16 @@ const ViewDocentesJefe = () => {
 
   return (
     <div className="container mx-auto">
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <AiOutlineBackward color="#F7F9F7" />
+          </button>
+        </div>
+      </div>
       <div className="flex justify-center">
         <div className="mt-10">
           <p className="text-gray-800 text-3xl font-black">
