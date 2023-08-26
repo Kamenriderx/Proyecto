@@ -73,10 +73,10 @@ const getSectionsByCenterAndCareerPeriods = async (user,currentPeriodId,nextPeri
             }, { ID_PERIOD: nextPeriodId}],
             DELETED:0
         },attributes:["SECTION_CODE","START_TIME","END_TIME","DAYS","SPACE_AVAILABLE","ID_SECTION"],include:[
-            {model:Professor, as:"Proffessor",attributes:["INSTITUTIONAL_EMAIL","CAREER"],where:{CAREER:{
+            {model:Professor, as:"Proffessor",attributes:["ID_PROFFERSSOR","INSTITUTIONAL_EMAIL","CAREER"],where:{CAREER:{
                 [Op.like]:`${professor.CAREER.toUpperCase()}`
             }},include:[{model:User, as:"user", attributes:["NAME"]}]},
-            {model:Classroom, as:"classroom",attributes:["NUMBER","AMOUNT_PEOPLE"],include:[
+            {model:Classroom, as:"classroom",attributes:["ID_CLASSROOM", "ID_BUILDING","NUMBER","AMOUNT_PEOPLE"],include:[
                 {model:Building, as:"building",attributes:["NAME","CENTER"], where:{CENTER:{
                 [Op.like]:`${user.CENTER.toUpperCase()}`
             }}},{
