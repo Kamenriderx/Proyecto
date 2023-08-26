@@ -43,65 +43,67 @@ const ListContacts = () => {
   if (loading) return <Spinner2 />;
   return (
     <>
-      <div className="mt-5">
-        {listContacts?.length > 0 ? (
-          <>
-            <table className="w-full bg-white shadow-md table-auto">
-              <thead className="bg-blue-800 text-white">
-                <tr className="">
-                  <th className="p-2">Foto de Perfil</th>
-                  <th className="p-2">Nombre del Contecto</th>
-                  <th className="p-2">Correo Institucional</th>
-                  <th className="p-2">Carrera</th>
-                  <th className="p-2">Centro</th>
-                  <th className="p-2">Eliminar Contacto</th>
-                </tr>
-              </thead>
-              <tbody>
-                {listContacts.map((estudiante) => (
-                  <tr className="border-b" key={estudiante.ID_USER}>
-                    <td className="border px-4 py-2 text-lg font-bold r">
-                      <div className="bg-gray-300 w-20 h-20 mx-auto rounded-full mb-2">
-                        <img
-                          src={estudiante.URL}
-                          alt="Foto Perfil"
-                          className="w-20 h-20 mx-auto rounded-full"
-                        />
-                      </div>
-                    </td>
-                    <td className="border px-4 py-2 text-lg font-bold r">
-                      {estudiante.NAME}
-                    </td>
-                    <td className="border px-4 py-2 text-lg font-bold r">
-                      {estudiante.INSTITUTIONAL_EMAIL}
-                    </td>
-                    <td className="border px-4 py-2 text-lg font-bold r">
-                      {estudiante.CAREER}
-                    </td>
-                    <td className="text-center border px-4 py-2 text-lg font-bold r">
-                      {estudiante.CENTER}
-                    </td>
-                    <td className="border px-4 py-2 text-lg font-bold r">
-                      <div className="flex justify-center">
-                        <AiFillDelete
-                          className="cursor-pointer"
-                          onClick={() => handleDelete(estudiante.ID_USER)}
-                          size={25}
-                        >
-                          Activar
-                        </AiFillDelete>
-                      </div>
-                    </td>
+      <div className="flex justify-center">
+        <div className="mt-24 mx-auto">
+          {listContacts?.length > 0 ? (
+            <>
+              <table className="w-full bg-white shadow-md table-auto">
+                <thead className="bg-blue-800 text-white">
+                  <tr className="">
+                    <th className="p-2">Foto de Perfil</th>
+                    <th className="p-2">Nombre del Contecto</th>
+                    <th className="p-2">Correo Institucional</th>
+                    <th className="p-2">Carrera</th>
+                    <th className="p-2">Centro</th>
+                    <th className="p-2">Eliminar Contacto</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
-        ) : (
-          <p className="text-center text-xl text-black font-black text-cente">
-            No tienes ningun contacto.
-          </p>
-        )}
+                </thead>
+                <tbody>
+                  {listContacts.map((estudiante) => (
+                    <tr className="border-b" key={estudiante.ID_USER}>
+                      <td className="border px-4 py-2 text-lg font-bold r">
+                        <div className="bg-gray-300 w-20 h-20 mx-auto rounded-full mb-2">
+                          <img
+                            src={estudiante.URL}
+                            alt="Foto Perfil"
+                            className="w-20 h-20 mx-auto rounded-full"
+                          />
+                        </div>
+                      </td>
+                      <td className="border px-4 py-2 text-lg font-bold r">
+                        {estudiante.NAME}
+                      </td>
+                      <td className="border px-4 py-2 text-lg font-bold r">
+                        {estudiante.INSTITUTIONAL_EMAIL}
+                      </td>
+                      <td className="border px-4 py-2 text-lg font-bold r">
+                        {estudiante.CAREER}
+                      </td>
+                      <td className="text-center border px-4 py-2 text-lg font-bold r">
+                        {estudiante.CENTER}
+                      </td>
+                      <td className="border px-4 py-2 text-lg font-bold r">
+                        <div className="flex justify-center">
+                          <AiFillDelete
+                            className="cursor-pointer"
+                            onClick={() => handleDelete(estudiante.ID_USER)}
+                            size={25}
+                          >
+                            Activar
+                          </AiFillDelete>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <p className="text-center text-xl text-black font-black text-cente">
+              No tienes ningun contacto.
+            </p>
+          )}
+        </div>
       </div>
     </>
   );

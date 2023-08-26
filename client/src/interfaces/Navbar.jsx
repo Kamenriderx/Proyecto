@@ -97,31 +97,6 @@ const ContentNavbar = () => {
               id="navbar-cta"
             >
               <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
-                {state?.user?.ID_ROLE === 4 && (
-                  <>
-                    <li>
-                      <Link to="/solicitudes-coordinador-centro">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Solicitudes Centro
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/Periodos">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Secciones
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/solicitudes-coordinador">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Solicitudes Carrera
-                        </button>
-                      </Link>
-                    </li>
-                  </>
-                )}
                 {!state.login ? (
                   <li>
                     <Link to="/login">

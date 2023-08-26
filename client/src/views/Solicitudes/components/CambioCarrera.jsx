@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Modal2 from "../../../components/Modal2";
 import FormCarrera from "./FormCarrera";
 import { Link } from "react-router-dom";
+import StudentContext from "../../ViewStudent/context/StudentContext";
 
 const CambioCarrera = () => {
+  const { stateStudent } = useContext(StudentContext);
   const [showModal, setShowModal] = useState(false);
+  console.log("ESTADO ESTUDIANTE", stateStudent);
   return (
     <div className="container mx-auto">
       <Modal2 Visible={showModal} Close={() => setShowModal(false)}>
@@ -18,13 +21,16 @@ const CambioCarrera = () => {
             <p className="text-sm font-bold text-gray-700">
               Centro de Estudios:{" "}
               <span className="text-gray-500 uppercase">
-                ciudad universitaria
+                {stateStudent.user.user.CENTER}
               </span>{" "}
             </p>
           </div>
           <div>
             <p className="text-sm font-bold text-gray-700">
-              Indice Global: <span className="text-gray-500">80%</span>{" "}
+              Indice Global:{" "}
+              <span className="text-gray-500">
+                {stateStudent.indexAcademicGlobal}%
+              </span>{" "}
             </p>
           </div>
         </div>
@@ -33,14 +39,16 @@ const CambioCarrera = () => {
             <p className="text-sm font-bold text-gray-700">
               Carrera Actual:{" "}
               <span className="text-gray-500 uppercase">
-                Ingenieria en sistemas
+                {stateStudent.user.CAREER}
               </span>{" "}
             </p>
           </div>
           <div>
             <p className="text-sm font-bold text-gray-700">
-              Indice Admision:{" "}
-              <span className="text-gray-500 uppercase">1050</span>{" "}
+              Numero de Cuenta:{" "}
+              <span className="text-gray-500 uppercase">
+                {stateStudent.user.user.ACCOUNT_NUMBER}
+              </span>{" "}
             </p>
           </div>
         </div>

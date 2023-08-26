@@ -42,7 +42,7 @@ const createMessage = async (req,res)=>{
         res.status(200).json({messagge:newMessage,chat});
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
 
     }
 }
@@ -143,7 +143,7 @@ const getMessagesChat = async (req,res)=>{
     
     } catch (error) {
         console.log({error});
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 

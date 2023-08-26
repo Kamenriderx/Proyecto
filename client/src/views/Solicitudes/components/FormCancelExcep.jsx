@@ -12,7 +12,7 @@ const FormCancelExcep = ({ setShowModal }) => {
   const [enrollment, setEnrollment] = useState("");
   const [clases, setClases] = useState([]);
   const [alerta, setAlerta] = useState({});
-
+  console.log("ESATDO", state);
   const handlePdfChange = (event) => {
     const file = event.target.files[0];
     setComprobante(file);
