@@ -95,7 +95,8 @@ const verifyData = async (data)=>{
             }
            
             if (student.CENTER.toLocaleLowerCase() !="ciudad universitaria" && student.CENTER.toLocaleLowerCase() !="centro universitario regional del centro" && student.CENTER.toLocaleLowerCase() != "Centro Universitario Regional de Litoral Atlántico".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Centro Universitario Regional del Litoral Pacífico".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="UNAH Valle de Sula".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Universidad Nacional Autónoma de Honduras Valle de Sula".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Centro Universitario Regional de Occidente".toLocaleLowerCase() && "Centro Universitario Regional Nororiental".toLocaleLowerCase() &&student.CENTER.toLocaleLowerCase() != "Centro Tecnológico de Danlí".toLocaleLowerCase()&& student.CENTER.toLocaleLowerCase() !="Centro Tecnológico del Valle del Aguán".toLocaleLowerCase() ) {
-                error.CENTER+=`El nombre del centro no es correcto o no existe, los siguientes son nombres válidos:
+                error.CENTER+=`
+                El nombre del centro no es correcto o no existe, los siguientes son nombres válidos:
                 1. Ciudad Universitaria
                 2. Centro Universitario Regional del Centro
                 3. UNAH Valle de Sula
