@@ -13,6 +13,8 @@ const verifyData = async (data)=>{
             CENTER:""
 
         }
+
+        
  
         
         if (!student.hasOwnProperty('NAME')) {
@@ -88,7 +90,11 @@ const verifyData = async (data)=>{
         }
 
         if (typeof student.CENTER == 'string') {
-            
+            if (student.CENTER.includes("\r")) {
+                student.CENTER= student.CENTER.slice(0,-1) 
+                
+            }
+    
             if (student.CENTER.trim()==="") {
                 error.CENTER+=`El campo está vació\n`;
                 
