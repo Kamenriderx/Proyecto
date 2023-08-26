@@ -76,7 +76,7 @@ const Buscador = ({ chats, enviarDatoAlPadre, check }) => {
             />
             */}
           </div>
-          <div className="overflow-y-auto scrollbar-thin h-[505px] ">
+          <div className="overflow-y-auto scrollbar-thin h-full ">
             {results && (
               <>
                 {results.map((chat) => (

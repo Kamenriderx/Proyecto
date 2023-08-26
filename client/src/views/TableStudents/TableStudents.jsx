@@ -24,7 +24,7 @@ const TableStudents = ({ body }) => {
     setData(body);
   }, [body]);
 
-  console.log("data: ", data);
+  // console.log("data: ", data);
   // console.log("props: ", body);
 
   function eliminarElemento(indice) {
@@ -96,8 +96,17 @@ const TableStudents = ({ body }) => {
 
     try {
       const res = await httpRequests()["post"]("http://localhost:3000/registro/admin/registerStudents",{ body: data });
-      console.log('respuesta correcta')
+      // console.log('respuesta correcta')
+      console.log("correcta: ", res)
       datav =res
+
+      // res.response.data.data.map((row, index) => (
+      //   if(row.error){
+
+      //   }
+      //   console.log('row: ', index, row.NAME)
+      // ))
+
       if(res?.status===200){
         setAlerta({
           text: res.messagge,
@@ -113,9 +122,9 @@ const TableStudents = ({ body }) => {
       }
       
     } catch (error) {
-      console.log('respuesta incorrecta')
-      console.log(error)
-      console.log(error.message)
+      // console.log('respuesta incorrecta')
+      console.log("error: ",error)
+      // console.log(error.message)
       setAlerta({
         text: error.message,
         icon: 'warning',
