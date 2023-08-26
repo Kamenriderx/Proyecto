@@ -34,7 +34,7 @@ const AddSections = () => {
   const [allPeriodos, setAllPeriodos] = useState([]);
   const [ID_PERIOD, setID_PERIOD] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sectionsPerPage] = useState(4);
+  const [sectionsPerPage] = useState(10);
   const [filteredPeriodo, setFilteredPeriodo] = useState([]);
   const [periodName, setPeriodName] = useState("");
   const [filterUV, setFilterUV] = useState("");
@@ -160,8 +160,8 @@ const AddSections = () => {
     setSTART_TIME(section.START_TIME);
     setEND_TIME(section.END_TIME);
     setID_CLASSROOM(section.ID_CLASSROOM);
-    setID_COURSE(section.ID_COURSE);
-    setID_PROFFERSSOR(section.ID_PROFFERSSOR);
+    setID_COURSE(section.course.ID_COURSE);
+    setID_PROFFERSSOR(section.Proffessor.user.NAME);
     setSPACE_AVAILABLE(section.SPACE_AVAILABLE);
     setDAYS(section.DAYS);
     setID_PERIOD(section.period.ID_PERIOD);
@@ -170,6 +170,7 @@ const AddSections = () => {
   console.log("SELECTED SECTION", selectedSection);
 
   const handleSubmit = async (e) => {
+    let ExpRegSoloNumeros = /^[0-9]+$/;
     e.preventDefault();
 
     if (
@@ -196,6 +197,17 @@ const AddSections = () => {
         message: "El horario de inicio y finalizacion no debe ser igual",
         error: true,
       });
+      return;
+    }
+
+    if (!ExpRegSoloNumeros.test(SPACE_AVAILABLE.trim())) {
+      setAlerta({
+        message: "Este campo solo acepta numeros",
+        error: true,
+      });
+      setTimeout(() => {
+        setAlerta({});
+      }, 4000);
       return;
     }
 
@@ -395,10 +407,10 @@ const AddSections = () => {
     const allPeriodos = async () => {
       try {
         const response = await axios(
-          "http://localhost:3000/registro/periodAcademic/allperiods"
+          "http://localhost:3000/registro/section/getPeriods"
         );
-        setAllPeriodos(response.data);
-        console.log(response.data);
+        setAllPeriodos(response.data.periods);
+        console.log(response.data.periods);
       } catch (error) {
         console.log(error);
       }
@@ -585,7 +597,7 @@ const AddSections = () => {
                 Cupos:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="Cupos"
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 w-36"
                 value={SPACE_AVAILABLE}
@@ -650,7 +662,7 @@ const AddSections = () => {
               onClick={() => setShowModal(true)}
               className="w-full flex items-center gap-1 bg-sky-600 hover:bg-sky-700 py-2 px-3 rounded shadow text-lg text-white font-bold"
             >
-              Agregar Seccion{" "}
+              Agregar Sección{" "}
               <AiOutlineAppstoreAdd className="mr-2" size={30} />
             </button>
           </div>

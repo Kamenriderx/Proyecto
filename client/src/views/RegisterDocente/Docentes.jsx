@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import FormularioDocente from "./components/FormularioDocente";
 /* import PreviewDocente from '../../components/Docente/PreviewDocente' */
 import Modal from "../../components/Modal";
+import { BsPersonFillAdd } from "react-icons/bs";
 import useAxios from "../../utils/hooks/useAxios";
 import PreviewDocente from "./components/PreviewDocente";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineBackward } from "react-icons/ai";
 
 const Docentes = () => {
   const [showModal, setShowModal] = useState(false);
@@ -13,6 +16,10 @@ const Docentes = () => {
   const [check2, setCheck2] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [teachersPerPage] = useState(10);
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const indexOfLastTeacher = currentPage * teachersPerPage;
   const indexOfFirstTeacher = indexOfLastTeacher - teachersPerPage;
@@ -43,22 +50,43 @@ const Docentes = () => {
   }, [check, check2]);
 
   return (
-    <>
-      <div className="md:flex md:justify-center gap-40 h-auto mt-5">
-        <button
-          className="bg-sky-600 hover:bg-sky-900 text-center text-white shadow p-2 border transition-colors uppercase font-bold text-lg rounded-md"
-          onClick={() => setShowModal(true)}
-        >
-          Registrar Docente
-        </button>
-        <Modal Visible={showModal} Close={() => setShowModal(false)}>
-          <div className="p-4">
-            <FormularioDocente setCheck={setCheck} check={check} />
-          </div>
-        </Modal>
-        <h1 className="text-4xl font-black text-center">Docentes</h1>
+    <div className="container mx-auto">
+      <Modal Visible={showModal} Close={() => setShowModal(false)}>
+        <div className="p-4">
+          <FormularioDocente setCheck={setCheck} check={check} />
+        </div>
+      </Modal>
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <AiOutlineBackward color="#F7F9F7" />
+          </button>
+        </div>
       </div>
-      <div className="shadow rounded-md p-5 mt-10">
+      <div className="md:flex md:justify-center gap-40 h-auto mt-5 flex justify-center">
+        <div className="mt-5">
+          <p className="text-4xl font-black text-sky-700">
+            Registro de Docentes
+          </p>
+        </div>
+      </div>
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            className="bg-sky-600 hover:bg-sky-900 text-center text-white shadow p-2 border transition-colors font-bold text-base rounded-md"
+            onClick={() => setShowModal(true)}
+          >
+            <div className="flex items-center gap-3">
+              <BsPersonFillAdd color="#F7F9F7" />
+              Registrar Docente
+            </div>
+          </button>
+        </div>
+      </div>
+      <div className="rounded-md p-5 mt-10">
         {docentes?.length > 0 ? (
           <>
             <table className="w-full bg-white shadow-md table-auto">
@@ -109,7 +137,7 @@ const Docentes = () => {
           </p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

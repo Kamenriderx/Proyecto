@@ -330,7 +330,7 @@ const Planificacion = () => {
           >
             <div className="mt-2">
               <p className="text-red-800 font-bold text-lg">
-                Planificacion Periodo I
+                Planificación Periodo I
               </p>
             </div>
             <div className="mt-3 flex justify-around">
@@ -345,7 +345,7 @@ const Planificacion = () => {
               </div>
               <div>
                 <p className="text-black text-sm font-bold">
-                  Fecha de Finalizacion
+                  Fecha de Finalización
                 </p>
                 <input
                   value={finishDate}
@@ -376,7 +376,7 @@ const Planificacion = () => {
           >
             <div className="mt-2">
               <p className="text-red-800 font-bold text-lg">
-                Planificacion Periodo II
+                Planificación Periodo II
               </p>
             </div>
             <div className="mt-3 flex justify-around">
@@ -391,7 +391,7 @@ const Planificacion = () => {
               </div>
               <div>
                 <p className="text-black text-sm font-bold">
-                  Fecha de Finalizacion
+                  Fecha de Finalización
                 </p>
                 <input
                   value={finishDate1}
@@ -422,7 +422,7 @@ const Planificacion = () => {
           >
             <div className="mt-2">
               <p className="text-red-800 font-bold text-lg">
-                Planificacion Periodo III
+                Planificación Periodo III
               </p>
             </div>
             <div className="mt-3 flex justify-around">
@@ -437,7 +437,7 @@ const Planificacion = () => {
               </div>
               <div>
                 <p className="text-black text-sm font-bold">
-                  Fecha de Finalizacion
+                  Fecha de Finalización
                 </p>
                 <input
                   value={finishDate2}
@@ -477,7 +477,7 @@ const Planificacion = () => {
             <div className="mt-3 flex text-center justify-around">
               <div className="mt-3">
                 <p className="text-gray-800 text-sm font-bold">
-                  Fecha de Finalizacion de Clases
+                  Fecha de Finalización de Clases
                 </p>
                 <div>
                   <div className="mt-2 block">
@@ -657,7 +657,7 @@ const Planificacion = () => {
         </div>
         <div className="mt-5 justify-center flex">
           <p className="text-red-800 font-bold text-4xl mt-5">
-            Planificacion de Periodo Academico
+            Planificación de Periodo Academico
           </p>
         </div>
         <div className="mt-10 flex justify-between">

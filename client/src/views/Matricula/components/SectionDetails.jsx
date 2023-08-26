@@ -115,7 +115,7 @@ const SectionDetails = () => {
                     <tr>
                       <th className="p-2">Nombre del Alumno</th>
                       <th className="p-2">Numero de Cuenta</th>
-                      <th className="p-2">Accion</th>
+                      <th className="p-2">Acción</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -146,7 +146,7 @@ const SectionDetails = () => {
               ) : (
                 <div className="text-center">
                   <p className="uppercase font-black text-gray-800 text-2xl">
-                    No hay alumnos en lista de espera en esta seccion
+                    No hay alumnos en lista de espera en esta sección
                   </p>
                 </div>
               )}
@@ -169,7 +169,7 @@ const SectionDetails = () => {
                     <tr>
                       <th className="p-2">Nombre del Alumno</th>
                       <th className="p-2">Numero de Cuenta</th>
-                      <th className="p-2">Calificacion</th>
+                      <th className="p-2">Calificación</th>
                       <th className="p-2">Obs</th>
                     </tr>
                   </thead>
@@ -195,7 +195,7 @@ const SectionDetails = () => {
               ) : (
                 <div className="text-center">
                   <p className="uppercase font-black text-gray-800 text-2xl">
-                    No hay alumnos matriculados en esta seccion
+                    No hay alumnos matriculados en esta sección
                   </p>
                 </div>
               )}
@@ -222,7 +222,7 @@ const SectionDetails = () => {
               </tr>
               <tr className="bg-blue-100">
                 <td className="border px-4 py-4 text-gray-700 font-bold text-lg">
-                  Seccion
+                  Sección
                 </td>
                 <td className="border px-4 py-4 text-sky-900 font-bold text-lg">
                   {sectionDetails.sectionNumber}
