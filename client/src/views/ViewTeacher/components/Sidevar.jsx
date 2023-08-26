@@ -352,6 +352,34 @@ const Sidevar = () => {
             {state?.user?.ID_ROLE === 5 && (
               <>
                 <li>
+                  <Link to="/periodo">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <AiOutlineUsergroupAdd className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Periodos
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/period">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <AiOutlineUsergroupAdd className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Planificacion
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
                   <Link to="/Docentes">
                     <a
                       href="#"
