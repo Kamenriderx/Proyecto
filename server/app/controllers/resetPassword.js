@@ -26,9 +26,9 @@ const restorePassword = async (req, res, next) => {
 
         user.USER_PASSWORD = await encrypt(USER_PASSWORD);
         await user.save();
-        res.status(200).json({message:"Contraseña cambiada correctamente"});
+        res.status(200).json({message:"Contraseña restablecida correctamente"});
     }else{
-        res.status(500).json({message:"No se ah podido reestablecer la contraseña "});
+        res.status(500).json({message:"No se ha podido reestablecer la contraseña "});
     }
 
   } catch (err) {
@@ -47,7 +47,7 @@ const sendRestoreEmail = async (req, res, next) => {
         );
             
         if (!user) {
-          return res.status(404).json({ message: "No existe un usuario con ese numero de cuenta" });
+          return res.status(404).json({ message: "No existe un usuario con ese número de cuenta" });
         }
 
         user.VERIFICATION_CODE = VERIFICATION_CODE;
@@ -59,11 +59,11 @@ const sendRestoreEmail = async (req, res, next) => {
         },"5m");
 
         const options = {
-            subject:"Recuperacion de contraseña",
+            subject:"Recuperación de contraseña",
         };
         sendMail(user.EMAIL,options,'resetPassword',{token})
         .then((response)=>{
-            res.status(200).json({message:`Se ah enviado un correo de verificacion a ${user.EMAIL}`,data:response.data})
+            res.status(200).json({message:`Se ha enviado un correo de verificación a ${user.EMAIL}`,data:response.data})
         })
         .catch(error=>{
             res.status(500).json({ error: error.message });
