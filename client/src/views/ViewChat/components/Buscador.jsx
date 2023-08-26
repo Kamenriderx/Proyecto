@@ -96,7 +96,7 @@ const Buscador = ({ chats, enviarDatoAlPadre, check }) => {
                                 ].URL
                               : fondoPerfil
                           }
-                          alt="seleccine imagen"
+                          alt="IMG"
                           className="bg-cyan-500 rounded-full w-12 h-12"
                         />
                       </div>
