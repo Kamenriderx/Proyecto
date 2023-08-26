@@ -91,6 +91,10 @@ const listSections = async (req,res)=>{
             let period = await periodToStart(currentMonth, currentYear)
             currentPeriod = period[0]
         }
+        if (!currentPeriod) {
+            res.status(400).json({messagge:"no hay periodos academicos en curso ni por empezar"})
+            return
+        }
 
         
        
