@@ -7,6 +7,37 @@ const getPeriodicAcademicCurrent = async () => await PeriodAcademic.findOne({att
 [fn("DAY", col("START_DATE")), "DAY"]
 ],where:{STATUS: "En curso"}})
 
+const periodToStart= async (currentMonth, currentYear) => await PeriodAcademic.findAll({attributes:["ID_PERIOD","PERIOD_NAME", 
+[fn("YEAR", col("START_DATE")), "YEAR"],
+[fn("MONTH", col("START_DATE")), "MONTH"],
+[fn("DAY", col("START_DATE")), "DAY"]
+],where:{
+  [Op.and]:[
+    where(fn('YEAR', col('START_DATE')), {
+      [Op.gte]: currentYear,
+    }),
+    where(fn('MONTH', col('START_DATE')), {
+      [Op.gte]: currentMonth,
+    }),
+    {STATUS: "Por empezar"}]
+}, order:[["START_DATE", "ASC"]], limit:1})
+
+const getTheLastPeriodAcademic= async ( currentYear) => await PeriodAcademic.findAll({attributes:["ID_PERIOD","PERIOD_NAME", 
+[fn("YEAR", col("START_DATE")), "YEAR"],
+[fn("MONTH", col("START_DATE")), "MONTH"],
+[fn("DAY", col("START_DATE")), "DAY"]
+],where:{
+  [Op.and]:[
+    where(fn('YEAR', col('START_DATE')), {
+      [Op.gte]: currentYear,
+    }),
+    
+      {[Op.or]:[{STATUS: "Por empezar"}, {STATUS: "En curso"}]}
+    ]
+}, order:[["START_DATE", "ASC"]], limit:3})
+
+
+
 const getNextPeriodicAcademic = async (currentYear, currentMonth) =>{ 
     
     return await PeriodAcademic.findOne({
@@ -20,7 +51,7 @@ const getNextPeriodicAcademic = async (currentYear, currentMonth) =>{
     where: {
       [Op.and]: [
         where(fn('YEAR', col('START_DATE')), {
-          [Op.gt]: currentYear,
+          [Op.eq]: currentYear,
         }),
         where(fn('MONTH', col('START_DATE')), {
           [Op.gt]: currentMonth,
@@ -56,6 +87,8 @@ const getDetailsDatesPeriodAcademic = async (id) => await DetailsPeriod.findOne(
 module.exports = {
     getPeriodicAcademicCurrent,
     getNextPeriodicAcademic,
-    getDetailsDatesPeriodAcademic
+    getDetailsDatesPeriodAcademic,
+    periodToStart,
+    getTheLastPeriodAcademic
 
 };
