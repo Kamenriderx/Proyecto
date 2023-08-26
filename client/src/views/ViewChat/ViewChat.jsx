@@ -118,7 +118,7 @@ const ViewChat = () => {
     <>
       {stateStudent && (
         <>
-          <div className="flex h-screen bg-gray-50">
+          <div className="flex h-full bg-gray-50">
             <div className="w-1/4 ">
               <Buscador check={check} enviarDatoAlPadre={recibirDatoDelHijo} />
             </div>
@@ -137,7 +137,7 @@ const ViewChat = () => {
                               ].URL
                             : fondoPerfil
                         }
-                        alt="seleccine imagen"
+                        alt="IMG"
                         className=" rounded-full w-12 h-12 object-cover"
                       />
                       <div className="flex flex-col justify-center">
@@ -153,7 +153,7 @@ const ViewChat = () => {
                 </div>
                 {showMessages && messages && (
                   <>
-                    <div className="overflow-y-scroll h-[450px] flex flex-col-reverse">
+                    <div className="overflow-y-scroll h-[500px] flex flex-col-reverse">
                       {messages.map((mess) => (
                         <div key={mess.ID_MESSAGE}>
                           {mess.SENDER_ID == state.user.ID_USER ? (
@@ -167,7 +167,7 @@ const ViewChat = () => {
                                       ].URL
                                     : fondoPerfil
                                 }
-                                alt="No hay imagen"
+                                alt="IMG"
                                 className="bg-cyan-400 rounded-full h-12 w-12 object-cover"
                               />
                               <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
@@ -198,7 +198,7 @@ const ViewChat = () => {
                                       ].URL
                                     : fondoPerfil
                                 }
-                                alt="No hay imagen"
+                                alt="IMG"
                                 className="bg-cyan-400 rounded-full h-12 w-12 object-cover"
                               />
                             </div>
@@ -233,7 +233,7 @@ const ViewChat = () => {
                 )}
               </div>
             </div>
-            <div className="w-1/4 bg-green-500 ">
+            <div className="w-1/4">
               {socket && (
                 <OnlineList setCheck={setCheck} check={check} socket={socket} />
               )}

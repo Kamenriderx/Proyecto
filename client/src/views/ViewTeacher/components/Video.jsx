@@ -3,6 +3,7 @@ import AlertThree from "../../../components/AlertThree.jsx";
 import ReactPlayer from "react-player";
 import { StoreContext } from "../../../store/ContextExample.jsx";
 import TeacherContext from "../context/TeacherContext.jsx";
+import Upload from "../../../assets/Upload.png";
 
 const Video = () => {
   const [videoUrl, setVideoUrl] = useState("");
@@ -22,7 +23,6 @@ const Video = () => {
   console.log("steTeacherVide: ", stateTeacher);
   // console.log("URL:", stateTeacher.user.user.multimedia[0].URL);
 
-
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     setError(false);
@@ -38,7 +38,7 @@ const Video = () => {
         });
       } else {
         setPropAlert({
-          text: "El Archivo no es un video (mp4), favor intentar con otro archivo.",
+          text: "El archivo no es un video (mp4), favor intentar con otro archivo.",
           icon: "error",
           title: "Error",
         });
@@ -46,15 +46,14 @@ const Video = () => {
       return;
     }
 
-    if(stateTeacher.user.user.multimedia.length  == 1 ){
-      alert('Solo se puede subir un video.')
+    if (stateTeacher.user.user.multimedia.length == 1) {
+      alert("Solo se puede subir un video.");
     }
 
     setVideoUrl(URL.createObjectURL(event.target.files[0]));
 
-    await putVideo(state,event.target.files[0])
-    await getTeacher(state)
-
+    await putVideo(state, event.target.files[0]);
+    await getTeacher(state);
   };
 
   return (
@@ -65,37 +64,92 @@ const Video = () => {
             <>
               <AlertThree alerta={propAlert} />
               <div className="flex flex-col">
-                <input
+                {/* <input
                   type="file"
                   accept=".mp4"
                   onChange={(e) => {
                     handleFileChange(e);
                   }}
                   className="rounded-full "
-                />
+                /> */}
+                <div className="flex justify-center mt-32">
+                  <label className="cursor-pointer">
+                    <input
+                      type="file"
+                      accept=".mp4"
+                      onChange={(e) => {
+                        handleFileChange(e);
+                      }}
+                      className="hidden"
+                    />
+
+                    <img
+                      src={Upload}
+                      className="w-20 h-20 rounded-full object-cover"
+                    />
+                  </label>
+                </div>
               </div>
             </>
           ) : (
             <>
               <div className="flex flex-col">
-                <input
+                {/* <input
                   type="file"
                   accept=".mp4"
                   onChange={(e) => {
                     handleFileChange(e);
                   }}
                   className="rounded-full"
-                />
+                /> */}
+                {!stateTeacher?.user?.user?.multimedia?.length == 1 && (
+                  <div className="flex justify-center mt-32">
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept=".mp4"
+                        onChange={(e) => {
+                          handleFileChange(e);
+                        }}
+                        className="hidden"
+                      />
+
+                      <img
+                        src={Upload}
+                        className="w-20 h-20 rounded-full object-cover"
+                      />
+                    </label>
+                  </div>
+                )}
                 <div className="h-80">
                   <>
-                {stateTeacher?.user?.user?.multimedia?.length  == 1 && (
-                  <ReactPlayer
-                    url={stateTeacher?.user?.user?.multimedia[0].URL}
-                    controls={true}
-                    width="100%"
-                    height="100%"
-                  />
-                )}
+                    {stateTeacher?.user?.user?.multimedia?.length == 1 && (
+                      <>
+                        <div className="flex m-1">
+                          <label className="cursor-pointer">
+                            <input
+                              type="file"
+                              accept=".mp4"
+                              onChange={(e) => {
+                                handleFileChange(e);
+                              }}
+                              className="hidden"
+                            />
+
+                            <img
+                              src={Upload}
+                              className="w-14 h-14 rounded-full object-cover"
+                            />
+                          </label>
+                        </div>
+                        <ReactPlayer
+                          url={stateTeacher?.user?.user?.multimedia[0].URL}
+                          controls={true}
+                          width="100%"
+                          height="100%"
+                        />
+                      </>
+                    )}
                   </>
                 </div>
               </div>

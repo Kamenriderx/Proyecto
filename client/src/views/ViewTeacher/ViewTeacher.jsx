@@ -32,7 +32,6 @@ const ViewTeacher = () => {
   return (
     <>
 <Sidevar/>
-
       <div className="grid grid-cols-3 gap-6 p-4 sm:ml-64 -mt-4">
         <div className="col-span-2">
           <div className="bg-gray-200 m-8 rounded-xl w-auto h-96  ">
