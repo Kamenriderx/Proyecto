@@ -17,7 +17,7 @@ const ViewTeacher = () => {
         const response = await axios(
           `http://localhost:3000/registro/section/sectionsForProfessors/${
             state.user.ID_USER
-          }/${periodo.ID_PERIOD}`
+          }/${2}`
         );
         setClasses(response.data);
       } catch (error) {

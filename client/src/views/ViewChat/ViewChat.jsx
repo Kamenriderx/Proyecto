@@ -180,8 +180,8 @@ const ViewChat = () => {
                               </div>
                             </div>
                           ) : (
-                            <div className="m-4 flex gap-2 justify-end">
-                              <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
+                            <div className="m-4 flex gap-2 justify-end ">
+                              <div className="h-auto w-4/5 border border-black rounded-tr-2xl rounded-bl-2xl p-2 bg-gray-300">
                                 <p className="break-words">{mess.CONTENT}</p>
                                 <p className="text-xs float-right">
                                   {new Date(mess.createdAt).getHours()}:
