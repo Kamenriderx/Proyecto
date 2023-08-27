@@ -14,15 +14,30 @@ import classNames from "classnames";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import AlertTwo from "../../components/AlertTwo";
 
-const TableStudents = ({ body }) => {
+const TableStudents = ({ body, recibirDatos, mess }) => {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState(false);
   const [buttonDisabled, setbuttonDisabled] = useState(false);
   const [alerta, setAlerta] = useState({});
 
+  const [dataError, setDataError] = useState(null);
+
+  const[che, setChe] = useState(true)
+
   useEffect(() => {
+    setMessage(false)
+    setbuttonDisabled(false)
+    setDataError(null)
     setData(body);
   }, [body]);
+
+  useEffect(() => {
+    setMessage(false)
+    setbuttonDisabled(false)
+    // setDataError(null)
+  }, [che]);
+
+
 
   // console.log("data: ", data);
   // console.log("props: ", body);
@@ -39,7 +54,7 @@ const TableStudents = ({ body }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const [dataError, setDataError] = useState(null);
+
 
   const openModal = (index) => {
     setSelectedItem({ ...data[index], index });
@@ -105,14 +120,6 @@ const TableStudents = ({ body }) => {
       console.log("correcta: ", res?.response?.data?.data);
       setDataError(res?.response?.data?.data);
       datav = res;
-
-      // res.response.data.data.map((row, index) => (
-      //   if(row.error){
-
-      //   }
-      //   console.log('row: ', index, row.NAME)
-      // ))
-
       if (res?.status === 200) {
         setAlerta({
           text: res.messagge,
@@ -120,7 +127,9 @@ const TableStudents = ({ body }) => {
           title: "Éxito",
         });
 
+        setChe(!che)
         setData([]);
+        // recibirDatos(false)
         return;
       }
       if (res?.response.status !== 200) {
@@ -136,11 +145,11 @@ const TableStudents = ({ body }) => {
         title: "Advertencia",
       });
 
+      setChe(!che)
       setData(datav.response.data.data);
+      return
     }
-
-    //res.data.messagge y res.status == 200
-    //res.respnse.data.messagge y res.respnse.status == 406
+    // setMessage(false)
   };
 
 
@@ -154,6 +163,10 @@ const TableStudents = ({ body }) => {
     };
     setMessage(false);
     if (dataError) {
+      if (dataError[index].error == "existe") {
+        alert(dataError[index].NAME+" "+"ya existe en la base de datos.");
+        return
+      }
       if (dataError[index].error.CARRER !== "") {
         objError.CARRER = dataError[index].error.CARRER;
         // alert("Error en el CARRER"+"\n"+dataError[index].NAME+"\n"+dataError[index].error.CARRER);
