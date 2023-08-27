@@ -51,12 +51,7 @@ const createSection = async(req,res)=>{
 
         }
 
-        if((course.UV != body.DAYS_COUNT) && diff != 1  ){
-            res.status(400).json({messagge:"El horario y los dias seleccionados estan mal establecidos"});
-            return
-
-        }
-
+       
         if((course.UV == body.DAYS_COUNT) && diff != 1  ){
             res.status(400).json({messagge:"Los horas asignadas a la clase no concuerdan con las que la clase necesita"});
             return
@@ -79,7 +74,7 @@ const createSection = async(req,res)=>{
         }
         const sectionR = await getSectionRange(body)
 
-        if (sectionR) {
+        if (sectionR && (sectionR.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionR.DAYS))) {
             res.status(400).json({messagge:"El aula esta ocupada en ese Horario"});
             return
             
