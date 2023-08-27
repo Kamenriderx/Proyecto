@@ -39,11 +39,11 @@ const registerProfessorCtrl = async (req,res)=>{
     try {
         
         const {file} = req;
+        const body = matchedData(req);
         if (file) {
             const url = `http://localhost:3000/images/${file.filename}`
             body.URL = url
         }
-        const body = matchedData(req);
         if (!file) {
             body.URL = ""
             
