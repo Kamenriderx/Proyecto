@@ -4,6 +4,7 @@ import { StoreContext } from "../store/ContextExample";
 import { BiSearch } from "react-icons/Bi";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import { BiArrowBack } from "react-icons/Bi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,6 +16,10 @@ const ListTeachers = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const fetchDocentes = async () => {
@@ -74,13 +79,22 @@ const ListTeachers = () => {
     }
   };
 
-
   if (loading) return <Spinner />;
 
   return (
     <div className="container mx-auto py-6">
-      <h2 className="text-2xl font-bold mb-6 text-gray-700">
-        Búsqueda de Docentes por Carrera
+      <div className="flex justify-start">
+        <div className="">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
+      <h2 className="text-2xl font-bold mb-6 text-gray-700 mt-10">
+        Búsqueda de docentes por carrera
       </h2>
       <div className="flex items-center justify-center mb-6">
         <ToastContainer position="top-right" />

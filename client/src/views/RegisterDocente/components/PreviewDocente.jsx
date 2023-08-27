@@ -49,22 +49,22 @@ const PreviewDocente = ({ docente, check2, setCheck2 }) => {
       </Modal>
       {message && <AlertTwo alerta={alerta} />}
       <tr className="border-b">
-        <td className="border px-4 py-2 text-lg font-bold r">
+        <td className="border px-4 py-2 text-base font-bold r">
           {docente.user.NAME}
         </td>
-        <td className="border px-4 py-2 text-lg font-bold r">
+        <td className="border px-4 py-2 text-base font-bold r">
           {docente.CAREER}
         </td>
-        <td className="border px-4 py-2 text-lg font-bold r">
+        <td className="border px-4 py-2 text-base font-bold r">
           {docente.user.CENTER}
         </td>
-        <td className="border px-4 py-2 text-lg font-bold r">
+        <td className="border px-4 py-2 text-base font-bold r">
           {docente.user.ACCOUNT_NUMBER}
         </td>
-        <td className="border px-4 py-2 text-lg font-bold r">
+        <td className="border px-4 py-2 text-base font-bold r">
           {docente.user.EMAIL}
         </td>
-        <td className="border px-4 py-2 text-lg font-bold r">
+        <td className="border px-4 py-2 text-base font-bold r">
           {docente.user.rol.ROLE_NAME}
         </td>
         <td className="gap-1 flex flex-row">

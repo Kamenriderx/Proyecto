@@ -92,7 +92,7 @@ const listSections = async (req,res)=>{
             currentPeriod = period[0]
         }
         if (!currentPeriod) {
-            res.status(400).json({messagge:"no hay periodos academicos en curso, tampoco por empezar"})
+            res.status(400).json({messagge:"no hay periodos academicos en curso ni por empezar"})
             return
         }
 

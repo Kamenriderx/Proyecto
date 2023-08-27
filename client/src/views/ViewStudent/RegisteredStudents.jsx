@@ -6,29 +6,28 @@ import { StoreContext } from "../../store/ContextExample";
 
 
 const style = {
-    button: {
-      width: "33%",
-      height:"100%",
-      cursor: "pointer",
-    },
-    buttonContainer:{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      top:0,
-      height:"50px",
-      width: "50%",
-      marginBottom: "20px",
-    },
-    loginForm:{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      flexDirection: "column",
-      width: "70%",
-    }
-  
-  };
+  button: {
+    width: "33%",
+    height: "100%",
+    cursor: "pointer",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    top: 0,
+    height: "50px",
+    width: "50%",
+    marginBottom: "20px",
+  },
+  loginForm: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    width: "70%",
+  },
+};
 const students = [
   {
     name: "Anibal Alejandro Reyes Maradiaga",
@@ -84,8 +83,7 @@ const RegisteredStudents = () => {
       },
       historial: {
         className: "",
-      }
-
+      },
     };
 
     defaultState[value].className =

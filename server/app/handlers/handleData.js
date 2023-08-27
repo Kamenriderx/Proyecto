@@ -18,53 +18,60 @@ const verifyData = async (data)=>{
  
         
         if (!student.hasOwnProperty('NAME')) {
-            error.NAME+=`La columna no existe\n`;
+            error.NAME+=`La columna nombre no existe\n`;
         }
 
         
         if ( typeof student.NAME !== 'string' ) {
-            error.NAME+=`El tipo de dato no es el correcto, debe ser cadena de caracteres\n`;
+            error.NAME+=`El tipo de la columna nombre dato no es el correcto, debe ser cadena de caracteres\n`;
         }
         if ( typeof student.NAME == 'string' ) {
             if (student.NAME.split(" ").length <2) {
                 error.NAME+=`El estudiante debe tener mas de un nombre\n`;                    
             }    
             if ( student.NAME.trim()==="") {
-                error.NAME+=`El campo está vacío\n`;
+                error.NAME+=`El nombre campo está vacío\n`;
             }
         }
 
         if (!student.hasOwnProperty('DNI')) {
-            error.DNI+=`La columna no existe`;
+            error.DNI+=`La columna DNI no existe`;
         }
 
         if ( typeof student.DNI !== 'string') {
-            error.DNI+=`El tipo de dato no es el correcto, debe ser una cadena de caracteres\n`;
+            error.DNI+=`El tipo de dato de la columna DNI no es el correcto, debe ser una cadena de caracteres\n`;
             
         }
         if ( typeof student.DNI == 'string') {
             
             if (!(/^[0-9]{4}-[0-9]{4}-[0-9]{5}$/.test(student.DNI)))  {
-                error.DNI +=`Debe seguir el siguiente patrón 000-0000-00000\n` 
+                if (student.DNI.length != 13 ) {
+                    error.DNI +=`El DNI Debe seguir el siguiente patrón 0000-0000-00000 ó tener 13 digitos\n` 
+                }
+                if (parseInt(student.DNI) !=true) {
+                    error.DNI +="El DNI debe de ser un valor númerico o una cadena de caracteres con el siguiente patrón 0000-0000-00000 "
+            
+            
+                }
             }
     
             if ((student.DNI.replace(/-/g, "").length != 13) ) {
-                error.DNI +=`Debe tener 13 digitos\n`
+                error.DNI +=`El DNI debe tener 13 digitos\n`
             }
             if (student.DNI.trim()==="") {
-                error.DNI+=`El campo está vació`;
+                error.DNI+=`El campo DNI está vació`;
                 
             }
             
         }
 
         if (!student.hasOwnProperty('CARRER') ) {
-            error.CARRER+=`La columna no existe\n`;
+            error.CARRER+=`La columna carrera no existe\n`;
         }
 
         if (typeof student.CARRER == 'string') {
             if (student.CARRER.trim()==="") {
-                error.CARRER+=`El campo está vació\n`;
+                error.CARRER+=`El campo carrera está vació\n`;
                 
             }
             let career = await Career.findOne({
@@ -81,12 +88,12 @@ const verifyData = async (data)=>{
 
 
         if (typeof student.CARRER !== 'string') {
-            error.CARRER+=`EL tipo de dato no es el correcto, deber ser una cadena de caracteres\n`;
+            error.CARRER+=`EL tipo de dato del campo carrera no es el correcto, deber ser una cadena de caracteres\n`;
         }
 
         
         if (!student.hasOwnProperty('CENTER') ) {
-            error.CENTER+=`La columna no existe\n`;
+            error.CENTER+=`La columna centro no existe\n`;
         }
 
         if (typeof student.CENTER == 'string') {
@@ -96,7 +103,7 @@ const verifyData = async (data)=>{
             }
     
             if (student.CENTER.trim()==="") {
-                error.CENTER+=`El campo está vació\n`;
+                error.CENTER+=`El campo centro está vació\n`;
                 
             }
            
@@ -117,20 +124,20 @@ const verifyData = async (data)=>{
             }
         }
         if (typeof student.CENTER !== 'string') {
-            error.CENTER+=`EL tipo de dato no es el correcto, deber ser una cadena de caracteres\n`;
+            error.CENTER+=`EL tipo de dato de la columna centro no es el correcto, deber ser una cadena de caracteres\n`;
         }
 
         
 
         
         if (!student.hasOwnProperty('EMAIL') ) {
-            error.CARRER+=`La columna no existe\n`;
+            error.CARRER+=`La columna correo no existe\n`;
         }
 
         if (typeof student.EMAIL == 'string') {
             
             if (student.EMAIL.trim()==="") {
-                error.EMAIL+=`El campo está vació\n`;
+                error.EMAIL+=`El campo correo está vació\n`;
                 
             }
     
@@ -141,7 +148,7 @@ const verifyData = async (data)=>{
         }
 
         if (typeof student.EMAIL !== "string") {
-            error.EMAIL+=`EL tipo de dato no es el correcto, deber ser una cadena de caracteres\n`;
+            error.EMAIL+=`EL tipo de dato del campo correo no es el correcto, deber ser una cadena de caracteres\n`;
             
         }
 
