@@ -76,7 +76,7 @@ const ContentNavbar = () => {
 
     return (
       <>
-        <nav className="bg-gradient-to-r from-sky-600 via-sky-400 to-sky-600 border-gray-200 fixed top-0 w-full z-50">
+        <nav className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 fixed top-0 w-full z-50">
           <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div className="flex items-center">
               <Link to="/">
@@ -101,7 +101,7 @@ const ContentNavbar = () => {
                 {!state.login ? (
                   <li>
                     <Link to="/login">
-                      <button className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3">
+                      <button className="p-2 rounded bg-gray-500 text-white font-bold hover:bg-gray-600 px-3">
                         Inicio de sesión
                       </button>
                     </Link>
@@ -117,16 +117,16 @@ const ContentNavbar = () => {
                         </li>
                       )}
                       <Link to="/perfil">
-                        <button className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3">
+                        <button className="p-2 rounded bg-gray-500 text-white font-bold hover:bg-gray-600 px-3">
                           Perfil
                         </button>
                       </Link>
                       <Link to="/">
                         <button
                           onClick={handleSession}
-                          className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3"
+                          className="p-2 rounded bg-gray-500 text-white font-bold hover:bg-gray-600 px-3"
                         >
-                          Cerrar sesion
+                          Cerrar sesión
                         </button>
                       </Link>
                     </div>
