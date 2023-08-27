@@ -13,8 +13,15 @@ const fechaActual = new Date().toLocaleDateString();
 const getProfessorsCtrl = async(req,res)=>{
 
     try {
-        const professors = await Professor.findAll({include:{
-        model:User ,as:"user" ,include:[{model:Rol,as:"rol"}]}})
+        const {idUser}= req.params;
+        const user = await User.findOne({
+            where:{ID_USER:idUser}
+        })
+        const professors = await Professor.findAll({
+            include:{
+        
+                model:User ,as:"user" ,where:{CENTER:{[Op.like]:user.CENTER}},include:[{model:Rol,as:"rol"}]
+            }})
         res.status(200).json({professors})
     } catch (error) {
         console.log(error)
