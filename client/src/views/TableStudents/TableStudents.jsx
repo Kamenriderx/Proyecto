@@ -143,15 +143,15 @@ const TableStudents = ({ body }) => {
     //res.respnse.data.messagge y res.respnse.status == 406
   };
 
-  let objError = {
-    CARRER: "",
-    CENTER: "",
-    DNI: "",
-    EMAIL: "",
-    NAME: "",
-  };
 
   const showError = (index) => {
+    let objError = {
+      CARRER: "",
+      CENTER: "",
+      DNI: "",
+      EMAIL: "",
+      NAME: "",
+    };
     setMessage(false);
     if (dataError) {
       if (dataError[index].error.CARRER !== "") {

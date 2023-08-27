@@ -35,7 +35,7 @@ const verifyData = async (data)=>{
         }
 
         if (!student.hasOwnProperty('DNI')) {
-            error.DNI+=`La columna DNI no existe`;
+            error.DNI+=`La columna DNI no existe\n`;
         }
 
         if ( typeof student.DNI !== 'string') {
@@ -46,10 +46,10 @@ const verifyData = async (data)=>{
             
             if (!(/^[0-9]{4}-[0-9]{4}-[0-9]{5}$/.test(student.DNI)))  {
                 if (student.DNI.length != 13 ) {
-                    error.DNI +=`El DNI Debe seguir el siguiente patrón 0000-0000-00000 ó tener 13 digitos\n` 
+                    error.DNI +=`El DNI debe seguir el siguiente patrón 0000-0000-00000\n` 
                 }
                 if (parseInt(student.DNI) !=true) {
-                    error.DNI +="El DNI debe de ser un valor númerico o una cadena de caracteres con el siguiente patrón 0000-0000-00000 "
+                    error.DNI +=`El DNI debe de ser un valor númerico o una cadena de caracteres con el siguiente patrón 0000-0000-00000\n`
             
             
                 }
@@ -59,7 +59,7 @@ const verifyData = async (data)=>{
                 error.DNI +=`El DNI debe tener 13 digitos\n`
             }
             if (student.DNI.trim()==="") {
-                error.DNI+=`El campo DNI está vació`;
+                error.DNI+=`El campo DNI está vacío\n`;
                 
             }
             
@@ -81,7 +81,7 @@ const verifyData = async (data)=>{
             })
     
             if (!career) {
-                error.CARRER += "El nombre de la carrera no es valido"
+                error.CARRER += "El nombre de la carrera no es válido\n"
                 
             }
         }
@@ -103,23 +103,12 @@ const verifyData = async (data)=>{
             }
     
             if (student.CENTER.trim()==="") {
-                error.CENTER+=`El campo centro está vació\n`;
+                error.CENTER+=`El campo centro está vacío\n`;
                 
             }
            
             if (student.CENTER.toLocaleLowerCase() !="ciudad universitaria" && student.CENTER.toLocaleLowerCase() !="centro universitario regional del centro" && student.CENTER.toLocaleLowerCase() != "Centro Universitario Regional de Litoral Atlántico".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Centro Universitario Regional del Litoral Pacífico".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="UNAH Valle de Sula".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Universidad Nacional Autónoma de Honduras Valle de Sula".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Centro Universitario Regional de Occidente".toLocaleLowerCase() && "Centro Universitario Regional Nororiental".toLocaleLowerCase() &&student.CENTER.toLocaleLowerCase() != "Centro Tecnológico de Danlí".toLocaleLowerCase()&& student.CENTER.toLocaleLowerCase() !="Centro Tecnológico del Valle del Aguán".toLocaleLowerCase() ) {
-                error.CENTER+=`
-                El nombre del centro no es correcto o no existe, los siguientes son nombres válidos:
-                1. Ciudad Universitaria
-                2. Centro Universitario Regional del Centro
-                3. UNAH Valle de Sula
-                4. Universidad Nacional Autónoma de Honduras del Valle de Sula
-                5. Centro Universitario Regional de Occidente
-                6. Centro Universitario Regional Nororiental
-                7. Centro Tecnológico de Danlí
-                8. Centro Tecnológico del Valle del Aguán
-                (las palabras pueden estár en minúscula o mayúscula totalmente)
-                `;
+                error.CENTER+=`El nombre del centro no es correcto o no existe, los siguientes son nombres válidos:\n1. Ciudad Universitaria\n2. Centro Universitario Regional del Centro\n3. UNAH Valle de Sula\n4. Universidad Nacional Autónoma de Honduras del Valle de Sula\n5. Centro Universitario Regional de Occidente\n6. Centro Universitario Regional Nororiental\n7. Centro Tecnológico de Danlí\n8. Centro Tecnológico del Valle del Aguán\n(las palabras pueden estár en minúscula o mayúscula totalmente)\n`;
                 
             }
         }
@@ -137,13 +126,13 @@ const verifyData = async (data)=>{
         if (typeof student.EMAIL == 'string') {
             
             if (student.EMAIL.trim()==="") {
-                error.EMAIL+=`El campo correo está vació\n`;
+                error.EMAIL+=`El campo correo está vacío\n`;
                 
             }
     
         
             if (  !/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(student.EMAIL) ) {
-                error.EMAIL+=`EL correo no tiene un formato valido`;
+                error.EMAIL+=`EL correo no tiene un formato válido\n`;
             }
         }
 
