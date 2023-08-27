@@ -44,7 +44,10 @@ const registerProfessorCtrl = async (req,res)=>{
             body.URL = url
         }
         const body = matchedData(req);
-        body.URL = ""
+        if (!file) {
+            body.URL = ""
+            
+        }
 
         if (!/^[A-Z][a-z]*\s[A-Z][a-z]*(?:\s[A-Z][a-z]*)*(?:\s[A-Z][a-z]*)*$/.test(body.NAME)) {
             res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
