@@ -46,7 +46,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
     if (!regexEmail.test(EMAIL.trim())) {
       setAlerta({
         message:
-          'El campo "correo docente" es invalido, ejem: alguien@algunlugar.es',
+          'El campo "correo docente" es inválido, ejem: alguien@algunlugar.es',
         error: true,
       });
       setTimeout(() => {
@@ -96,7 +96,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
         throw new Error(res.response.data.messagge);
       }
       setAlerta({
-        message: "Docente Creado Correctamente",
+        message: "Docente creado correctamente",
         error: false,
       });
       setCheck(!check);
@@ -167,7 +167,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
         throw new Error(res.response.data.messagge);
       }
       setAlerta({
-        message: "Docente Actualizado Correctamente",
+        message: "Docente actualizado correctamente",
         error: false,
       });
       setCheck2(!check2);
@@ -228,7 +228,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
             onChange={(e) => setNAME(e.target.value)}
             value={NAME}
             type="text"
-            placeholder="Escribe tu Nombre"
+            placeholder="Escribe un nombre"
             className="w-full mt-2 p-2 border rounded-xl bg-gray-50"
             id="nombre"
           />
@@ -245,7 +245,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
             value={EMAIL}
             onChange={(e) => setEMAIL(e.target.value)}
             type="text"
-            placeholder="Escribe el Correo del Docente"
+            placeholder="Escribe el correo del docente"
             className="w-full mt-2 p-2 border rounded-xl bg-gray-50 "
             id="email"
           />
@@ -262,7 +262,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
             <option value="">-- Seleccione un Centro --</option>
             <option value="Ciudad Universitaria">UNAH-CU</option>
             <option value="UNAH Valle de Sula">UNAH-VS</option>
-            <option value="CENTRO UNIVERSITARIO REGIONAL DEL CENTRO">
+            <option value="Centro Universitario Regional del Centro">
               UNAH-CURC
             </option>
             <option value="Centro Universitario Regional de Litoral Atlantico">
@@ -312,20 +312,20 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
             >
               <option value="">-- Seleccione Carrera del Docente --</option>
               <option value="Ingenieria en Sistemas">
-                Ingenieria en Sistemas
+                Ingeniería en Sistemas
               </option>
               <option value="Ingenieria Quimica Industrial">
-                Ingenieria Quimica Industrial
+                Ingeniería Quimica Industrial
               </option>
               <option value="Ingenieria Electrica Industrial">
-                Ingenieria Electrica Industrial
+                Ingeniería Electrica Industrial
               </option>
               <option value="Ingenieria Industrial">
-                Ingenieria Industrial
+                Ingeniería Industrial
               </option>
-              <option value="INGENIERIA CIVIL">Ingeniería Civil</option>
+              <option value="INGENIERIA CIVIL">Ingeníería Civil</option>
               <option value="Ingenieria Mecanica Industrial">
-                Ingenieria Mecanica Industrial
+                Ingeniería Mecanica Industrial
               </option>
               <option value="Arquitectura">Arquitectura</option>
               <option value="Licenciatura en Derecho">

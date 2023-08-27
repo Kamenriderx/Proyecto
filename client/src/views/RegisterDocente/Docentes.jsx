@@ -8,7 +8,7 @@ import PreviewDocente from "./components/PreviewDocente";
 import axios from "axios";
 import { StoreContext } from "../../store/ContextExample";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineBackward } from "react-icons/ai";
+import { BiArrowBack } from "react-icons/Bi";
 
 const Docentes = () => {
   const { state, dispatch } = useContext(StoreContext);
@@ -64,13 +64,13 @@ const Docentes = () => {
             onClick={handleBack}
             className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
           >
-            <AiOutlineBackward color="#F7F9F7" />
+            <BiArrowBack color="#F7F9F7" />
           </button>
         </div>
       </div>
       <div className="md:flex md:justify-center gap-40 h-auto mt-5 flex justify-center">
         <div className="mt-5">
-          <p className="text-4xl font-black text-sky-700">
+          <p className="text-4xl font-black text-black">
             Registro de Docentes
           </p>
         </div>
@@ -97,7 +97,7 @@ const Docentes = () => {
                   <th className="p-2">Nombre del Docente</th>
                   <th className="p-2">Carrera</th>
                   <th className="p-2">Centro</th>
-                  <th className="p-2">Numero de Cuenta</th>
+                  <th className="p-2">Número de Cuenta</th>
                   <th className="p-2">Email</th>
                   <th className="p-2">Rol del Docente</th>
                   <th className="p-2">Acciones</th>
@@ -135,7 +135,7 @@ const Docentes = () => {
           </>
         ) : (
           <p className="text-2xl text-center uppercase font-bold ">
-            No hay Docentes Inscritos Aun
+            No hay docentes inscritos
           </p>
         )}
       </div>
