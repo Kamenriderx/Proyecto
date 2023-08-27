@@ -41,7 +41,7 @@ const createSection = async(req,res)=>{
             return    
         }
         let diff = (parseInt(body.END_TIME) - parseInt(body.START_TIME))/100
-        if((course.UV != body.DAYS_COUNT)){
+        if((course.UV != body.DAYS_COUNT) && diff != course.UV){
             res.status(400).json({messagge:"El horario no concuerda con la cantidad de unidades valorativas"});
             return
         }
