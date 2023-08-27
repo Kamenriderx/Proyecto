@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TableRow from "./components/TableRow";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import {AiOutlineSearch} from "react-icons/ai"
 import StudentCard from "./components/StudentCard";
+import { StoreContext } from "../../store/ContextExample";
 const History = () => {
+    
+
   const [enrollments, setEnrollments] = useState([]);
   const [proms, setProms] = useState({
     global:0,
