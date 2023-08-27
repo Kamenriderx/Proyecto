@@ -45,7 +45,7 @@ const verifyData = async (data)=>{
         if ( typeof student.DNI == 'string') {
             
             if (!(/^[0-9]{4}-[0-9]{4}-[0-9]{5}$/.test(student.DNI)))  {
-                error.DNI +=`Debe seguir el siguiente patrón 000-0000-00000\n` 
+                error.DNI +=`Debe seguir el siguiente patrón 0000-0000-00000\n` 
             }
     
             if ((student.DNI.replace(/-/g, "").length != 13) ) {
