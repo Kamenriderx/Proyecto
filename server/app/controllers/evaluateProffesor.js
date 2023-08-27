@@ -85,7 +85,7 @@ exports.classStudent = async function (req, res) {
     });
 
     if (existingEvaluation) {
-      return res.status(400).json({ error: "Ya existe una evaluacion." });
+      return res.status(400).json({ error: "Ya existe una evaluación." });
     }
 
     // Verifica que todas las preguntas estén llenas
@@ -164,7 +164,7 @@ exports.getProfessorEvaluations = async function (req, res) {
     const professor = await Professor.findOne({ where: { ID_USER: idUser } });
 
     if (!professor) {
-      return res.status(404).json({ message: 'Profesor no encontrado' });
+      return res.status(404).json({ message: 'Profesor no encontrado.' });
     }
 
     // Career del profesor
@@ -185,13 +185,13 @@ exports.getProfessorEvaluations = async function (req, res) {
         if (!professorRecord) {
           return {
             ...evaluation.toJSON(),
-            PROFESSOR_NAME: 'Nombre del profesor no encontrado',
+            PROFESSOR_NAME: 'Nombre del profesor no encontrado.',
           };
         }
         const professorUser = await User.findOne({ where: { ID_USER: professorRecord.ID_USER } });
         return {
           ...evaluation.toJSON(),
-          PROFESSOR_NAME: professorUser ? professorUser.NAME : 'Nombre del profesor no encontrado',
+          PROFESSOR_NAME: professorUser ? professorUser.NAME : 'Nombre del profesor no encontrado.',
         };
       })
     );
@@ -203,13 +203,13 @@ exports.getProfessorEvaluations = async function (req, res) {
         if (!student) {
           return {
             ...evaluation,
-            STUDENT_NAME: 'Nombre del estudiante no encontrado',
+            STUDENT_NAME: 'Nombre del estudiante no encontrado.',
           };
         }
         const studentUser = await User.findOne({ where: { ID_USER: student.ID_USER } });
         return {
           ...evaluation,
-          STUDENT_NAME: studentUser ? studentUser.NAME : 'Nombre del estudiante no encontrado',
+          STUDENT_NAME: studentUser ? studentUser.NAME : 'Nombre del estudiante no encontrado.',
         };
       })
     );
@@ -221,7 +221,7 @@ exports.getProfessorEvaluations = async function (req, res) {
         if (!course) {
           return {
             ...evaluation,
-            COURSE_NAME: 'Nombre del curso no encontrado',
+            COURSE_NAME: 'Nombre del curso no encontrado.',
           };
         }
         return {
@@ -238,7 +238,7 @@ exports.getProfessorEvaluations = async function (req, res) {
         if (!section || section.ID_COURSE !== evaluation.ID_COURSE) {
           return {
             ...evaluation,
-            SECTION_CODE: 'Código de la sección no encontrado',
+            SECTION_CODE: 'Código de la sección no encontrado.',
           };
         }
         return {
@@ -251,7 +251,7 @@ exports.getProfessorEvaluations = async function (req, res) {
     res.json(evaluationsWithSectionCode); 
   } catch (error) {
     console.error('Error al obtener las evaluaciones:', error);
-    res.status(500).json({ message: 'Error al obtener las evaluaciones' });
+    res.status(500).json({ message: 'Error al obtener las evaluaciones.' });
   }
 };
 
