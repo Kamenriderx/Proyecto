@@ -271,6 +271,7 @@ const ContentNavbar = () => {
             path="/seccionesmatriculadas/:id"
             element={<NavigateSections />}
           />
+          <Route exact path="/periodoAmnin" element={<Planificacion />} />
           <Route exact path="/dictamenExcep" element={<ViewDictamenExcep />} />
           <Route exact path="/secciones-Docente" element={<ClassTeacher />} />
           <Route exact path="/matricula-jefe" element={<Matricula />} />

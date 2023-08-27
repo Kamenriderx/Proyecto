@@ -3,7 +3,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
+import {
+  AiFillDelete,
+  AiFillEdit,
+  AiFillEye,
+  AiOutlineBackward,
+} from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 import AlertTwo from "../../components/AlertTwo";
 import Modal3 from "../../components/Modal3";
 import Modal2 from "../../components/Modal2";
@@ -35,6 +41,11 @@ const Planificacion = () => {
   const [id, setId] = useState("");
   const [showModal2, setShowModal2] = useState(false);
   const [peri, setperi] = useState([]);
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   function mostrarFecha(fechaOriginal) {
     const fechaObjeto = new Date(fechaOriginal);
@@ -319,7 +330,7 @@ const Planificacion = () => {
           >
             <div className="mt-2">
               <p className="text-red-800 font-bold text-lg">
-                Planificacion Periodo I
+                Planificación Periodo I
               </p>
             </div>
             <div className="mt-3 flex justify-around">
@@ -334,7 +345,7 @@ const Planificacion = () => {
               </div>
               <div>
                 <p className="text-black text-sm font-bold">
-                  Fecha de Finalizacion
+                  Fecha de Finalización
                 </p>
                 <input
                   value={finishDate}
@@ -365,7 +376,7 @@ const Planificacion = () => {
           >
             <div className="mt-2">
               <p className="text-red-800 font-bold text-lg">
-                Planificacion Periodo II
+                Planificación Periodo II
               </p>
             </div>
             <div className="mt-3 flex justify-around">
@@ -380,7 +391,7 @@ const Planificacion = () => {
               </div>
               <div>
                 <p className="text-black text-sm font-bold">
-                  Fecha de Finalizacion
+                  Fecha de Finalización
                 </p>
                 <input
                   value={finishDate1}
@@ -411,7 +422,7 @@ const Planificacion = () => {
           >
             <div className="mt-2">
               <p className="text-red-800 font-bold text-lg">
-                Planificacion Periodo III
+                Planificación Periodo III
               </p>
             </div>
             <div className="mt-3 flex justify-around">
@@ -426,7 +437,7 @@ const Planificacion = () => {
               </div>
               <div>
                 <p className="text-black text-sm font-bold">
-                  Fecha de Finalizacion
+                  Fecha de Finalización
                 </p>
                 <input
                   value={finishDate2}
@@ -466,7 +477,7 @@ const Planificacion = () => {
             <div className="mt-3 flex text-center justify-around">
               <div className="mt-3">
                 <p className="text-gray-800 text-sm font-bold">
-                  Fecha de Finalizacion de Clases
+                  Fecha de Finalización de Clases
                 </p>
                 <div>
                   <div className="mt-2 block">
@@ -634,12 +645,22 @@ const Planificacion = () => {
         </div>
       </Modal2>
       <div className="w-3/4 mx-auto">
-        <div className="mt-5 text-center">
-          <p className="text-red-800 font-bold text-2xl">
-            Planificacion de Periodo Academico
+        <div className="flex justify-start">
+          <div className="mt-5">
+            <button
+              onClick={handleBack}
+              className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+            >
+              <AiOutlineBackward color="#F7F9F7" />
+            </button>
+          </div>
+        </div>
+        <div className="mt-5 justify-center flex">
+          <p className="text-red-800 font-bold text-4xl mt-5">
+            Planificación de Periodo Academico
           </p>
         </div>
-        <div className="mt-5 flex justify-between">
+        <div className="mt-10 flex justify-between">
           <div className="">
             <button
               onClick={() => setShowModal(true)}
@@ -649,7 +670,11 @@ const Planificacion = () => {
             </button>
           </div>
           <div>
-            <select value={anyo} onChange={(e) => setAnyo(e.target.value)}>
+            <select
+              className="focus:border-sky-600 rounded"
+              value={anyo}
+              onChange={(e) => setAnyo(e.target.value)}
+            >
               <option value="">-- Selecciona el Año --</option>
               <option value="2023">2023</option>
               <option value="2024">2024</option>
@@ -718,7 +743,7 @@ const Planificacion = () => {
               </tbody>
             </table>
           ) : (
-            <div className="text-center">
+            <div className="text-center mt-20">
               <p className="text-black font-bold text-2xl">
                 No hay planificacion para este año
               </p>

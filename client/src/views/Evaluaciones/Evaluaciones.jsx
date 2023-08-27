@@ -35,7 +35,7 @@ const Evaluaciones = () => {
 
   useEffect(() => {
     getEvaluacion(state);
-  }, [state]);
+  }, [state.user.ID_USER]);
 
   return (
     <div className="mx-16 mt-28 ">

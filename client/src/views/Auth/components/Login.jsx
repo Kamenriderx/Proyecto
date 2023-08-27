@@ -8,26 +8,25 @@ import { Link } from "react-router-dom";
 const style = {
   button: {
     width: "33%",
-    height:"100%",
+    height: "100%",
     cursor: "pointer",
   },
-  buttonContainer:{
+  buttonContainer: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    top:0,
-    height:"50px",
+    top: 0,
+    height: "50px",
     width: "50%",
     marginBottom: "20px",
   },
-  loginForm:{
+  loginForm: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
     width: "70%",
-  }
-
+  },
 };
 
 const LoginForm = () => {
@@ -38,21 +37,21 @@ const LoginForm = () => {
     loginType: "students",
   });
 
-  const [className,setClassName] = useState({
-    admins:{
-      className:""
+  const [className, setClassName] = useState({
+    admins: {
+      className: "",
     },
-    professors:{
-      className:""
+    professors: {
+      className: "",
     },
-    students:{
-      className:"outline-none ring-2 ring-sky-500 bg-sky-500  ring-offset-2  text-white"
-    }
+    students: {
+      className:
+        "outline-none ring-2 ring-sky-500 bg-sky-500  ring-offset-2  text-white",
+    },
   });
 
   const { dispatch } = useContext(StoreContext);
 
-  
   const handleChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
@@ -61,55 +60,53 @@ const LoginForm = () => {
       [name]: value.trim(),
     });
   };
-  const handleSelect = (e)=>{
+  const handleSelect = (e) => {
     e.preventDefault();
     const { value } = e.target;
     const defaultState = {
-      admins:{
-        className:""
+      admins: {
+        className: "",
       },
-      professors:{
-        className:""
+      professors: {
+        className: "",
       },
-      students:{
-        className:""
-      }
-    }
-    defaultState[value].className = "outline-none ring-2 ring-sky-500 ring-offset-2 bg-sky-500 text-white" 
-    setClassName(
-      defaultState
-    );
+      students: {
+        className: "",
+      },
+    };
+    defaultState[value].className =
+      "outline-none ring-2 ring-sky-500 ring-offset-2 bg-sky-500 text-white";
+    setClassName(defaultState);
     handleChange(e);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-/*     const passwordRe = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,10}$/;
+    /*     const passwordRe = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,10}$/;
     const accountRe = /^\d{11}$/; */
 
-
-
-    if(login.password.trim()==="" || login.identifier.trim()===""){
+    if (login.password.trim() === "" || login.identifier.trim() === "") {
       alert("Debes llenar todos los campos");
       return;
     }
 
-/*     if(!passwordRe.test(login.password.trim())){
+    /*     if(!passwordRe.test(login.password.trim())){
       alert("La contraseña no es valida");
       return;
     } */
 
-   /*  if(!accountRe.test(login.identifier.trim())){
+    /*  if(!accountRe.test(login.identifier.trim())){
       alert("El numero de cuenta no es valido");
       return;
     } */
 
-    const res = await httpRequests()["post"](`http://localhost:3000/registro/login/${login.loginType}`, { body: { ...login } });
+    const res = await httpRequests()["post"](
+      `http://localhost:3000/registro/login/${login.loginType}`,
+      { body: { ...login } }
+    );
     if (res.status === 200) {
-
       const token = res.data.token;
       localStorage.setItem("token", token);
-
 
       dispatch({ type: "USER", user: res.data.user });
       dispatch({ type: "TOKEN", token: res.data.token });
@@ -120,25 +117,45 @@ const LoginForm = () => {
     }
   };
   return (
-    <form style={style.loginForm} className="p-6 mx-auto bg-white rounded-xl shadow-lg items-center  space-x-4 animate__zoomIn animate__animated">
+    <form
+      style={style.loginForm}
+      className=" p-6 mx-auto bg-white rounded-xl shadow-2xl items-center  space-x-4 animate__zoomIn animate__animated mt-10"
+    >
       {
-        // todo Cambiar esto a una barra 
-      } 
+        // todo Cambiar esto a una barra
+      }
       <div style={style.buttonContainer}>
-        <button style={style.button} className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.professors.className}`} name="loginType" value="professors" onClick={handleSelect}>
+        <button
+          style={style.button}
+          className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.professors.className}`}
+          name="loginType"
+          value="professors"
+          onClick={handleSelect}
+        >
           Profesores
         </button>
-        <button style={style.button} className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.students.className}`} name="loginType" value="students" onClick={handleSelect}>
+        <button
+          style={style.button}
+          className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.students.className}`}
+          name="loginType"
+          value="students"
+          onClick={handleSelect}
+        >
           Estudiantes
         </button>
-        <button style={style.button} className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.admins.className}`} name="loginType" value="admins" onClick={handleSelect}>
+        <button
+          style={style.button}
+          className={` hover:text-white hover:bg-sky-500 hover:border-transparent ${className.admins.className}`}
+          name="loginType"
+          value="admins"
+          onClick={handleSelect}
+        >
           Administracion
         </button>
       </div>
 
-
       <div className="flex flex-row justify-center items-center mb-3">
-        {/*<GiLynxHead style={{ width: "40px", height: "40px" }} />*/ }
+        {/*<GiLynxHead style={{ width: "40px", height: "40px" }} />*/}
         <h2
           className="text-gray-800 text-xl font-bold text-center flex items-center"
           htmlFor="email"
@@ -176,9 +193,12 @@ const LoginForm = () => {
       >
         Iniciar sesion
       </button>
-        <Link to="/RecuperarContrasena" className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5">
-          Recuperar contraseña
-        </Link>
+      <Link
+        to="/RecuperarContrasena"
+        className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5"
+      >
+        Recuperar contraseña
+      </Link>
     </form>
   );
 };

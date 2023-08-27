@@ -21,7 +21,8 @@ import {
   PiNotebookFill,
   PiStudentFill,
 } from "react-icons/pi";
-import { SiGoogleclassroom } from "react-icons/si";
+import { GrPlan } from "react-icons/gr";
+import { SiGoogleclassroom, SiMicrosoftacademic } from "react-icons/si";
 import { FaHistory, FaAddressCard } from "react-icons/fa";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { StoreContext } from "../../../store/ContextExample";
@@ -351,6 +352,34 @@ const Sidevar = () => {
             )}
             {state?.user?.ID_ROLE === 5 && (
               <>
+                <li>
+                  <Link to="/periodoAmnin">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <SiMicrosoftacademic className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Planificación Periodos
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/period">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg 
+                hover:bg-orange-100 hover:font-bold"
+                    >
+                      <GrPlan className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Planificación
+                      </span>
+                    </a>
+                  </Link>
+                </li>
                 <li>
                   <Link to="/Docentes">
                     <a
