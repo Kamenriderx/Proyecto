@@ -218,11 +218,11 @@ const updateProfessor = async (req,res)=>{
             if (profesor) {
           
                 if ( body.ROL == 3 && profesor.ID_USER != idUser) {
-                    res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
+                    res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CARRER} en el centro ${body.CENTER}`})
                     return                
                 }
                 if ( body.ROL == 4 && profesor.ID_USER != idUser) {
-                    res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
+                    res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CARRER} en el centro ${body.CENTER}`})
                     return                
                 }
             }
