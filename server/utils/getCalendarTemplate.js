@@ -43,7 +43,7 @@ const getCalendarTemplate = (content) => {
             content.calendar.map(date=>{
                 return `
                 ${headers}
-                <li style="align-content: center; display: flex; justify-content: center; width: 100%; height: 30px;">
+                <li style="align-content: center; display: flex; justify-content: center; width: 100%; height:${date.students.split(" ").length > 5 ?date.students.indexOf("EX")==0?"300px;":"150px;":"30px;"} ">
                     <ul
                         style="list-style: none; display: flex; justify-content: space-around; align-items: center; width: 100%; box-sizing: border-box;">
                         <li style="align-items: center; display: flex; justify-content: center; flex: 1;">

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Pagination from "./components/Pagination";
 import Table from "./components/Table";
 import History from "./History";
+import { StoreContext } from "../../store/ContextExample";
+
 
 const style = {
   button: {
@@ -55,7 +57,8 @@ const students = [
 ];
 
 const RegisteredStudents = () => {
-  const [view, setView] = useState("matriculados");
+  const { state, dispatch } = useContext(StoreContext);
+    const [view, setView] = useState("historial");
   const [className, setClassName] = useState({
     matriculados: {
       className: "",
@@ -93,36 +96,52 @@ const RegisteredStudents = () => {
   const [pages, setPages] = useState(20);
 
   return (
-    <div className="w-full flex flex-col pt-14   items-center h-full">
-      <div style={style.buttonContainer}>
-        <button
-          style={style.button}
-          className={` hover:text-white hover:bg-sky-500 bg-sky-400 hover:border-transparent ${className.matriculados.className}`}
-          name="loginType"
-          value="matriculados"
-          onClick={handleSelect}
-        >
-          Matriculados
-        </button>
-        <button
-          style={style.button}
-          className={` hover:text-white hover:bg-sky-500 bg-sky-400 hover:border-transparent ${className.historial.className}`}
-          name="loginType"
-          value="historial"
-          onClick={handleSelect}
-        >
-          Historial
-        </button>
-      </div>
-      <div className="w-full flex justify-center flex-col items-center">
-        {view === "matriculados" && (
-          <>
-            <Table />
-            <Pagination page={page} setPage={setPage} pages={pages} />
-          </>
-        )}
-        {view === "historial" && <History />}
-      </div>
+    <div className="w-full flex flex-col pt-2   items-center h-full">
+      {
+        state?.user?.ID_ROLE !== 4 &&
+        <div style={style.buttonContainer}>
+          <button
+            style={style.button}
+            className={` hover:text-white hover:bg-sky-500 bg-sky-400 hover:border-transparent ${className.matriculados.className}`}
+            name="loginType"
+            value="matriculados"
+            onClick={handleSelect}
+          >
+            Matriculados
+          </button>
+          <button
+            style={style.button}
+            className={` hover:text-white hover:bg-sky-500 bg-sky-400 hover:border-transparent ${className.historial.className}`}
+            name="loginType"
+            value="historial"
+            onClick={handleSelect}
+          >
+            Historial
+          </button>
+
+        </div>
+
+      }
+
+        <div className="w-full flex justify-center flex-col items-center">
+
+        {
+        view==="matriculados" &&
+        <>
+        <Table />
+        <Pagination page={page} setPage={setPage} pages={pages}/>
+        </>
+    }
+      {
+        view==="historial" &&
+        <History />
+                
+
+       }
+
+
+        </div>
+      
     </div>
   );
 };

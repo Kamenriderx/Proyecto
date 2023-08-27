@@ -16,7 +16,7 @@ const ViewTeacherPublic = ({ ID_USER_PROFFESOR, chek}) => {
   const getClassTeacher = async () => {
     try {
       const response = await axios(
-        `http://localhost:3000/registro/section/sectionsForProfessors/${ID_USER_PROFFESOR}/${periodo.ID_PERIOD}`
+        `http://localhost:3000/registro/section/sectionsForProfessors/${ID_USER_PROFFESOR}/${2}`
       );
       setClasses(response.data);
     } catch (error) {
