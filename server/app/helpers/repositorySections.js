@@ -126,6 +126,30 @@ const sectionbyProffessor = async (body)=>{
     })
 }
 
+const getSectionRange = async (body)=>{
+    return await Section.findOne({
+        where:{
+            [Op.and]:[
+                {
+                    ID_CLASSROOM: body.ID_CLASSROOM
+                },
+                {
+                    START_TIME:{
+                        [Op.gte]:body.START_TIME
+                    },
+                },
+                {
+                    END_TIME:{
+                        [Op.lte]:body.END_TIME
+                    },
+                },
+                {DELETED:0}
+            ]
+            
+        }
+    })
+}
+
 const getSection = async (body)=>{
     return await Section.findOne({
         where:{
@@ -258,5 +282,6 @@ module.exports = {
     getMyIndexAcademic,
     getMyCoursePeriodPrev,
     getMyCourseAproved,
-    getSectionsByCenterAndCareerPeriods
+    getSectionsByCenterAndCareerPeriods,
+    getSectionRange
 };
