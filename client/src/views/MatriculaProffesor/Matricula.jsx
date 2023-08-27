@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { StoreContext } from "../../store/ContextExample";
 import { Link, useNavigate } from "react-router-dom";
-import { AiOutlineBackward } from "react-icons/ai";
+import { BiArrowBack } from "react-icons/Bi";
 const Matricula = () => {
   const { state, dispatch } = useContext(StoreContext);
   const [sections, setSections] = useState([]);
@@ -110,7 +110,7 @@ const Matricula = () => {
             onClick={handleBack}
             className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
           >
-            <AiOutlineBackward color="#F7F9F7" />
+            <BiArrowBack color="#F7F9F7" size={20} />
           </button>
         </div>
       </div>

@@ -1,9 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Modal2 from "../../../components/Modal2";
 import { AiFillEye } from "react-icons/ai";
 import AlertTwo from "../../../components/AlertTwo";
+import { BiArrowBack } from "react-icons/Bi";
 const SectionDetails = () => {
   const params = useParams();
   const id = params.idSection;
@@ -15,6 +16,10 @@ const SectionDetails = () => {
   const [check, setCheck] = useState(false);
   const [alerta, setAlerta] = useState({});
   const [check2, setCheck2] = useState(false);
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const fetchSectionDetails = async () => {
@@ -204,6 +209,16 @@ const SectionDetails = () => {
         </div>
       </Modal2>
       <div className="container mx-auto">
+        <div className="flex justify-start">
+          <div className="mt-5">
+            <button
+              onClick={handleBack}
+              className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+            >
+              <BiArrowBack color="#F7F9F7" size={20} />
+            </button>
+          </div>
+        </div>
         <div className="mt-10 text-center">
           <p className="text-sky-800 font-black uppercase text-2xl">
             Detalles de la Sección

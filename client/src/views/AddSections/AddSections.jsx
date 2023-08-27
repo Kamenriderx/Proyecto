@@ -1,10 +1,6 @@
-import {
-  AiOutlineAppstoreAdd,
-  AiFillDelete,
-  AiFillEdit,
-  AiOutlineBackward,
-} from "react-icons/ai";
+import { AiOutlineAppstoreAdd, AiFillDelete, AiFillEdit } from "react-icons/ai";
 import Modal from "../../components/Modal";
+import { BiArrowBack } from "react-icons/Bi";
 import { useState, useContext, useEffect } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import axios from "axios";
@@ -431,7 +427,7 @@ const AddSections = () => {
             onClick={handleBack}
             className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
           >
-            <AiOutlineBackward color="#F7F9F7" />
+            <BiArrowBack color="#F7F9F7" size={20} />
           </button>
         </div>
       </div>
@@ -445,7 +441,7 @@ const AddSections = () => {
           check={check}
         >
           <div className="text-center mb-5 mt-5">
-            <span className="text-sky-700 font-bold text-2xl">
+            <span className="text-black font-bold text-2xl">
               {isEditMode ? "Editar Sección" : "Agregar Nueva Sección"}
             </span>
           </div>
