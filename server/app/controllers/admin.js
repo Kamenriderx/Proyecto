@@ -10,19 +10,11 @@ const fechaActual = new Date().toLocaleDateString();
 
 
 
-
 const getProfessorsCtrl = async(req,res)=>{
 
     try {
-        const {idUser}= req.params;
-        const user = await User.findOne({
-            where:{ID_USER:idUser}
-        })
-        const professors = await Professor.findAll({
-            include:{
-        
-                model:User ,as:"user" ,where:{CENTER:{[Op.like]:user.CENTER}},include:[{model:Rol,as:"rol"}]
-            }})
+        const professors = await Professor.findAll({include:{
+        model:User ,as:"user" ,include:[{model:Rol,as:"rol"}]}})
         res.status(200).json({professors})
     } catch (error) {
         console.log(error)
@@ -39,11 +31,11 @@ const registerProfessorCtrl = async (req,res)=>{
     try {
         
         const {file} = req;
+        const body = matchedData(req);
         if (file) {
             const url = `http://localhost:3000/images/${file.filename}`
             body.URL = url
         }
-        const body = matchedData(req);
         body.URL = ""
 
         if (!/^[A-Z][a-z]*\s[A-Z][a-z]*(?:\s[A-Z][a-z]*)*(?:\s[A-Z][a-z]*)*$/.test(body.NAME)) {
