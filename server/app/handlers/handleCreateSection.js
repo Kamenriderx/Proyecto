@@ -35,7 +35,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.gt]:body.START_TIME
                         },
-                    },{DELETED : 0}
+                    },{DELETED : 0},{ID_PERIOD:body.ID_PERIOD}
                     
                 ]},
                 {[Op.and]:[
@@ -51,7 +51,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.gt]:body.START_TIME
                         },
-                    },{DELETED : 0}
+                    },{DELETED : 0},{ID_PERIOD:body.ID_PERIOD}
                     
                 ]},
                 {[Op.and]:[
@@ -77,7 +77,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.lt]:body.END_TIME
                         },
-                    },{DELETED : 0}
+                    },{DELETED : 0},{ID_PERIOD:body.ID_PERIOD}
                     
                 ]},
                 {[Op.and]:[
@@ -93,7 +93,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.gt]:body.END_TIME
                         },
-                    },{DELETED : 0}
+                    },{DELETED : 0},{ID_PERIOD:body.ID_PERIOD}
                     
                 ]},
                 {[Op.and]:[
@@ -109,7 +109,7 @@ const sectionRange = async (body)=>{
                         END_TIME:{
                             [Op.eq]:body.END_TIME
                         },
-                    },{DELETED : 0}
+                    },{DELETED : 0},{ID_PERIOD:body.ID_PERIOD}
                     
                 ]},
             ]
@@ -124,6 +124,7 @@ const sectionExists = async (body)=>{
             ID_CLASSROOM: body.ID_CLASSROOM,
             START_TIME: body.START_TIME,
             END_TIME: body.END_TIME,
+            ID_PERIOD: body.ID_PERIOD,
             DELETED:0
         }
     })
@@ -164,11 +165,12 @@ const getProfessor = async (body)=>{
     })
 }
 
-const getSectionsProffessor = async (ID_PROFFERSSOR)=>{
+const getSectionsProffessor = async (IdProfersor,idPeriod)=>{
     return await Section.findAndCountAll({
         where:{
-            ID_PROFFERSSOR,
-            DELETED:0
+            ID_PROFFERSSOR:IdProfersor,
+            DELETED:0,
+            ID_PERIOD: idPeriod
         }
     })
 }

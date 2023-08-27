@@ -48,7 +48,7 @@ const verifyData = async (data)=>{
                 if (student.DNI.length != 13 ) {
                     error.DNI +=`El DNI debe seguir el siguiente patrón 0000-0000-00000\n` 
                 }
-                if (parseInt(student.DNI) !=true) {
+                if ( typeof parseInt(student.DNI) !== "number") {
                     error.DNI +=`El DNI debe de ser un valor númerico o una cadena de caracteres con el siguiente patrón 0000-0000-00000\n`
             
             
@@ -150,7 +150,7 @@ const verifyData = async (data)=>{
             dataError.push(student);
             return student
         } else {
-
+            student.DNI=student.DNI.replace(/-/g,"")
             dataValidate.push(student);
             return student;
             

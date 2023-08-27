@@ -143,7 +143,7 @@ const getSectionRange = async (body)=>{
                         [Op.lte]:body.END_TIME
                     },
                 },
-                {DELETED:0}
+                {DELETED:0}, ,{ID_PERIOD:body.ID_PERIOD}
             ]
             
         }

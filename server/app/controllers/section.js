@@ -42,7 +42,7 @@ const createSection = async(req,res)=>{
         }
         let diff = (parseInt(body.END_TIME) - parseInt(body.START_TIME))/100
         if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff < course.UV  ){
-            res.status(400).json({messagge:"El horario no cubre totalmente la cantidad de unidades valorativas"});
+            res.status(400).json({messagge:"El horario no concuerda con la cantidad de unidades valorativas"});
             return
 
 
@@ -67,9 +67,9 @@ const createSection = async(req,res)=>{
             return
             
         }
-        const sectionRange = await getSectionRange(body)
+        const sectionR = await getSectionRange(body)
 
-        if (sectionRange) {
+        if (sectionR) {
             res.status(400).json({messagge:"El aula esta ocupada en ese Horario"});
             return
             
@@ -217,7 +217,7 @@ const updateSection = async (req,res)=>{
         
         body.SPACE_AVAILABLE = (body.SPACE_AVAILABLE == null || body.SPACE_AVAILABLE==0) ? classroom.AMOUNT_PEOPLE : body.SPACE_AVAILABLE
         
-        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR);
+        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR, body.ID_PERIOD);
         professor.sections = sections.rows
         
         if (parseInt(section.Proffessor.ID_PROFFERSSOR) != parseInt(body.ID_PROFFERSSOR)) {
@@ -275,9 +275,9 @@ const updateSection = async (req,res)=>{
             
         }
 
-        const sectionRange = await getSectionRange(body)
+        const sectionR = await getSectionRange(body)
 
-        if (sectionRange) {
+        if (sectionR) {
             res.status(400).json({messagge:"El aula esta ocupada en ese Horario"});
             return
             
