@@ -14,8 +14,15 @@ const fechaActual = new Date().toLocaleDateString();
 const getProfessorsCtrl = async(req,res)=>{
 
     try {
-        const professors = await Professor.findAll({include:{
-        model:User ,as:"user" ,include:[{model:Rol,as:"rol"}]}})
+        const {idUser}= req.params;
+        const user = await User.findOne({
+            where:{ID_USER:idUser}
+        })
+        const professors = await Professor.findAll({
+            include:{
+        
+                model:User ,as:"user" ,where:{CENTER:{[Op.like]:user.CENTER}},include:[{model:Rol,as:"rol"}]
+            }})
         res.status(200).json({professors})
     } catch (error) {
         console.log(error)
@@ -32,9 +39,18 @@ const registerProfessorCtrl = async (req,res)=>{
     try {
         
         const {file} = req;
-        const url = `http://localhost:3000/images/${file.filename}`
+        if (file) {
+            const url = `http://localhost:3000/images/${file.filename}`
+            body.URL = url
+        }
         const body = matchedData(req);
-        body.URL = url
+        body.URL = ""
+
+        if (!/^[A-Z][a-z]*\s[A-Z][a-z]*(?:\s[A-Z][a-z]*)*(?:\s[A-Z][a-z]*)*$/.test(body.NAME)) {
+            res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
+            return
+            
+        }
         if(body.NAME.split(" ").length == 1){
             res.status(401).json({messagge:"El nombre es incorrecto"})
         }
@@ -76,11 +92,11 @@ const registerProfessorCtrl = async (req,res)=>{
                 ]
             })
 
-            if (body.ROLE == 3) {
+            if (body.ROLE == 3 && profesor) {
                 res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
                 return                
             }
-            if (body.ROLE == 4) {
+            if (profesor && body.ROLE == 4) {
                 res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
                 return                
             }
@@ -96,7 +112,7 @@ const registerProfessorCtrl = async (req,res)=>{
         body.USER_PASSWORD = await encrypt(body.USER_PASSWORD_PLAIN);
         body.ACCOUNT_NUMBER = ACCOUNT_NUMBER
         await Professor.add(body);
-        sendMail(body.EMAIL, {subject: "Registro, Universidad Nacional Autonoma e Honduras"},"sendMailProfessor", {
+        sendMail(body.EMAIL, {subject: "Registro, Universidad Nacional Autonoma de Honduras"},"sendMailProfessor", {
             name: body.NAME,
             password: body.USER_PASSWORD_PLAIN,
             account_number:body.ACCOUNT_NUMBER,
@@ -133,7 +149,7 @@ const registerProfessorCtrl = async (req,res)=>{
 const deleteProfessor = async(req, res)=>{
     try {
         const {idUser} = req.params
-        await Professor.destroy({where:{ID_USER: idUser }})
+        await User.destroy({where:{ID_USER: idUser }})
         res.status(200).json({messagge:"El docente ha sido eliminado exitosamente"})
         
     } catch (error) {
@@ -148,9 +164,14 @@ const updateProfessor = async (req,res)=>{
         
         
         const {idUser} = req.params
+        console.log({idUser})
         
         const {body} = req;
-        
+        if (!/^[A-Z][a-z]*\s[A-Z][a-z]*(?:\s[A-Z][a-z]*)*(?:\s[A-Z][a-z]*)*$/.test(body.NAME)) {
+            res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
+            return
+            
+        }
 
         if(body.NAME.split(" ").length == 1){
             res.status(401).json({messagge:"El nombre es incorrecto"})
@@ -177,10 +198,11 @@ const updateProfessor = async (req,res)=>{
             
         
         if (body.ROL != 2 ) {
+           
             
             profesor = await Professor.findOne({
                 where:{
-                    CAREER: {[Op.like]:body.CAREER}
+                    CAREER: {[Op.like]:body.CARRER}
                 }, include:[
                     {
                         model:User, as:"user", where:{
@@ -192,15 +214,19 @@ const updateProfessor = async (req,res)=>{
                     }
                 ]
             })
+     
+            if (profesor) {
+          
+                if ( body.ROL == 3 && profesor.ID_USER != idUser) {
+                    res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
+                    return                
+                }
+                if ( body.ROL == 4 && profesor.ID_USER != idUser) {
+                    res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
+                    return                
+                }
+            }
 
-            if (body.ROL == 3 && profesor.ID_USER != idUser) {
-                res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
-                return                
-            }
-            if (body.ROL == 4 && profesor.ID_USER != idUser) {
-                res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
-                return                
-            }
         }
 
         await Professor.update({

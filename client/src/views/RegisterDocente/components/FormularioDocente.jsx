@@ -161,7 +161,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
         { NAME, CENTER, CARRER, ROL, EMAIL },
         config
       );
-      console.log(res.data);
+      console.log(res.data.data);
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);
