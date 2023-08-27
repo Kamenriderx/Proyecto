@@ -19,6 +19,7 @@ const getClassroom = async(body)=>{
 }
 
 const sectionRange = async (body)=>{
+    
     return await Section.findOne({
         where:{
             [Op.or]:[
@@ -119,6 +120,7 @@ const sectionRange = async (body)=>{
 }
 
 const sectionExists = async (body)=>{
+    
     return await Section.findOne({
         where:{
             ID_CLASSROOM: body.ID_CLASSROOM,

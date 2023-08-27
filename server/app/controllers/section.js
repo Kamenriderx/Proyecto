@@ -41,20 +41,30 @@ const createSection = async(req,res)=>{
             return    
         }
         let diff = (parseInt(body.END_TIME) - parseInt(body.START_TIME))/100
-        if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff < course.UV  ){
+        if((course.UV != body.DAYS_COUNT)){
             res.status(400).json({messagge:"El horario no concuerda con la cantidad de unidades valorativas"});
             return
-
-
         }
-        if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff > course.UV  ){
+        if((course.UV != body.DAYS_COUNT) && diff > course.UV  ){
             res.status(400).json({messagge:"Las horas asignadas es mayor a la cantidad necesaria para la clase"});
             return
 
         }
 
+        if((course.UV != body.DAYS_COUNT) && diff != 1  ){
+            res.status(400).json({messagge:"El horario y los dias seleccionados estan mal establecidos"});
+            return
+
+        }
+
+        if((course.UV == body.DAYS_COUNT) && diff != 1  ){
+            res.status(400).json({messagge:"Los horas asignadas a la clase no concuerdan con las que la clase necesita"});
+            return
+
+        }
+
         
-        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR);
+        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR, body.ID_PERIOD);
         professor.sections = sections.rows
         if (professor.sections != null && professor.sections.length == 5 ) {
             res.status(400).json({messagge:"El docente ya tiene asignadas 5 secciones"});
@@ -253,13 +263,13 @@ const updateSection = async (req,res)=>{
             return    
         }
         let diff = (parseInt(body.END_TIME) - parseInt(body.START_TIME))/100
-        if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff < course.UV  ){
+        if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff < course.UV && diff != 1 ){
             res.status(400).json({messagge:"El horario no cumple con la totalidad de unidades valorativas"});
             return
 
 
         }
-        if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff > course.UV  ){
+        if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff > course.UV && diff != 1 ){
             res.status(400).json({messagge:"Las horas asignadas son más de las que la asignatura necesita"});
             return
 
