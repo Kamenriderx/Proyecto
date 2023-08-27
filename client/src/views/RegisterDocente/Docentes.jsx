@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import FormularioDocente from "./components/FormularioDocente";
 /* import PreviewDocente from '../../components/Docente/PreviewDocente' */
 import Modal from "../../components/Modal";
@@ -6,10 +6,12 @@ import { BsPersonFillAdd } from "react-icons/bs";
 import useAxios from "../../utils/hooks/useAxios";
 import PreviewDocente from "./components/PreviewDocente";
 import axios from "axios";
+import { StoreContext } from "../../store/ContextExample";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineBackward } from "react-icons/ai";
 
 const Docentes = () => {
+  const { state, dispatch } = useContext(StoreContext);
   const [showModal, setShowModal] = useState(false);
   const [docentes, setDocentes] = useState([]);
   const [check, setCheck] = useState(false);
@@ -42,7 +44,7 @@ const Docentes = () => {
   useEffect(() => {
     const axiosCall = async () => {
       const res = await axios(
-        "http://localhost:3000/registro/admin/getProfessors"
+        `http://localhost:3000/registro/admin/getProfessors/${state.user.ID_USER}`
       );
       setDocentes(res.data.professors);
     };
