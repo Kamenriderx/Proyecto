@@ -164,8 +164,7 @@ const updateProfessor = async (req,res)=>{
         
         
         const {idUser} = req.params
-        console.log({idUser})
-        
+ 
         const {body} = req;
         if (!/^[A-Z][a-z]*\s[A-Z][a-z]*(?:\s[A-Z][a-z]*)*(?:\s[A-Z][a-z]*)*$/.test(body.NAME)) {
             res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
@@ -326,7 +325,7 @@ const registerStudentsCtrl = async (req,res)=>{
         }
 
         if (dataDuplicate.length > 0 && newDataValidate.length ==0 && dataError.length ==0) {
-            res.status(409).json({messagge:"Estos estudiantes ya habian sido registrados en el sistema",data:dataDuplicate})    
+            res.status(409).json({messagge:"El/Los estudiantes ya habian sido registrados en el sistema",data:dataDuplicate})    
             return
         
         }
@@ -353,7 +352,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(200).json({messagge:"Los estudiantes se han registrado de forma correcta"})
+            res.status(200).json({messagge:"El/Los estudiantes se han registrado de forma correcta"})
             return 
         
         }
