@@ -21,7 +21,7 @@ const getProfessorsCtrl = async(req,res)=>{
         const professors = await Professor.findAll({
             include:{
         
-                model:User ,as:"user" ,where:{CENTER:{[Op.like]:user.CENTER}},include:[{model:Rol,as:"rol"}]
+                model:User ,as:"user",include:[{model:Rol,as:"rol"}]
             }})
         res.status(200).json({professors})
     } catch (error) {
