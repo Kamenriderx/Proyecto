@@ -17,7 +17,6 @@ const Evaluaciones = () => {
     setIsModalOpen(false);
   };
 
-
   const getEvaluacion = async (stateUser) => {
     try {
       const config = {
@@ -49,9 +48,14 @@ const Evaluaciones = () => {
 
   return (
     <div className="mx-16 mt-28 ">
-            <Modal isOpen={isModalOpen} onClose={closeModal} />
+      <Modal isOpen={isModalOpen} onClose={closeModal} />
 
-      <button className="text-xl font-bold text-center mb-4" onClick={openModal} >VER PREGUNTAS</button>
+      <button
+        className="text-xl font-bold text-center mb-4"
+        onClick={openModal}
+      >
+        VER PREGUNTAS
+      </button>
 
       <div className="relative overflow-x-auto rounded-xl">
         <table className="w-full text-lg text-left text-gray-700 ">
@@ -81,8 +85,6 @@ const Evaluaciones = () => {
               <th scope="col" class="px-2 py-3">
                 Excelente
               </th>{" "}
-     
-             
             </tr>
           </thead>
           <tbody>
@@ -101,8 +103,6 @@ const Evaluaciones = () => {
                     <td className="px-6 py-4">{evaluacion.RESP_2}</td>
                     <td className="px-6 py-4">{evaluacion.RESP_3}</td>
                     <td className="px-6 py-4">{evaluacion.RESP_4}</td>
-                  
-              
                   </tr>
                 ))}
               </>

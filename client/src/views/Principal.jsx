@@ -119,7 +119,7 @@ const Principal = () => {
           />
         </div>
         <div className="h-[600px] flex justify-center flex-col items-center">
-          <h2 className="font-bold text-4xl my-14 ">Calendario academico</h2>
+          <h2 className="font-bold text-4xl my-14 ">Calendario académico</h2>
 
           <div className="h-5/6 mr-3">
             <img src={url ? url : ""} alt="" />
