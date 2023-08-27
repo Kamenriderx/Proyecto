@@ -49,7 +49,8 @@ const registerProfessorCtrl = async (req,res)=>{
             
         }
 
-        if (!/^[A-Z][a-z]*\s[A-Z][a-z]*(?:\s[A-Z][a-z]*)*(?:\s[A-Z][a-z]*)*$/.test(body.NAME)) {
+        if (!/^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*$/
+        .test(body.NAME)) {
             res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
             return
             
@@ -169,7 +170,8 @@ const updateProfessor = async (req,res)=>{
         const {idUser} = req.params
  
         const {body} = req;
-        if (!/^[A-Z][a-z]*\s[A-Z][a-z]*(?:\s[A-Z][a-z]*)*(?:\s[A-Z][a-z]*)*$/.test(body.NAME)) {
+        if (!/^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*$/
+        .test(body.NAME)) {
             res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
             return
             
