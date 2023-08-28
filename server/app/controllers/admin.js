@@ -48,6 +48,16 @@ const registerProfessorCtrl = async (req,res)=>{
             body.URL = ""
             
         }
+        console.log({body})
+
+        if (body.NAME.slice(-1)==" ") {
+            body.NAME = body.NAME.replace(/\s+$/, '');
+            
+        }
+        if (body.EMAIL.slice(-1)==" ") {
+            body.EMAIL = body.EMAIL.replace(/\s+$/, '');
+            
+        }
 
         if (!/^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*$/
         .test(body.NAME)) {
@@ -170,6 +180,14 @@ const updateProfessor = async (req,res)=>{
         const {idUser} = req.params
  
         const {body} = req;
+        if (body.NAME.slice(-1)==" ") {
+            body.NAME = body.NAME.replace(/\s+$/, '');
+            
+        }
+        if (body.EMAIL.slice(-1)==" ") {
+            body.EMAIL = body.EMAIL.replace(/\s+$/, '');
+            
+        }
         if (!/^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*$/
         .test(body.NAME)) {
             res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
