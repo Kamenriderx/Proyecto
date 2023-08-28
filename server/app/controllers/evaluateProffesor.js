@@ -171,86 +171,75 @@ exports.getProfessorEvaluations = async function (req, res) {
     const user = await User.findOne({ where: { ID_USER: idUser } });
     const professorName = user ? user.NAME : 'Nombre del profesor no encontrado.';
 
-    // Career del profesor
+    // Obtener la carrera del profesor
     const professorCareer = professor.CAREER;
 
-    // Evaluaciones del profesor en el periodo y carrera
+    // Obtener todas las evaluaciones del profesor en el periodo y carrera
     const evaluations = await Evaluation.findAll({
       where: {
         ID_PERIOD: idPeriod,
-        PROFESSOR_CAREER: { [Sequelize.Op.like]: `%${professorCareer}%` },
+        PROFESSOR_CAREER: { [Sequelize.Op.like]: `%${professorCareer}%` }, // Case-insensitive comparison
       },
     });
 
-    // Inicializar sumatorias
-    let sumDeficiente = 0;
-    let sumBueno = 0;
-    let sumMuyBueno = 0;
-    let sumExcelente = 0;
+    // Inicializar un arreglo para almacenar los resultados de las evaluaciones
+    const evaluationResults = [];
 
-    // Calcular sumatorias y obtener respuestas 27 y 28
-    const evaluationsProcessed = await Promise.all(
-      evaluations.map(async (evaluation) => {
-        const responses = [
-          evaluation.RESP_1, evaluation.RESP_2, evaluation.RESP_3, evaluation.RESP_4,
-          evaluation.RESP_5, evaluation.RESP_6, evaluation.RESP_7, evaluation.RESP_8,
-          evaluation.RESP_9, evaluation.RESP_10, evaluation.RESP_11, evaluation.RESP_12,
-          evaluation.RESP_13, evaluation.RESP_14, evaluation.RESP_15, evaluation.RESP_16,
-          evaluation.RESP_17, evaluation.RESP_18, evaluation.RESP_19, evaluation.RESP_20,
-          evaluation.RESP_21, evaluation.RESP_22, evaluation.RESP_23, evaluation.RESP_24,
-          evaluation.RESP_25, evaluation.RESP_26
-        ];
+    // Iterar a través de cada evaluación
+    for (const evaluation of evaluations) {
+      // Inicializar sumatorias por evaluación
+      let sumDeficiente = 0;
+      let sumBueno = 0;
+      let sumMuyBueno = 0;
+      let sumExcelente = 0;
 
-        sumDeficiente += responses.filter(resp => resp === 'Deficiente').length;
-        sumBueno += responses.filter(resp => resp === 'Bueno').length;
-        sumMuyBueno += responses.filter(resp => resp === 'Muy bueno').length;
-        sumExcelente += responses.filter(resp => resp === 'Excelente').length;
+      // Calcular sumatorias para cada evaluación
+      const responses = [
+        evaluation.RESP_1, evaluation.RESP_2, evaluation.RESP_3, evaluation.RESP_4,
+        evaluation.RESP_5, evaluation.RESP_6, evaluation.RESP_7, evaluation.RESP_8,
+        evaluation.RESP_9, evaluation.RESP_10, evaluation.RESP_11, evaluation.RESP_12,
+        evaluation.RESP_13, evaluation.RESP_14, evaluation.RESP_15, evaluation.RESP_16,
+        evaluation.RESP_17, evaluation.RESP_18, evaluation.RESP_19, evaluation.RESP_20,
+        evaluation.RESP_21, evaluation.RESP_22, evaluation.RESP_23, evaluation.RESP_24,
+        evaluation.RESP_25, evaluation.RESP_26
+      ];
 
-        return {
-          ...evaluation.toJSON(),
-          RESP_27: evaluation.RESP_27,
-          RESP_28: evaluation.RESP_28,
-        };
-      })
-    );
+      sumDeficiente = responses.filter(resp => resp === 'Deficiente').length;
+      sumBueno = responses.filter(resp => resp === 'Bueno').length;
+      sumMuyBueno = responses.filter(resp => resp === 'Muy bueno').length;
+      sumExcelente = responses.filter(resp => resp === 'Excelente').length;
 
-    // Nombre del estudiante, curso y sección
-    const evaluationsWithNames = await Promise.all(
-      evaluationsProcessed.map(async (evaluation) => {
-        const student = await Student.findOne({ where: { ID_STUDENT: evaluation.ID_STUDENT } });
-        const course = await Course.findByPk(evaluation.ID_COURSE);
-        const section = await Section.findByPk(evaluation.ID_SECTION);
+      // Nombre del estudiante, curso y sección
+      const student = await Student.findOne({ where: { ID_STUDENT: evaluation.ID_STUDENT } });
+      const course = await Course.findByPk(evaluation.ID_COURSE);
+      const section = await Section.findByPk(evaluation.ID_SECTION);
 
-        return {
-          ...evaluation,
-          STUDENT_NAME: student ? student.NAME : 'Nombre del estudiante no encontrado.',
-          COURSE_NAME: course ? course.NAME : 'Nombre del curso no encontrado.',
-          SECTION_CODE: section ? section.SECTION_CODE : 'Código de la sección no encontrado.',
-        };
-      })
-    );
+      // Crear el resultado de la evaluación actual
+      const evaluationResult = {
+        sumDeficiente,
+        sumBueno,
+        sumMuyBueno,
+        sumExcelente,
+        professorName,
+        RESP_26: evaluation.RESP_26,
+        RESP_27: evaluation.RESP_27,
+        RESP_28: evaluation.RESP_28,
+        STUDENT_NAME: student ? student.NAME : 'Nombre del estudiante no encontrado.',
+        COURSE_NAME: course ? course.NAME : 'Nombre del curso no encontrado.',
+        SECTION_CODE: section ? section.SECTION_CODE : 'Código de la sección no encontrado.',
+        PROFESSOR_CAREER: professorCareer,
+      };
 
-    // Extraer respuestas 27 y 28
-    const evaluationsResponses = evaluationsWithNames.map(evaluation => ({
-      RESP_27: evaluation.RESP_27,
-      RESP_28: evaluation.RESP_28,
-    }));
+      // Agregar el resultado de la evaluación al arreglo de resultados de evaluaciones
+      evaluationResults.push(evaluationResult);
+    }
 
-    // Crear el resultado en el formato deseado
-    const result = {
-      sumDeficiente,
-      sumBueno,
-      sumMuyBueno,
-      sumExcelente,
-      professorName,
-      STUDENT_NAME: 'Nombre del estudiante no encontrado.',
-      COURSE_NAME: 'INTRODUCCION A LA INGENIERIA EN SISTEMAS',
-      SECTION_CODE: '0700',
-      PROFESSOR_CAREER: professorCareer,
-      evaluations: evaluationsResponses,
+    // Crear el resultado final con el arreglo de resultados de evaluaciones
+    const overallResult = {
+      evaluations: evaluationResults,
     };
 
-    res.json(result);
+    res.json(overallResult);
   } catch (error) {
     console.error('Error al obtener las evaluaciones:', error);
     res.status(500).json({ message: 'Error al obtener las evaluaciones.' });
