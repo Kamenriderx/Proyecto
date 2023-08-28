@@ -6,6 +6,7 @@ import Sidevar from "./components/Sidevar";
 import axios from "axios";
 import admin from "../../assets/admin.jpg"
 import UNAH from "../../assets/UNAH.png"
+import TeacherContext from "./context/TeacherContext";
 
 
 const ViewTeacher = () => {
