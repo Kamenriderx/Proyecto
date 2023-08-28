@@ -8,7 +8,7 @@ import Carrusell from "./components/Carrusell";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import StudentContext from "./context/StudentContext";
-import { MdAccountBox } from "react-icons/md";
+import { MdAccountBox } from "react-icons/Md";
 
 import io from "socket.io-client";
 
