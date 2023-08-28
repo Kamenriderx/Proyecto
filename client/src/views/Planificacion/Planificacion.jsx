@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BiArrowBack } from "react-icons/Bi";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -645,19 +646,19 @@ const Planificacion = () => {
         </div>
       </Modal2>
       <div className="w-3/4 mx-auto">
-        <div className="flex justify-start">
-          <div className="mt-5">
-            <button
-              onClick={handleBack}
-              className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
-            >
-              <AiOutlineBackward color="#F7F9F7" />
-            </button>
-          </div>
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
         </div>
+      </div>
         <div className="mt-5 justify-center flex">
-          <p className="text-red-800 font-bold text-4xl mt-5">
-            Planificación de Periodo Academico
+          <p className="text-black font-bold text-4xl mt-5">
+            Planificación de Periodo Académico
           </p>
         </div>
         <div className="mt-10 flex justify-between">
@@ -680,10 +681,6 @@ const Planificacion = () => {
               <option value="2024">2024</option>
               <option value="2025">2025</option>
               <option value="2025">2026</option>
-              <option value="2025">2027</option>
-              <option value="2025">2028</option>
-              <option value="2025">2029</option>
-              <option value="2025">2030</option>
             </select>
           </div>
         </div>
@@ -745,7 +742,7 @@ const Planificacion = () => {
           ) : (
             <div className="text-center mt-20">
               <p className="text-black font-bold text-2xl">
-                No hay planificacion para este año
+                No hay planificación para este año
               </p>
             </div>
           )}

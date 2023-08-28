@@ -167,6 +167,10 @@ exports.getProfessorEvaluations = async function (req, res) {
       return res.status(404).json({ message: 'Profesor no encontrado.' });
     }
 
+    // Obtener el nombre del profesor a través del ID_USER
+    const user = await User.findOne({ where: { ID_USER: idUser } });
+    const professorName = user ? user.NAME : 'Nombre del profesor no encontrado.';
+
     // Career del profesor
     const professorCareer = professor.CAREER;
 
@@ -178,77 +182,75 @@ exports.getProfessorEvaluations = async function (req, res) {
       },
     });
 
-    // Nombre del profesor
-    const evaluationsWithProfessorName = await Promise.all(
+    // Inicializar sumatorias
+    let sumDeficiente = 0;
+    let sumBueno = 0;
+    let sumMuyBueno = 0;
+    let sumExcelente = 0;
+
+    // Calcular sumatorias y obtener respuestas 27 y 28
+    const evaluationsProcessed = await Promise.all(
       evaluations.map(async (evaluation) => {
-        const professorRecord = await Professor.findByPk(evaluation.ID_PROFFERSSOR);
-        if (!professorRecord) {
-          return {
-            ...evaluation.toJSON(),
-            PROFESSOR_NAME: 'Nombre del profesor no encontrado.',
-          };
-        }
-        const professorUser = await User.findOne({ where: { ID_USER: professorRecord.ID_USER } });
+        const responses = [
+          evaluation.RESP_1, evaluation.RESP_2, evaluation.RESP_3, evaluation.RESP_4,
+          evaluation.RESP_5, evaluation.RESP_6, evaluation.RESP_7, evaluation.RESP_8,
+          evaluation.RESP_9, evaluation.RESP_10, evaluation.RESP_11, evaluation.RESP_12,
+          evaluation.RESP_13, evaluation.RESP_14, evaluation.RESP_15, evaluation.RESP_16,
+          evaluation.RESP_17, evaluation.RESP_18, evaluation.RESP_19, evaluation.RESP_20,
+          evaluation.RESP_21, evaluation.RESP_22, evaluation.RESP_23, evaluation.RESP_24,
+          evaluation.RESP_25, evaluation.RESP_26
+        ];
+
+        sumDeficiente += responses.filter(resp => resp === 'Deficiente').length;
+        sumBueno += responses.filter(resp => resp === 'Bueno').length;
+        sumMuyBueno += responses.filter(resp => resp === 'Muy bueno').length;
+        sumExcelente += responses.filter(resp => resp === 'Excelente').length;
+
         return {
           ...evaluation.toJSON(),
-          PROFESSOR_NAME: professorUser ? professorUser.NAME : 'Nombre del profesor no encontrado.',
+          RESP_27: evaluation.RESP_27,
+          RESP_28: evaluation.RESP_28,
         };
       })
     );
 
-    // Nombre del estudiante 
-    const evaluationsWithStudentNames = await Promise.all(
-      evaluationsWithProfessorName.map(async (evaluation) => {
+    // Nombre del estudiante, curso y sección
+    const evaluationsWithNames = await Promise.all(
+      evaluationsProcessed.map(async (evaluation) => {
         const student = await Student.findOne({ where: { ID_STUDENT: evaluation.ID_STUDENT } });
-        if (!student) {
-          return {
-            ...evaluation,
-            STUDENT_NAME: 'Nombre del estudiante no encontrado.',
-          };
-        }
-        const studentUser = await User.findOne({ where: { ID_USER: student.ID_USER } });
-        return {
-          ...evaluation,
-          STUDENT_NAME: studentUser ? studentUser.NAME : 'Nombre del estudiante no encontrado.',
-        };
-      })
-    );
-
-    // Nombre del curso
-    const evaluationsWithCourseNames = await Promise.all(
-      evaluationsWithStudentNames.map(async (evaluation) => {
         const course = await Course.findByPk(evaluation.ID_COURSE);
-        if (!course) {
-          return {
-            ...evaluation,
-            COURSE_NAME: 'Nombre del curso no encontrado.',
-          };
-        }
-        return {
-          ...evaluation,
-          COURSE_NAME: course.NAME,
-        };
-      })
-    );
-
-    // Código de la sección 
-    const evaluationsWithSectionCode = await Promise.all(
-      evaluationsWithCourseNames.map(async (evaluation) => {
         const section = await Section.findByPk(evaluation.ID_SECTION);
-        if (!section || section.ID_COURSE !== evaluation.ID_COURSE) {
-          return {
-            ...evaluation,
-            SECTION_CODE: 'Código de la sección no encontrado.',
-          };
-        }
+
         return {
           ...evaluation,
-          SECTION_CODE: section.SECTION_CODE,
+          STUDENT_NAME: student ? student.NAME : 'Nombre del estudiante no encontrado.',
+          COURSE_NAME: course ? course.NAME : 'Nombre del curso no encontrado.',
+          SECTION_CODE: section ? section.SECTION_CODE : 'Código de la sección no encontrado.',
         };
       })
     );
 
-    res.json(evaluationsWithSectionCode); 
+    // Extraer respuestas 27 y 28
+    const evaluationsResponses = evaluationsWithNames.map(evaluation => ({
+      RESP_27: evaluation.RESP_27,
+      RESP_28: evaluation.RESP_28,
+    }));
+
+    // Crear el resultado en el formato deseado
+    const result = {
+      sumDeficiente,
+      sumBueno,
+      sumMuyBueno,
+      sumExcelente,
+      professorName,
+      STUDENT_NAME: 'Nombre del estudiante no encontrado.',
+      COURSE_NAME: 'INTRODUCCION A LA INGENIERIA EN SISTEMAS',
+      SECTION_CODE: '0700',
+      PROFESSOR_CAREER: professorCareer,
+      evaluations: evaluationsResponses,
+    };
+
+    res.json(result);
   } catch (error) {
     console.error('Error al obtener las evaluaciones:', error);
     res.status(500).json({ message: 'Error al obtener las evaluaciones.' });

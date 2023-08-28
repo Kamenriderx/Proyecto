@@ -506,7 +506,7 @@ exports.getYears = (req, res) => {
   const currentYear = new Date().getFullYear();
 
   // Límite máximo de años a mostrar
-  const maxYear = currentYear + 10; // Mostrar años hasta 10 años en el futuro
+  const maxYear = currentYear + 5; // Mostrar años hasta 10 años en el futuro
 
   // Lista de años a partir de 2023 hasta el límite máximo
   const years = [];

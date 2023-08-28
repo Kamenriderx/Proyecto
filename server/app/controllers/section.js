@@ -1,6 +1,6 @@
 const {getCourse, getClassroom, sectionRange, sectionExists,createSectionCode, getProfessor, validateSchedule, getSectionsProffessor} = require('../handlers/handleCreateSection');
 const { Section, Professor, User, Enrollment } = require('../models');
-const {getProfessorIdUser, getSectionsByCenterAndCareer,getSection, sectionExistsHourClassroom,sectionbyProffessor, getSectionsByCenterAndCareerPeriod, getSectionsByCenterAndCareerPeriods, getSectionById} = require('../helpers/repositorySections');
+const {getProfessorIdUser, getSectionsByCenterAndCareer,getSection, sectionExistsHourClassroom,sectionbyProffessor, getSectionsByCenterAndCareerPeriod, getSectionsByCenterAndCareerPeriods, getSectionById, getSectionRange} = require('../helpers/repositorySections');
 const {  getPeriodicAcademicCurrent,getNextPeriodicAcademic, getDetailsDatesPeriodAcademic, periodToStart, getTheLastPeriodAcademic } = require("../helpers/repositoryPeriodicAcademic");
 
 
@@ -41,18 +41,25 @@ const createSection = async(req,res)=>{
             return    
         }
         let diff = (parseInt(body.END_TIME) - parseInt(body.START_TIME))/100
-        if(course.UV != body.DAYS_COUNT && diff < course.UV  ){
-            res.status(400).json({messagge:"El horario no cubre totalmente la cantidad de unidades valorativas"});
+        if((course.UV != body.DAYS_COUNT) && diff != course.UV){
+            res.status(400).json({messagge:"El horario no concuerda con la cantidad de unidades valorativas"});
             return
-
-
         }
-        if(course.UV != body.DAYS_COUNT && diff > course.UV  ){
+        if((course.UV != body.DAYS_COUNT) && diff > course.UV  ){
             res.status(400).json({messagge:"Las horas asignadas es mayor a la cantidad necesaria para la clase"});
             return
 
         }
-        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR);
+
+       
+        if((course.UV == body.DAYS_COUNT) && diff != 1  ){
+            res.status(400).json({messagge:"Los horas asignadas a la clase no concuerdan con las que la clase necesita"});
+            return
+
+        }
+
+        
+        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR, body.ID_PERIOD);
         professor.sections = sections.rows
         if (professor.sections != null && professor.sections.length == 5 ) {
             res.status(400).json({messagge:"El docente ya tiene asignadas 5 secciones"});
@@ -62,6 +69,13 @@ const createSection = async(req,res)=>{
         if (await validateSchedule(body) || (sectionPro && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
          
             res.status(400).json({messagge:"El docente ya tiene una sección asiganada a esa hora y esos días"});
+            return
+            
+        }
+        const sectionR = await getSectionRange(body)
+
+        if (sectionR && (sectionR.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionR.DAYS))) {
+            res.status(400).json({messagge:"El aula esta ocupada en ese Horario"});
             return
             
         }
@@ -208,7 +222,7 @@ const updateSection = async (req,res)=>{
         
         body.SPACE_AVAILABLE = (body.SPACE_AVAILABLE == null || body.SPACE_AVAILABLE==0) ? classroom.AMOUNT_PEOPLE : body.SPACE_AVAILABLE
         
-        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR);
+        const sections = await getSectionsProffessor(professor.ID_PROFFERSSOR, body.ID_PERIOD);
         professor.sections = sections.rows
         
         if (parseInt(section.Proffessor.ID_PROFFERSSOR) != parseInt(body.ID_PROFFERSSOR)) {
@@ -244,13 +258,13 @@ const updateSection = async (req,res)=>{
             return    
         }
         let diff = (parseInt(body.END_TIME) - parseInt(body.START_TIME))/100
-        if(course.UV != body.DAYS_COUNT && diff < course.UV  ){
+        if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff < course.UV && diff != 1 ){
             res.status(400).json({messagge:"El horario no cumple con la totalidad de unidades valorativas"});
             return
 
 
         }
-        if(course.UV != body.DAYS_COUNT && diff > course.UV  ){
+        if((course.UV != body.DAYS_COUNT || course.UV == body.DAYS_COUNT) && diff > course.UV && diff != 1 ){
             res.status(400).json({messagge:"Las horas asignadas son más de las que la asignatura necesita"});
             return
 
@@ -265,6 +279,16 @@ const updateSection = async (req,res)=>{
             return
             
         }
+
+        const sectionR = await getSectionRange(body)
+
+        if (sectionR) {
+            res.status(400).json({messagge:"El aula esta ocupada en ese Horario"});
+            return
+            
+        }
+
+        
 
         body.SECTION_CODE = await createSectionCode(body);
         await Section.update({
