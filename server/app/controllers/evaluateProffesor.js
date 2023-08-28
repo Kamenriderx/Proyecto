@@ -209,8 +209,16 @@ exports.getProfessorEvaluations = async function (req, res) {
       sumMuyBueno = responses.filter(resp => resp === 'Muy bueno').length;
       sumExcelente = responses.filter(resp => resp === 'Excelente').length;
 
-      // Nombre del estudiante, curso y sección
+      // Buscar el estudiante por ID_STUDENT y obtener su ID_USER
       const student = await Student.findOne({ where: { ID_STUDENT: evaluation.ID_STUDENT } });
+      if (!student) {
+        console.log('Estudiante no encontrado para la evaluación:', evaluation.ID_EVALUATION);
+        continue; // Ir a la siguiente evaluación si no se encuentra el estudiante
+      }
+      const studentUser = await User.findOne({ where: { ID_USER: student.ID_USER } });
+      const studentName = studentUser ? studentUser.NAME : 'Nombre del estudiante no encontrado.';
+
+      // Nombre del curso y sección
       const course = await Course.findByPk(evaluation.ID_COURSE);
       const section = await Section.findByPk(evaluation.ID_SECTION);
 
@@ -224,7 +232,7 @@ exports.getProfessorEvaluations = async function (req, res) {
         RESP_26: evaluation.RESP_26,
         RESP_27: evaluation.RESP_27,
         RESP_28: evaluation.RESP_28,
-        STUDENT_NAME: student ? student.NAME : 'Nombre del estudiante no encontrado.',
+        STUDENT_NAME: studentName,
         COURSE_NAME: course ? course.NAME : 'Nombre del curso no encontrado.',
         SECTION_CODE: section ? section.SECTION_CODE : 'Código de la sección no encontrado.',
         PROFESSOR_CAREER: professorCareer,
