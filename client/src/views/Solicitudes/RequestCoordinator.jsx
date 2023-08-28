@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AlertTwo from "../../components/AlertTwo";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const RequestCoordinator = () => {
   const [solicitudesCordi, setSolicitudesCordi] = useState([]);
   const [alerta, setAlerta] = useState({});
   const [check, setCheck] = useState(false);
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const getSolicitudes = async () => {
@@ -94,6 +100,16 @@ const RequestCoordinator = () => {
 
   return (
     <div className="container mx-auto mt-10">
+      <div className="flex justify-start mx-5 mb-5">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       {message && <AlertTwo alerta={alerta} />}
       <div className="text-center mb-10">
         <p className="text-red-800 text-2xl font-bold">

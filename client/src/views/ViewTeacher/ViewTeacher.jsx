@@ -39,12 +39,77 @@ const ViewTeacher = () => {
 
   return (
     <>
-<Sidevar/>
-{state?.user?.ID_ROLE === 5 ? (
-  <div className="w-full h-full">
-
-<img src={UNAH} alt="foto" className="w-[900px] h-[600px] ml-[480px] mt-[100px]"/>
-  </div>
+      {stateTeacher && (
+        <>
+          <Sidevar />
+          {stateTeacher.role === 2 ||
+          stateTeacher.role === 3 ||
+          stateTeacher.role === 4 ? (
+            <>
+              <div className="grid grid-cols-3">
+                <div className="col-span-3 p-4 pl-72">
+                  <div className="w-full border-2 border-gray-300">
+                    <div className="flex flex-row items-center justify-center">
+                      <div className="mx-auto w-32 h-32 justify-end flex rounded-full mb-10 mt-5">
+                        {stateTeacher.user.PROFILE_PHOTO ? (
+                          <img
+                            src={stateTeacher.user.PROFILE_PHOTO}
+                            alt="Perfil del docente"
+                            className="rounded-full -mx-24"
+                          />
+                        ) : (
+                          <img
+                            src={fondoPerfil}
+                            alt="Perfil del docente"
+                            className="rounded-full -mx-24"
+                          />
+                        )}
+                      </div>
+                      <div className="w-2/3">
+                        <div className="flex flex-col m-4">
+                          <div className="font-bold">
+                            <p className="text-xl">
+                              {stateTeacher.user.user.NAME}
+                            </p>
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {stateTeacher.user.CAREER}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="border-2 border-gray-300 mt-5 mb-5">
+                <div className="p-2 border-b-2 border-gray-300 text-xl bg-gray-50">
+                  <div className="flex justify-between">
+                    <div className="mx-96">Información</div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-1">
+                    <div className="flex m-4 items-center gap-2 border-b-2 pb-2 mx-96">
+                      <MdEmail className="flex-shrink-0 w-8 h-8 text-gray-500" />
+                      <div className="-mx-32">
+                        <div className="text-sm mx-36">Correo Personal</div>
+                        <div className="mx-36">
+                          {stateTeacher.user.user.EMAIL}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-1">
+                    <div className="flex m-4 items-center gap-2 border-b-2 pb-2">
+                      <MdEmail className="flex-shrink-0 w-8 h-8 text-gray-500" />
+                      <div>
+                        <div className="text-sm ">Correo Institucional</div>
+                        <div>{stateTeacher.user.INSTITUTIONAL_EMAIL}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 ): (
   <div className="grid grid-cols-3 gap-6 p-4 sm:ml-64 -mt-4">

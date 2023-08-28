@@ -587,7 +587,6 @@ const History = () => {
               return <TableRow {...note} />;
             }
           })}
-
           <nav className="flex justify-center mt-6">
             <ul className="flex h-10 border justify-center items-center">
               <li className="hover:bg-slate-400 h-full justify-center items-center flex px-6">
