@@ -4,13 +4,13 @@ import { httpRequests } from "../../utils/helpers/httpRequests";
 import { AiOutlineSearch } from "react-icons/ai";
 import StudentCard from "./components/StudentCard";
 import { StoreContext } from "../../store/ContextExample";
-import { BiArrowBack } from "react-icons/Bi";
-import { useNavigate } from "react-router-dom";
+/* import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom"; */
 const History = () => {
-  const navigate = useNavigate();
+  /*   const navigate = useNavigate();
   const handleBack = () => {
     navigate(-1);
-  };
+  }; */
 
   const [enrollments, setEnrollments] = useState([]);
   const [proms, setProms] = useState({
@@ -67,7 +67,7 @@ const History = () => {
 
   return (
     <div className="w-10/12">
-      <div className="flex justify-start mx-5 mb-5">
+      {/*       <div className="flex justify-start mx-5 mb-5">
         <div className="mt-5">
           <button
             onClick={handleBack}
@@ -76,7 +76,7 @@ const History = () => {
             <BiArrowBack color="#F7F9F7" size={20} />
           </button>
         </div>
-      </div>
+      </div> */}
       <div className="w-full flex items-center justify-center ">
         <div className="flex items-center justify-center border w-2/5 h-[150px] border-none  border-r-black">
           <input
