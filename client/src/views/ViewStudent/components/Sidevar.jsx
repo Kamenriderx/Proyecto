@@ -125,7 +125,7 @@ const Sidevar = () => {
                 hover:bg-orange-100 hover:font-bold"
               >
                 <PiNotebookBold className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                <span className="flex-1 ml-3 whitespace-nowrap">Matricula</span>
+                <span className="flex-1 ml-3 whitespace-nowrap">Matrícula</span>
               </div>
               </Link>
             </li>

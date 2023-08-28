@@ -123,7 +123,7 @@ const Modal = ({ isOpen, onClose }) => {
         </div>
         <button
           onClick={onClose}
-          className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md"
+          className="px-4 py-2 bg-red-400 hover:bg-red-500 text-white rounded-md font-bold mt-4"
         >
           Cerrar
         </button>

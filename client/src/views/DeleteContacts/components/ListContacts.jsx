@@ -60,7 +60,7 @@ const ListContacts = () => {
                   <thead className="bg-blue-800 text-white">
                     <tr className="">
                       <th className="py-2 px-10">Foto de Perfil</th>
-                      <th className="p-2">Nombre del Contecto</th>
+                      <th className="p-2">Nombre del Contacto</th>
                       <th className="p-2">Correo Institucional</th>
                       <th className="p-2">Carrera</th>
                       <th className="p-2">Centro</th>
@@ -74,7 +74,7 @@ const ListContacts = () => {
                           <div className="bg-gray-300 w-20 h-20 mx-auto rounded-full mb-2">
                             <img
                               src={estudiante.URL}
-                              alt="Foto Perfil"
+                              alt="Foto"
                               className="w-20 h-20 mx-auto rounded-full"
                             />
                           </div>
