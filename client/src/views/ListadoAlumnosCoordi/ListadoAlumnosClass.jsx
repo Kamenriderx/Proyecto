@@ -4,8 +4,14 @@ import { StoreContext } from "../../store/ContextExample";
 import Modal3 from "../../components/Modal3";
 import { AiFillEye } from "react-icons/ai";
 import AlertTwo from "../../components/AlertTwo";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const ListadoAlumnosClass = () => {
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   const { periodo, state } = useContext(StoreContext);
   const [listAlumnos, setListAlumnos] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -119,6 +125,16 @@ const ListadoAlumnosClass = () => {
   return (
     <div className="flex mt-10">
       <div className="container mx-auto mt-10">
+        <div className="flex justify-start mx-5 mb-5">
+          <div className="mt-5">
+            <button
+              onClick={handleBack}
+              className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+            >
+              <BiArrowBack color="#F7F9F7" size={20} />
+            </button>
+          </div>
+        </div>
         <Modal3 Visible={showModal} Close={() => setShowModal(false)}>
           <div className="my-2 mx-2 shadow rounded bg-gray-100">
             <div className="mx-3">

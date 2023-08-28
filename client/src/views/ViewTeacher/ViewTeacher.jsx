@@ -49,7 +49,7 @@ const ViewTeacher = () => {
                 <div className="col-span-3 p-4 pl-72">
                   <div className="w-full border-2 border-gray-300">
                     <div className="flex flex-row items-center justify-center">
-                      <div className="mx-auto w-32 h-24 justify-end flex rounded-full mb-10 mt-5">
+                      <div className="mx-auto w-32 h-32 justify-end flex rounded-full mb-10 mt-5">
                         {stateTeacher.user.PROFILE_PHOTO ? (
                           <img
                             src={stateTeacher.user.PROFILE_PHOTO}
@@ -80,7 +80,7 @@ const ViewTeacher = () => {
                   </div>
                 </div>
               </div>
-              <div className="border-2 border-gray-300 mt-8">
+              <div className="border-2 border-gray-300 mt-5 mb-5">
                 <div className="p-2 border-b-2 border-gray-300 text-xl bg-gray-50">
                   <div className="flex justify-between">
                     <div className="mx-96">Información</div>

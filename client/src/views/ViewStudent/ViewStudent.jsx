@@ -8,6 +8,7 @@ import Carrusell from "./components/Carrusell";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import StudentContext from "./context/StudentContext";
+import { MdAccountBox } from "react-icons/md";
 
 import io from "socket.io-client";
 
@@ -136,7 +137,7 @@ const ViewStudent = () => {
                   )}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <div className="flex m-4 items-center gap-2 border-b-2 pb-2">
                     <MdEmail className="flex-shrink-0 w-8 h-8 text-gray-500" />
@@ -153,6 +154,16 @@ const ViewStudent = () => {
                     <div>
                       <div className="text-sm">Correo Institucional</div>
                       <div>{stateStudent.user.INSTITUTIONAL_EMAIL}</div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex m-4 items-center gap-2 border-b-2 pb-2">
+                    <MdAccountBox className="flex-shrink-0 w-8 h-8 text-gray-500" />
+
+                    <div>
+                      <div className="text-sm">Numero de Cuenta</div>
+                      <div>{stateStudent.user.user.ACCOUNT_NUMBER}</div>
                     </div>
                   </div>
                 </div>
