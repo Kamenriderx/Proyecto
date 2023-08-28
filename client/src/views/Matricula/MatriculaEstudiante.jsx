@@ -240,7 +240,7 @@ const MatriculaEstudiante = () => {
           <div className="mt-10">
             <p className="text-red-800 font-bold text-lg block">MATRÍCULA</p>
             <p className="text-gray-500 font-semibold text-md">
-              Bienvenido a la sección de matrícula.
+              Bienvenido a la sección de matrícula
             </p>
           </div>
           <aside className="md:w-80 lg:w-3/5 px-5 py-10">

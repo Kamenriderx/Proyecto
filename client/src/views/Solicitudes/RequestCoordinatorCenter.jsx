@@ -114,7 +114,7 @@ const RequestCoordinatorCenter = () => {
       {message && <AlertTwo alerta={alerta} />}
       <div className="text-center mb-10">
         <p className="text-red-800 text-2xl font-bold">
-          Estado de solicitudes por cambio de centro
+          Estado de Solicitudes por Cambio de Centro
         </p>
       </div>
       {solicitudesCordi.length > 0 ? (
@@ -183,7 +183,7 @@ const RequestCoordinatorCenter = () => {
         </table>
       ) : (
         <div className="text-center">
-          <p className="text-black font-bold text-2xl">Sin solicitudes</p>
+          <p className="text-black font-bold text-2xl">Sin Solicitudes</p>
         </div>
       )}
     </div>

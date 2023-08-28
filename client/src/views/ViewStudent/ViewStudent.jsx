@@ -162,7 +162,7 @@ const ViewStudent = () => {
                     <MdAccountBox className="flex-shrink-0 w-8 h-8 text-gray-500" />
 
                     <div>
-                      <div className="text-sm">Numero de Cuenta</div>
+                      <div className="text-sm">Número de Cuenta</div>
                       <div>{stateStudent.user.user.ACCOUNT_NUMBER}</div>
                     </div>
                   </div>

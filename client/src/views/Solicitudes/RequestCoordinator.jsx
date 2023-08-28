@@ -113,19 +113,19 @@ const RequestCoordinator = () => {
       {message && <AlertTwo alerta={alerta} />}
       <div className="text-center mb-10">
         <p className="text-red-800 text-2xl font-bold">
-          Estado de solicitudes por cambio de carrera
+          Estado de Solicitudes por Cambio de Carrera
         </p>
       </div>
       {solicitudesCordi.length > 0 ? (
         <table className="w-full bg-white shadow-md table-auto">
           <thead className="bg-blue-800 text-white">
             <tr className="">
-              <th className="p-2">Carrera Actula</th>
+              <th className="p-2">Carrera Actual</th>
               <th className="p-2">Solicitud de Cambio</th>
               <th className="p-2">Correo Institucional</th>
-              <th className="p-2">Numero de Cuenta</th>
+              <th className="p-2">Número de Cuenta</th>
               <th className="p-2">Centro</th>
-              <th className="p-2">Justificacion</th>
+              <th className="p-2">Justificación</th>
               <th className="p-2">Estado</th>
               <th className="p-2">Obs</th>
             </tr>
@@ -186,7 +186,7 @@ const RequestCoordinator = () => {
         </table>
       ) : (
         <div className="text-center">
-          <p className="text-black font-bold text-2xl">Sin solicitudes</p>
+          <p className="text-black font-bold text-2xl">Sin Solicitudes</p>
         </div>
       )}
     </div>
