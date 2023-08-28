@@ -11,7 +11,7 @@ import AlertTwo from "../../components/AlertTwo";
 
 const AddSections = () => {
   const [showModal, setShowModal] = useState(false);
-  const { state, dispatch } = useContext(StoreContext);
+  const { state, dispatch, periodo } = useContext(StoreContext);
   const [listCourses, setListCourses] = useState([]);
   const [listAulas, setListAulas] = useState([]);
   const [docentes, setDocentes] = useState([]);
@@ -644,12 +644,12 @@ const AddSections = () => {
       </Modal>
       <div className="bg-gray-100 p-3">
         <div className="w-full py-2 mt-5 mb-10 text-center">
-          <span className="text-3xl font-bold text-sky-700">
-            Planificacion Academica
+          <span className="text-3xl font-bold text-black">
+            Planificación Academica
           </span>
-          <span className="text-3xl font-bold text-gray-700">
+          <span className="text-3xl font-bold text-black">
             {" "}
-            "Carrera" - "Nombre del Periodo"
+            - {periodo.PERIOD_NAME}
           </span>
         </div>
         <div className="flex justify-around mt-5 mb-5">
