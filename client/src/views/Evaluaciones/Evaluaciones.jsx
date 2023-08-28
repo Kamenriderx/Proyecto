@@ -36,8 +36,8 @@ const Evaluaciones = () => {
         { ...config }
       );
 
-      console.log("GET_EVALUACION: ", res.data);
-      setdataEvaluacion(res.data);
+      console.log("GET_EVALUACION: ", res.data.evaluations);
+      setdataEvaluacion(res.data.evaluations);
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);
@@ -210,25 +210,58 @@ const Evaluaciones = () => {
               <th scope="col" class="px-2 py-3">
                 Excelente
               </th>{" "}
+              <th scope="col" class="px-2 py-3">
+                Respuesta 26
+              </th>{" "}
+              <th scope="col" class="px-2 py-3">
+              Respuesta 27
+              </th>{" "}
+              <th scope="col" class="px-2 py-3">
+              Respuesta 28
+              </th>{" "}
             </tr>
           </thead>
           <tbody>
             {dataEvaluacion && (
               <>
-                {dataEvaluacion.map((evaluacion) => (
-                  <tr
-                    key={evaluacion.ID_EVALUATION}
-                    className="bg-white border-b hover:bg-gray-100"
-                  >
-                    <td className="px-6 py-4">{evaluacion.PROFESSOR_NAME}</td>
-                    <td className="px-6 py-4">{evaluacion.COURSE_NAME}</td>
-                    <td className="px-6 py-4">{evaluacion.SECTION_CODE}</td>
-                    <td className="px-6 py-4">{evaluacion.STUDENT_NAME}</td>
-                    <td className="px-6 py-4">{evaluacion.RESP_1}</td>
-                    <td className="px-6 py-4">{evaluacion.RESP_2}</td>
-                    <td className="px-6 py-4">{evaluacion.RESP_3}</td>
-                    <td className="px-6 py-4">{evaluacion.RESP_4}</td>
-                  </tr>
+                {dataEvaluacion.map((evalau) => (
+                  <>
+                    <tr className="bg-white border-b hover:bg-gray-100">
+                      <td className="px-6 py-4">
+                        {evalau.professorName}
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.COURSE_NAME}
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.SECTION_CODE}
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.STUDENT_NAME}
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.sumDeficiente}/25
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.sumBueno}/25
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.sumMuyBueno}/25
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.sumExcelente}/25
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.RESP_26}
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.RESP_27}
+                      </td>
+                      <td className="px-6 py-4">
+                        {evalau.RESP_28}
+                      </td>
+                    </tr>
+                  </>
                 ))}
               </>
             )}

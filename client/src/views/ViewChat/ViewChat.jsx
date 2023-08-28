@@ -118,7 +118,7 @@ const ViewChat = () => {
     <>
       {stateStudent && (
         <>
-          <div className="flex h-full bg-gray-50">
+          <div className="flex h-full">
             <div className="w-1/4 ">
               <Buscador check={check} enviarDatoAlPadre={recibirDatoDelHijo} />
             </div>

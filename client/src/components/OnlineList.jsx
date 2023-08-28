@@ -84,7 +84,7 @@ const OnlineList = ({setCheck,check,socket}) => {
       <div className="h-5/6 w-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
         <fieldset className="border p-4 rounded-sm">
           <legend className="text-xl font-normal text-center mb-2">
-            En linea
+            En línea
           </legend>
           {list
             .filter((contact) => contact.ONLINE_STATUS === "online")

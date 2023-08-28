@@ -91,7 +91,7 @@ const ListContacts = () => {
                           <div className="bg-gray-300 w-20 h-20 mx-auto rounded-full mb-2">
                             <img
                               src={estudiante.URL}
-                              alt="Foto Perfil"
+                              alt="Foto"
                               className="w-20 h-20 mx-auto rounded-full"
                             />
                           </div>
