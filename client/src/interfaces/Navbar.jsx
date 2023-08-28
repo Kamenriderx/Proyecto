@@ -101,7 +101,7 @@ const ContentNavbar = () => {
                 {!state.login ? (
                   <li>
                     <Link to="/login">
-                      <button className="p-2 rounded bg-gray-500 text-white font-bold hover:bg-gray-600 px-3">
+                      <button className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3">
                         Inicio de sesión
                       </button>
                     </Link>
@@ -117,14 +117,14 @@ const ContentNavbar = () => {
                         </li>
                       )}
                       <Link to="/perfil">
-                        <button className="p-2 rounded bg-[#1565C0] text-white font-bold hover:bg-[#42A5F5] px-3">
+                        <button className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3">
                           Perfil
                         </button>
                       </Link>
                       <Link to="/">
                         <button
                           onClick={handleSession}
-                          className="p-2 rounded bg-[#1565C0] text-white font-bold hover:bg-[#42A5F5] px-3"
+                          className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3"
                         >
                           Cerrar sesión
                         </button>
