@@ -4,6 +4,8 @@ import axios from "axios";
 import { DotSpinner } from "@uiball/loaders";
 import TableStudents from "../views/TableStudents/TableStudents.jsx";
 import AlertThree from "./AlertThree.jsx";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 import Upload from "../assets/Upload.png";
 
@@ -14,6 +16,12 @@ const ReadCSV = () => {
   const [alerta, setAlerta] = useState({});
   const [students, setStudents] = useState();
   const [check, setCheck] = useState(false);
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     const callAxios = async () => {
       const { data } = await axios(
@@ -106,6 +114,16 @@ const ReadCSV = () => {
 
   return (
     <>
+      <div className="flex justify-start mx-10">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       {mostrarTable && (
         <div className="flex mt-32 mb-8 mx-20">
           <div className="flex">

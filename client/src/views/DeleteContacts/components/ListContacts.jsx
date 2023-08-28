@@ -4,11 +4,18 @@ import { StoreContext } from "../../../store/ContextExample";
 import Spinner2 from "../../../components/Spinner2";
 import { AiFillDelete } from "react-icons/ai";
 import { IoIosContact } from "react-icons/io";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const ListContacts = () => {
   const [listContacts, setListContacts] = useState([]);
   const { state, dispatch } = useContext(StoreContext);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const getContacts = async () => {
@@ -45,6 +52,16 @@ const ListContacts = () => {
   return (
     <>
       <div className="container mx-auto">
+        <div className="flex justify-start mx-10">
+          <div className="mt-5">
+            <button
+              onClick={handleBack}
+              className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+            >
+              <BiArrowBack color="#F7F9F7" size={20} />
+            </button>
+          </div>
+        </div>
         <div className="flex justify-center">
           <div className="mt-10 text-center">
             <p className="text-4xl text-sky-700 font-black flex items-center gap-5">
@@ -60,7 +77,7 @@ const ListContacts = () => {
                   <thead className="bg-blue-800 text-white">
                     <tr className="">
                       <th className="py-2 px-10">Foto de Perfil</th>
-                      <th className="p-2">Nombre del Contecto</th>
+                      <th className="p-2">Nombre del Contacto</th>
                       <th className="p-2">Correo Institucional</th>
                       <th className="p-2">Carrera</th>
                       <th className="p-2">Centro</th>

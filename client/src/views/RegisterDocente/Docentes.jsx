@@ -70,9 +70,7 @@ const Docentes = () => {
       </div>
       <div className="md:flex md:justify-center gap-40 h-auto mt-5 flex justify-center">
         <div className="mt-5">
-          <p className="text-4xl font-black text-sky-700">
-            Registro de Docentes
-          </p>
+          <p className="text-4xl font-black text-black">Registro de Docentes</p>
         </div>
       </div>
       <div className="flex justify-start">

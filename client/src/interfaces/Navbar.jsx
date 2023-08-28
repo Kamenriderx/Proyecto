@@ -217,7 +217,11 @@ const ContentNavbar = () => {
           <Route exact path="/solicitudes" element={<Requests />} />
           <Route exact path="/history" element={<History />} />
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
-          <Route exact path="/RecuperarContrasena" element={<ConfirmAccountForm />} />
+          <Route
+            exact
+            path="/RecuperarContrasena"
+            element={<ConfirmAccountForm />}
+          />
           <Route
             exact
             path="/solicitudes-estudiantes"
@@ -225,7 +229,7 @@ const ContentNavbar = () => {
           />
           <Route
             exact
-            path="/solicitudes-estudiantescenterenter"
+            path="/solicitudes-estudiantescenter"
             element={<RequesStudentCenter />}
           />
           <Route
