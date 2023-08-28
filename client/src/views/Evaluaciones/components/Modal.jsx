@@ -1,71 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { StoreContext } from "../../store/ContextExample";
-import { httpRequests } from "../../utils/helpers/httpRequests";
-import { BiArrowBack } from "react-icons/Bi";
-import { useNavigate } from "react-router-dom";
-
-const Evaluaciones = () => {
-  const navigate = useNavigate();
-  const handleBack = () => {
-    navigate(-1);
-  };
-  //contexto de usuario
-  const { state, periodo } = useContext(StoreContext);
-  const [dataEvaluacion, setdataEvaluacion] = useState(null);
-
-  //modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const getEvaluacion = async (stateUser) => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${stateUser.token}`,
-        },
-      };
-
-      const res = await httpRequests()["get"](
-        `http://localhost:3000/registro/evaluateProffesor/department/${periodo.ID_PERIOD}/${stateUser.user.ID_USER}`,
-        { ...config }
-      );
-
-      console.log("GET_EVALUACION: ", res.data.evaluations);
-      setdataEvaluacion(res.data.evaluations);
-
-      if (!res.status && res?.response?.status !== 200) {
-        throw new Error(res.response.data.messagge);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getEvaluacion(state);
-  }, [state.user.ID_USER]);
+const Modal = ({ isOpen, onClose }) => {
+  if (!isOpen) {
+    return null;
+  }
 
   return (
-    <div className="mx-16 mt-28 ">
-      <div className="flex justify-start mx-5 mb-5">
-        <div className="mt-5">
-          <button
-            onClick={handleBack}
-            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
-          >
-            <BiArrowBack color="#F7F9F7" size={20} />
-          </button>
-        </div>
-      </div>
-      <p className="text-xl font-bold text-center mb-4">PREGUNTAS</p>
-      <div className="grid grid-cols-2 mb-6">
-        <div className="overflow-y-auto h-[300px]">
+    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-50">
+      <div className="bg-white p-6 rounded-md shadow-lg">
+        <div className="overflow-y-auto h-[500px] w-[600px]">
           <div className="font-semibold mb-2 text-lg">
             1- Al iniciar la clase ¿le facilitó por escrito el Programa de la
             asignatura, que contenia los objetivos de aprendizaje, temas,
@@ -122,8 +63,7 @@ const Evaluaciones = () => {
           <div className="font-semibold mb-2 text-lg">
             14- ¿Relaciona el contenido de la clase con la vida real?
           </div>
-        </div>
-        <div className="overflow-y-auto h-[300px]">
+
           <div className="font-semibold mb-2 text-lg">
             15- ¿Logra mantener la atención de los estudiantes durante el
             desarrollo de la clase?
@@ -181,95 +121,15 @@ const Evaluaciones = () => {
             con un docente universitario
           </div>
         </div>
-      </div>
-      <div className="relative overflow-x-auto rounded-xl">
-        <table className="w-full text-lg text-left text-gray-700 ">
-          <thead className="text-xl text-black uppercase bg-gray-200 ">
-            <tr>
-              <th scope="col" class="px-2">
-                Profesor
-              </th>
-              <th scope="col" class="px-2 py-3">
-                Asignatura
-              </th>
-              <th scope="col" class="px-2 py-3">
-                Seccion
-              </th>
-              <th scope="col" class="px-2 py-3">
-                Estudiante
-              </th>
-              <th scope="col" class="px-2 py-3">
-                Deficiente
-              </th>
-              <th scope="col" class="px-2 py-3">
-                Bueno
-              </th>{" "}
-              <th scope="col" class="px-2 py-3">
-                Muy bueno
-              </th>{" "}
-              <th scope="col" class="px-2 py-3">
-                Excelente
-              </th>{" "}
-              <th scope="col" class="px-2 py-3">
-                Respuesta 26
-              </th>{" "}
-              <th scope="col" class="px-2 py-3">
-              Respuesta 27
-              </th>{" "}
-              <th scope="col" class="px-2 py-3">
-              Respuesta 28
-              </th>{" "}
-            </tr>
-          </thead>
-          <tbody>
-            {dataEvaluacion && (
-              <>
-                {dataEvaluacion.map((evalau) => (
-                  <>
-                    <tr className="bg-white border-b hover:bg-gray-100">
-                      <td className="px-6 py-4">
-                        {evalau.professorName}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.COURSE_NAME}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.SECTION_CODE}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.STUDENT_NAME}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.sumDeficiente}/25
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.sumBueno}/25
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.sumMuyBueno}/25
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.sumExcelente}/25
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.RESP_26}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.RESP_27}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.RESP_28}
-                      </td>
-                    </tr>
-                  </>
-                ))}
-              </>
-            )}
-          </tbody>
-        </table>
+        <button
+          onClick={onClose}
+          className="px-4 py-2 bg-red-400 hover:bg-red-500 text-white rounded-md font-bold mt-4"
+        >
+          Cerrar
+        </button>
       </div>
     </div>
   );
 };
 
-export default Evaluaciones;
+export default Modal;

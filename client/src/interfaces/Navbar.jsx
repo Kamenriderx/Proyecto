@@ -76,7 +76,7 @@ const ContentNavbar = () => {
 
     return (
       <>
-        <nav className="bg-gradient-to-r from-sky-600 via-sky-400 to-sky-600 border-gray-200 fixed top-0 w-full z-50">
+        <nav className="bg-gradient-to-r from-[#42A5F5]  via-[#42A5F5] to-[#42A5F5] fixed top-0 w-full z-50">
           <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div className="flex items-center">
               <Link to="/">
@@ -126,7 +126,7 @@ const ContentNavbar = () => {
                           onClick={handleSession}
                           className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3"
                         >
-                          Cerrar sesion
+                          Cerrar sesión
                         </button>
                       </Link>
                     </div>

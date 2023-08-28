@@ -16,7 +16,7 @@ const PeriodTable = () => {
     clicked: false,
   });
 
-  const [selectedPeriod, setSelectedPeriod] = useState("");
+  const [selectedPeriod, setSelectedPeriod] = useState("-");
 
   const handlePe = (value) => {
     console.log("Valor seleccionado", selectedPeriod);
@@ -104,9 +104,7 @@ const PeriodTable = () => {
       (row) =>
         `${row.course.CODE_COURSE},${row.course.NAME},${row.SECTION_CODE}\n`
     );
-    const csvContent = `data:text/csv;charset=utf-8,${header[0]},${header[1]},${header[2]}\n
-        ${data}
-      `;
+    const csvContent = 'data:text/csv;charset=utf-8,' + `${header[0]},${header[1]},${header[2]}\n${data}`;
 
     const downloadLink = document.createElement("a");
     downloadLink.href = encodeURI(csvContent);
@@ -128,6 +126,9 @@ const PeriodTable = () => {
           onChange={handlePeriodChange}
           className="w-25 h-12 rounded-md"
         >
+          <option>
+            -
+          </option>
           {state.periods.map((p) => (
             <option key={p.ID_PERIOD} value={p.ID_PERIOD}>
               {p.PERIOD_NAME}

@@ -32,7 +32,7 @@ const Requests = () => {
               to="/cambio-carrera"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Solicitud de Cambio de Carrera
+              Solicitud de cambio de carrera
             </Link>
           </div>
           <div className="mt-10">
@@ -40,7 +40,7 @@ const Requests = () => {
               to="/solicitudes-centro"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Solicitud de Cambio de Centro
+              Solicitud de cambio de centro
             </Link>
           </div>
           <div className="mt-10">
@@ -56,7 +56,7 @@ const Requests = () => {
               to="/cancelacion-excep"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Solicitud de Cancelacion Excepcional
+              Solicitud de cancelación excepcional
             </Link>
           </div>
         </aside>

@@ -4,8 +4,8 @@ import { httpRequests } from "../../utils/helpers/httpRequests";
 import { AiOutlineSearch } from "react-icons/ai";
 import StudentCard from "./components/StudentCard";
 import { StoreContext } from "../../store/ContextExample";
-/* import { BiArrowBack } from "react-icons/Bi";
-import { useNavigate } from "react-router-dom"; */
+//import { BiArrowBack } from "react-icons/Bi";
+//import { useNavigate } from "react-router-dom";
 const History = () => {
   /*   const navigate = useNavigate();
   const handleBack = () => {
@@ -67,7 +67,7 @@ const History = () => {
 
   return (
     <div className="w-10/12">
-      {/*       <div className="flex justify-start mx-5 mb-5">
+      {/*     <div className="flex justify-start mx-5 mb-5">
         <div className="mt-5">
           <button
             onClick={handleBack}

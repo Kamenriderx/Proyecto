@@ -33,6 +33,12 @@ const ReadCSV = () => {
     callAxios();
   }, [check]);
 
+  const[datoRecibido, setDatoRecibido] = useState(true)
+  const recibirDatos = (datos) => {
+    console.log(datos)
+    setDatoRecibido(datos)
+  }
+
   function handleFileUpload(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -166,7 +172,7 @@ const ReadCSV = () => {
           </div>
         </>
       ) : mostrarTable ? (
-        <TableStudents body={data} />
+        <TableStudents body={data} mess={false} />
       ) : (
         <div className="flex justify-center my-64">
           <div className="flex space-x-2">

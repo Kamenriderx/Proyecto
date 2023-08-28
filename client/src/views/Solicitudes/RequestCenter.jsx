@@ -26,7 +26,7 @@ const RequestCenter = () => {
       <Modal2 Visible={showModal} Close={() => setShowModal(false)}>
         <div className="text-center rounded-md bg-sky-700 shadow">
           <p className="text-white font-semibold text-lg uppercase">
-            Solicitud de Cambio de Centro
+            Solicitud de cambio de centro
           </p>
         </div>
 
@@ -39,7 +39,7 @@ const RequestCenter = () => {
           <p className="text-red-800 font-bold text-md">
             SOLICITUDES -{" "}
             <span className="text-red-800 uppercase text-lg">
-              cambio de centro
+              Cambio de centro
             </span>
           </p>
           <p className="text-gray-500 font-semibold text-md">
@@ -52,20 +52,20 @@ const RequestCenter = () => {
               onClick={() => setShowModal(true)}
               className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded"
             >
-              Realizar Soicitud
+              Realizar soicitud
             </button>
           </div>
           <div className="mt-5">
             <Link to="/solicitudes-estudiantescenter">
               <button className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded">
-                Ver Solicitudes
+                Ver solicitudes
               </button>
             </Link>
           </div>
           <div className="mt-5">
             <Link to="/dictamen-centro">
               <button className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded">
-                Ver Dictamen
+                Ver dictamen
               </button>
             </Link>
           </div>
