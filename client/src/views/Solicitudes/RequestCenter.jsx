@@ -2,11 +2,27 @@ import FormCenter from "./components/FormCenter";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Modal2 from "../../components/Modal2";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const RequestCenter = () => {
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   const [showModal, setShowModal] = useState(false);
   return (
     <div className="container mx-auto">
+      <div className="flex justify-start mx-5 mb-5">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       <Modal2 Visible={showModal} Close={() => setShowModal(false)}>
         <div className="text-center rounded-md bg-sky-700 shadow">
           <p className="text-white font-semibold text-lg uppercase">
@@ -40,7 +56,7 @@ const RequestCenter = () => {
             </button>
           </div>
           <div className="mt-5">
-            <Link to="/solicitudes-estudiantescenterenter">
+            <Link to="/solicitudes-estudiantescenter">
               <button className="py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg shadow-md rounded">
                 Ver Solicitudes
               </button>

@@ -58,7 +58,7 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
     if (!regexNombbre.test(NAME.trim())) {
       setAlerta({
         message:
-          'El campo "nombre docente" solo acepta letras y espacios en blanco',
+          'El campo "nombre docente" solo acepta letras y un espacio en blanco por cada nombre',
         error: true,
       });
       setTimeout(() => {
@@ -161,7 +161,6 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
         { NAME, CENTER, CARRER, ROL, EMAIL },
         config
       );
-      
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);

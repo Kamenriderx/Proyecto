@@ -118,7 +118,7 @@ const PeriodTable = () => {
 
   return (
     <div>
-      <div className="flex min-w-full justify-end mb-4 items-center align-middle">
+      <div className="flex min-w-full justify-end mb-10 items-center align-middle mt-10">
         <select
           name="selectedPeriod"
           value={selectedPeriod}

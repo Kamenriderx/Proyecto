@@ -5,6 +5,8 @@ import axios from "axios";
 import Modal2 from "../../components/Modal2";
 import { AiFillCheckCircle } from "react-icons/ai";
 import AlertTwo from "../../components/AlertTwo";
+import { BiArrowBack } from "react-icons/Bi";
+
 const MatriculaEstudiante = () => {
   const { state, periodo } = useContext(StoreContext);
   const [estado, setEstado] = useState([]);
@@ -130,6 +132,10 @@ const MatriculaEstudiante = () => {
     handleMatricula(dato);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       {message1 && (
@@ -221,6 +227,16 @@ const MatriculaEstudiante = () => {
           </div>
         </Modal2>
         <div>
+          <div className="flex justify-start mx-10">
+            <div className="mt-5">
+              <button
+                onClick={handleBack}
+                className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+              >
+                <BiArrowBack color="#F7F9F7" size={20} />
+              </button>
+            </div>
+          </div>
           <div className="mt-10">
             <p className="text-red-800 font-bold text-lg block">MATRÍCULA</p>
             <p className="text-gray-500 font-semibold text-md">
