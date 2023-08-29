@@ -5,10 +5,31 @@ import AlertTwo from "../../components/AlertTwo";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+///////////////////////////////////////
+import io from "socket.io-client";
+
+
 const CardTeachers = ({ student }) => {
   const { state, dispatch } = useContext(StoreContext);
   const [alerta, setAlerta] = useState({});
   const [boton, setBoton] = useState(false);
+
+  /////////////////////////////////////////////
+  const [socket, setSocket] = useState(null);
+  const [check, setCheck] = useState(true);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      let s = io(
+        `http://localhost:3000?token=${localStorage.getItem("token")}`
+      );
+      setSocket(s);
+      dispatch({ type: "SOCKET", socket: s });
+
+    }
+  }, [localStorage.getItem("token")]);
+
+
 
   const enviarSolicitudContacto = async () => {
     const senderId = `${state.user.ID_USER}`;
@@ -21,6 +42,11 @@ const CardTeachers = ({ student }) => {
       );
       setBoton(true);
       console.log("Solicitud Enviada....", res.data);
+
+      socket?.emit("sendSolicitud", {
+        RECEIVER_ID: recipientId,
+      });
+  
       toast.success("Solicitud enviada correctamente", {
         position: "top-right",
         autoClose: 3000,
@@ -30,6 +56,7 @@ const CardTeachers = ({ student }) => {
         draggable: true,
         progress: undefined,
       });
+      
     } catch (error) {
       setAlerta({
         message: error.response.data.message,
@@ -96,7 +123,7 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
             </p>
             <p className="mt-2 text-gray-500 text-lg">
               <span className="font-bold text-gray-700">
-                Numero de Cuenta:{" "}
+                Número de Cuenta:{" "}
               </span>
               {student.user.ACCOUNT_NUMBER}
             </p>
