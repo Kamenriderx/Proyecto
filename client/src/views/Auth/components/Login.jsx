@@ -189,7 +189,7 @@ const LoginForm = () => {
       </button>
       <Link
         to="/RecuperarContrasena"
-        className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5"
+        className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none text-center    mt-5"
       >
         Recuperar contraseña
       </Link>

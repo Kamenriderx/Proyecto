@@ -100,7 +100,7 @@ const History = () => {
       </div>
       <div className=" border m-2 p-4 mb-10">
         <div className="text-center border rounded-t bg-blue-100 mb-3 text-2xl font-bold">
-          Información general
+          Información General
         </div>
         <div className="flex justify-evenly">
           <div className="flex w-1/2">
@@ -140,7 +140,7 @@ const History = () => {
 
     <div className="">
       <div className="text-center border p-1   bg-blue-100 text-3xl font-bold">
-        Historial academico
+        Historial Académico
       </div>
       <div className="flex justify-center">
         {history && <PDFDownloadLink document={<GeneratePDF history={history} />} fileName="Historial.pdf">
@@ -183,6 +183,7 @@ const History = () => {
 
         <Pagination setPagination = {setPagination} pagination={pagination}/>
       </div>
+    </div>
     </div>
   );
 };
