@@ -1,25 +1,62 @@
 import { FiBell } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Modal from "../../components/Modal";
 import useStudents from "../../utils/hooks/useStudents";
 import axios from "axios";
 import io from "socket.io-client";
+import { StoreContext } from "../../store/ContextExample";
 
 const Solicitud = () => {
-  const socket = io("http://localhost:5173");
   const [showModal, setShowModal] = useState(false);
-  const { solicitudes, setSolicitudes } = useStudents();
+  // const { solicitudes, setSolicitudes } = useStudents();
+
+  ////////////////////////////////////////////////
+  const [solicitudes, setSolicitudes] = useState([]);
+  const { state, dispatch } = useContext(StoreContext);
+  // const [socket, setSocket] = useState(null);
+  const [check, setCheck] = useState(true);
+
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    socket.on("solicitudEnviada", (solicitud) => {
-      setSolicitudes((prevSolicitudes) => [...prevSolicitudes, solicitud]);
-    });
+    if (localStorage.getItem("token")) {
+      let s = io(
+        `http://localhost:3000?token=${localStorage.getItem("token")}`
+      );
+      setSocket(s);
+      // dispatch({ type: "SOCKET", socket: s });
+    }
+  }, [localStorage.getItem("token")]);
 
-    // Limpiar el event listener
-    return () => {
-      socket.off("solicitudEnviada");
+  // useEffect(() => {
+  //     console.log("io: ",s)
+  //     setSocket(s);
+  //     dispatch({ type: "SOCKET", socket: s });
+  // }, [s]);
+
+  const getSolicitudes = async () => {
+    const res = await axios(
+      `http://localhost:3000/registro/contacts/requestspendings/${state.user.ID_USER}`
+    );
+    const results = await Promise.resolve(res);
+
+    console.log("Solicitudes Pendientes: ", res.data);
+    setSolicitudes(results.data.pendingRequests);
+  };
+
+  useEffect(() => {
+    console.log('escuchando1: ')
+      socket?.on("getSolicitud", async (msg) => {
+        await getSolicitudes();
+      });
+  }, [socket]);
+
+  useEffect(() => {
+    const soli = async () => {
+      await getSolicitudes();
     };
-  }, []);
+    soli();
+  }, [state.user.ID_USER, socket]);
 
   const AceptSolicitud = async (id) => {
     try {

@@ -56,6 +56,13 @@ const handleConnections = (io) => {
       const user = getUser(data.RECEIVER_ID);
       io.to(user.socketId).emit("getMessage", data);
     });
+
+    /////////////////////////////////
+    socket.on("sendSolicitud", (data) => {
+      console.log('Escuchando RECEIVER_ID: ',data.RECEIVER_ID)
+      const user = getUser(data.RECEIVER_ID);
+      io.to(user.socketId).emit("getSolicitud", data);
+    });
   });
 };
 
