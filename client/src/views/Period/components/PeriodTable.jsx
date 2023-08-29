@@ -4,6 +4,7 @@ import "jspdf-autotable";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
+import unidecode from 'unidecode';
 
 const PeriodTable = () => {
   const [pagination, setPagination] = useState({
@@ -45,15 +46,13 @@ const PeriodTable = () => {
           pages: Math.ceil(res.data.sections.length / pagination.items),
         });
         let viewSections = [];
-        for (let i = 0; i < pagination.items; i++) {
-          if (res.data.sections[i]) {
-            console.log("Es indefinido?:", res.data.sections[i]);
-            viewSections.push(res.data.sections[i]);
+        for(let i = 0; i<  pagination.items;i++){
+          if( res.data.sections[i] ){
+            viewSections.push( res.data.sections[i]);
           }
         }
 
         setViewableSections(viewSections);
-        console.log("Aqui estan las secciones", viewSections);
       });
   };
   useEffect(() => {
@@ -96,7 +95,6 @@ const PeriodTable = () => {
               }
             )
             .then((res2) => {
-              console.log(res2);
               setState({
                 ...state,
                 sections: res2.data.sections,
@@ -137,11 +135,10 @@ const PeriodTable = () => {
     const header = ["Código", "Clase", "Sección"];
     const data = state.sections.map(
       (row) =>
-        `${row.course.CODE_COURSE},${row.course.NAME},${row.SECTION_CODE}\n`
+        `\n${unidecode(row.course.CODE_COURSE)},${unidecode(row.course.NAME)},${unidecode(row.SECTION_CODE)}`
     );
     const csvContent =
-      "data:text/csv;charset=utf-8," +
-      `${header[0]},${header[1]},${header[2]}\n${data}`;
+      "data:text/csv;charset=utf-8,"+`${unidecode(header[0])},${unidecode(header[1])},${unidecode(header[2])}`+`${data}`;
 
     const downloadLink = document.createElement("a");
     downloadLink.href = encodeURI(csvContent);

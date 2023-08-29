@@ -46,201 +46,201 @@ const styles = StyleSheet.create({
   },
 });
 
-const history = {
-  basicInformation: {
-    accountNumber: "20171003445",
-    name: "Aníbal Alejandro",
-    lastName: "Reyes Maradiaga",
-    career: "Ingenieria en sistemas",
-    center: "Ciudad universitaria",
-  },
-  academicInformation: {
-    totalUV: 204,
-    UVenrollmentsProduct: 18288,
-    careers: [
-      {
-        career: "Ingenieria en sistemas",
-        years: [
-          {
-            year: "2017",
-            enrollments: [
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-            ],
-          },
-          {
-            year: "2018",
-            enrollments: [
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-            ],
-          },
-          {
-            year: "2019",
-            enrollments: [
+// const history = {
+//   basicInformation: {
+//     accountNumber: "20171003445",
+//     name: "Aníbal Alejandro",
+//     lastName: "Reyes Maradiaga",
+//     career: "Ingenieria en sistemas",
+//     center: "Ciudad universitaria",
+//   },
+//   academicInformation: {
+//     totalUV: 204,
+//     UVenrollmentsProduct: 18288,
+//     careers: [
+//       {
+//         career: "Ingenieria en sistemas",
+//         years: [
+//           {
+//             year: "2017",
+//             enrollments: [
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//             ],
+//           },
+//           {
+//             year: "2018",
+//             enrollments: [
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//             ],
+//           },
+//           {
+//             year: "2019",
+//             enrollments: [
 
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-            ],
-          },
-          {
-            year: "2020",
-            enrollments: [
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-              {
-                code: "110",
-                name: "Matematicas 1",
-                uv: "5",
-                period: "I",
-                CALIFICATION: "90",
-                OBS: "APR",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-};
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//             ],
+//           },
+//           {
+//             year: "2020",
+//             enrollments: [
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//               {
+//                 code: "110",
+//                 name: "Matematicas 1",
+//                 uv: "5",
+//                 period: "I",
+//                 CALIFICATION: "90",
+//                 OBS: "APR",
+//               },
+//             ],
+//           },
+//         ],
+//       },
+//     ],
+//   },
+// };
 
-const Header = ({ basicInformation }) => {
+const Header = ({ history }) => {
   return (
     <View style={styles.header}>
       <View
@@ -295,7 +295,7 @@ const Footer = () => {
     </View>
   );
 };
-const TableYear = ({ year }) => {
+const TableYear = ({ year, }) => {
   return (
     <View style={{ marginTop: "10px", marginBottom: "30px" }}>
       <View
@@ -378,7 +378,7 @@ const TableYear = ({ year }) => {
                 <Text>{enrollment.code}</Text>
               </View>
               <View style={{ width: "50%", paddingLeft: "5px" }}>
-                <Text>{enrollment.name}</Text>
+                <Text>{enrollment.career}</Text>
               </View>
               <View style={{ textAlign: "center", width: "8%" }}>
                 <Text>{enrollment.uv}</Text>
@@ -415,10 +415,10 @@ const TableYear = ({ year }) => {
     </View>
   );
 };
-const FirstPage = ({ page }) => {
+const FirstPage = ({ page,history }) => {
   return (
     <Page size={"A4"} style={{ padding: "40px" }}>
-      <Header></Header>
+      <Header history = {history}></Header>
 
       <View
         style={{ display: "flex", flexDirection: "row", marginTop: "10px" }}
@@ -537,7 +537,7 @@ const ContentPage = ({ page }) => {
     </Page>
   );
 };
-const LastPage = () => {
+const LastPage = ({history}) => {
   return (
     <Page size={"A4"} style={{ padding: "40px" }}>
       <View
@@ -554,7 +554,7 @@ const LastPage = () => {
       >
         <Image style={styles.image} src={seal} />
       </View>
-      <Header />
+      <Header history ={history} />
 
       <View
         style={{ fontSize: "12px", marginTop: "20px", textAlign: "center" }}
@@ -611,10 +611,10 @@ const LastPage = () => {
   );
 };
 
-const GeneratePDF = ({ enrollments, basicInformation }) => {
+const GeneratePDF = ({ history, basicInformation }) => {
   let [pages, setPages] = useState(null);
   let [firstPage, setFirstPage] = useState(null);
-  console.log(enrollments, basicInformation);
+  console.log(history);
   useEffect(() => {
     let contentPages = [];
     let pageSize = 0;
@@ -625,6 +625,7 @@ const GeneratePDF = ({ enrollments, basicInformation }) => {
       for (const year of career.years) {
         const tableSize = 98 + year.enrollments.length * 14;
         if (!inserted) {
+          console.log("tamaño de la pagina",tableSize);
           if (firstPageSize + tableSize <= 560) {
             page.push({ year, career: career.career });
             firstPageSize += tableSize;
@@ -633,7 +634,7 @@ const GeneratePDF = ({ enrollments, basicInformation }) => {
             inserted = true;
             page = [];
             pageSize = 0;
-            console.log(firstPageSize);
+            console.log("Primera pagina",firstPageSize);
           }
         }
         if (inserted) {
@@ -657,13 +658,15 @@ const GeneratePDF = ({ enrollments, basicInformation }) => {
       }
     }
     setPages(contentPages);
+    console.log("Contenido de las paginas",contentPages);
+
   }, []);
 
   return (
     <Document>
-      {firstPage && firstPage?.map((page) => <FirstPage page={page} />)}
-      {pages && pages?.map((page) => <ContentPage page={page} />)}
-      <LastPage></LastPage>
+      {firstPage && firstPage?.map((page) => <FirstPage history={history}  page={page} />)} 
+      {pages && pages?.map((page) => <ContentPage history={history} page={page} />)} 
+      <LastPage history={history}></LastPage> 
     </Document>
   );
 };
