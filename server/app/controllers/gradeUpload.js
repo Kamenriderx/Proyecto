@@ -85,12 +85,12 @@ exports.createEnrollment = async function (req, res) {
         }
         STATE = "Finalizada";
       } else if (CALIFICATION > 30 && CALIFICATION <= 64) {
-        if (OBS === "ABD" || OBS === "NCP") {
+        if (OBS === "ABD" || OBS === "NCP" || OBS === "APR") {
           return res
             .status(400)
             .json({
               error:
-                "Para calificación mayor a 30 y menor o igual a 64, la observación no puede ser 'ABD' o 'NCP'.",
+                "Para la calificación la observación no puede ser 'ABD' o 'APR'.",
             });
         }
         STATE = "Finalizada";
