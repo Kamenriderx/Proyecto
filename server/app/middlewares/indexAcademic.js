@@ -10,7 +10,7 @@ const verifyIndexAcademic = async(req,res,next)=>{
     try {
 
       const {student} = req
-      const hourIni = "09:00:00"
+      const hourIni = "04:00:00"
       const hourFin = "23:59:59"
       const currentHour = new Date().toTimeString().slice(0, 8);
       let currentYear = new Date().getFullYear()
