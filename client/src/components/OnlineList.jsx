@@ -75,15 +75,16 @@ const OnlineList = ({setCheck,check,socket}) => {
       });
   };
   return (
-    <div className=" max-w-md h-screen mx-auto bg-white rounded-sm  flex flex-col px-0 items-center content-between justify-between  border border-s-gray-100 ">
-      <div className="h-14 flex justify-center items-center border border-t-gray-100 w-full">
-        <h1>Contactos</h1>
+    <div className=" max-w-md h-full flex flex-col items-center content-between justify-between">
+      
+      <div className="text-center border-2 bg-gray-200 border-b-gray-600 w-full">
+        <h1 className="font-bold text-lg h-[61px] ">Contactos</h1>
       </div>
 
-      <div className="h-5/6  overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+      <div className="h-5/6 w-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
         <fieldset className="border p-4 rounded-sm">
           <legend className="text-xl font-normal text-center mb-2">
-            En linea
+            En línea
           </legend>
           {list
             .filter((contact) => contact.ONLINE_STATUS === "online")

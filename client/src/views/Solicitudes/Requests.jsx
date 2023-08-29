@@ -1,8 +1,24 @@
 import { Link } from "react-router-dom";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const Requests = () => {
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   return (
     <div className="container mx-auto">
+      <div className="flex justify-start mx-5 mb-5">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       <div>
         <div className="mt-10">
           <p className="text-red-800 font-bold text-lg block">SOLICITUDES</p>
@@ -16,7 +32,7 @@ const Requests = () => {
               to="/cambio-carrera"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Solicitud de Cambio de Carrera
+              Solicitud de cambio de carrera
             </Link>
           </div>
           <div className="mt-10">
@@ -24,7 +40,7 @@ const Requests = () => {
               to="/solicitudes-centro"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Solicitud de Cambio de Centro
+              Solicitud de cambio de centro
             </Link>
           </div>
           <div className="mt-10">
@@ -32,7 +48,7 @@ const Requests = () => {
               to="/pago-reposicion"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Activación de pago para examen de reposición
+              Activación de pago para examén de reposición
             </Link>
           </div>
           <div className="mt-10">
@@ -40,7 +56,7 @@ const Requests = () => {
               to="/cancelacion-excep"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Solicitud de Cancelacion Excepcional
+              Solicitud de cancelación excepcional
             </Link>
           </div>
         </aside>

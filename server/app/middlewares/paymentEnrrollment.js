@@ -18,14 +18,14 @@ const verifyPaymentEnrollment = async (req,res, next)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 
 }
 const verifyPaymentChangeCenter = async (req,res, next)=>{
     try {
-        const {idUser} = req.params;
-        const student = await getStudent(idUser)
+        const {user} = req;
+        const student = await getStudent(user.ID_USER)
         if (student.CHANGE_CENTER_PAYMENT==0) {
             res.status(400).json({messagge:"Debes realizar el pago de cambio de centro"})
             return
@@ -40,14 +40,14 @@ const verifyPaymentChangeCenter = async (req,res, next)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 
 }
 const verifyPaymentChangeCareer = async (req,res, next)=>{
     try {
-        const {idUser} = req.params;
-        const student = await getStudent(idUser)
+        const {user} = req;
+        const student = await getStudent(user.ID_USER)
         if (student.CHANGE_CAREER_PAYMENT==0) {
             res.status(400).json({messagge:"Debes realizar el pago de cambio de carrera"})
             return
@@ -62,7 +62,7 @@ const verifyPaymentChangeCareer = async (req,res, next)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 
 }

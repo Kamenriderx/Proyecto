@@ -10,13 +10,12 @@ import { useEffect, useState } from "react";
 const Principal = () => {
   const [url, setUrl] = useState("");
   useEffect(() => {
-    httpRequests()["get"]("http://localhost:3000/registro/periodAcademic/getCalendar",{}).then(res=>{
-      setUrl(res.data.url.CALENDAR_REGISTRATION);
-    })
-  
-    
-  }, [])
-  
+    httpRequests()
+      ["get"]("http://localhost:3000/registro/periodAcademic/getCalendar", {})
+      .then((res) => {
+        setUrl(res.data.url.CALENDAR_REGISTRATION);
+      });
+  }, []);
 
   const images = [
     "https://s3.amazonaws.com/prod-wp-tunota/wp-content/uploads/2023/01/inicio-clases-unah-2023-maxima-casa-estudios-enfoca-educacion-linea.jpg",
@@ -37,7 +36,8 @@ const Principal = () => {
         <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-40">
           <div className="text-center w-1/2 mx-auto">
             <p className="text-white text-4xl font-black">
-              Bienvenido al Registro de la Universidad Nacional Autónoma de Honduras.
+              Bienvenido al Registro de la Universidad Nacional Autónoma de
+              Honduras.
             </p>
             <div className="mt-10 grid grid-cols-3 text-center">
               <div className="">
@@ -119,11 +119,10 @@ const Principal = () => {
           />
         </div>
         <div className="h-[600px] flex justify-center flex-col items-center">
-          <h2 className="font-bold text-4xl my-14 ">Calendario academico</h2>
+          <h2 className="font-bold text-4xl my-14 ">Calendario académico</h2>
 
           <div className="h-5/6 mr-3">
-            <img src={url?url:""} alt="" />
-
+            <img src={url ? url : ""} alt="" />
           </div>
         </div>
       </div>

@@ -55,6 +55,7 @@ import PerfilDocentes from "../views/ViewStudent/PerfilDocentes";
 import ViewDocentesJefe from "../views/viewDocentesJefe/ViewDocentesJefe";
 import { NavigateSections } from "../views/viewDocentesJefe/components/NavigateSections";
 import Evaluaciones from "../views/Evaluaciones/Evaluaciones";
+import ConfirmAccountForm from "../views/Auth/components/ConfirmAccountForm";
 /* import InitialSession from "./components/InitialSession"; */
 
 const ContentNavbar = () => {
@@ -75,7 +76,7 @@ const ContentNavbar = () => {
 
     return (
       <>
-        <nav className="bg-gradient-to-r from-sky-600 via-sky-400 to-sky-600 border-gray-200 fixed top-0 w-full z-50">
+        <nav className="bg-gradient-to-r from-[#42A5F5]  via-[#42A5F5] to-[#42A5F5] fixed top-0 w-full z-50">
           <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div className="flex items-center">
               <Link to="/">
@@ -97,31 +98,6 @@ const ContentNavbar = () => {
               id="navbar-cta"
             >
               <ul className="flex flex-col font-bold text-2xl p-2 mt-4 border border-red-100 rounded-lg md:flex-row md:space-x-4 md:my-0 md:border-0 ">
-                {state?.user?.ID_ROLE === 4 && (
-                  <>
-                    <li>
-                      <Link to="/solicitudes-coordinador-centro">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Solicitudes Centro
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/Periodos">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Secciones
-                        </button>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/solicitudes-coordinador">
-                        <button className="block p-2 rounded hover:bg-gray-100 hover:text-blue-700">
-                          Solicitudes Carrera
-                        </button>
-                      </Link>
-                    </li>
-                  </>
-                )}
                 {!state.login ? (
                   <li>
                     <Link to="/login">
@@ -150,7 +126,7 @@ const ContentNavbar = () => {
                           onClick={handleSession}
                           className="p-2 rounded bg-sky-600 text-white font-bold hover:bg-sky-700 px-3"
                         >
-                          Cerrar sesion
+                          Cerrar sesión
                         </button>
                       </Link>
                     </div>
@@ -243,12 +219,17 @@ const ContentNavbar = () => {
           <Route exact path="/cambio-carrera" element={<CambioCarrera />} />
           <Route
             exact
+            path="/RecuperarContrasena"
+            element={<ConfirmAccountForm />}
+          />
+          <Route
+            exact
             path="/solicitudes-estudiantes"
             element={<RequestStudent />}
           />
           <Route
             exact
-            path="/solicitudes-estudiantescenterenter"
+            path="/solicitudes-estudiantescenter"
             element={<RequesStudentCenter />}
           />
           <Route
@@ -296,6 +277,7 @@ const ContentNavbar = () => {
             path="/seccionesmatriculadas/:id"
             element={<NavigateSections />}
           />
+          <Route exact path="/periodoAmnin" element={<Planificacion />} />
           <Route exact path="/dictamenExcep" element={<ViewDictamenExcep />} />
           <Route exact path="/secciones-Docente" element={<ClassTeacher />} />
           <Route exact path="/matricula-jefe" element={<Matricula />} />

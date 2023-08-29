@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { MdDeleteForever } from "react-icons/Md";
-import { BiEdit } from "react-icons/Bi";
+import { BiEdit, BiSolidErrorCircle } from "react-icons/Bi";
 import "animate.css";
-import AlertThree from '../../components/AlertThree.jsx'
+import AlertThree from "../../components/AlertThree.jsx";
 
 import {
   flexRender,
@@ -14,17 +14,32 @@ import classNames from "classnames";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import AlertTwo from "../../components/AlertTwo";
 
-const TableStudents = ({ body }) => {
+const TableStudents = ({ body, recibirDatos, mess }) => {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState(false);
   const [buttonDisabled, setbuttonDisabled] = useState(false);
   const [alerta, setAlerta] = useState({});
 
+  const [dataError, setDataError] = useState(null);
+
+  const[che, setChe] = useState(true)
+
   useEffect(() => {
+    setMessage(false)
+    setbuttonDisabled(false)
+    setDataError(null)
     setData(body);
   }, [body]);
 
-  console.log("data: ", data);
+  useEffect(() => {
+    setMessage(false)
+    setbuttonDisabled(false)
+    // setDataError(null)
+  }, [che]);
+
+
+
+  // console.log("data: ", data);
   // console.log("props: ", body);
 
   function eliminarElemento(indice) {
@@ -38,6 +53,8 @@ const TableStudents = ({ body }) => {
   //EDITAR
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+
+
 
   const openModal = (index) => {
     setSelectedItem({ ...data[index], index });
@@ -61,23 +78,23 @@ const TableStudents = ({ body }) => {
   const columns = [
     {
       accessorKey: "NAME",
-      header: () => <span>NOMBRE</span>
+      header: () => <span>NOMBRE</span>,
     },
     {
       accessorKey: "DNI",
-      header: () => <span>DNI</span>      
+      header: () => <span>DNI</span>,
     },
     {
       accessorKey: "CARRER",
-      header: () => <span>CARRERA</span>
+      header: () => <span>CARRERA</span>,
     },
     {
       accessorKey: "EMAIL",
-      header: () => <span>CORREO</span>
+      header: () => <span>CORREO</span>,
     },
     {
       accessorKey: "CENTER",
-      header: () => <span>CENTRO</span>
+      header: () => <span>CENTRO</span>,
     },
   ];
 
@@ -92,42 +109,95 @@ const TableStudents = ({ body }) => {
     e.preventDefault();
     setMessage(true);
     setbuttonDisabled(true);
-    let datav = []
+    let datav = [];
 
     try {
-      const res = await httpRequests()["post"]("http://localhost:3000/registro/admin/registerStudents",{ body: data });
-      console.log('respuesta correcta')
-      datav =res
-      if(res?.status===200){
+      const res = await httpRequests()["post"](
+        "http://localhost:3000/registro/admin/registerStudents",
+        { body: data }
+      );
+      // console.log('respuesta correcta')
+      console.log("correcta: ", res?.response?.data?.data);
+      setDataError(res?.response?.data?.data);
+      datav = res;
+      if (res?.status === 200) {
         setAlerta({
           text: res.messagge,
-          icon: 'success',
-          title: 'Éxito'
+          icon: "success",
+          title: "Éxito",
         });
 
-        setData([])
+        setChe(!che)
+        setData([]);
+        // recibirDatos(false)
         return;
       }
-      if(res?.response.status!==200 ){
+      if (res?.response.status !== 200) {
         throw new Error(res.response.data.messagge);
       }
-      
     } catch (error) {
-      console.log('respuesta incorrecta')
-      console.log(error)
-      console.log(error.message)
+      // console.log('respuesta incorrecta')
+      console.log("error: ", error);
+      // console.log(error.message)
       setAlerta({
         text: error.message,
-        icon: 'warning',
-        title: 'Advertencia'
+        icon: "warning",
+        title: "Advertencia",
       });
 
-      setData(datav.response.data.data)
-      
+      setChe(!che)
+      setData(datav.response.data.data);
+      return
     }
- 
-    //res.data.messagge y res.status == 200
-    //res.respnse.data.messagge y res.respnse.status == 406
+    // setMessage(false)
+  };
+
+
+  const showError = (index) => {
+    let objError = {
+      CARRER: "",
+      CENTER: "",
+      DNI: "",
+      EMAIL: "",
+      NAME: "",
+    };
+    setMessage(false);
+    if (dataError) {
+      if (dataError[index].error == "existe") {
+        alert(dataError[index].NAME+" "+"ya existe en la base de datos.");
+        return
+      }
+      if (dataError[index].error.CARRER !== "") {
+        objError.CARRER = dataError[index].error.CARRER;
+        // alert("Error en el CARRER"+"\n"+dataError[index].NAME+"\n"+dataError[index].error.CARRER);
+      }
+      if (dataError[index].error.CENTER !== "") {
+        objError.CENTER = dataError[index].error.CENTER;
+        // alert("Error en el CENTER"+"\n"+dataError[index].NAME+"\n"+dataError[index].error.CENTER);
+      }
+      if (dataError[index].error.DNI !== "") {
+        objError.DNI = dataError[index].error.DNI;
+        // alert("Error en el DNI"+"\n"+dataError[index].NAME+"\n"+dataError[index].error.DNI);
+      }
+      if (dataError[index].error.EMAIL !== "") {
+        objError.EMAIL = dataError[index].error.EMAIL;
+        // alert("Error en el EMAIL"+"\n"+dataError[index].NAME+"\n"+dataError[index].error.EMAIL);
+      }
+      if (dataError[index].error.NAME !== "") {
+        objError.NAME = dataError[index].error.NAME;
+        // alert("Error en el NAME"+"\n"+dataError[index].NAME+"\n"+dataError[index].error.NAME);
+      }
+      // for (let clave in objError){
+      //   console.log(objError[clave]);
+      // }
+      alert(
+        dataError[index].NAME +
+          "\n" +
+          "Tiene el/los siguientes errores:" +
+          "\n" + 
+          objError.CARRER+" "+ objError.CENTER+" "+objError.DNI+" "+objError.EMAIL+" "+objError.NAME
+      );
+    }
   };
 
   return (
@@ -155,11 +225,12 @@ const TableStudents = ({ body }) => {
                     </th>
                   ))}
                   <th className="p-3 text-left uppercase text-xl">ACCIONES</th>
+                  <th className="p-3 text-left uppercase text-xl">OBS</th>
                 </tr>
               ))}
             </thead>
             <tbody>
-              {table.getRowModel().rows.map((row) => (
+              {table.getRowModel().rows.map((row, index) => (
                 <tr
                   key={row.id}
                   className="bg-blue-500 border border-blue-400 text-xl hover:bg-blue-300 hover:text-black"
@@ -180,7 +251,7 @@ const TableStudents = ({ body }) => {
                         eliminarElemento(row.id);
                       }}
                     >
-                      <MdDeleteForever className="text-4xl text-red-800 hover:text-pink-500 shadow-md shadow-red-400" />
+                      <MdDeleteForever className="text-4xl text-red-700 hover:text-red-800 " />
                     </button>
                     &nbsp; &nbsp;&nbsp;
                     <button
@@ -190,7 +261,13 @@ const TableStudents = ({ body }) => {
                         openModal(row.id);
                       }}
                     >
-                      <BiEdit className="text-4xl text-green-800 hover:text-green-500 shadow-md shadow-green-400" />
+                      <BiEdit className="text-4xl text-green-700 hover:text-green-800 " />
+                    </button>
+                  </td>
+                  <td>
+                    <button onClick={() => showError(index)}>
+                      <BiSolidErrorCircle className={`${(dataError ? 'text-4xl text-orange-400 hover:text-orange-500 animate-blink' : 'text-4xl text-orange-400 hover:text-orange-500')}`}
+/>
                     </button>
                   </td>
                 </tr>

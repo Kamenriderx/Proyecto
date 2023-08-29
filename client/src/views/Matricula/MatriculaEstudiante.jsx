@@ -5,6 +5,8 @@ import axios from "axios";
 import Modal2 from "../../components/Modal2";
 import { AiFillCheckCircle } from "react-icons/ai";
 import AlertTwo from "../../components/AlertTwo";
+import { BiArrowBack } from "react-icons/Bi";
+
 const MatriculaEstudiante = () => {
   const { state, periodo } = useContext(StoreContext);
   const [estado, setEstado] = useState([]);
@@ -47,12 +49,6 @@ const MatriculaEstudiante = () => {
       if (dato == 1) {
         navigate("/matricula/adicionar-clase");
       }
-      if (dato == 2) {
-        navigate("/matricula/cancelar-clase-matriculada");
-      }
-      if (dato == 3) {
-        navigate("/matricula/cancelar-clase-espera");
-      }
     } catch (error) {
       setMessage1(true);
       // alert('ahahah')
@@ -78,7 +74,7 @@ const MatriculaEstudiante = () => {
         `http://localhost:3000/registro/enrollment/addCancelation/${state.user.ID_USER}`,
         { ...config }
       );
-      
+
       if (dato == 2) {
         navigate("/matricula/cancelar-clase-matriculada");
       }
@@ -109,8 +105,6 @@ const MatriculaEstudiante = () => {
         `http://localhost:3000/registro/enrollment/form003/${state.user.ID_USER}`,
         { ...config }
       );
-      
-      
       if (dato == 4) {
         navigate("/matricula/forma03");
       }
@@ -126,16 +120,20 @@ const MatriculaEstudiante = () => {
     }
   };
 
-  const handleClickInfo = (dato)=>{
-    handleInfoForm(dato)
-  }
+  const handleClickInfo = (dato) => {
+    handleInfoForm(dato);
+  };
 
-  const handleClickCancelacion = (dato)=>{
-    handleCancelacion(dato)
+  const handleClickCancelacion = (dato) => {
+    handleCancelacion(dato);
   };
 
   const handleClick = (dato) => {
     handleMatricula(dato);
+  };
+
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -159,7 +157,7 @@ const MatriculaEstudiante = () => {
                 <table className="w-full bg-white shadow-md table-auto">
                   <thead className="bg-blue-800 text-white">
                     <tr>
-                      <th className="p-2">Descripcion</th>
+                      <th className="p-2">Descripción</th>
                       <th className="p-2">Valor</th>
                       <th className="p-2">Pagado</th>
                     </tr>
@@ -229,10 +227,20 @@ const MatriculaEstudiante = () => {
           </div>
         </Modal2>
         <div>
+          <div className="flex justify-start mx-10">
+            <div className="mt-5">
+              <button
+                onClick={handleBack}
+                className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+              >
+                <BiArrowBack color="#F7F9F7" size={20} />
+              </button>
+            </div>
+          </div>
           <div className="mt-10">
             <p className="text-red-800 font-bold text-lg block">MATRÍCULA</p>
             <p className="text-gray-500 font-semibold text-md">
-              Bienvenido a la sección de matrícula.
+              Bienvenido a la sección de matrícula
             </p>
           </div>
           <aside className="md:w-80 lg:w-3/5 px-5 py-10">
@@ -242,24 +250,17 @@ const MatriculaEstudiante = () => {
               </Link>
             </div>
             <div className="mt-10" onClick={() => handleClickCancelacion(2)}>
-              <Link
-                className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
-              >
+              <Link className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded">
                 Cancelar clase matrículada
               </Link>
             </div>
             <div className="mt-10" onClick={() => handleClickCancelacion(3)}>
-              <Link
-                className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
-              >
+              <Link className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded">
                 Cancelar clase en espera
               </Link>
             </div>
-            <div className="mt-10" onClick={()=> handleClickInfo(4)}>
-              <Link
-                to="/matricula/forma03"
-                className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
-              >
+            <div className="mt-10" onClick={() => handleClickInfo(4)}>
+              <Link className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded">
                 Forma 03
               </Link>
             </div>

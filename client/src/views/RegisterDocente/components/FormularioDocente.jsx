@@ -6,7 +6,7 @@ import { httpRequests } from "../../../utils/helpers/httpRequests";
 import { useEffect } from "react";
 import axios from "axios";
 
-const FormularioDocente = ({ check, setCheck, docente }) => {
+const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
   const [NAME, setNAME] = useState("");
   const [CENTER, setCENTER] = useState("");
   const [ROL, setROL] = useState("");
@@ -46,7 +46,7 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
     if (!regexEmail.test(EMAIL.trim())) {
       setAlerta({
         message:
-          'El campo "correo docente" es invalido, ejem: alguien@algunlugar.es',
+          'El campo "correo docente" es inválido, ejem: alguien@algunlugar.es',
         error: true,
       });
       setTimeout(() => {
@@ -58,7 +58,7 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
     if (!regexNombbre.test(NAME.trim())) {
       setAlerta({
         message:
-          'El campo "nombre docente" solo acepta letras y espacios en blanco',
+          'El campo "nombre docente" solo acepta letras y un espacio en blanco por cada nombre',
         error: true,
       });
       setTimeout(() => {
@@ -96,7 +96,7 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
         throw new Error(res.response.data.messagge);
       }
       setAlerta({
-        message: "Docente Creado Correctamente",
+        message: "Docente creado correctamente",
         error: false,
       });
       setCheck(!check);
@@ -156,29 +156,24 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const res = await axios.post(
+      const res = await axios.put(
         `http://localhost:3000/registro/admin/updateProfessor/${idP}`,
-        { NAME, CENTER, CARRER, ROL, EMAIL }, config
+        { NAME, CENTER, CARRER, ROL, EMAIL },
+        config
       );
-      console.log(res);
 
       if (!res.status && res?.response?.status !== 200) {
         throw new Error(res.response.data.messagge);
       }
       setAlerta({
-        message: "Docente Actualizado Correctamente",
+        message: "Docente actualizado correctamente",
         error: false,
       });
-      setCheck(!check);
-      setNAME("");
-      setCARRER("");
-      setCENTER("");
-      setROL("");
-      setEMAIL("");
+      setCheck2(!check2);
     } catch (error) {
       console.log(error);
       setAlerta({
-        message: error.message,
+        message: error.response.data.messagge,
         error: true,
       });
       return;
@@ -227,7 +222,7 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
             onChange={(e) => setNAME(e.target.value)}
             value={NAME}
             type="text"
-            placeholder="Escribe tu Nombre"
+            placeholder="Escribe un nombre"
             className="w-full mt-2 p-2 border rounded-xl bg-gray-50"
             id="nombre"
           />
@@ -244,7 +239,7 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
             value={EMAIL}
             onChange={(e) => setEMAIL(e.target.value)}
             type="text"
-            placeholder="Escribe el Correo del Docente"
+            placeholder="Escribe el correo del docente"
             className="w-full mt-2 p-2 border rounded-xl bg-gray-50 "
             id="email"
           />
@@ -260,16 +255,26 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
           >
             <option value="">-- Seleccione un Centro --</option>
             <option value="Ciudad Universitaria">UNAH-CU</option>
-            <option value="UNAH-VS">UNAH-VS</option>
-            <option value="CENTRO UNIVERSITARIO REGIONAL DEL CENTRO">
+            <option value="UNAH Valle de Sula">UNAH-VS</option>
+            <option value="Centro Universitario Regional del Centro">
               UNAH-CURC
             </option>
-            <option value="UNAH-CURLA">UNAH-CURLA</option>
-            <option value="UNAH-CURLP">UNAH-CURLP</option>
-            <option value="UNAH-CUROC">UNAH-CUROC</option>
-            <option value="UNAH-CURNO">UNAH-CURNO</option>
-            <option value="UNAH-TEC Danli">UNAH-TEC Danli</option>
-            <option value="UNAH-TEC Aguan">UNAH-TEC Aguan</option>
+            <option value="Centro Universitario Regional de Litoral Atlantico">
+              UNAH-CURLA
+            </option>
+            <option value="Centro Universitario Regional del Litoral Pacífico">
+              UNAH-CURLP
+            </option>
+            <option value="Centro Universitario Regional de Occidente">
+              UNAH-CUROC
+            </option>
+            <option value="Centro Universitario Regional Nororiental">
+              UNAH-CURNO
+            </option>
+            <option value="Centro Tecnológico de Danlí">UNAH-TEC Danli</option>
+            <option value="Centro Tecnológico del Valle del Aguán">
+              UNAH-TEC Aguan
+            </option>
           </select>
         </div>
         <div className="my-3">
@@ -301,21 +306,22 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
             >
               <option value="">-- Seleccione Carrera del Docente --</option>
               <option value="Ingenieria en Sistemas">
-                Ingenieria en Sistemas
+                Ingeniería en Sistemas
               </option>
               <option value="Ingenieria Quimica Industrial">
-                Ingenieria Quimica Industrial
+                Ingeniería Quimica Industrial
               </option>
               <option value="Ingenieria Electrica Industrial">
-                Ingenieria Electrica Industrial
+                Ingeniería Electrica Industrial
               </option>
               <option value="Ingenieria Industrial">
-                Ingenieria Industrial
+                Ingeniería Industrial
               </option>
-              <option value="INGENIERIA CIVIL">Ingeniería Civil</option>
+              <option value="INGENIERIA CIVIL">Ingeníería Civil</option>
               <option value="Ingenieria Mecanica Industrial">
-                Ingenieria Mecanica Industrial
+                Ingeniería Mecanica Industrial
               </option>
+              <option value="Arquitectura">Arquitectura</option>
               <option value="Licenciatura en Derecho">
                 Licenciatura en Derecho
               </option>
@@ -337,6 +343,19 @@ const FormularioDocente = ({ check, setCheck, docente }) => {
                 Licenciatura en Astronomía y Astrofísica
               </option>
               <option value="Medicina">Medicina</option>
+              <option value="Odontología">Odontología</option>
+              <option value="Licenciatura en Historia">
+                Licenciatura en Historia
+              </option>
+              <option value="Licenciatura en Letras">
+                Licenciatura en Letras
+              </option>
+              <option value="Licenciatura en Sociología">
+                Licenciatura en Sociología
+              </option>
+              <option value="Licenciatura en Sociología">
+                Licenciatura en Sociología
+              </option>
             </select>
           </div>
         )}

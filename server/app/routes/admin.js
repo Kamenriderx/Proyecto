@@ -6,8 +6,8 @@ const {getProfessorsCtrl,registerProfessorCtrl,registerStudentsCtrl,getStudents,
 const  upload = require("../middlewares/upload");
 const {validatorRegisterProfessor} = require("../middlewares/validations");
 
-router.get("/getProfessors",getProfessorsCtrl);
-router.get("/getStudents",getStudents);
+router.get("/getProfessors/:idUser",getProfessorsCtrl);
+router.get("/getStudents/:idUser",getStudents);
 
 
 

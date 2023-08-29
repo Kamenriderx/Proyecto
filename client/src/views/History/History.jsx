@@ -2,14 +2,19 @@ import { useEffect, useState } from "react";
 import TableRow from "./components/TableRow";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import jsPDF from "jspdf";
-
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const History = () => {
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   const [enrollments, setEnrollments] = useState([]);
   const [basicInformation, setBasicInformation] = useState({});
   const [proms, setProms] = useState({
-    global:0,
-    period:0
+    global: 0,
+    period: 0,
   });
 
   useEffect(() => {
@@ -21,28 +26,26 @@ const History = () => {
         console.log(res);
         let globalProm;
         let periodProm;
-        let totalUV=0;
-        let totalSum=0;
-        
-        let totalLastPeriodUV=0;
-        let totalLastPeriodSum=0;
-        res.data.data.forEach(enrollment=>{
-            if(enrollment.calification!==0){
+        let totalUV = 0;
+        let totalSum = 0;
 
-            
-            totalUV += enrollment.uv ;
-            totalSum += enrollment.uv*enrollment.calification
-            
-            if(enrollment.ID_PERIOD === res.data.lastPeriod ){
-                totalLastPeriodUV += enrollment.uv;
-                totalLastPeriodSum += enrollment.uv*enrollment.calification
+        let totalLastPeriodUV = 0;
+        let totalLastPeriodSum = 0;
+        res.data.data.forEach((enrollment) => {
+          if (enrollment.calification !== 0) {
+            totalUV += enrollment.uv;
+            totalSum += enrollment.uv * enrollment.calification;
+
+            if (enrollment.ID_PERIOD === res.data.lastPeriod) {
+              totalLastPeriodUV += enrollment.uv;
+              totalLastPeriodSum += enrollment.uv * enrollment.calification;
             }
-        }
+          }
         });
-        console.log("Suma total:",res);
-        globalProm = totalSum  /totalUV;
-        periodProm = totalLastPeriodSum /totalLastPeriodUV;
-        setProms({global:globalProm,period:periodProm});
+        console.log("Suma total:", res);
+        globalProm = totalSum / totalUV;
+        periodProm = totalLastPeriodSum / totalLastPeriodUV;
+        setProms({ global: globalProm, period: periodProm });
         setEnrollments(res.data.data);
         setBasicInformation(res.data.basicInformation);
       });
@@ -419,7 +422,9 @@ const History = () => {
 
     // Título con líneas centrado horizontalmente entre las líneas
 
-    let currentYear = enrollments[0]?enrollments[0].year : (new Date()).getFullYear();
+    let currentYear = enrollments[0]
+      ? enrollments[0].year
+      : new Date().getFullYear();
 
     const titleWithLines = `${currentYear}`;
     const titleWidth =
@@ -454,11 +459,11 @@ const History = () => {
           theme: "plain",
         });
         tableData = [];
-        acum=0
+        acum = 0;
       }
 
       // Datos para la tabla
-      if(enrollment.calification>0){
+      if (enrollment.calification > 0) {
         let row = [
           enrollment.section_code,
           enrollment.name,
@@ -470,24 +475,23 @@ const History = () => {
         tableData.push(row);
         acum += 5;
       }
-      
     }
     console.log(tableData);
     doc.autoTable({
-        head: [["CODIGO", "NOMBRE", "UV", "PERIODO", "NOTA", "OBS"]],
-        body: tableData,
-        startY: newCenterY2,
+      head: [["CODIGO", "NOMBRE", "UV", "PERIODO", "NOTA", "OBS"]],
+      body: tableData,
+      startY: newCenterY2,
 
-        bodyStyles: {
-          textColor: [0, 0, 0],
-          halign: "center",
-          valign: "middle",
-        },
-        margin: { left: tableX },
-        tableWidth: "auto",
-        theme: "plain",
-      });
-    
+      bodyStyles: {
+        textColor: [0, 0, 0],
+        halign: "center",
+        valign: "middle",
+      },
+      margin: { left: tableX },
+      tableWidth: "auto",
+      theme: "plain",
+    });
+
     const date = Date().split(" ");
     const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
     doc.save(`report_${dateStr}.pdf`);
@@ -495,6 +499,16 @@ const History = () => {
 
   return (
     <div className="m-24 mt-20">
+      <div className="flex justify-start mx-5 mb-5">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       <div className=" border m-2 p-4 mb-10">
         <div className="text-center border rounded-t bg-blue-100 mb-3">
           informacion general
@@ -528,7 +542,7 @@ const History = () => {
               <ul>
                 <li>{basicInformation.CENTER}</li>
                 <li>{isNaN(proms.global) ? "0" : proms.global}</li>
-                <li>{isNaN(proms.period)?"0":proms.period}</li>
+                <li>{isNaN(proms.period) ? "0" : proms.period}</li>
               </ul>
             </div>
           </div>
@@ -569,16 +583,10 @@ const History = () => {
             <li className="border border-blue-100 w-1/12 text-center">OBS</li>
           </ul>
           {enrollments.map((note) => {
-                if(note.calification>0){
-                    return (
-                        <TableRow {...note} />
-                    );
-                }
-                
+            if (note.calification > 0) {
+              return <TableRow {...note} />;
             }
-              
-            )}
-
+          })}
           <nav className="flex justify-center mt-6">
             <ul className="flex h-10 border justify-center items-center">
               <li className="hover:bg-slate-400 h-full justify-center items-center flex px-6">

@@ -33,7 +33,7 @@ const getEnrollmentAreas = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 
 }
@@ -55,37 +55,37 @@ const enrolmentCourse = async (req,res)=>{
         let data = []
         
         if (enrollmentCurrent && enrollmentCurrent.STATE=="Matriculada") {
-            res.status(400).json({messagge:`ya tienes matriculada la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
+            res.status(400).json({messagge:`Ya tienes matriculada la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
             return
         }
         if (enrollmentCurrent && enrollmentCurrent.STATE=="En Espera") {
-            res.status(400).json({messagge:`ya tienes Espera la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
+            res.status(400).json({messagge:`Ya tienes en espera la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
             return
         }
         if (enrollments.length > 0) {
             data = await verifySections(enrollments, body.ID_SECTION)
             if (data.length >0 ) {
                 if (data[0].STATE == "En Espera" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
-                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
+                    res.status(400).json({messagge:`Tiene traslape de horario con la sección ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
                     return    
                 }
                 if (data[0].seccion.ID_SECTION == body.ID_SECTION && data[0].STATE == "En Espera" ) {
-                    res.status(400).json({messagge:`la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada en lista de espera`})
+                    res.status(400).json({messagge:`La sección ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada en lista de espera`})
                     return    
                 }
 
                 if (data[0].seccion.ID_SECTION == body.ID_SECTION && data[0].STATE == "Matriculada" ) {
-                    res.status(400).json({messagge:`la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada`})
+                    res.status(400).json({messagge:`La sección ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada`})
                     return    
                 }
 
                 if (data[0].STATE == "Matriculada" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
-                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
+                    res.status(400).json({messagge:`Tiene traslape de horario con la sección ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
                     return    
                 }
 
 
-                res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
+                res.status(400).json({messagge:`Tiene traslape de horario con la sección ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
                 return
             }
             
@@ -98,7 +98,7 @@ const enrolmentCourse = async (req,res)=>{
         }
         
         if (uvSection > student.UV_AVAILABLE) {
-            res.status(400).json({messagge:"No tienes la cantidad de unidades valorativas suficientes"})
+            res.status(400).json({messagge:"No tienes la cantidad suficiente de unidades valorativas"})
             return
             
         }
@@ -115,11 +115,11 @@ const enrolmentCourse = async (req,res)=>{
 
         
         
-        res.status(200).json({messagge:"Matricula correcta"})
+        res.status(200).json({messagge:"Matricula exitosa"})
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
     
 }
@@ -139,11 +139,11 @@ const enrolmentWaitCourse = async (req,res)=>{
         let data = []
 
         if (enrollmentCurrent && enrollmentCurrent.STATE=="Matriculada") {
-            res.status(400).json({messagge:`ya tienes matriculada la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
+            res.status(400).json({messagge:`Ya tienes matriculada la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
             return
         }
         if (enrollmentCurrent && enrollmentCurrent.STATE=="En Espera") {
-            res.status(400).json({messagge:`ya tienes Espera la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
+            res.status(400).json({messagge:`Ya tienes en espera la clase ${enrollmentCurrent.seccion.course.CODE_COURSE} ${enrollmentCurrent.seccion.course.NAME}`})
             return
         }
         if (enrollments.length > 0) {
@@ -151,26 +151,26 @@ const enrolmentWaitCourse = async (req,res)=>{
             if (data.length >0 ) {
                 if (data[0].STATE == "En Espera" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
                     
-                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
+                    res.status(400).json({messagge:`Tiene traslape de horario con la sección ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} que está en lista de espera`})
                     return    
                 }
                 if (data[0].seccion.ID_SECTION == body.ID_SECTION && data[0].STATE == "En Espera" ) {
-                    res.status(400).json({messagge:`la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada en lista de espera`})
+                    res.status(400).json({messagge:`La seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada en lista de espera`})
                     return    
                 }
 
                 if (data[0].seccion.ID_SECTION == body.ID_SECTION && data[0].STATE == "Matriculada" ) {
-                    res.status(400).json({messagge:`la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada`})
+                    res.status(400).json({messagge:`La seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME} ya la tienes matriculada`})
                     return    
                 }
 
                 if (data[0].STATE == "Matriculada" && data[0].seccion.ID_SECTION != body.ID_SECTION) {
-                    res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
+                    res.status(400).json({messagge:`Tiene traslape de horario con la sección ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
                     return    
                 }
 
 
-                res.status(400).json({messagge:`Tiene traslape de horario con la seccion ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
+                res.status(400).json({messagge:`Tiene traslape de horario con la sección ${data[0].seccion.course.CODE_COURSE} ${data[0].seccion.course.NAME}`})
                 return
             }
             
@@ -196,11 +196,11 @@ const enrolmentWaitCourse = async (req,res)=>{
 
         
         
-        res.status(200).json({messagge:"clase matriculada en espera"})
+        res.status(200).json({messagge:"Clase matriculada en espera"})
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
     
 }
@@ -250,7 +250,7 @@ const listCoursesArea = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
     
 }
@@ -289,7 +289,7 @@ const getSectionsByIdCourse= async(req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO_SALIO_MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -316,7 +316,7 @@ const getInfoAcademicStudent = async (req,res)=>{
         
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
  
@@ -329,7 +329,7 @@ const getStudentEnrollmentCourses = async (req,res)=>{
         res.status(200).json({courses})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const getStudentWaitingCourses = async (req,res)=>{
@@ -341,7 +341,7 @@ const getStudentWaitingCourses = async (req,res)=>{
         res.status(200).json({courses})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const cancelledEnrollment = async (req,res)=>{
@@ -349,10 +349,10 @@ const cancelledEnrollment = async (req,res)=>{
         const {idEnrollment, idUser} = req.params
 
         await cancelInscription(idEnrollment, idUser)
-        res.status(200).json({messagge:"matricula cancelada exitosamente"})
+        res.status(200).json({messagge:"Matricula cancelada exitosamente"})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const specialCancelledEnrollment = async (req,res)=>{
@@ -360,19 +360,19 @@ const specialCancelledEnrollment = async (req,res)=>{
         const {idEnrollment, idUser} = req.params
 
         await specialCancelInscription(idEnrollment,idUser)
-        res.status(200).json({messagge:"matricula cancelada exitosamente"})
+        res.status(200).json({messagge:"Matricula cancelada exitosamente"})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
 const verifyEnrollment = async (req,res)=>{
     try {
         
-        res.status(200).json({messagge:"acceso concedido"})
+        res.status(200).json({messagge:"Acceso concedido"})
     } catch (error) {
         console.log({error})
-        res.status(500).json({messagge:"ALGO SALIO MAL"})
+        res.status(500).json({messagge:"Algo salio mal"})
     }
 }
  
@@ -382,7 +382,7 @@ const enrollmentPayment = async (req,res) =>{
         FROM professor
             JOIN student ON student.CAREER = professor.CAREER
             JOIN user_ ON user_.ID_USER = student.ID_USER
-        WHERE professor.ID_USER = ${req.token.userId} AND REGISTRATION_PAYMENT = 0
+        WHERE professor.ID_USER = ${req.token.userId} AND REGISTRATION_PAYMENT = 1
     `)
     const response = enrollmentStudents[0]
     res.status(200).json({enrollmentStudents:response});

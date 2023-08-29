@@ -1,56 +1,172 @@
-const {User} =require("../models");
+const {User, Career} =require("../models");
 const {Op} = require('sequelize');
-const verifyData = (data)=>{
+const verifyData = async (data)=>{
     const dataError=[];
     const dataValidate =[];
 
-    data.map(async (student)=>{
-        let error = ""
-        try {
+    await Promise.all(data.map(async (student)=>{
+        let error = {
+            NAME:"",
+            DNI:"",
+            CARRER:"",
+            EMAIL:"",
+            CENTER:""
 
-            
-            if (!student.hasOwnProperty('NAME')|| student.NAME.length <2 || typeof student.NAME !== 'string' || student.NAME.trim()==="") {
-                error+=`Campo NAME invalido: ${student.NAME}, `;
-            }
-            if (!student.hasOwnProperty('DNI') || typeof student.DNI !== 'string' || student.DNI.length != 13) {
-                error+=`Campo DNI invalido: ${student.DNI}, `;
-            }
-            if (!student.hasOwnProperty('CARRER') || typeof student.CARRER !== 'string' || student.CARRER.trim()==="") {
-                error+=`Campo CARRER invalido: ${student.CARRER}, `;
-            }
-           
-            if (!student.hasOwnProperty('CENTER') || typeof student.CENTER !== 'string'|| student.CENTER.trim()==="" || student.CENTER.split(" ").length < 2) {
-                error+=`Campo invalido: ${student.CENTER}, `;
-            }
+        }
+
         
-            if ( !student.hasOwnProperty('EMAIL')|| typeof student.EMAIL !== 'string'  || student.EMAIL.trim()==="" || !/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(student.EMAIL) ) {
-                error+=`Campo invalido: ${student.EMAIL}`;
+ 
+        
+        if (!student.hasOwnProperty('NAME')) {
+            error.NAME+=`La columna nombre no existe\n`;
+        }
+
+        
+        if ( typeof student.NAME !== 'string' ) {
+            error.NAME+=`El tipo de la columna nombre dato no es el correcto, debe ser cadena de caracteres\n`;
+        }
+        if ( typeof student.NAME == 'string' ) {
+            if (student.NAME.split(" ").length <2) {
+                error.NAME+=`El estudiante debe tener mas de un nombre\n`;                    
+            }    
+            if ( student.NAME.trim()==="") {
+                error.NAME+=`El nombre campo está vacío\n`;
             }
+        }
 
+        if (!student.hasOwnProperty('DNI')) {
+            error.DNI+=`La columna DNI no existe\n`;
+        }
 
-
-            if (error.length>0) {
-                throw new Error(error)
-            } else {
+        if ( typeof student.DNI !== 'string') {
+            error.DNI+=`El tipo de dato de la columna DNI no es el correcto, debe ser una cadena de caracteres\n`;
+            
+        }
+        if ( typeof student.DNI == 'string') {
+            
+            if (!(/^[0-9]{4}-[0-9]{4}-[0-9]{5}$/.test(student.DNI)))  {
+                if (student.DNI.length != 13 ) {
+                    error.DNI +=`El DNI debe seguir el siguiente patrón 0000-0000-00000\n` 
+                }
+                if ( typeof parseInt(student.DNI) !== "number") {
+                    error.DNI +=`El DNI debe de ser un valor númerico o una cadena de caracteres con el siguiente patrón 0000-0000-00000\n`
+            
+            
+                }
+            }
     
-                dataValidate.push(student);
-                return student;
+            if ((student.DNI.replace(/-/g, "").length != 13) ) {
+                error.DNI +=`El DNI debe tener 13 digitos\n`
+            }
+            if (student.DNI.trim()==="") {
+                error.DNI+=`El campo DNI está vacío\n`;
                 
             }
-
             
-        } catch (err) {
-            student.error = err.message;
-            dataError.push(student);
-            return student
+        }
+
+        if (!student.hasOwnProperty('CARRER') ) {
+            error.CARRER+=`La columna carrera no existe\n`;
+        }
+
+        if (typeof student.CARRER == 'string') {
+            if (student.CARRER.trim()==="") {
+                error.CARRER+=`El campo carrera está vació\n`;
+                
+            }
+            let career = await Career.findOne({
+                where:{
+                    NAME: {[Op.like]:student.CARRER}
+                }
+            })
+    
+            if (!career) {
+                error.CARRER += "El nombre de la carrera no es válido\n"
+                
+            }
         }
 
 
-    })
+        if (typeof student.CARRER !== 'string') {
+            error.CARRER+=`EL tipo de dato del campo carrera no es el correcto, deber ser una cadena de caracteres\n`;
+        }
+
+        
+        if (!student.hasOwnProperty('CENTER') ) {
+            error.CENTER+=`La columna centro no existe\n`;
+        }
+
+        if (typeof student.CENTER == 'string') {
+            if (student.CENTER.includes("\r")) {
+                student.CENTER= student.CENTER.slice(0,-1) 
+                
+            }
+    
+            if (student.CENTER.trim()==="") {
+                error.CENTER+=`El campo centro está vacío\n`;
+                
+            }
+           
+            if (student.CENTER.toLocaleLowerCase() !="ciudad universitaria" && student.CENTER.toLocaleLowerCase() !="centro universitario regional del centro" && student.CENTER.toLocaleLowerCase() != "Centro Universitario Regional de Litoral Atlántico".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Centro Universitario Regional del Litoral Pacífico".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="UNAH Valle de Sula".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Universidad Nacional Autónoma de Honduras Valle de Sula".toLocaleLowerCase() && student.CENTER.toLocaleLowerCase() !="Centro Universitario Regional de Occidente".toLocaleLowerCase() && "Centro Universitario Regional Nororiental".toLocaleLowerCase() &&student.CENTER.toLocaleLowerCase() != "Centro Tecnológico de Danlí".toLocaleLowerCase()&& student.CENTER.toLocaleLowerCase() !="Centro Tecnológico del Valle del Aguán".toLocaleLowerCase() ) {
+                error.CENTER+=`El nombre del centro no es correcto o no existe, los siguientes son nombres válidos:\n1. Ciudad Universitaria\n2. Centro Universitario Regional del Centro\n3. UNAH Valle de Sula\n4. Universidad Nacional Autónoma de Honduras del Valle de Sula\n5. Centro Universitario Regional de Occidente\n6. Centro Universitario Regional Nororiental\n7. Centro Tecnológico de Danlí\n8. Centro Tecnológico del Valle del Aguán\n(las palabras pueden estár en minúscula o mayúscula totalmente)\n`;
+                
+            }
+        }
+        if (typeof student.CENTER !== 'string') {
+            error.CENTER+=`EL tipo de dato de la columna centro no es el correcto, deber ser una cadena de caracteres\n`;
+        }
+
+        
+
+        
+        if (!student.hasOwnProperty('EMAIL') ) {
+            error.CARRER+=`La columna correo no existe\n`;
+        }
+
+        if (typeof student.EMAIL == 'string') {
+            
+            if (student.EMAIL.trim()==="") {
+                error.EMAIL+=`El campo correo está vacío\n`;
+                
+            }
+    
+        
+            if (  !/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(student.EMAIL) ) {
+                error.EMAIL+=`EL correo no tiene un formato válido\n`;
+            }
+        }
+
+        if (typeof student.EMAIL !== "string") {
+            error.EMAIL+=`EL tipo de dato del campo correo no es el correcto, deber ser una cadena de caracteres\n`;
+            
+        }
+
+
+   
+
+        if ( error.NAME.length>0 || error.DNI.length>0 || error.CARRER.length>0 || error.CENTER.length>0 || error.EMAIL.length>0) {
+            student.error = error;
+
+            dataError.push(student);
+            return student
+        } else {
+            student.DNI=student.DNI.replace(/-/g,"")
+            dataValidate.push(student);
+            return student;
+            
+        }
+
+            
+        
+
+
+    }));
 
     return {dataError,dataValidate}
 
 }
+
+
 const isDuplicate = async (data)=>{
     const dataDuplicate = [];
     const newDataValidate = [];
@@ -73,7 +189,7 @@ const isDuplicate = async (data)=>{
                     
             }else{
                 
-                throw new Error("EL USUARIO YA ESTA REGISTRADO");
+                throw new Error("existe");
             }
                 
         } catch (error) {

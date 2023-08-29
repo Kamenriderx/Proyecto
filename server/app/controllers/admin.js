@@ -10,12 +10,18 @@ const fechaActual = new Date().toLocaleDateString();
 
 
 
-
 const getProfessorsCtrl = async(req,res)=>{
 
     try {
-        const professors = await Professor.findAll({include:{
-        model:User ,as:"user" ,include:[{model:Rol,as:"rol"}]}})
+        const {idUser}= req.params;
+        const user = await User.findOne({
+            where:{ID_USER:idUser}
+        })
+        const professors = await Professor.findAll({
+            include:{
+        
+                model:User ,as:"user",include:[{model:Rol,as:"rol"}]
+            }})
         res.status(200).json({professors})
     } catch (error) {
         console.log(error)
@@ -32,9 +38,32 @@ const registerProfessorCtrl = async (req,res)=>{
     try {
         
         const {file} = req;
-        const url = `http://localhost:3000/images/${file.filename}`
         const body = matchedData(req);
-        body.URL = url
+        if (file) {
+            const url = `http://localhost:3000/images/${file.filename}`
+            body.URL = url
+        }
+        if (!file) {
+            body.URL = ""
+            
+        }
+        console.log({body})
+
+        if (body.NAME.slice(-1)==" ") {
+            body.NAME = body.NAME.replace(/\s+$/, '');
+            
+        }
+        if (body.EMAIL.slice(-1)==" ") {
+            body.EMAIL = body.EMAIL.replace(/\s+$/, '');
+            
+        }
+
+        if (!/^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*$/
+        .test(body.NAME)) {
+            res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
+            return
+            
+        }
         if(body.NAME.split(" ").length == 1){
             res.status(401).json({messagge:"El nombre es incorrecto"})
         }
@@ -76,11 +105,11 @@ const registerProfessorCtrl = async (req,res)=>{
                 ]
             })
 
-            if (body.ROLE == 3) {
+            if (body.ROLE == 3 && profesor) {
                 res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
                 return                
             }
-            if (body.ROLE == 4) {
+            if (profesor && body.ROLE == 4) {
                 res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
                 return                
             }
@@ -96,7 +125,7 @@ const registerProfessorCtrl = async (req,res)=>{
         body.USER_PASSWORD = await encrypt(body.USER_PASSWORD_PLAIN);
         body.ACCOUNT_NUMBER = ACCOUNT_NUMBER
         await Professor.add(body);
-        sendMail(body.EMAIL, {subject: "Registro, Universidad Nacional Autonoma e Honduras"},"sendMailProfessor", {
+        sendMail(body.EMAIL, {subject: "Registro, Universidad Nacional Autonoma de Honduras"},"sendMailProfessor", {
             name: body.NAME,
             password: body.USER_PASSWORD_PLAIN,
             account_number:body.ACCOUNT_NUMBER,
@@ -124,7 +153,7 @@ const registerProfessorCtrl = async (req,res)=>{
         
     } catch (error) {
         console.log(error)
-        res.status(403).json({messagge:"ALGO SALIO MAL"})
+        res.status(403).json({messagge:"Algo salio mal"})
         
     }
 
@@ -133,7 +162,7 @@ const registerProfessorCtrl = async (req,res)=>{
 const deleteProfessor = async(req, res)=>{
     try {
         const {idUser} = req.params
-        await Professor.destroy({where:{ID_USER: idUser }})
+        await User.destroy({where:{ID_USER: idUser }})
         res.status(200).json({messagge:"El docente ha sido eliminado exitosamente"})
         
     } catch (error) {
@@ -148,9 +177,22 @@ const updateProfessor = async (req,res)=>{
         
         
         const {idUser} = req.params
-        
+ 
         const {body} = req;
-        
+        if (body.NAME.slice(-1)==" ") {
+            body.NAME = body.NAME.replace(/\s+$/, '');
+            
+        }
+        if (body.EMAIL.slice(-1)==" ") {
+            body.EMAIL = body.EMAIL.replace(/\s+$/, '');
+            
+        }
+        if (!/^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*(?:\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]*)*$/
+        .test(body.NAME)) {
+            res.status(400).json({messagge:"El nombre del docente es incorrecto, debe de tener la primera letra en mayúscula de cada nombre y apellido"})
+            return
+            
+        }
 
         if(body.NAME.split(" ").length == 1){
             res.status(401).json({messagge:"El nombre es incorrecto"})
@@ -177,10 +219,11 @@ const updateProfessor = async (req,res)=>{
             
         
         if (body.ROL != 2 ) {
+           
             
             profesor = await Professor.findOne({
                 where:{
-                    CAREER: {[Op.like]:body.CAREER}
+                    CAREER: {[Op.like]:body.CARRER}
                 }, include:[
                     {
                         model:User, as:"user", where:{
@@ -192,15 +235,19 @@ const updateProfessor = async (req,res)=>{
                     }
                 ]
             })
+     
+            if (profesor) {
+          
+                if ( body.ROL == 3 && profesor.ID_USER != idUser) {
+                    res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CARRER} en el centro ${body.CENTER}`})
+                    return                
+                }
+                if ( body.ROL == 4 && profesor.ID_USER != idUser) {
+                    res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CARRER} en el centro ${body.CENTER}`})
+                    return                
+                }
+            }
 
-            if (body.ROL == 3 && profesor.ID_USER != idUser) {
-                res.status(400).json({messagge:  `Ya existe un jefe de departamento para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
-                return                
-            }
-            if (body.ROL == 4 && profesor.ID_USER != idUser) {
-                res.status(400).json({messagge:  `Ya existe un coordinador para la carrera de ${body.CAREER} en el centro ${body.CENTER}`})
-                return                
-            }
         }
 
         await Professor.update({
@@ -227,7 +274,7 @@ const updateProfessor = async (req,res)=>{
         
     } catch (error) {
         console.log(error)
-        res.status(403).json({messagge:"ALGO SALIO MAL"})
+        res.status(403).json({messagge:"Algo salio mal"})
         
     }
 
@@ -250,14 +297,14 @@ const registerStudentsCtrl = async (req,res)=>{
     try {
         
         if (req.body.length <= 0) {
-            res.status(400).json({messagge:"NO SE HA ENVIADO DATA"})
+            res.status(400).json({messagge:"No se ha recibido ningún dato"})
             
         }
 
     
         
         
-        let {dataError,dataValidate} = verifyData(req.body);
+        let {dataError,dataValidate} = await  verifyData(req.body);
         let {dataDuplicate,newDataValidate} =  await isDuplicate(dataValidate);
         
 
@@ -268,7 +315,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"ALGUNOS REGISTROS ESTAN DUPLICADOS",data:dataDuplicate})    
+            res.status(409).json({messagge:"No todos los estudiantes fueron registrados, algunos estudiantes ya habian sido registrados en el sistema",data:dataDuplicate})    
             return
         
         }
@@ -278,7 +325,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"ALGUNOS REGISTROS ESTAN DUPLICADOS",data:dataError})    
+            res.status(409).json({messagge:"No todos los Estudiantes fueron registrados, porque la información de algunos estudiantes contiene errores",data:dataError})    
             return
         
         }
@@ -288,19 +335,19 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(409).json({messagge:"ALGUNOS REGISTROS ESTAN DUPLICADOS Y OTROS TIENEN ERRORES",data:dataDuplicate.concat(dataError)})    
+            res.status(409).json({messagge:"No todos los estudiantes fueron registrados, porque algunos estudiantes ya habian sido registrados en el sistema y otros tienen errores en su información",data:dataDuplicate.concat(dataError)})    
             return
         
         }
         if (dataDuplicate.length > 0 && newDataValidate.length == 0 && dataError.length >0 ) {
             
-            res.status(409).json({messagge:"LOS REGISTROS NO SON ACEPTABLES, ALGUNOS ESTAN DUPLICADOS Y OTROS TIENEN ERRORES",data:dataDuplicate.concat(dataError)})    
+            res.status(409).json({messagge:"No se ha registrado ningún estudiante, porque algunos estudiantes tienen errores en su información y otros ya habian sido registrados en el sistema",data:dataDuplicate.concat(dataError)})    
             return
         
         }
 
         if (dataDuplicate.length > 0 && newDataValidate.length ==0 && dataError.length ==0) {
-            res.status(409).json({messagge:"TODOS LOS REGISTROS ESTAN DUPLICADOS",data:dataDuplicate})    
+            res.status(409).json({messagge:"El/Los estudiantes ya habian sido registrados en el sistema",data:dataDuplicate})    
             return
         
         }
@@ -311,13 +358,13 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(406).json({messagge:"ALGUNOS REGISTROS TIENEN ERRORES",data:dataError})
+            res.status(406).json({messagge:"No se han registrado todos los estudiantes, porque la información de algunos estudiantes contiene errores",data:dataError})
             return 
         }
         
 
         if(dataError.length>0 && newDataValidate.length==0 && dataDuplicate.length ==0){            
-            res.status(406).json({messagge:"TODOS LOS REGISTROS TIENEN ERRORES",data:dataError})
+            res.status(406).json({messagge:"No se ha registrado ningún estudiante, porque su información contiene errores",data:dataError})
             return 
         }
         
@@ -327,7 +374,7 @@ const registerStudentsCtrl = async (req,res)=>{
             newDataValidate = passwordAssignment(newDataValidate);
             newDataValidate= save(newDataValidate);
             sendEmail(newDataValidate);
-            res.status(200).json({messagge:"LOS ESTUDIANTES HAN SIDO REGISTRADOS DE FORMA EXITOSA"})
+            res.status(200).json({messagge:"El/Los estudiantes se han registrado de forma correcta"})
             return 
         
         }
@@ -339,7 +386,7 @@ const registerStudentsCtrl = async (req,res)=>{
         
     } catch (error) {
         console.log(error);
-        res.status(403).send({messagge:"ERROR_UPLOAD_DATA"})
+        res.status(403).send({messagge:"Error al cargar los datos"})
         
     }
 }

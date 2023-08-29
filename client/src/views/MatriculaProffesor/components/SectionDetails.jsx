@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Modal2 from "../../../components/Modal2";
@@ -15,6 +15,11 @@ const SectionDetails = () => {
   const [check, setCheck] = useState(false);
   const [alerta, setAlerta] = useState({});
   const [check2, setCheck2] = useState(false);
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const fetchSectionDetails = async () => {
@@ -222,7 +227,7 @@ const SectionDetails = () => {
               </tr>
               <tr className="bg-blue-100">
                 <td className="border px-4 py-4 text-gray-700 font-bold text-lg">
-                  Seccion
+                  Sección
                 </td>
                 <td className="border px-4 py-4 text-sky-900 font-bold text-lg">
                   {sectionDetails.sectionNumber}

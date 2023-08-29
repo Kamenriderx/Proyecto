@@ -4,6 +4,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AlertTwo from "../../components/AlertTwo";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const RequestRepo = () => {
   const [showModal, setShowModal] = useState(false);
@@ -11,6 +13,11 @@ const RequestRepo = () => {
   const [pago, setPago] = useState([]);
   const [check, setCheck] = useState(false);
   const [alerta, setAlerta] = useState({});
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,6 +100,16 @@ const RequestRepo = () => {
 
   return (
     <div className="container mx-auto mt-10">
+      <div className="flex justify-start mx-5 mb-5">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       {message && <AlertTwo alerta={alerta} />}
       <Modal Visible={showModal} Close={handleClose}>
         <form
