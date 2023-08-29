@@ -170,11 +170,6 @@ const FormularioDocente = ({ check, setCheck, docente, check2, setCheck2 }) => {
         error: false,
       });
       setCheck2(!check2);
-      setNAME("");
-      setCARRER("");
-      setCENTER("");
-      setROL("");
-      setEMAIL("");
     } catch (error) {
       console.log(error);
       setAlerta({
