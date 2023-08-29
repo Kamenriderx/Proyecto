@@ -53,7 +53,7 @@ const PeriodTable = () => {
   };
   useEffect(() => {
     let viewSections = [];
-        for(let i = pagination.page*pagination.pages; i<pagination.page*pagination.pages + pagination.items;i++){
+        for(let i = pagination.page*pagination.items - pagination.items; i<pagination.page*pagination.items +1;i++){
           if(state.sections[i]){
             viewSections.push(state.sections[i]);
           }
