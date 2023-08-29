@@ -384,6 +384,7 @@ const enrollmentPayment = async (req,res) =>{
             JOIN user_ ON user_.ID_USER = student.ID_USER
         WHERE professor.ID_USER = ${req.token.userId} AND REGISTRATION_PAYMENT = 1
     `)
+    console.log(req.token);
     const response = enrollmentStudents[0]
     res.status(200).json({enrollmentStudents:response});
 }

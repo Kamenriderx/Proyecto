@@ -4,14 +4,15 @@ import { httpRequests } from "../../utils/helpers/httpRequests";
 import { AiOutlineSearch } from "react-icons/ai";
 import StudentCard from "./components/StudentCard";
 import { StoreContext } from "../../store/ContextExample";
-//import { BiArrowBack } from "react-icons/Bi";
-//import { useNavigate } from "react-router-dom";
-const History = () => {
-  /*   const navigate = useNavigate();
-  const handleBack = () => {
-    navigate(-1);
-  }; */
+import Pagination from "../History/components/Pagination";
 
+const History = () => {
+  const [viewableSections, setViewableSections] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pages: 0,
+    items: 8,
+  });
   const [enrollments, setEnrollments] = useState([]);
   const [proms, setProms] = useState({
     global: 0,
@@ -62,8 +63,38 @@ const History = () => {
 
         setEnrollments(res.data.data);
         setBasicInformation(res.data.basicInformation);
+
+        setPagination({
+          ...pagination,
+          page: 1,
+          pages: Math.ceil(res.data.data.length / pagination.items),
+        });
+        let viewSections = [];
+        for (let i = 0; i < pagination.items; i++) {
+          if (res.data.data[i]) {
+            console.log("Es indefinido?:", res.data.data[i]);
+            viewSections.push(res.data.data[i]);
+          }
+        }
+
+        setViewableSections(viewSections);
       });
   };
+
+  useEffect(() => {
+    let viewSections = [];
+    for (
+      let i = pagination.page * pagination.pages;
+      i < pagination.page * pagination.pages + pagination.items;
+      i++
+    ) {
+      if (enrollments[i]) {
+        viewSections.push(enrollments[i]);
+      }
+    }
+
+    setViewableSections(viewSections);
+  }, [pagination.page]);
 
   return (
     <div className="w-10/12">
@@ -97,7 +128,7 @@ const History = () => {
       <div className=" ">
         <div className=" border m-2 p-4 mb-10">
           <div className="text-center border rounded-t bg-blue-100 mb-3">
-            informacion general
+            Información general
           </div>
           <div className="flex justify-evenly">
             <div className="flex w-1/2">
@@ -121,14 +152,14 @@ const History = () => {
                 <ul className="font-bold">
                   <li>CENTRO:</li>
                   <li>INDICE GLOBAL:</li>
-                  <li>INDICEDE PERIODO:</li>
+                  <li>INDICE DE PERIODO:</li>
                 </ul>
               </div>
               <div className="w-1/2">
                 <ul>
                   <li>{basicInformation.CENTER}</li>
-                  <li>{isNaN(proms.global) ? "0" : proms.global}</li>
-                  <li>{isNaN(proms.period) ? "0" : proms.period}</li>
+                  <li>{isNaN(proms.global) ? "0" : parseInt(proms.global)}</li>
+                  <li>{isNaN(proms.period) ? "0" : parseInt(proms.period)}</li>
                 </ul>
               </div>
             </div>
@@ -137,7 +168,7 @@ const History = () => {
 
         <div className="">
           <div className="text-center border p-1   bg-blue-100">
-            Historial academico
+            Historial Académico
           </div>
 
           <div>
@@ -157,45 +188,21 @@ const History = () => {
                 PERIODO
               </li>
               <li className="border border-blue-100 w-2/12 text-center">
-                CALIFICAION
+                CALIFICACION
               </li>
               <li className="border border-blue-100 w-1/12 text-center">OBS</li>
             </ul>
-            {enrollments.map((note) => {
+            {viewableSections.map((note) => {
               if (note.calification > 0) {
                 return <TableRow {...note} />;
               }
             })}
-
-            <nav className="flex justify-center mt-6">
-              <ul className="flex h-10 border justify-center items-center">
-                <li className="hover:bg-slate-400 h-full justify-center items-center flex px-6">
-                  <a className="" href="#">
-                    Anterior
-                  </a>
-                </li>
-                <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex ">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
-                </li>
-                <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex  ">
-                  <a className="page-link" href="#">
-                    2
-                  </a>
-                </li>
-                <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex ">
-                  <a className="page-link" href="#">
-                    3
-                  </a>
-                </li>
-                <li className="hover:bg-slate-400 h-full justify-center items-center flex px-6">
-                  <a className="page-link" href="#">
-                    Siguiente
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            <div className="flex justify-center">
+              <Pagination
+                setPagination={setPagination}
+                pagination={pagination}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ import AlertTwo from "../../components/AlertTwo";
 
 const AddSections = () => {
   const [showModal, setShowModal] = useState(false);
-  const { state, dispatch, periodo } = useContext(StoreContext);
+  const { state, dispatch,periodo } = useContext(StoreContext);
   const [listCourses, setListCourses] = useState([]);
   const [listAulas, setListAulas] = useState([]);
   const [docentes, setDocentes] = useState([]);
@@ -60,7 +60,7 @@ const AddSections = () => {
   useEffect(() => {
     setIsEditMode(selectedSection !== null);
   }, [selectedSection]);
-
+  console.log(state);
   useEffect(() => {
     if (periodName) {
       const filtered = sections.filter(
@@ -649,7 +649,7 @@ const AddSections = () => {
           </span>
           <span className="text-3xl font-bold text-black">
             {" "}
-            - {periodo.PERIOD_NAME}
+             - {periodo.PERIOD_NAME}
           </span>
         </div>
         <div className="flex justify-around mt-5 mb-5">
