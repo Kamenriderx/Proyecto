@@ -293,11 +293,11 @@ exports.getContacts = async function(req, res) {
     if (userId) {
       // Consulta para obtener los contactos en CONTACT_ID de un USER_ID
       userContacts = await connection.query(
-        'SELECT user_.ID_USER, user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER, student.INSTITUTIONAL_EMAIL, student.CAREER, multimedia.URL ' +
+        'SELECT user_.ID_USER, user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER, student.INSTITUTIONAL_EMAIL, student.CAREER, ' +
+        '(SELECT multimedia.URL FROM multimedia WHERE user_.ID_USER = multimedia.ID_USER LIMIT 1) AS URL ' +
         'FROM contacts ' +
         'INNER JOIN user_ ON contacts.CONTACT_ID = user_.ID_USER ' +
         'LEFT JOIN student ON user_.ID_USER = student.ID_USER ' +
-        'LEFT JOIN multimedia ON user_.ID_USER = multimedia.ID_USER ' +
         'WHERE contacts.USER_ID = :userId',
         {
           type: connection.QueryTypes.SELECT,
@@ -307,11 +307,11 @@ exports.getContacts = async function(req, res) {
 
       // Consulta para obtener los contactos en USER_ID de un CONTACT_ID
       const contactContacts = await connection.query(
-        'SELECT user_.ID_USER, user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER, student.INSTITUTIONAL_EMAIL, student.CAREER, multimedia.URL ' +
+        'SELECT user_.ID_USER, user_.NAME, user_.CENTER, user_.ACCOUNT_NUMBER, student.INSTITUTIONAL_EMAIL, student.CAREER, ' +
+        '(SELECT multimedia.URL FROM multimedia WHERE user_.ID_USER = multimedia.ID_USER LIMIT 1) AS URL ' +
         'FROM contacts ' +
         'INNER JOIN user_ ON contacts.USER_ID = user_.ID_USER ' +
         'LEFT JOIN student ON user_.ID_USER = student.ID_USER ' +
-        'LEFT JOIN multimedia ON user_.ID_USER = multimedia.ID_USER ' +
         'WHERE contacts.CONTACT_ID = :userId',
         {
           type: connection.QueryTypes.SELECT,
@@ -322,7 +322,7 @@ exports.getContacts = async function(req, res) {
       // Asignar los contactos de CONTACT_ID a userContacts
       userContacts = userContacts.concat(contactContacts);
     }
-
+    console.log({userContacts});
     return res.status(200).json({ contacts: userContacts });
   } catch (error) {
     console.error('Error al obtener los contactos:', error);

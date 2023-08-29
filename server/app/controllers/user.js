@@ -455,11 +455,12 @@ async function validationImg(res,id,files){
 
 
 async function deleteFile(id){
-    await User.connection.query("UPDATE multimedia SET IS_PROFILE = :NEW_PROFILE WHERE ID_MULTIMEDIA= :ID_MULTIMEDIA",{replacements:{
+    /*await User.connection.query("UPDATE multimedia SET IS_PROFILE = :NEW_PROFILE WHERE ID_MULTIMEDIA= :ID_MULTIMEDIA",{replacements:{
         NEW_PROFILE: 0,
         ID_MULTIMEDIA: id
 
-    }})
+    }})*/
+    await Multimedia.destroy({where:{ID_MULTIMEDIA:id}});
   
 }
 
