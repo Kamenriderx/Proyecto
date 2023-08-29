@@ -89,7 +89,7 @@ async function  getInfo(id,role){
             },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user",include:[{model:Multimedia, as:"multimedia", where:{IS_PROFILE:1}}]}}) || await Student.findOne({where:{
                 ID_USER: id
         
-            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user", include:[{model:Multimedia, as:"multimedia"}]}})
+            },include:{attributes:["ID_ROLE","ACCOUNT_NUMBER","NAME","DNI","CENTER","EMAIL"],model:User, as:"user", include:[{model:Multimedia, limit:1, as:"multimedia"}]}})
             break;
         case 2 :
 

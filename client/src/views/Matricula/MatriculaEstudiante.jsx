@@ -157,7 +157,7 @@ const MatriculaEstudiante = () => {
                 <table className="w-full bg-white shadow-md table-auto">
                   <thead className="bg-blue-800 text-white">
                     <tr>
-                      <th className="p-2">Descripcion</th>
+                      <th className="p-2">Descripción</th>
                       <th className="p-2">Valor</th>
                       <th className="p-2">Pagado</th>
                     </tr>

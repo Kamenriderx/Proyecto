@@ -459,6 +459,11 @@ exports.editPeriod = async function (req, res) {
       return res.status(404).json({ error: 'El período académico no existe' });
     }
 
+    // Verifica si el estado del período es 'Finalizado'
+    if (existingPeriod.STATUS === 'Finalizado') {
+      return res.status(403).json({ error: 'No se puede editar un período finalizado' });
+    }
+    
     // Filtrar los campos que se pueden actualizar 
     const allowedFields = [];
     const filteredData = Object.keys(updatedData).reduce((acc, key) => {

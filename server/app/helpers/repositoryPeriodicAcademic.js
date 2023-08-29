@@ -34,7 +34,7 @@ const getTheLastPeriodAcademic= async ( currentYear) => await PeriodAcademic.fin
     
       {[Op.or]:[{STATUS: "Por empezar"}, {STATUS: "En curso"}]}
     ]
-}, order:[["START_DATE", "ASC"]], limit:3})
+}, order:[["START_DATE", "ASC"]], limit:2})
 
 
 

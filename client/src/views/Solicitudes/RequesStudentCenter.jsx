@@ -85,7 +85,7 @@ const RequesStudentCenter = () => {
         {message && <AlertTwo alerta={alerta} />}
         <div className="text-center mb-10">
           <p className="text-red-800 text-2xl font-bold">
-            Solicitudes Camabio de Centro
+            Solicitudes de Cambio de Centro
           </p>
         </div>
         {listRequest.length > 0 ? (
@@ -139,7 +139,7 @@ const RequesStudentCenter = () => {
         ) : (
           <div className="text-center">
             <p className="text-black font-bold text-2xl">
-              No tienes solicitudes realizadas
+              No tienes Solicitudes Realizadas
             </p>
           </div>
         )}

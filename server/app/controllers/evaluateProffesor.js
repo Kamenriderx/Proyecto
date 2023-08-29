@@ -2,12 +2,12 @@ const connection = require('../../config/database');
 const Evaluation = require('../models/evaluateProfessor');
 const Sequelize = require('sequelize');
 const Op = require('sequelize');
-const Professor = require("../models/professor");
 const User = require("../models/user");
 const Student = require("../models/student");
 const Course = require("../models/course");
 const Section = require("../models/section.js");
 const Multimedia = require("../models/multimedia");
+const Professor = require("../models/professor")
 
 //! Controlador que obtiene las secciones matriculadas de un estudiante en específico
 exports.classStudent = async function (req, res) {
@@ -24,7 +24,8 @@ exports.classStudent = async function (req, res) {
           a.SECTION_CODE,
           u.NAME AS NAME_PROFFESOR,
           e.CALIFICATION,
-          e.OBS AS OBSERVATION
+          e.OBS AS OBSERVATION,
+          p.PROFILE_PHOTO
         FROM
           ENROLLMENT e
           INNER JOIN SECTION a ON a.ID_SECTION = e.ID_SECTION
@@ -264,16 +265,25 @@ exports.getProfessorProfilePicture = async function (req, res) {
       where: {
         ID_USER: idUser,
         IS_PROFILE: 1,
-      },
+      },include:[
+        {
+          model:User, as:'user', attributes:['ID_USER'], include:[
+            {
+              model:Professor, attributes:['PROFILE_PHOTO']
+            }
+          ]
+        }
+      ]
     });
 
     if (!profileImage) {
       return res.status(404).json({ message: 'Imagen de perfil no encontrada' });
     }
 
-    const imageUrl = profileImage.URL;
+    const videoURL = profileImage.URL;
+    const imageURL = profileImage.user.PROFESSORs[0].PROFILE_PHOTO
 
-    res.json({ imageUrl });
+    res.json({ videoURL, imageURL });
   } catch (error) {
     console.error('Error al obtener la imagen de perfil:', error);
     res.status(500).json({ message: 'Error al obtener la imagen de perfil' });

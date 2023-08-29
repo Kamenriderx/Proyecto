@@ -118,7 +118,7 @@ const ViewStudent = () => {
                   <div className="flex flex-col p-2 items-center bg-white">
                     <div className="text-sm">Promedio</div>
                     <div className="text-4xl font-bold">
-                      {stateStudent.indexAcademicGlobal}
+                      {stateStudent.indexAcademicGlobal}%
                     </div>
                   </div>
                 </div>

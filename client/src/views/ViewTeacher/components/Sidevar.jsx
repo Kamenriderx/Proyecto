@@ -28,7 +28,9 @@ import { FaHistory, FaAddressCard } from "react-icons/fa";
 import { AiOutlineUnorderedList, AiOutlineException} from "react-icons/ai";
 import { StoreContext } from "../../../store/ContextExample";
 import { FcPlanner, FcCancel } from "react-icons/fc";
+import {RiPagesFill} from "react-icons/ri"
 import { Link } from "react-router-dom";
+import {FaFileDownload} from "react-icons/fa"
 import {BsFillFileEarmarkArrowDownFill} from "react-icons/bs"
 const Sidevar = () => {
   const { state, dispatch } = useContext(StoreContext);
@@ -374,9 +376,9 @@ const Sidevar = () => {
                       className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
                     >
-                      <GrPlan className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <FaFileDownload className="flex-shrink-0 w-6 h-6 text-gray-500" />
                       <span className="flex-1 ml-3 whitespace-nowrap">
-                        Planificación
+                        Descargar Planificación
                       </span>
                     </a>
                   </Link>
@@ -388,7 +390,7 @@ const Sidevar = () => {
                       className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
                     >
-                      <AiOutlineUsergroupAdd className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <AiOutlineUsergroupAdd className="flex-shrink-0 w-6 h-6 text-gray-600" />
                       <span className="flex-1 ml-3 whitespace-nowrap">
                         Agregar Docentes
                       </span>
@@ -416,9 +418,9 @@ const Sidevar = () => {
                       className="flex items-center p-2 text-gray-900 rounded-lg 
                 hover:bg-orange-100 hover:font-bold"
                     >
-                      <BsGraphUp className="flex-shrink-0 w-6 h-6 text-gray-500" />
+                      <BsGraphUp className="flex-shrink-0 w-6 h-6 text-gray-600" />
                       <span className="flex-1 ml-3 whitespace-nowrap">
-                        Estadisticas
+                        Estadísticas
                       </span>
                     </a>
                   </Link>

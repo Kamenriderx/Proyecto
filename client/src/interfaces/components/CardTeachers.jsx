@@ -4,6 +4,7 @@ import axios from "axios";
 import AlertTwo from "../../components/AlertTwo";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import fondoPerfil from "../../assets/fondoPerfil.jpg";
 
 const CardTeachers = ({ student }) => {
   const { state, dispatch } = useContext(StoreContext);
@@ -70,11 +71,19 @@ const esDestinatario = state.user.ID_USER === pendings.recipientId; */
         <ToastContainer position="top-right" />
         <div className="md:flex">
           <div className="md:flex">
+          {student.user?.multimedia[0]?.URL ? (
             <img
-              className="object-cover md:w-48"
-              src={student.user?.multimedia[0]?.URL}
-              alt="Imagen de perfil"
-            />
+            className="object-cover md:w-48"
+            src={student.user?.multimedia[0]?.URL}
+            alt="Imagen de perfil"
+          />
+          ):(
+            <img
+            className="object-cover md:w-48"
+            src={fondoPerfil}
+            alt="Imagen de perfil"
+          />
+          )}
           </div>
           <div className="p-8">
             <div className="uppercase tracking-wide text-lg font-bold text-indigo-500">
