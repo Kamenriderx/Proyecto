@@ -5,17 +5,15 @@ import { AiOutlineSearch } from "react-icons/ai";
 import StudentCard from "./components/StudentCard";
 import { StoreContext } from "../../store/ContextExample";
 import Pagination from "../History/components/Pagination";
+
+
 const History = () => {
   const [viewableSections,setViewableSections] = useState([]);
   const [pagination,setPagination] = useState({
     page:1,
     pages:0,
-  /*   const navigate = useNavigate();
-  const handleBack = () => {
     items:8
-  });navigate(-1);
-  }; */
-
+  });
   const [enrollments, setEnrollments] = useState([]);
   const [proms, setProms] = useState({
     global: 0,
@@ -156,8 +154,8 @@ const History = () => {
               <div className="w-1/2">
                 <ul>
                   <li>{basicInformation.CENTER}</li>
-                  <li>{isNaN(proms.global) ? "0" : proms.global}</li>
-                  <li>{isNaN(proms.period) ? "0" : proms.period}</li>
+                  <li>{isNaN(proms.global) ? "0" :parseInt( proms.global)}</li>
+                  <li>{isNaN(proms.period) ? "0" : parseInt(proms.period)}</li>
                 </ul>
               </div>
             </div>

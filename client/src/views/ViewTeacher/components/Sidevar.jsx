@@ -369,20 +369,7 @@ const Sidevar = () => {
                     </a>
                   </Link>
                 </li>
-                <li>
-                  <Link to="/period">
-                    <a
-                      href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-                    >
-                      <FaFileDownload className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                      <span className="flex-1 ml-3 whitespace-nowrap">
-                        Descargar Planificación
-                      </span>
-                    </a>
-                  </Link>
-                </li>
+                
                 <li>
                   <Link to="/Docentes">
                     <a

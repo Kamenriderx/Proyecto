@@ -96,7 +96,7 @@ const History = () => {
         </div>
       </div>
       <div className=" border m-2 p-4 mb-10">
-        <div className="text-center border rounded-t bg-blue-100 mb-3">
+        <div className="text-center border rounded-t bg-blue-100 mb-3 text-2xl font-bold">
           informacion general
         </div>
         <div className="flex justify-evenly">
@@ -127,8 +127,8 @@ const History = () => {
             <div className="w-1/2">
               <ul>
                 <li>{basicInformation.CENTER}</li>
-                <li>{isNaN(proms.global) ? "0" : proms.global}</li>
-                <li>{isNaN(proms.period) ? "0" : proms.period}</li>
+                <li>{isNaN(proms.global) ? "0" : parseInt(proms.global)}</li>
+                <li>{isNaN(proms.period) ? "0" : parseInt(proms.period)}</li>
               </ul>
             </div>
           </div>
