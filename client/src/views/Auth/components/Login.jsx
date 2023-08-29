@@ -164,7 +164,6 @@ const LoginForm = () => {
         </h2>
       </div>
 
-    
       <input
         className="mt-3 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-2/5"
         id="email"
@@ -186,11 +185,11 @@ const LoginForm = () => {
         className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5 "
         onClick={handleSubmit}
       >
-        Iniciar sesion
+        Iniciar sesión
       </button>
       <Link
         to="/RecuperarContrasena"
-        className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none    mt-5"
+        className="px-4 py-1 w-1/5 text-sm text-sky-500 font-semibold rounded-md border border-purple-200 hover:text-white hover:bg-sky-500 hover:border-transparent focus:outline-none text-center    mt-5"
       >
         Recuperar contraseña
       </Link>

@@ -80,6 +80,8 @@ const OnlineList = ({setCheck,check,socket}) => {
       <div className="text-center border-2 bg-gray-200 border-b-gray-600 w-full">
         <h1 className="font-bold text-lg h-[61px] ">Contactos</h1>
       </div>
+      {list.length !== 0 && (
+<>
 
       <div className="h-5/6 w-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
         <fieldset className="border p-4 rounded-sm">
@@ -121,7 +123,6 @@ const OnlineList = ({setCheck,check,socket}) => {
             ))}
         </fieldset>
       </div>
-
       <div className="h-16 flex justify-center items-center border border-t-gray-100 w-full">
         <button
           className="w-12 h-12 cursor-pointer hover:bg-gray-200 flex justify-center items-center rounded-s-md"
@@ -137,6 +138,10 @@ const OnlineList = ({setCheck,check,socket}) => {
           onInput={handleChange}
         />
       </div>
+</>
+      )}
+
+
     </div>
   );
 };

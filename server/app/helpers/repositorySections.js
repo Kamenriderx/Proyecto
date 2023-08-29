@@ -116,12 +116,14 @@ const sectionExistsHourClassroom = async (body)=>{
 }
 
 const sectionbyProffessor = async (body)=>{
+   
     return await Section.findOne({
         where:{
             ID_PROFFERSSOR: body.ID_PROFFERSSOR,
             START_TIME: body.START_TIME,
             END_TIME: body.END_TIME,
-            DELETED:0
+            DELETED:0,
+            ID_PERIOD: body.ID_PERIOD
         }
     })
 }

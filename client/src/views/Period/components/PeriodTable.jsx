@@ -7,12 +7,12 @@ import Pagination from "./Pagination";
 import unidecode from 'unidecode';
 
 const PeriodTable = () => {
-  const [pagination,setPagination] = useState({
-    page:1,
-    pages:0,
-    items:10
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pages: 0,
+    items: 10,
   });
-  const [viewableSections,setViewableSections] = useState([]);
+  const [viewableSections, setViewableSections] = useState([]);
   const [state, setState] = useState({
     periods: [],
     selectedYear: "",
@@ -39,8 +39,12 @@ const PeriodTable = () => {
           ...state,
           sections: res.data.sections,
         });
-        
-        setPagination({...pagination,page:1,pages:Math.ceil(res.data.sections.length/pagination.items)});
+
+        setPagination({
+          ...pagination,
+          page: 1,
+          pages: Math.ceil(res.data.sections.length / pagination.items),
+        });
         let viewSections = [];
         for(let i = 0; i<  pagination.items;i++){
           if( res.data.sections[i] ){
@@ -60,9 +64,8 @@ const PeriodTable = () => {
         }
 
     setViewableSections(viewSections);
+  }, [pagination.page]);
 
-  }, [pagination.page])
-  
   const handlePeriodChange = (event) => {
     const { value, name } = event.target;
     setSelectedPeriod(value);
@@ -92,9 +95,12 @@ const PeriodTable = () => {
                 ...state,
                 sections: res2.data.sections,
               });
-              setPagination({...pagination,page:1,pages:Math.ceil(res2.data.sections.length/10)});
+              setPagination({
+                ...pagination,
+                page: 1,
+                pages: Math.ceil(res2.data.sections.length / 10),
+              });
             });
-
         });
     };
     handlePetitions();
@@ -103,7 +109,7 @@ const PeriodTable = () => {
   const handleDownload = async () => {
     const doc = new jsPDF();
 
-    const tableColumn = ["Codigo", "Clase", "Seccion"];
+    const tableColumn = ["Código", "Clase", "Sección"];
     const tableRows = [];
     state.sections.forEach((section) => {
       const sectionData = [
@@ -122,7 +128,7 @@ const PeriodTable = () => {
   };
 
   const generateCSV = () => {
-    const header = ["Codigo", "Clase", "Seccion"];
+    const header = ["Código", "Clase", "Sección"];
     const data = state.sections.map(
       (row) =>
         `\n${unidecode(row.course.CODE_COURSE)},${unidecode(row.course.NAME)},${unidecode(row.SECTION_CODE)}`
@@ -179,11 +185,11 @@ const PeriodTable = () => {
           <li className="border border-gray-200 cursor-default rounded-xl p-2 mb-3 bg-gray-400 text-white">
             <ul className="list-none flex flex-row min-w-full">
               <li className="flex justify-center items-center w-1/3 ">
-                Codigo
+                Código
               </li>
               <li className="flex justify-center items-center w-1/3 ">Clase</li>
               <li className="flex justify-center items-center w-1/3 ">
-                Seccion
+                Sección
               </li>
             </ul>
           </li>
@@ -195,7 +201,7 @@ const PeriodTable = () => {
         </ul>
       </div>
       <div className="flex justify-center">
-        <Pagination setPagination = {setPagination} pagination={pagination}/>
+        <Pagination setPagination={setPagination} pagination={pagination} />
       </div>
     </div>
   );

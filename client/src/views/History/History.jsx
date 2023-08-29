@@ -3,8 +3,9 @@ import TableRow from "./components/TableRow";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import jsPDF from "jspdf";
 import { BiArrowBack } from "react-icons/Bi";
-import { useNavigate } from "react-router-dom";import GeneratePDF from "./components/GeneratePDF";
-import { PDFDownloadLink,PDFViewer } from "@react-pdf/renderer";
+import { useNavigate } from "react-router-dom";
+import GeneratePDF from "./components/GeneratePDF";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import Pagination from "./components/Pagination";
 
 const History = () => {
@@ -72,15 +73,18 @@ const History = () => {
 
   useEffect(() => {
     let viewSections = [];
-        for(let i = pagination.page*pagination.pages; i<pagination.page*pagination.pages + pagination.items;i++){
-          if(enrollments[i]){
-            viewSections.push(enrollments[i]);
-          }
-        }
+    for (
+      let i = pagination.page * pagination.pages;
+      i < pagination.page * pagination.pages + pagination.items;
+      i++
+    ) {
+      if (enrollments[i]) {
+        viewSections.push(enrollments[i]);
+      }
+    }
 
     setViewableSections(viewSections);
-
-  }, [pagination.page])
+  }, [pagination.page]);
 
   return (
     <div className="m-24 mt-20">
@@ -96,7 +100,7 @@ const History = () => {
       </div>
       <div className=" border m-2 p-4 mb-10">
         <div className="text-center border rounded-t bg-blue-100 mb-3 text-2xl font-bold">
-          informacion general
+          Información General
         </div>
         <div className="flex justify-evenly">
           <div className="flex w-1/2">
@@ -120,7 +124,7 @@ const History = () => {
               <ul className="font-bold">
                 <li>CENTRO:</li>
                 <li>INDICE GLOBAL:</li>
-                <li>INDICEDE PERIODO:</li>
+                <li>INDICE DE PERIODO:</li>
               </ul>
             </div>
             <div className="w-1/2">
@@ -136,7 +140,7 @@ const History = () => {
 
     <div className="">
       <div className="text-center border p-1   bg-blue-100 text-3xl font-bold">
-        Historial academico
+        Historial Académico
       </div>
       <div className="flex justify-center">
         {history && <PDFDownloadLink document={<GeneratePDF history={history} />} fileName="Historial.pdf">
@@ -180,8 +184,7 @@ const History = () => {
         <Pagination setPagination = {setPagination} pagination={pagination}/>
       </div>
     </div>
-  </div> 
-    
+    </div>
   );
 };
 

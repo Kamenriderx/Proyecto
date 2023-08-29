@@ -6,13 +6,12 @@ import StudentCard from "./components/StudentCard";
 import { StoreContext } from "../../store/ContextExample";
 import Pagination from "../History/components/Pagination";
 
-
 const History = () => {
-  const [viewableSections,setViewableSections] = useState([]);
-  const [pagination,setPagination] = useState({
-    page:1,
-    pages:0,
-    items:8
+  const [viewableSections, setViewableSections] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pages: 0,
+    items: 8,
   });
   const [enrollments, setEnrollments] = useState([]);
   const [proms, setProms] = useState({
@@ -65,32 +64,37 @@ const History = () => {
         setEnrollments(res.data.data);
         setBasicInformation(res.data.basicInformation);
 
-        setPagination({...pagination,page:1,pages:Math.ceil(res.data.data.length/pagination.items)});
+        setPagination({
+          ...pagination,
+          page: 1,
+          pages: Math.ceil(res.data.data.length / pagination.items),
+        });
         let viewSections = [];
-        for(let i = 0; i<  pagination.items;i++){
-          if( res.data.data[i] ){
-            console.log("Es indefinido?:",res.data.data[i])
-            viewSections.push( res.data.data[i]);
+        for (let i = 0; i < pagination.items; i++) {
+          if (res.data.data[i]) {
+            console.log("Es indefinido?:", res.data.data[i]);
+            viewSections.push(res.data.data[i]);
           }
         }
 
         setViewableSections(viewSections);
-
       });
-  }
+  };
 
-  
   useEffect(() => {
     let viewSections = [];
-        for(let i = pagination.page*pagination.pages; i<pagination.page*pagination.pages + pagination.items;i++){
-          if(enrollments[i]){
-            viewSections.push(enrollments[i]);
-          }
-        }
+    for (
+      let i = pagination.page * pagination.pages;
+      i < pagination.page * pagination.pages + pagination.items;
+      i++
+    ) {
+      if (enrollments[i]) {
+        viewSections.push(enrollments[i]);
+      }
+    }
 
     setViewableSections(viewSections);
-
-  }, [pagination.page])
+  }, [pagination.page]);
 
   return (
     <div className="w-10/12">
@@ -124,7 +128,7 @@ const History = () => {
       <div className=" ">
         <div className=" border m-2 p-4 mb-10">
           <div className="text-center border rounded-t bg-blue-100 mb-3">
-            informacion general
+            Información general
           </div>
           <div className="flex justify-evenly">
             <div className="flex w-1/2">
@@ -148,13 +152,13 @@ const History = () => {
                 <ul className="font-bold">
                   <li>CENTRO:</li>
                   <li>INDICE GLOBAL:</li>
-                  <li>INDICEDE PERIODO:</li>
+                  <li>INDICE DE PERIODO:</li>
                 </ul>
               </div>
               <div className="w-1/2">
                 <ul>
                   <li>{basicInformation.CENTER}</li>
-                  <li>{isNaN(proms.global) ? "0" :parseInt( proms.global)}</li>
+                  <li>{isNaN(proms.global) ? "0" : parseInt(proms.global)}</li>
                   <li>{isNaN(proms.period) ? "0" : parseInt(proms.period)}</li>
                 </ul>
               </div>
@@ -164,7 +168,7 @@ const History = () => {
 
         <div className="">
           <div className="text-center border p-1   bg-blue-100">
-            Historial academico
+            Historial Académico
           </div>
 
           <div>
@@ -184,23 +188,21 @@ const History = () => {
                 PERIODO
               </li>
               <li className="border border-blue-100 w-2/12 text-center">
-                CALIFICAION
+                CALIFICACION
               </li>
               <li className="border border-blue-100 w-1/12 text-center">OBS</li>
             </ul>
             {viewableSections.map((note) => {
-                if(note.calification>0){
-                    return (
-                        <TableRow {...note} />
-                    );
-                }
-                
-            }
-              
-            )}
-      <div className="flex justify-center">
-        <Pagination setPagination = {setPagination} pagination={pagination}/>
-      </div>
+              if (note.calification > 0) {
+                return <TableRow {...note} />;
+              }
+            })}
+            <div className="flex justify-center">
+              <Pagination
+                setPagination={setPagination}
+                pagination={pagination}
+              />
+            </div>
           </div>
         </div>
       </div>
