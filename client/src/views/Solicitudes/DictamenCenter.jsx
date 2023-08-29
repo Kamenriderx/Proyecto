@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const DictamenCenter = () => {
   const [listRequest, setListRequest] = useState([]);
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const getListRequest = async () => {
@@ -37,6 +44,16 @@ const DictamenCenter = () => {
   };
   return (
     <div className="container mx-auto mt-10">
+      <div className="flex justify-start mx-5 mb-5">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       <div className="mt-5 text-center">
         <p className="text-red-800 text-lg font-bold">
           DICTAMEN DE LA SOLICITUD DE CAMBIO DE CENTRO

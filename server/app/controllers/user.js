@@ -28,7 +28,7 @@ const getPerfil = async (req,res)=>{
         };
 
         if (!user) {
-            res.status(404).json({messagge:"EL USUARIO NO EXISTE"})
+            res.status(404).json({messagge:"El usuario no existe"})
             return
             
         }
@@ -69,7 +69,7 @@ const getPerfil = async (req,res)=>{
         
     } catch (error) {
         console.log(error);
-        res.status(400).json({messagge:"ALGO SALIO MAL"})
+        res.status(400).json({messagge:"Algo salio mal"})
     }
 }
 
@@ -133,7 +133,6 @@ async function  getInfo(id,role){
                 user = await User.findOne({where:{
                     ID_USER : id
                 }});
-                console.log("Usuario alksmlaksx",user)
             break;
     }
 
@@ -159,14 +158,14 @@ const updateEmail = async (req,res)=>{
       
         if(!body.EMAIL){
             res.status(406).json({
-                messagge:"NO ESTA DEFINIDO"
+                messagge:"No se ha definido"
             })
             return
 
         }
         
         if (parseInt(id)!==req.user.ID_USER) {
-            res.status(401).json({messagge:"NO TIENES PERMISO DE EDTIAR ESTE PERFIL"})
+            res.status(401).json({messagge:"No tienes permiso para editar este perfil"})
             return
             
         }
@@ -174,21 +173,21 @@ const updateEmail = async (req,res)=>{
         const result = await getInfo(id,req.user.ID_ROLE)
 
         if (!result) {
-            res.status(404).json({messagge:"EL USUARIO NO EXISTE"})
+            res.status(404).json({messagge:"El usuario no existe"})
             return
             
         }
         
         if(body.EMAIL==""){
             res.status(406).json({
-                messagge:"EL EMAIL ESTA EN BLANCO"
+                messagge:"El email está en blanco"
             })
             return
             
         }
         if ((req.body.EMAIL == result.user.EMAIL) && (id == req.user.ID_USER)){
             res.status(400).json({
-                messagge:"INGRESA UN CORREO DIFERENTE AL QUE YA TIENES"
+                messagge:"Ingesa un correo diferente al que estas ya tienes"
             })    
             return
             
@@ -196,7 +195,7 @@ const updateEmail = async (req,res)=>{
       
         if (await emailExists(body.EMAIL)){
             res.status(400).json({
-                messagge:"El CORREO YA EXISTE"
+                messagge:"El correo ya existe, deberías elegir otro"
             })    
             return
         }
@@ -205,12 +204,12 @@ const updateEmail = async (req,res)=>{
     
         await User.updateEmail(id,body.EMAIL)
         res.status(200).json({
-        messagge:"CORREO ACTUALIZADO"
+        messagge:"Correo actualizado"
         })
         
     } catch (error) {
         console.log(error);
-        res.status(400).json({messagge:"ALGO SALIO MAL"})
+        res.status(400).json({messagge:"Algo salio mal"})
     }
 }
 //  ----------------------------------------------------------------------------------------
@@ -233,25 +232,25 @@ const uploadPhotos =  async (req, res, next) => {
         const {id} = req.params;
 
         if (parseInt(id)!==user.ID_USER) {
-            res.status(401).json({messagge:"NO TIENES PERMISO DE EDTIAR ESTE PERFIL"})
+            res.status(401).json({messagge:"No tienes permiso para editar este perfil"})
             return
             
         }
         const result = await getInfo(id, user.ID_ROLE)
 
         if (!result) {
-            res.status(404).json({messagge:"EL USUARIO NO EXISTE"})
+            res.status(404).json({messagge:"El usuario no existe"})
             return
             
         }
 
         if(files.length == 0){
-            res.status(400).json({messagge: "NO HAS ENVIADO NINGUNA IMAGEN"})
+            res.status(400).json({messagge: "No has enviado ninguna imagen"})
             return
 
         }
         if(files.length >= 4){
-            res.status(400).json({messagge: "SOLO PUEDES SUBIR 3 IMAGENES"})
+            res.status(400).json({messagge: "Solo puedes subir 3 imágenes"})
             return
 
         }
@@ -260,18 +259,18 @@ const uploadPhotos =  async (req, res, next) => {
         
         if (flag) {
             await uploadImg(files, id)
-            res.status(200).json({messagge:"FOTOS DE PERFIL ACTUALIZADAS DE FORMA CORRECTA"})
+            res.status(200).json({messagge:"Fotos de perfil actualizadas"})
             return    
         }
 
         if(!flag){
-            res.status(400).json({messagge:"DEBES ELIMINAR UNA O MAS IMAGENES, SOLO PUEDES TENER 3 EN TU PERFIL"})
+            res.status(400).json({messagge:"Debes eliminar una o más imágenes, Solo puedes tener 3 en tu perfil"})
             return
         }
         
     } catch (error) {
         console.log({error});
-        res.status(400).json({messagge:"ALGO SALIO MAL"})
+        res.status(400).json({messagge:"Algo salio mal"})
     }
 }
 //  ----------------------------------------------------------------------------------------
@@ -288,20 +287,20 @@ const uploadVideo = async (req, res) => {
         const {id} = req.params;
 
         if (parseInt(id)!==user.ID_USER) {
-            res.status(401).json({messagge:"NO TIENES PERMISO DE EDTIAR ESTE PERFIL"})
+            res.status(401).json({messagge:"No tienes permiso para editar este perfil"})
             return
             
         }
         const result = await getInfo(id, user.ID_ROLE)
 
         if (!result) {
-            res.status(404).json({messagge:"EL USUARIO NO EXISTE"})
+            res.status(404).json({messagge:"El usuario no existe"})
             return
             
         }
 
         if(!file){
-            res.status(400).json({messagge: "NO HAS ENVIADO NINGUN VIDEO"})
+            res.status(400).json({messagge: "No has subido ningún video"})
             return
         }
 
@@ -315,7 +314,7 @@ const uploadVideo = async (req, res) => {
         });
 
         if(multi.length==1){
-            res.status(400).json({messagge:"SOLO PUEDES SUBIR UN VIDEO"})
+            res.status(400).json({messagge:"Solo puedes subir un video"})
             return
         }
 
@@ -323,7 +322,7 @@ const uploadVideo = async (req, res) => {
     
         const url = `http://localhost:3000/videos/${file.filename}`;
         await Professor.updateVideo(id,url);
-        res.status(200).json({messagge:"VIDEO SUBIDO CORRECTAMENTE"})
+        res.status(200).json({messagge:"video subido"})
         
     } catch (error) {
         console.log({error});
@@ -358,12 +357,12 @@ const deleteMultimedia = async(req,res)=>{
         const IdUser = multimedia.dataValues.ID_USER;
        
         if (IdUser !== req.user.ID_USER ) {
-            res.status(400).json({messagge:"NO TIENES PERMISO DE ELIMINAR ESTE ARCHIVO"})
+            res.status(400).json({messagge:"No tienes permiso para eliminar este archivo"})
             return
         }
 
         await deleteFile(id);
-        res.status(200).json({messagge:"ARCHIVO ELIMINADO"});
+        res.status(200).json({messagge:"Archivo eliminado"});
 
 
 

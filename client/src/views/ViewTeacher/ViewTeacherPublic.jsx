@@ -16,7 +16,7 @@ const ViewTeacherPublic = ({ ID_USER_PROFFESOR, chek}) => {
   const getClassTeacher = async () => {
     try {
       const response = await axios(
-        `http://localhost:3000/registro/section/sectionsForProfessors/${ID_USER_PROFFESOR}/${periodo.ID_PERIOD}`
+        `http://localhost:3000/registro/section/sectionsForProfessors/${ID_USER_PROFFESOR}/${2}`
       );
       setClasses(response.data);
     } catch (error) {
@@ -32,8 +32,8 @@ const ViewTeacherPublic = ({ ID_USER_PROFFESOR, chek}) => {
         `http://localhost:3000/registro/evaluateProffesor/video/${ID_USER_PROFFESOR}`,
         {}
       );
-      console.log("GET_VIDEO: ", res.data.imageUrl);
-      setVideo(res.data.imageUrl);
+      console.log("GET_VIDEO: ", res.data.videoURL);
+      setVideo(res.data.videoURL);
     } catch (error) {
       console.log(error);
     }

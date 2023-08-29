@@ -1,18 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import FormularioDocente from "./components/FormularioDocente";
 /* import PreviewDocente from '../../components/Docente/PreviewDocente' */
 import Modal from "../../components/Modal";
+import { BsPersonFillAdd } from "react-icons/bs";
 import useAxios from "../../utils/hooks/useAxios";
 import PreviewDocente from "./components/PreviewDocente";
 import axios from "axios";
+import { StoreContext } from "../../store/ContextExample";
+import { useNavigate } from "react-router-dom";
+import { BiArrowBack } from "react-icons/Bi";
 
 const Docentes = () => {
+  const { state, dispatch } = useContext(StoreContext);
   const [showModal, setShowModal] = useState(false);
   const [docentes, setDocentes] = useState([]);
   const [check, setCheck] = useState(false);
   const [check2, setCheck2] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [teachersPerPage] = useState(10);
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const indexOfLastTeacher = currentPage * teachersPerPage;
   const indexOfFirstTeacher = indexOfLastTeacher - teachersPerPage;
@@ -35,7 +44,7 @@ const Docentes = () => {
   useEffect(() => {
     const axiosCall = async () => {
       const res = await axios(
-        "http://localhost:3000/registro/admin/getProfessors"
+        `http://localhost:3000/registro/admin/getProfessors/${state.user.ID_USER}`
       );
       setDocentes(res.data.professors);
     };
@@ -43,22 +52,41 @@ const Docentes = () => {
   }, [check, check2]);
 
   return (
-    <>
-      <div className="md:flex md:justify-center gap-40 h-auto mt-5">
-        <button
-          className="bg-sky-600 hover:bg-sky-900 text-center text-white shadow p-2 border transition-colors uppercase font-bold text-lg rounded-md"
-          onClick={() => setShowModal(true)}
-        >
-          Registrar Docente
-        </button>
-        <Modal Visible={showModal} Close={() => setShowModal(false)}>
-          <div className="p-4">
-            <FormularioDocente setCheck={setCheck} check={check} />
-          </div>
-        </Modal>
-        <h1 className="text-4xl font-black text-center">Docentes</h1>
+    <div className="container mx-auto">
+      <Modal Visible={showModal} Close={() => setShowModal(false)}>
+        <div className="p-4">
+          <FormularioDocente setCheck={setCheck} check={check} />
+        </div>
+      </Modal>
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" />
+          </button>
+        </div>
       </div>
-      <div className="shadow rounded-md p-5 mt-10">
+      <div className="md:flex md:justify-center gap-40 h-auto mt-5 flex justify-center">
+        <div className="mt-5">
+          <p className="text-4xl font-black text-black">Registro de Docentes</p>
+        </div>
+      </div>
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            className="bg-sky-600 hover:bg-sky-900 text-center text-white shadow p-2 border transition-colors font-bold text-base rounded-md"
+            onClick={() => setShowModal(true)}
+          >
+            <div className="flex items-center gap-3">
+              <BsPersonFillAdd color="#F7F9F7" />
+              Registrar Docente
+            </div>
+          </button>
+        </div>
+      </div>
+      <div className="rounded-md p-5 mt-10">
         {docentes?.length > 0 ? (
           <>
             <table className="w-full bg-white shadow-md table-auto">
@@ -67,7 +95,7 @@ const Docentes = () => {
                   <th className="p-2">Nombre del Docente</th>
                   <th className="p-2">Carrera</th>
                   <th className="p-2">Centro</th>
-                  <th className="p-2">Numero de Cuenta</th>
+                  <th className="p-2">Número de Cuenta</th>
                   <th className="p-2">Email</th>
                   <th className="p-2">Rol del Docente</th>
                   <th className="p-2">Acciones</th>
@@ -105,11 +133,11 @@ const Docentes = () => {
           </>
         ) : (
           <p className="text-2xl text-center uppercase font-bold ">
-            No hay Docentes Inscritos Aun
+            No hay docentes inscritos
           </p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

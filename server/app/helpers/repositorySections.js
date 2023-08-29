@@ -33,12 +33,12 @@ const getSectionsByCenterAndCareer = async (user) =>{
     })
 }
 
-const getSectionsByCenterAndCareerPeriod = async (user,id) =>{
+const getSectionsByCenterAndCareerPeriod = async (user,currentPeriodId) =>{
     const professor = await getProfessorIdUser(user);
 
     return await Section.findAll({
         where:{
-            ID_PERIOD:id ,
+            ID_PERIOD:currentPeriodId, 
             DELETED:0
         },attributes:["SECTION_CODE","START_TIME","END_TIME","DAYS","SPACE_AVAILABLE","ID_SECTION"],include:[
             {model:Professor, as:"Proffessor",attributes:["INSTITUTIONAL_EMAIL","CAREER"],where:{CAREER:{
@@ -59,6 +59,38 @@ const getSectionsByCenterAndCareerPeriod = async (user,id) =>{
                 }}
             }]},
             {model:PeriodAcademic, as:"period", attributes:["PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}
+        ]
+    })
+}
+
+const getSectionsByCenterAndCareerPeriods = async (user,currentPeriodId,nextPeriodId) =>{
+    const professor = await getProfessorIdUser(user);
+
+    return await Section.findAll({
+        where:{
+            [Op.or]:[{
+                ID_PERIOD:currentPeriodId, 
+            }, { ID_PERIOD: nextPeriodId}],
+            DELETED:0
+        },attributes:["SECTION_CODE","START_TIME","END_TIME","DAYS","SPACE_AVAILABLE","ID_SECTION"],include:[
+            {model:Professor, as:"Proffessor",attributes:["ID_PROFFERSSOR","INSTITUTIONAL_EMAIL","CAREER"],where:{CAREER:{
+                [Op.like]:`${professor.CAREER.toUpperCase()}`
+            }},include:[{model:User, as:"user", attributes:["NAME"]}]},
+            {model:Classroom, as:"classroom",attributes:["ID_CLASSROOM", "ID_BUILDING","NUMBER","AMOUNT_PEOPLE"],include:[
+                {model:Building, as:"building",attributes:["NAME","CENTER"], where:{CENTER:{
+                [Op.like]:`${user.CENTER.toUpperCase()}`
+            }}},{
+                model:Career, as:"career", where:{NAME:{
+                    [Op.like]:`${professor.CAREER.toUpperCase()}`
+                }}
+            }]},
+            {model:Course, as:"course",  required:true, attributes:["ID_COURSE","CODE_COURSE","NAME","UV"], include :
+            [{
+                model:Career, as:"career", attributes:["NAME","ID_DEPARTMENT"], where:{NAME:{
+                    [Op.like]:`${professor.CAREER.toUpperCase()}`
+                }}
+            }]},
+            {model:PeriodAcademic, as:"period", attributes:["ID_PERIOD","PERIOD_NAME", [fn("YEAR", col("START_DATE")), "YEAR"]]}
         ]
     })
 }
@@ -94,10 +126,44 @@ const sectionbyProffessor = async (body)=>{
     })
 }
 
+const getSectionRange = async (body)=>{
+    return await Section.findOne({
+        where:{
+            [Op.and]:[
+                {
+                    ID_CLASSROOM: body.ID_CLASSROOM
+                },
+                {
+                    START_TIME:{
+                        [Op.gte]:body.START_TIME
+                    },
+                },
+                {
+                    END_TIME:{
+                        [Op.lte]:body.END_TIME
+                    },
+                },
+                {DELETED:0}, ,{ID_PERIOD:body.ID_PERIOD}
+            ]
+            
+        }
+    })
+}
+
 const getSection = async (body)=>{
     return await Section.findOne({
         where:{
             ID_SECTION: body.ID_SECTION
+        },include:{
+            model:Professor, as:"Proffessor"
+        }
+    })
+}
+
+const getSectionById = async (id)=>{
+    return await Section.findOne({
+        where:{
+            ID_SECTION: id
         },include:{
             model:Professor, as:"Proffessor"
         }
@@ -209,10 +275,13 @@ module.exports = {
     getSectionsByCenterAndCareerPeriod,
     getProfessorIdUser,
     getSection,
+    getSectionById,
     sectionExistsHourClassroom,
     sectionbyProffessor,
     getMyCourseEnded,
     getMyIndexAcademic,
     getMyCoursePeriodPrev,
-    getMyCourseAproved
+    getMyCourseAproved,
+    getSectionsByCenterAndCareerPeriods,
+    getSectionRange
 };

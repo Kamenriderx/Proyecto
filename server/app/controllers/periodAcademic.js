@@ -459,6 +459,11 @@ exports.editPeriod = async function (req, res) {
       return res.status(404).json({ error: 'El período académico no existe' });
     }
 
+    // Verifica si el estado del período es 'Finalizado'
+    if (existingPeriod.STATUS === 'Finalizado') {
+      return res.status(403).json({ error: 'No se puede editar un período finalizado' });
+    }
+    
     // Filtrar los campos que se pueden actualizar 
     const allowedFields = [];
     const filteredData = Object.keys(updatedData).reduce((acc, key) => {
@@ -506,7 +511,7 @@ exports.getYears = (req, res) => {
   const currentYear = new Date().getFullYear();
 
   // Límite máximo de años a mostrar
-  const maxYear = currentYear + 10; // Mostrar años hasta 10 años en el futuro
+  const maxYear = currentYear + 5; // Mostrar años hasta 10 años en el futuro
 
   // Lista de años a partir de 2023 hasta el límite máximo
   const years = [];

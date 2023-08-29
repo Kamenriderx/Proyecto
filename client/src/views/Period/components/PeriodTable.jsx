@@ -23,7 +23,7 @@ const PeriodTable = () => {
     clicked: false,
   });
 
-  const [selectedPeriod, setSelectedPeriod] = useState("");
+  const [selectedPeriod, setSelectedPeriod] = useState("-");
 
   const handlePe = (value) => {
     httpRequests()
@@ -128,9 +128,7 @@ const PeriodTable = () => {
       (row) =>
         `${row.course.CODE_COURSE},${row.course.NAME},${row.SECTION_CODE}\n`
     );
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      `${header[0]},${header[1]},${header[2]}\n${data}`;
+    const csvContent = 'data:text/csv;charset=utf-8,' + `${header[0]},${header[1]},${header[2]}\n${data}`;
 
     const downloadLink = document.createElement("a");
     downloadLink.href = encodeURI(csvContent);

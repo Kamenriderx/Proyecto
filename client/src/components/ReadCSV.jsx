@@ -3,7 +3,11 @@ import axios from "axios";
 // import Alert from "./Alert";
 import { DotSpinner } from "@uiball/loaders";
 import TableStudents from "../views/TableStudents/TableStudents.jsx";
-import AlertThree from './AlertThree.jsx'
+import AlertThree from "./AlertThree.jsx";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
+
+import Upload from "../assets/Upload.png";
 
 const ReadCSV = () => {
   const [data, setData] = useState([]);
@@ -11,15 +15,29 @@ const ReadCSV = () => {
   const [mostrarTable, setMostrarTable] = useState(false);
   const [alerta, setAlerta] = useState({});
   const [students, setStudents] = useState();
-  const [check,setCheck] = useState(false); 
+  const [check, setCheck] = useState(false);
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     const callAxios = async () => {
-      const {data} = await axios("http://localhost:3000/registro/admin/getStudents");
+      const { data } = await axios(
+        "http://localhost:3000/registro/admin/getStudents"
+      );
       setStudents(data);
-      console.log(data );
-    }
+      // console.log(data );
+    };
     callAxios();
   }, [check]);
+
+  const[datoRecibido, setDatoRecibido] = useState(true)
+  const recibirDatos = (datos) => {
+    console.log(datos)
+    setDatoRecibido(datos)
+  }
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -28,21 +46,19 @@ const ReadCSV = () => {
     if (!file?.name.includes("csv")) {
       setError(true);
       setMostrarTable(false);
-      console.log("Error de archivo");
-      if(!file){
+      // console.log("Error de archivo");
+      if (!file) {
         setAlerta({
-          text: 'Debe seleccionar un archivo!',
-          icon: 'error',
-          title: 'Error'
+          text: "Debe seleccionar un archivo.",
+          icon: "error",
+          title: "Error",
         });
-
-      }else{
+      } else {
         setAlerta({
-          text: 'El Archivo no es un CSV, favor intentar con otro archivo.',
-          icon: 'error',
-          title: 'Error'
+          text: "El Archivo no es un CSV, favor intentar con otro archivo.",
+          icon: "error",
+          title: "Error",
         });
-        
       }
 
       return;
@@ -68,35 +84,35 @@ const ReadCSV = () => {
     }
 
     const arr1 = headers;
-    console.log(validarArrayExpresionRegular(arr1));
+    // console.log(validarArrayExpresionRegular(arr1));
 
     if (!validarArrayExpresionRegular(arr1)) {
-      event.target.value = null
+      event.target.value = null;
 
       setError(true);
       setMostrarTable(false);
-      console.log("El archivo no tiene completo el encabezado.");
+      // console.log("El archivo no tiene completo el encabezado.");
       setAlerta({
-        text: "El archivo tiene uno o varios errores en el encabezado.",
+        text: "Error en el encabezado del archivo.",
         title: "Error",
-        icon: "error"
-      })
+        icon: "error",
+      });
       return;
     }
 
     const result = [];
 
-    for (let i = 1; i < (lines.length - 1); i++) {
+    for (let i = 1; i < lines.length - 1; i++) {
       const obj = {};
       const currentline = lines[i].split(",");
 
-      for (let j = 0; j < (headers.length - 1); j++) {
+      for (let j = 0; j < headers.length - 1; j++) {
         obj[headers[j]] = currentline[j];
       }
 
       result.push(obj);
     }
-    console.log("result: ", result);
+    // console.log("result: ", result);
     setData(result);
     setError(false);
     setMostrarTable(true);
@@ -104,31 +120,78 @@ const ReadCSV = () => {
 
   return (
     <>
-      <input
-        type="file"
-        accept=".csv"
-        className="
-        file:text-sm file:font-medium 
-        hover:file:cursor-pointer
-        mx-20 my-10 bg-gray-100 rounded-full"
-        onChange={handleFileUpload}
-      />
+      <div className="flex justify-start mx-10">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
+      {mostrarTable && (
+        <div className="flex mt-32 mb-8 mx-20">
+          <div className="flex">
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept=".csv"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
 
-      {error ? (
-        <>
-          <AlertThree alerta = {alerta}/>
-          <div className="flex justify-center my-10">
-            <DotSpinner size={50} speed={0.9} color="black" />
+              <img
+                src={Upload}
+                className="w-20 h-20 rounded-full object-cover"
+              />
+            </label>
           </div>
-        </>
-      ) : mostrarTable ? (
-        <TableStudents body={data} />
-      ) : (
-        <div className="flex justify-center my-10">
-          <DotSpinner size={50} speed={0.9} color="black" />
         </div>
       )}
 
+      {error ? (
+        <>
+          <AlertThree alerta={alerta} />
+          <div className="flex justify-center my-64">
+            <div className="flex space-x-2">
+              <label className="cursor-pointer">
+                <input
+                  type="file"
+                  accept=".csv"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+
+                <img
+                  src={Upload}
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+              </label>
+            </div>
+          </div>
+        </>
+      ) : mostrarTable ? (
+        <TableStudents body={data} mess={false} />
+      ) : (
+        <div className="flex justify-center my-64">
+          <div className="flex space-x-2">
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept=".csv"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+
+              <img
+                src={Upload}
+                className="w-32 h-32 rounded-full object-cover"
+              />
+            </label>
+          </div>
+        </div>
+      )}
     </>
   );
 };

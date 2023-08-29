@@ -10,6 +10,9 @@ import io from "socket.io-client";
 import StudentContext from "../ViewStudent/context/StudentContext";
 import OnlineList from "../../components/OnlineList";
 import { httpRequests } from "../../utils/helpers/httpRequests";
+import { useNavigate } from "react-router-dom";
+import { BiArrowBack } from "react-icons/Bi";
+
 
 const ViewChat = () => {
   const [socket, setSocket] = useState(null);
@@ -28,6 +31,12 @@ const ViewChat = () => {
   const [contMessage, setContMessage] = useState(1);
 
   const [messages, setMessages] = useState([]);
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
+
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -116,9 +125,19 @@ const ViewChat = () => {
 
   return (
     <>
+    <div className="flex justify-start">
+        <div className="mt-5 mb-5 mx-10">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       {stateStudent && (
         <>
-          <div className="flex h-screen bg-gray-50">
+          <div className="flex h-full">
             <div className="w-1/4 ">
               <Buscador check={check} enviarDatoAlPadre={recibirDatoDelHijo} />
             </div>
@@ -137,7 +156,7 @@ const ViewChat = () => {
                               ].URL
                             : fondoPerfil
                         }
-                        alt="seleccine imagen"
+                        alt="IMG"
                         className=" rounded-full w-12 h-12 object-cover"
                       />
                       <div className="flex flex-col justify-center">
@@ -153,7 +172,7 @@ const ViewChat = () => {
                 </div>
                 {showMessages && messages && (
                   <>
-                    <div className="overflow-y-scroll h-[450px] flex flex-col-reverse">
+                    <div className="overflow-y-scroll h-[500px] flex flex-col-reverse">
                       {messages.map((mess) => (
                         <div key={mess.ID_MESSAGE}>
                           {mess.SENDER_ID == state.user.ID_USER ? (
@@ -167,7 +186,7 @@ const ViewChat = () => {
                                       ].URL
                                     : fondoPerfil
                                 }
-                                alt="No hay imagen"
+                                alt="IMG"
                                 className="bg-cyan-400 rounded-full h-12 w-12 object-cover"
                               />
                               <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
@@ -180,8 +199,8 @@ const ViewChat = () => {
                               </div>
                             </div>
                           ) : (
-                            <div className="m-4 flex gap-2 justify-end">
-                              <div className="h-auto w-4/5 bg-gray-100 border border-black rounded-tr-2xl rounded-bl-2xl p-2">
+                            <div className="m-4 flex gap-2 justify-end ">
+                              <div className="h-auto w-4/5 border border-black rounded-tr-2xl rounded-bl-2xl p-2 bg-gray-300">
                                 <p className="break-words">{mess.CONTENT}</p>
                                 <p className="text-xs float-right">
                                   {new Date(mess.createdAt).getHours()}:
@@ -198,7 +217,7 @@ const ViewChat = () => {
                                       ].URL
                                     : fondoPerfil
                                 }
-                                alt="No hay imagen"
+                                alt="IMG"
                                 className="bg-cyan-400 rounded-full h-12 w-12 object-cover"
                               />
                             </div>
@@ -233,7 +252,7 @@ const ViewChat = () => {
                 )}
               </div>
             </div>
-            <div className="w-1/4 bg-green-500 ">
+            <div className="w-1/4">
               {socket && (
                 <OnlineList setCheck={setCheck} check={check} socket={socket} />
               )}

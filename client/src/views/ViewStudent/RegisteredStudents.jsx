@@ -3,32 +3,32 @@ import Pagination from "./components/Pagination";
 import Table from "./components/Table";
 import History from "./History";
 import { StoreContext } from "../../store/ContextExample";
-
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const style = {
-    button: {
-      width: "33%",
-      height:"100%",
-      cursor: "pointer",
-    },
-    buttonContainer:{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      top:0,
-      height:"50px",
-      width: "50%",
-      marginBottom: "20px",
-    },
-    loginForm:{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      flexDirection: "column",
-      width: "70%",
-    }
-  
-  };
+  button: {
+    width: "33%",
+    height: "100%",
+    cursor: "pointer",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    top: 0,
+    height: "50px",
+    width: "50%",
+    marginBottom: "20px",
+  },
+  loginForm: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    width: "70%",
+  },
+};
 const students = [
   {
     name: "Anibal Alejandro Reyes Maradiaga",
@@ -64,8 +64,12 @@ const RegisteredStudents = () => {
     pages:0,
     items:8
   });
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   const { state, dispatch } = useContext(StoreContext);
-    const [view, setView] = useState("historial");
+  const [view, setView] = useState("historial");
   const [className, setClassName] = useState({
     matriculados: {
       className: "",
@@ -90,8 +94,7 @@ const RegisteredStudents = () => {
       },
       historial: {
         className: "",
-      }
-
+      },
     };
 
     defaultState[value].className =
@@ -105,9 +108,18 @@ const RegisteredStudents = () => {
 
   return (
     <div className="w-full flex flex-col pt-2   items-center h-full">
-      {
-        state?.user?.ID_ROLE !== 4 &&
+      {state?.user?.ID_ROLE !== 4 && (
         <div style={style.buttonContainer}>
+          <div className="-mx-52 mb-5">
+            <div className="mt-5">
+              <button
+                onClick={handleBack}
+                className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+              >
+                <BiArrowBack color="#F7F9F7" size={20} />
+              </button>
+            </div>
+          </div>
           <button
             style={style.button}
             className={` hover:text-white hover:bg-sky-500 bg-sky-400 hover:border-transparent ${className.matriculados.className}`}
@@ -126,10 +138,8 @@ const RegisteredStudents = () => {
           >
             Historial
           </button>
-
         </div>
-
-      }
+      )}
 
         <div className="w-full flex justify-center flex-col items-center">
 

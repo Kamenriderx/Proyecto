@@ -3,7 +3,7 @@ const { getMyCourseEnded, getMyIndexAcademic, getMyCoursePeriodPrev, getMyCourse
 const DetailsPeriod = require("../models/detailsPeriod")
 const PeriodAcademic = require('../models/periodAcademic');
 const { getPeriodicAcademicCurrent, getNextPeriodicAcademic, getDetailsDatesPeriodAcademic } = require("../helpers/repositoryPeriodicAcademic");
-const { log } = require("winston");
+
 
 
 const verifyIndexAcademic = async(req,res,next)=>{
@@ -26,7 +26,7 @@ const verifyIndexAcademic = async(req,res,next)=>{
         
       }
       if (!currentPeriod) {
-        res.status(400).json({messagge:"El siguiente período todavía no ha sido planificado."})
+        res.status(400).json({messagge:"El siguiente periodo todavía no ha sido planificado."})
         return   
         
       }
@@ -94,35 +94,35 @@ const verifyIndexAcademic = async(req,res,next)=>{
 
       
       if (currentDate < calendarPreRegistration.dataValues.PRE_DATE_INI) {
-        res.status(400).json({messagge:"El proceso de pre-matricula no ha comenzado"})
+        res.status(400).json({messagge:"El proceso de pre-matrícula no ha comenzado"})
         return
       }
 
 
       if (currentDate > calendarPreRegistration.dataValues.PRE_DATE_END && currentDate < RE_DATE_END) {
-        res.status(400).json({messagge:"El proceso de matricula no ha comenzado"})
+        res.status(400).json({messagge:"El proceso de matrícula no ha comenzado"})
         return
       }
       if (currentDate > RE_DATE_END && currentDate <   ADD_CAN_DATE_INI) {
-          res.status(400).json({messagge:"El proceso de adciones y cancelacion no ha comenzado"})
+          res.status(400).json({messagge:"El proceso de adiciones y cancelaciones no ha comenzado"})
           return
       }
 
       
       if ( currentDate >   ADD_CAN_DATE_END) {
-          res.status(400).json({messagge:"El proceso de adciones y cancelacion ya ha finalizado"})
+          res.status(400).json({messagge:"El proceso de adiciones y cancelaciones ya ha finalizado"})
           return
       }
 
       
 
       if (currentHour < hourIni &&   currentDate >= calendarPreRegistration.dataValues.PRE_DATE_INI && currentDate <= calendarPreRegistration.dataValues.PRE_DATE_INI ) {
-        res.status(400).json({messagge:"la pre-matricula comienza las 09:00:00 y finaliza a las 23:59:59 "})
+        res.status(400).json({messagge:"La pre-matrícula comienza a las 09:00:00 y finaliza a las 23:59:59 "})
         return
         
       }
       if (currentHour < hourIni &&   currentDate >= RE_DATE_INI && currentDate <= RE_DATE_END ) {
-        res.status(400).json({messagge:"la matricula comienza las 09:00:00 y finaliza a las 23:59:59 "})
+        res.status(400).json({messagge:"La matrícula comienza a las 09:00:00 y finaliza a las 23:59:59 "})
         return
         
       }

@@ -26,7 +26,7 @@ const ResultsSearch = () => {
 
   return (
     <div className="">
-      <p className="text-md text-gray-700 text-2xl font-bold uppercase py-5">
+      <p className="text-md text-gray-700 text-2xl font-bold uppercase py-5 mx-5">
         Se encontraron <span>{studentsFilteres.length}</span> resultados :
       </p>
       <button

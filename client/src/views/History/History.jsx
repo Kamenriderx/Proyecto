@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import TableRow from "./components/TableRow";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import jsPDF from "jspdf";
-import GeneratePDF from "./components/GeneratePDF";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";import GeneratePDF from "./components/GeneratePDF";
 import { PDFDownloadLink,PDFViewer } from "@react-pdf/renderer";
 import Pagination from "./components/Pagination";
 
@@ -13,6 +14,10 @@ const History = () => {
     pages:0,
     items:8
   });
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   const [enrollments, setEnrollments] = useState([]);
   const [basicInformation, setBasicInformation] = useState({});
   const [proms, setProms] = useState({
@@ -80,45 +85,55 @@ const History = () => {
 
   return (
     <div className="m-24 mt-20">
-    <div className=" border m-2 p-4 mb-10">
-      <div className="text-center border rounded-t bg-blue-100 mb-3 text-3xl font-bold">
-        informacion general
-      </div>
-      <div className="flex justify-evenly">
-        <div className="flex w-1/2">
-          <div className="flex w-1/2">
-            <ul className="font-bold">
-              <li>CUENTA: </li>
-              <li>NOMBRE: </li>
-              <li>CARRERA: </li>
-            </ul>
-          </div>
-          <div className="flex w-1/2">
-            <ul>
-              <li>{basicInformation.ACCOUNT_NUMBER}</li>
-              <li>{basicInformation.NAME}</li>
-              <li>{basicInformation.CAREER}</li>
-            </ul>
-          </div>
-        </div>
-        <div className="flex w-1/2">
-          <div className="w-1/2">
-            <ul className="font-bold">
-              <li>CENTRO:</li>
-              <li>INDICE GLOBAL:</li>
-              <li>INDICEDE PERIODO:</li>
-            </ul>
-          </div>
-          <div className="w-1/2">
-            <ul>
-              <li>{basicInformation.CENTER}</li>
-              <li>{isNaN(proms.global) ? "0" : parseInt(proms.global) }</li>
-              <li>{isNaN(proms.period) ? "0" : parseInt(proms.period)}</li>
-            </ul>
-          </div>
+      <div className="flex justify-start mx-5 mb-5">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
         </div>
       </div>
-    </div>
+      <div className=" border m-2 p-4 mb-10">
+        <div className="text-center border rounded-t bg-blue-100 mb-3">
+          informacion general
+        </div>
+        <div className="flex justify-evenly">
+          <div className="flex w-1/2">
+            <div className="flex w-1/2">
+              <ul className="font-bold">
+                <li>CUENTA: </li>
+                <li>NOMBRE: </li>
+                <li>CARRERA: </li>
+              </ul>
+            </div>
+            <div className="flex w-1/2">
+              <ul>
+                <li>{basicInformation.ACCOUNT_NUMBER}</li>
+                <li>{basicInformation.NAME}</li>
+                <li>{basicInformation.CAREER}</li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex w-1/2">
+            <div className="w-1/2">
+              <ul className="font-bold">
+                <li>CENTRO:</li>
+                <li>INDICE GLOBAL:</li>
+                <li>INDICEDE PERIODO:</li>
+              </ul>
+            </div>
+            <div className="w-1/2">
+              <ul>
+                <li>{basicInformation.CENTER}</li>
+                <li>{isNaN(proms.global) ? "0" : proms.global}</li>
+                <li>{isNaN(proms.period) ? "0" : proms.period}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <div className="">
       <div className="text-center border p-1   bg-blue-100 text-3xl font-bold">

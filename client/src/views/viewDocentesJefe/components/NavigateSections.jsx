@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { StoreContext } from "../../../store/ContextExample";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { GrFormView } from "react-icons/gr";
 import Modal3 from "../../../components/Modal3";
+import { BiArrowBack } from "react-icons/Bi";
 
 export const NavigateSections = () => {
   const params = useParams();
@@ -13,6 +14,11 @@ export const NavigateSections = () => {
   const [showModal, setShowModal] = useState(false);
   const [calificaciones, setCalificaciones] = useState([]);
   const [NombreClase, setNombreClase] = useState("");
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const getSecciones = async () => {
@@ -51,6 +57,16 @@ export const NavigateSections = () => {
   console.log("CALIFICACIONES VAR", calificaciones);
   return (
     <div className="container mx-auto">
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       <div className="flex justify-center">
         <Modal3 Visible={showModal} Close={() => setShowModal(false)}>
           <div className="mt-5">

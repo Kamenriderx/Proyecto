@@ -76,7 +76,7 @@ const Buscador = ({ chats, enviarDatoAlPadre, check }) => {
             />
             */}
           </div>
-          <div className="overflow-y-auto scrollbar-thin h-[505px] ">
+          <div className="overflow-y-auto scrollbar-thin h-full ">
             {results && (
               <>
                 {results.map((chat) => (
@@ -96,7 +96,7 @@ const Buscador = ({ chats, enviarDatoAlPadre, check }) => {
                                 ].URL
                               : fondoPerfil
                           }
-                          alt="seleccine imagen"
+                          alt="IMG"
                           className="bg-cyan-500 rounded-full w-12 h-12"
                         />
                       </div>
