@@ -27,7 +27,7 @@ const getHistory = async (req, res) => {
             uv,
             section_code,
             calification,
-            state,
+            enrollment.state,
             YEAR(start_date) as year
         FROM enrollment
             JOIN section on enrollment.id_section = section.id_section
@@ -53,7 +53,7 @@ const getHistory = async (req, res) => {
         },
         ...final
     }
-    console.log(response);
+    console.log("Respuesta:",response);
     res.status(200).json(response);
   } catch (e) {
     console.log(e);

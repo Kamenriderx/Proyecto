@@ -4,7 +4,7 @@ import { httpRequests } from "../../utils/helpers/httpRequests";
 
 const Evaluaciones = () => {
   //contexto de usuario
-  const { state } = useContext(StoreContext);
+  const { state ,periodo} = useContext(StoreContext);
 
   const [dataEvaluacion, setdataEvaluacion] = useState(null);
 
@@ -16,9 +16,9 @@ const Evaluaciones = () => {
           Authorization: `Bearer {stateUser.token}`,
         },
       };
-
+      console.log("PERIODOOOO",periodo)
       const res = await httpRequests()["get"](
-        `http://localhost:3000/registro/evaluateProffesor/department/${2}/${stateUser.user.ID_USER}`,
+        `http://localhost:3000/registro/evaluateProffesor/department/${periodo.ID_PERIOD}/${stateUser.user.ID_USER}`,
         { ...config }
       );
 

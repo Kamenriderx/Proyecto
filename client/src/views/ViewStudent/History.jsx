@@ -4,8 +4,14 @@ import { httpRequests } from "../../utils/helpers/httpRequests";
 import {AiOutlineSearch} from "react-icons/ai"
 import StudentCard from "./components/StudentCard";
 import { StoreContext } from "../../store/ContextExample";
+import Pagination from "../History/components/Pagination";
 const History = () => {
-    
+  const [viewableSections,setViewableSections] = useState([]);
+  const [pagination,setPagination] = useState({
+    page:1,
+    pages:0,
+    items:8
+  });
 
   const [enrollments, setEnrollments] = useState([]);
   const [proms, setProms] = useState({
@@ -60,9 +66,33 @@ const History = () => {
 
         setEnrollments(res.data.data);
         setBasicInformation(res.data.basicInformation);
+
+        setPagination({...pagination,page:1,pages:Math.ceil(res.data.data.length/pagination.items)});
+        let viewSections = [];
+        for(let i = 0; i<  pagination.items;i++){
+          if( res.data.data[i] ){
+            console.log("Es indefinido?:",res.data.data[i])
+            viewSections.push( res.data.data[i]);
+          }
+        }
+
+        setViewableSections(viewSections);
+
       });
   }
 
+  
+  useEffect(() => {
+    let viewSections = [];
+        for(let i = pagination.page*pagination.pages; i<pagination.page*pagination.pages + pagination.items;i++){
+          if(enrollments[i]){
+            viewSections.push(enrollments[i]);
+          }
+        }
+
+    setViewableSections(viewSections);
+
+  }, [pagination.page])
 
   return (
     <div className="w-10/12">
@@ -141,7 +171,7 @@ const History = () => {
               </li>
               <li className="border border-blue-100 w-1/12 text-center">OBS</li>
             </ul>
-            {enrollments.map((note) => {
+            {viewableSections.map((note) => {
                 if(note.calification>0){
                     return (
                         <TableRow {...note} />
@@ -151,36 +181,9 @@ const History = () => {
             }
               
             )}
-
-            <nav className="flex justify-center mt-6">
-              <ul className="flex h-10 border justify-center items-center">
-                <li className="hover:bg-slate-400 h-full justify-center items-center flex px-6">
-                  <a className="" href="#">
-                    Anterior
-                  </a>
-                </li>
-                <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex ">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
-                </li>
-                <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex  ">
-                  <a className="page-link" href="#">
-                    2
-                  </a>
-                </li>
-                <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex ">
-                  <a className="page-link" href="#">
-                    3
-                  </a>
-                </li>
-                <li className="hover:bg-slate-400 h-full justify-center items-center flex px-6">
-                  <a className="page-link" href="#">
-                    Siguiente
-                  </a>
-                </li>
-              </ul>
-            </nav>
+      <div className="flex justify-center">
+        <Pagination setPagination = {setPagination} pagination={pagination}/>
+      </div>
           </div>
         </div>
       </div>

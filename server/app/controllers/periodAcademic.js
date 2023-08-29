@@ -428,8 +428,8 @@ exports.getValidYears = async (req, res) => {
 exports.getAllPeriodsDetails = async function (req, res) {
   try {
     // Obtener todos los periodos académicos
-    const periods = await PeriodAcademic.findAll();
-
+    const periods = await PeriodAcademic.findAll({where:{STATUS:"En curso"}});
+    console.log("periodos:",periods);
     res.json(periods);
   } catch (error) {
     console.error("Error al obtener los periodos académicos:", error);

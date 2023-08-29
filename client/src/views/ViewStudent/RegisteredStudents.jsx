@@ -58,6 +58,12 @@ const students = [
 ];
 
 const RegisteredStudents = () => {
+  const [viewableSections,setViewableSections] = useState([]);
+  const [pagination,setPagination] = useState({
+    page:1,
+    pages:0,
+    items:8
+  });
   const { state, dispatch } = useContext(StoreContext);
     const [view, setView] = useState("historial");
   const [className, setClassName] = useState({
@@ -131,7 +137,7 @@ const RegisteredStudents = () => {
         view==="matriculados" &&
         <>
         <Table />
-        <Pagination page={page} setPage={setPage} pages={pages}/>
+       
         </>
     }
       {

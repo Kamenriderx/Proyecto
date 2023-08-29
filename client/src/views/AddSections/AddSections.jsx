@@ -9,7 +9,7 @@ import AlertTwo from "../../components/AlertTwo";
 
 const AddSections = () => {
   const [showModal, setShowModal] = useState(false);
-  const { state, dispatch } = useContext(StoreContext);
+  const { state, dispatch,periodo } = useContext(StoreContext);
   const [listCourses, setListCourses] = useState([]);
   const [listAulas, setListAulas] = useState([]);
   const [docentes, setDocentes] = useState([]);
@@ -29,7 +29,7 @@ const AddSections = () => {
   const [allPeriodos, setAllPeriodos] = useState([]);
   const [ID_PERIOD, setID_PERIOD] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sectionsPerPage] = useState(4);
+  const [sectionsPerPage] = useState(10);
   const indexOfLastTeacher = currentPage * sectionsPerPage;
   const indexOfFirstTeacher = indexOfLastTeacher - sectionsPerPage;
   const currentSections = sections.slice(
@@ -51,7 +51,7 @@ const AddSections = () => {
   useEffect(() => {
     setIsEditMode(selectedSection !== null);
   }, [selectedSection]);
-
+  console.log(state);
   useEffect(() => {
     const fetchDocentes = async () => {
       try {
@@ -622,7 +622,7 @@ const AddSections = () => {
           </span>
           <span className="text-3xl font-bold text-gray-700">
             {" "}
-            "Carrera" - "Nombre del Periodo"
+             - {periodo.PERIOD_NAME}
           </span>
         </div>
         <div className="flex justify-start mt-5 mb-5">

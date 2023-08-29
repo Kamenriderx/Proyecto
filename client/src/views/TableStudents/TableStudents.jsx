@@ -111,6 +111,8 @@ const TableStudents = ({ body }) => {
       if(res?.response.status!==200 ){
         throw new Error(res.response.data.messagge);
       }
+
+      console.log(res);
       
     } catch (error) {
       console.log('respuesta incorrecta')
@@ -131,6 +133,7 @@ const TableStudents = ({ body }) => {
   };
 
   return (
+
     <>
       {
         <div className="prelative overflow-x-auto shadow-md sm:rounded-lg mx-20">

@@ -3,8 +3,15 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 import { useEffect, useState } from "react";
+import Pagination from "./Pagination";
 
 const PeriodTable = () => {
+  const [pagination,setPagination] = useState({
+    page:1,
+    pages:0,
+    items:10
+  });
+  const [viewableSections,setViewableSections] = useState([]);
   const [state, setState] = useState({
     periods: [],
     selectedYear: "",
@@ -19,7 +26,6 @@ const PeriodTable = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("");
 
   const handlePe = (value) => {
-    console.log("Valor seleccionado", selectedPeriod);
     httpRequests()
       ["get"](
         `http://localhost:3000/registro/section/getSectionsPeriod/${value}`,
@@ -32,12 +38,34 @@ const PeriodTable = () => {
           ...state,
           sections: res.data.sections,
         });
+        
+        setPagination({...pagination,page:1,pages:Math.ceil(res.data.sections.length/pagination.items)});
+        let viewSections = [];
+        for(let i = 0; i<  pagination.items;i++){
+          if( res.data.sections[i] ){
+            console.log("Es indefinido?:",res.data.sections[i])
+            viewSections.push( res.data.sections[i]);
+          }
+        }
+
+        setViewableSections(viewSections);
+        console.log("Aqui estan las secciones",viewSections);
       });
   };
+  useEffect(() => {
+    let viewSections = [];
+        for(let i = pagination.page*pagination.pages; i<pagination.page*pagination.pages + pagination.items;i++){
+          if(state.sections[i]){
+            viewSections.push(state.sections[i]);
+          }
+        }
 
+    setViewableSections(viewSections);
+
+  }, [pagination.page])
+  
   const handlePeriodChange = (event) => {
     const { value, name } = event.target;
-    console.log(value, name);
     setSelectedPeriod(value);
     handlePe(value);
   };
@@ -61,15 +89,13 @@ const PeriodTable = () => {
               }
             )
             .then((res2) => {
-              console.log("Valores 1", res, res2);
-              console.log("Valores 2", selectedPeriod);
               setState({
                 ...state,
                 sections: res2.data.sections,
               });
+              setPagination({...pagination,page:1,pages:Math.ceil(res2.data.sections.length/10)});
             });
 
-          console.log("Periodos", res);
         });
     };
     handlePetitions();
@@ -80,9 +106,7 @@ const PeriodTable = () => {
 
     const tableColumn = ["Codigo", "Clase", "Seccion"];
     const tableRows = [];
-    console.log("Secciones:", state.sections["0"]);
     state.sections.forEach((section) => {
-      console.log(section);
       const sectionData = [
         section.course.CODE_COURSE,
         section.course.NAME,
@@ -104,9 +128,9 @@ const PeriodTable = () => {
       (row) =>
         `${row.course.CODE_COURSE},${row.course.NAME},${row.SECTION_CODE}\n`
     );
-    const csvContent = `data:text/csv;charset=utf-8,${header[0]},${header[1]},${header[2]}\n
-        ${data}
-      `;
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      `${header[0]},${header[1]},${header[2]}\n${data}`;
 
     const downloadLink = document.createElement("a");
     downloadLink.href = encodeURI(csvContent);
@@ -120,49 +144,61 @@ const PeriodTable = () => {
 
   return (
     <div>
-      <div className="flex min-w-full justify-end mb-4 items-center align-middle">
-        <select
-          name="selectedPeriod"
-          value={selectedPeriod}
-          id="years"
-          onChange={handlePeriodChange}
-          className="w-25 h-12 rounded-md"
-        >
-          {state.periods.map((p) => (
-            <option key={p.ID_PERIOD} value={p.ID_PERIOD}>
-              {p.PERIOD_NAME}
+      <div>
+        <div className="flex min-w-full justify-end mb-4 items-center align-middle">
+          <select
+            name="selectedPeriod"
+            value={selectedPeriod}
+            id="years"
+            onChange={handlePeriodChange}
+            className="w-25 h-12 rounded-md"
+          >
+            <option className="flex justify-center text-center">
+              <div>-</div>
             </option>
-          ))}
-        </select>
-      </div>
-      <div className="m-3 flex justify-around">
-        <button
-          onClick={generateCSV}
-          className="bg-lime-500 text-white w-40 rounded-md h-8 m-3 hover:bg-lime-600"
-        >
-          Descargar CSV
-        </button>
-        <button
-          onClick={handleDownload}
-          className="bg-red-500 text-white w-40 rounded-md h-8 m-3 hover:bg-red-600"
-        >
-          Descargar PDF
-        </button>
-      </div>
-      <ul>
-        <li className="border border-gray-200 cursor-default rounded-xl p-2 mb-3 bg-gray-400 text-white">
-          <ul className="list-none flex flex-row min-w-full">
-            <li className="flex justify-center items-center w-1/3 ">Codigo</li>
-            <li className="flex justify-center items-center w-1/3 ">Clase</li>
-            <li className="flex justify-center items-center w-1/3 ">Seccion</li>
-          </ul>
-        </li>
-        <div className="border border-gray-200 rounded-lg p-0">
-          {state.sections.map((section, index) => (
-            <PeriodRow key={index} section={section} />
-          ))}
+            {state.periods.map((p) => (
+              <option key={p.ID_PERIOD} value={p.ID_PERIOD}>
+                {p.PERIOD_NAME}
+              </option>
+            ))}
+          </select>
         </div>
-      </ul>
+        <div className="m-3 flex justify-around">
+          <button
+            onClick={generateCSV}
+            className="bg-lime-500 text-white w-40 rounded-md h-8 m-3 hover:bg-lime-600"
+          >
+            Descargar CSV
+          </button>
+          <button
+            onClick={handleDownload}
+            className="bg-red-500 text-white w-40 rounded-md h-8 m-3 hover:bg-red-600"
+          >
+            Descargar PDF
+          </button>
+        </div>
+        <ul>
+          <li className="border border-gray-200 cursor-default rounded-xl p-2 mb-3 bg-gray-400 text-white">
+            <ul className="list-none flex flex-row min-w-full">
+              <li className="flex justify-center items-center w-1/3 ">
+                Codigo
+              </li>
+              <li className="flex justify-center items-center w-1/3 ">Clase</li>
+              <li className="flex justify-center items-center w-1/3 ">
+                Seccion
+              </li>
+            </ul>
+          </li>
+          <div className="border border-gray-200 rounded-lg p-0">
+            {viewableSections.map((section, index) => (
+              <PeriodRow key={index} section={section} />
+            ))}
+          </div>
+        </ul>
+      </div>
+      <div className="flex justify-center">
+        <Pagination setPagination = {setPagination} pagination={pagination}/>
+      </div>
     </div>
   );
 };
