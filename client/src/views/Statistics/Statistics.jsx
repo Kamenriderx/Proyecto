@@ -16,12 +16,16 @@ const Statistics = () => {
   };
   return (
     <div className="flex items-center flex-col mt-10 bg-white">
-      <button
-        onClick={handleBack}
-        className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
-      >
-        <BiArrowBack color="#F7F9F7" size={20} />
-      </button>
+      <div className="flex mx-48">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
 
       <div className="w-2/3 h-[500px] rounded-md mb-5  shadow-lg flex ">
         <div className="w-[800px] h-[400px]  shadow-2xl rounded-md m-10 ">
@@ -33,7 +37,7 @@ const Statistics = () => {
       </div>
       <div className="w-2/3 h-[500px] rounded-md mb-5  shadow-lg flex justify-center">
         <div className="w-[800px] h-[400px]  shadow-2xl rounded-md  m-10">
-          <DoughnutGraphic/>
+          <DoughnutGraphic />
         </div>
       </div>
     </div>

@@ -9,7 +9,6 @@ import { MdEmail } from "react-icons/Md";
 import fondoPerfil from "../../../src/assets/fondoPerfil.jpg";
 import UNAH from "../../../src/assets/UNAH.png";
 
-
 const ViewTeacher = () => {
   const { state, dispatch, periodo } = useContext(StoreContext);
   const { stateTeacher, getTeacher } = useContext(TeacherContext);
@@ -144,10 +143,13 @@ const ViewTeacher = () => {
             </>
           ) : (
             <>
-  <div className="w-full h-full">
-
-<img src={UNAH} alt="foto" className="w-[900px] h-[600px] ml-[480px] mt-[100px]"/>
-  </div>
+              <div className="w-full h-full">
+                <img
+                  src={UNAH}
+                  alt="foto"
+                  className="w-[900px] h-[600px] ml-[480px] mt-[100px]"
+                />
+              </div>
             </>
           )}
         </>
