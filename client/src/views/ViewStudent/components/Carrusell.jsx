@@ -45,22 +45,20 @@ const Carrusell = ({ user }) => {
                   {stateStudent.user.user.hasOwnProperty("multimedia") ? (
                     <>
                       {stateStudent.user.user.multimedia.map((imageUrl) => (
-                    
-                          <div className="text-center"  key={imageUrl.ID_MULTIMEDIA}>
-                            <button
-                              onClick={() =>
-                                handleDelete(imageUrl.ID_MULTIMEDIA)
-                              }
-                            >
-                              <MdDeleteForever className="text-3xl text-red-600 hover:text-red-800" />
-                            </button>
-                            <img
-                             
-                              className="w-52 h-52 object-cover border-2 m-1 border-gray-700"
-                              src={imageUrl.URL}
-                            />
-                          </div>
-                 
+                        <div
+                          className="text-center"
+                          key={imageUrl.ID_MULTIMEDIA}
+                        >
+                          <button
+                            onClick={() => handleDelete(imageUrl.ID_MULTIMEDIA)}
+                          >
+                            <MdDeleteForever className="text-3xl text-red-600 hover:text-red-800" />
+                          </button>
+                          <img
+                            className="w-52 h-52 object-cover border-2 m-1 border-gray-700"
+                            src={imageUrl.URL}
+                          />
+                        </div>
                       ))}
                     </>
                   ) : (

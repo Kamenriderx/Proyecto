@@ -30,6 +30,7 @@ const CardTeachers = ({ student }) => {
         draggable: true,
         progress: undefined,
       });
+      socket.emit("nueva solicitud", async () => await res.data);
     } catch (error) {
       setAlerta({
         message: error.response.data.message,

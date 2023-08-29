@@ -56,8 +56,15 @@ const handleConnections = (io) => {
       const user = getUser(data.RECEIVER_ID);
       io.to(user.socketId).emit("getMessage", data);
     });
+
+    socket.on("nuevasolicitud",({senderId, recipientId})=>{
+      console.log("SOLICITUD",{senderId, recipientId});
+      const user = getUser(recipientId);
+      io.to(user.socketId).emit("Solicitudes",recipientId);
+    })
   });
 };
+
 
 // obtener usuario en linea
 const getUser = (id) => {
