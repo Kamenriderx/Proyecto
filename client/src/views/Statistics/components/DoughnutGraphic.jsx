@@ -1,15 +1,42 @@
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, registerables } from "chart.js";
+import { useEffect, useState } from 'react';
+import { httpRequests } from '../../../utils/helpers/httpRequests';
 Chart.register(...registerables);
 
 const DoughnutGraphic = () => {
+  const [dataValues, setDataValues] = useState({
+    labels: [],
+    data: [],
+  });
+  useEffect(() => {
+    httpRequests()["get"]("http://localhost:3000/registro/graph/dataAprSystem", {})
+      .then((res) => {
+        console.log("Datos",res.data);
+        let labels = []
+        let data =[]
+        for(const value of res.data.data){
+          labels.push(Object.values(value)[0].split(" ")[0])
+          data.push(Object.values(value)[1])
+          
+        }
+        setDataValues({
+          labels,
+          data
+        })
+
+      });
+  }, []);
+
+
+
     const data = {
-        labels: ['Alimentación', 'Transporte', 'Vivienda', 'Ocio', 'Otros'],
+        labels: dataValues.labels,
         datasets: [
           {
-            data: [30, 20, 15, 10, 25], 
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#E7E9ED'],
-            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#E7E9ED'],
+            data: dataValues.data, 
+            backgroundColor:['#E57373', '#64B5F6', '#FFD54F', '#81C784', '#B0BEC5', '#9575CD', '#7986CB', '#4DB6AC', '#FF8A65', '#A1887F'],
+            hoverBackgroundColor: ['#E57373', '#64B5F6', '#FFD54F', '#81C784', '#B0BEC5', '#9575CD', '#7986CB', '#4DB6AC', '#FF8A65', '#A1887F'],
           },
         ],
       };

@@ -25,13 +25,13 @@ import {
 import { GrPlan } from "react-icons/gr";
 import { SiGoogleclassroom, SiMicrosoftacademic } from "react-icons/si";
 import { FaHistory, FaAddressCard } from "react-icons/fa";
-import { AiOutlineUnorderedList, AiOutlineException} from "react-icons/ai";
+import { AiOutlineUnorderedList, AiOutlineException } from "react-icons/ai";
 import { StoreContext } from "../../../store/ContextExample";
 import { FcPlanner, FcCancel } from "react-icons/fc";
-import {RiPagesFill} from "react-icons/ri"
+import { RiPagesFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import {FaFileDownload} from "react-icons/fa"
-import {BsFillFileEarmarkArrowDownFill} from "react-icons/bs"
+import { FaFileDownload } from "react-icons/fa";
+import { BsFillFileEarmarkArrowDownFill } from "react-icons/bs";
 const Sidevar = () => {
   const { state, dispatch } = useContext(StoreContext);
   return (
@@ -369,7 +369,7 @@ const Sidevar = () => {
                     </a>
                   </Link>
                 </li>
-                
+
                 <li>
                   <Link to="/Docentes">
                     <a
@@ -394,20 +394,6 @@ const Sidevar = () => {
                       <FaAddressCard className="flex-shrink-0 w-6 h-6 text-gray-500" />
                       <span className="flex-1 ml-3 whitespace-nowrap">
                         Agregar Estudiante
-                      </span>
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/planificacion">
-                    <a
-                      href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg 
-                hover:bg-orange-100 hover:font-bold"
-                    >
-                      <FaAddressCard className="flex-shrink-0 w-6 h-6 text-gray-500" />
-                      <span className="flex-1 ml-3 whitespace-nowrap">
-                        Periodo
                       </span>
                     </a>
                   </Link>

@@ -127,10 +127,11 @@ const verifyIndexAcademic = async(req,res,next)=>{
         
       }
       
+      if (currentHour < hourIni &&   currentDate >= ADD_CAN_DATE_INI && currentDate <= ADD_CAN_DATE_INI ) {
+        res.status(400).json({messagge:"El proceso de adiciones y cancelaciones comienza a las 09:00:00 y finaliza a las 23:59:59 "})
+        return
 
-
-
-
+      }
 
 
       res.status(400).json({messagge:"No cumplés con los requisitos para matricular el dia de hoy"})
