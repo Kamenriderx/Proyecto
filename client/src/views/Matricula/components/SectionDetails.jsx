@@ -111,22 +111,22 @@ const SectionDetails = () => {
             ALUMNOS EN LISTA DE ESPERA
           </p>
         </div>
-        <div>
-          <div className="mt-5 mx-5 my-5">
+        <div className="overflow-y-auto h-[500px]">
+          <div>
             <>
               {listaEspera.length > 0 ? (
                 <table className="w-full bg-white shadow-md table-auto">
                   <thead className="bg-blue-800 text-white">
                     <tr>
-                      <th className="p-2">Nombre del Alumno</th>
-                      <th className="p-2">Numero de Cuenta</th>
-                      <th className="p-2">Acción</th>
+                      <th className="">Nombre del Alumno</th>
+                      <th className="">Número de Cuenta</th>
+                      <th className="">Acción</th>
                     </tr>
                   </thead>
                   <tbody>
                     {listaEspera.map((lista) => (
                       <tr className="border-b" key={lista.ACCOUNT_NUMBER}>
-                        <td className="py-2 px-3 text-gray-800 font-bold">
+                        <td className="py-2 px-3 text-gray-800 font-bold text-center">
                           {lista.STUDENT_NAME}
                         </td>
                         <td className="py-2 px-3 text-gray-700 font-bold">
@@ -165,7 +165,7 @@ const SectionDetails = () => {
             ALUMNOS MATRICULADOS
           </p>
         </div>
-        <div>
+        <div className="overflow-y-auto h-[500px]">
           <div className="mt-5 mx-5 my-5">
             <>
               {matriculados.length > 0 ? (
@@ -173,7 +173,7 @@ const SectionDetails = () => {
                   <thead className="bg-blue-800 text-white">
                     <tr>
                       <th className="p-2">Nombre del Alumno</th>
-                      <th className="p-2">Numero de Cuenta</th>
+                      <th className="p-2">Número de Cuenta</th>
                       <th className="p-2">Calificación</th>
                       <th className="p-2">Obs</th>
                     </tr>
@@ -181,7 +181,7 @@ const SectionDetails = () => {
                   <tbody>
                     {matriculados.map((matriculado) => (
                       <tr className="border-b" key={matriculado.ID_STUDENT}>
-                        <td className="py-2 px-3 text-gray-700 font-bold">
+                        <td className="py-2 px-3 text-gray-700 font-bold text-center">
                           {matriculado.STUDENT_NAME}
                         </td>
                         <td className="py-2 px-3 text-sky-800 font-bold text-center">

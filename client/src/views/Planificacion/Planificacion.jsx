@@ -472,7 +472,7 @@ const Planificacion = () => {
           >
             <div className="mt-2 text-center">
               <p className="text-red-800 font-black text-2xl">
-                Edicion de Fechas
+                Edición de Fechas
               </p>
             </div>
             <div className="mt-3 flex text-center justify-around">
@@ -496,7 +496,7 @@ const Planificacion = () => {
               </div>
               <div className="mt-3">
                 <p className="text-gray-800 text-sm font-bold">
-                  Fechas de pago de Matricula
+                  Fechas de Pago de Matricula
                 </p>
                 <div className="mt-2 flex gap-3 justify-around">
                   <div>
@@ -575,7 +575,7 @@ const Planificacion = () => {
               <div className="mt-3">
                 <div className="text-center">
                   <p className="text-red-800 text-xl font-bold">
-                    Fechas importantes del año {anyo}
+                    Fechas Importantes del Periodo
                   </p>
                   <div className="mt-2">
                     <p className="text-gray-900 font-bold text-lg">
