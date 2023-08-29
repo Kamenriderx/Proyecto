@@ -8,6 +8,7 @@ import { PDFDownloadLink,PDFViewer } from "@react-pdf/renderer";
 import Pagination from "./components/Pagination";
 
 const History = () => {
+  const [history,setHistory] = useState(undefined);
   const [viewableSections,setViewableSections] = useState([]);
   const [pagination,setPagination] = useState({
     page:1,
@@ -31,7 +32,6 @@ const History = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
-        console.log(res);
         let globalProm;
         let periodProm;
         let totalUV = 0;
@@ -39,35 +39,34 @@ const History = () => {
 
         let totalLastPeriodUV = 0;
         let totalLastPeriodSum = 0;
-        res.data.data.forEach((enrollment) => {
+        res.data.response.data.forEach((enrollment) => {
           if (enrollment.calification !== 0) {
             totalUV += enrollment.uv;
             totalSum += enrollment.uv * enrollment.calification;
 
-            if (enrollment.ID_PERIOD === res.data.lastPeriod) {
+            if (enrollment.ID_PERIOD === res.data.response.lastPeriod) {
               totalLastPeriodUV += enrollment.uv;
               totalLastPeriodSum += enrollment.uv * enrollment.calification;
             }
           }
         });
-        console.log("Suma total:", res);
         globalProm = totalSum / totalUV;
         periodProm = totalLastPeriodSum / totalLastPeriodUV;
         setProms({ global: globalProm, period: periodProm });
-        setEnrollments(res.data.data);
-        setBasicInformation(res.data.basicInformation);
+        setEnrollments(res.data.response.data);
+        setBasicInformation(res.data.response.basicInformation);
 
-        setPagination({...pagination,page:1,pages:Math.ceil(res.data.data.length/pagination.items)});
+        setPagination({...pagination,page:1,pages:Math.ceil(res.data.response.data.length/pagination.items)});
         let viewSections = [];
         for(let i = 0; i<  pagination.items;i++){
-          if( res.data.data[i] ){
-            console.log("Es indefinido?:",res.data.data[i])
-            viewSections.push( res.data.data[i]);
+          if( res.data.response.data[i] ){
+            viewSections.push( res.data.response.data[i]);
           }
         }
 
         setViewableSections(viewSections);
-
+        setHistory(res.data.history);
+        console.log("Historial",res.data.history)
       });
   }, []);
 
@@ -140,13 +139,13 @@ const History = () => {
         Historial academico
       </div>
       <div className="flex justify-center">
-        <PDFDownloadLink document={<GeneratePDF enrollments={enrollments} basicInformation={basicInformation} />} fileName="Historial.pdf">
+        {history && <PDFDownloadLink document={<GeneratePDF history={history} />} fileName="Historial.pdf">
           <button
             className="bg-red-500 text-white w-40 rounded-md h-8 m-3 hover:bg-red-600"
           >
             Descargar PDF
           </button>
-        </PDFDownloadLink>
+        </PDFDownloadLink>}
       </div>
       <div>
         <ul className="flex justify-around font-bold bg-blue-100 ">
