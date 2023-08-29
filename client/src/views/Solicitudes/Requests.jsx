@@ -48,7 +48,7 @@ const Requests = () => {
               to="/pago-reposicion"
               className="py-3 px-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-md shadow-md rounded"
             >
-              Activación de pago para examen de reposición
+              Activación de pago para examén de reposición
             </Link>
           </div>
           <div className="mt-10">
