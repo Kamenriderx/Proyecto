@@ -7,46 +7,59 @@ Chart.register(...registerables);
 const BarGraph = () => {
   const [dataValues, setDataValues] = useState({
     labels: [],
-    datasets: [],
+    data: [],
   });
   const [loading,setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     httpRequests()
-      ["get"]("http://localhost:3000/registro/statistics/getData", {})
+      // ["get"]("http://localhost:3000/registro/statistics/getData", {})
+      // .then((res) => {
+      //   const APR = [];
+      //   for (const label of Object.keys(res.data.data)) {
+      //     for (const value of res.data.data[label]) {
+      //       if (value.OBS === "APR") {
+      //         APR.push(value.QUANTITY);
+      //       }
+      //     }
+      //   }
+      //   setDataValues({
+      //   labels: Object.keys(res.data.data),
+      //     datasets: [
+      //       {
+      //         label: "Aprobados",
+      //         data: APR,
+      //         backgroundColor: "rgba(75, 192, 192, 0.8)",
+      //         borderColor: "rgba(75, 192, 192, 1)",
+      //         borderWidth: 1,
+      //       },
+      //     ],
+      //   });
+      //   setLoading(false);
+
+      // });
+
+      ["get"]("http://localhost:3000/registro/graph/dataAbdSystem", {})
       .then((res) => {
-        const APR = [];
-        for (const label of Object.keys(res.data.data)) {
-          for (const value of res.data.data[label]) {
-            if (value.OBS === "APR") {
-              APR.push(value.QUANTITY);
-            }
-          }
+        let labels = []
+        let data =[]
+        for(const value of res.data.data){
+          labels.push(Object.values(value)[0].split(" ")[0])
+          data.push(Object.values(value)[1])
+
         }
-        setDataValues({
-        labels: Object.keys(res.data.data),
-          datasets: [
-            {
-              label: "Aprobados",
-              data: APR,
-              backgroundColor: "rgba(75, 192, 192, 0.8)",
-              borderColor: "rgba(75, 192, 192, 1)",
-              borderWidth: 1,
-            },
-          ],
-        });
-        setLoading(false);
+        setDataValues({data, labels});
 
       });
   }, []);
 
   const data = {
-    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+    labels: dataValues.labels,
     datasets: [
       {
-        label: 'Temperatura Promedio',
-        data: [10, 12, 15, 18, 22, 25, 28, 27, 24, 20, 15, 12], 
+        label: 'Top 10 clases con mas ABD',
+        data: dataValues.data, 
         fill: false,
         borderColor: '#FF6384', 
         tension: 0.4, 
@@ -54,6 +67,7 @@ const BarGraph = () => {
       },
     ],
   };
+  
 
   const options = {
     responsive: true,
