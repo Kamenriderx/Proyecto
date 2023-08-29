@@ -126,7 +126,7 @@ export const NavigateSections = () => {
         </Modal3>
         <div className="mt-10">
           <p className="text-gray-800 text-3xl font-black">
-            Secciones impartidas por el Maestro
+            Secciones Impartidas 
           </p>
         </div>
       </div>
