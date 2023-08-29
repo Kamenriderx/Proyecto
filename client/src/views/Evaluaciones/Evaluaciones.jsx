@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../store/ContextExample";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import Modal from "./components/Modal";
+import { useNavigate } from "react-router-dom";
+import { BiArrowBack } from "react-icons/Bi";
 
 const Evaluaciones = () => {
   //contexto de usuario
@@ -46,8 +48,23 @@ const Evaluaciones = () => {
     getEvaluacion(state);
   }, [state.user.ID_USER]);
 
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="mx-16 mt-28 ">
+      <div className="flex justify-start mb-10">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       <Modal isOpen={isModalOpen} onClose={closeModal} />
 
       <button
@@ -89,10 +106,10 @@ const Evaluaciones = () => {
                 Respuesta 26
               </th>{" "}
               <th scope="col" class="px-2 py-3">
-              Respuesta 27
+                Respuesta 27
               </th>{" "}
               <th scope="col" class="px-2 py-3">
-              Respuesta 28
+                Respuesta 28
               </th>{" "}
             </tr>
           </thead>
@@ -102,39 +119,17 @@ const Evaluaciones = () => {
                 {dataEvaluacion.map((evalau) => (
                   <>
                     <tr className="bg-white border-b hover:bg-gray-100">
-                      <td className="px-6 py-4">
-                        {evalau.professorName}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.COURSE_NAME}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.SECTION_CODE}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.STUDENT_NAME}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.sumDeficiente}/25
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.sumBueno}/25
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.sumMuyBueno}/25
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.sumExcelente}/25
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.RESP_26}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.RESP_27}
-                      </td>
-                      <td className="px-6 py-4">
-                        {evalau.RESP_28}
-                      </td>
+                      <td className="px-6 py-4">{evalau.professorName}</td>
+                      <td className="px-6 py-4">{evalau.COURSE_NAME}</td>
+                      <td className="px-6 py-4">{evalau.SECTION_CODE}</td>
+                      <td className="px-6 py-4">{evalau.STUDENT_NAME}</td>
+                      <td className="px-6 py-4">{evalau.sumDeficiente}/25</td>
+                      <td className="px-6 py-4">{evalau.sumBueno}/25</td>
+                      <td className="px-6 py-4">{evalau.sumMuyBueno}/25</td>
+                      <td className="px-6 py-4">{evalau.sumExcelente}/25</td>
+                      <td className="px-6 py-4">{evalau.RESP_26}</td>
+                      <td className="px-6 py-4">{evalau.RESP_27}</td>
+                      <td className="px-6 py-4">{evalau.RESP_28}</td>
                     </tr>
                   </>
                 ))}

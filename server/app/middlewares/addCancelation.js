@@ -22,7 +22,7 @@ const verifyAddCancelation = async(req,res,next)=>{
         
       }
       if (!currentPeriod) {
-        res.status(400).json({messagge:"El siguiente período todavía no ha sido planificado."})
+        res.status(400).json({messagge:"El siguiente periodo todavía no ha sido planificado."})
         return   
         
       }
@@ -43,11 +43,11 @@ const verifyAddCancelation = async(req,res,next)=>{
       }
 
       if (currentDate < ADD_CAN_DATE_INI  ) {
-        res.status(400).json({messagge:"El proceso de adiciones y cancelaciones todavia no ha comenzado"})
+        res.status(400).json({messagge:"El proceso de adiciones y cancelaciones todavía no ha comenzado"})
         return  
       }
       if (currentDate > ADD_CAN_DATE_INI  ) {
-        res.status(400).json({messagge:"El proceso de adicioness y cancelaciones ha finalizado"})
+        res.status(400).json({messagge:"El proceso de adiciones y cancelaciones ha finalizado"})
         return   
       }
 

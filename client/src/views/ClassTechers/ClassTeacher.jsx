@@ -5,6 +5,8 @@ import { AiFillEye, AiFillEdit } from "react-icons/ai";
 import Modal2 from "../../components/Modal2";
 import Rows from "./components/Rows";
 import AlertTwo from "../../components/AlertTwo";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 const ClassTeacher = () => {
   const { state, dispatch, periodo } = useContext(StoreContext);
   const [classes, setClasses] = useState([]);
@@ -30,9 +32,7 @@ const ClassTeacher = () => {
     const getClassTeacher = async () => {
       try {
         const response = await axios(
-          `http://localhost:3000/registro/section/sectionsForProfessors/${
-            state.user.ID_USER
-          }/${periodo.ID_PERIOD}`
+          `http://localhost:3000/registro/section/sectionsForProfessors/${state.user.ID_USER}/${periodo.ID_PERIOD}`
         );
         setClasses(response.data);
       } catch (error) {
@@ -88,10 +88,25 @@ const ClassTeacher = () => {
     link.click();
   };
 
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   // console.log("LOS MATRICULADOS", matriculados);
   return (
     <>
       <div className="container mx-auto">
+        <div className="flex justify-start mx-5 mb-5">
+          <div className="mt-5">
+            <button
+              onClick={handleBack}
+              className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+            >
+              <BiArrowBack color="#F7F9F7" size={20} />
+            </button>
+          </div>
+        </div>
         <Modal2 Visible={showModal} Close={() => setShowModal(false)}>
           <div className="mt-5 mx-3">
             <div className="text-center">

@@ -167,7 +167,7 @@ const ListTeachers = () => {
           </>
         ) : (
           <p className="text-center text-xl text-black font-black text-cente">
-            No hay docentes en la busqueda.
+            No hay docentes en la búsqueda.
           </p>
         )}
       </div>

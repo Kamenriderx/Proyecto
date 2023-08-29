@@ -4,8 +4,14 @@ import { StoreContext } from "../../store/ContextExample";
 import Modal3 from "../../components/Modal3";
 import { AiFillEye } from "react-icons/ai";
 import AlertTwo from "../../components/AlertTwo";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const ListadoAlumnosClass = () => {
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   const { periodo, state } = useContext(StoreContext);
   const [listAlumnos, setListAlumnos] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -119,12 +125,22 @@ const ListadoAlumnosClass = () => {
   return (
     <div className="flex mt-10">
       <div className="container mx-auto mt-10">
+        <div className="flex justify-start mx-5 mb-5">
+          <div className="mt-5">
+            <button
+              onClick={handleBack}
+              className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+            >
+              <BiArrowBack color="#F7F9F7" size={20} />
+            </button>
+          </div>
+        </div>
         <Modal3 Visible={showModal} Close={() => setShowModal(false)}>
           <div className="my-2 mx-2 shadow rounded bg-gray-100">
             <div className="mx-3">
               <div className="mt-4 text-center">
                 <p className="text-gray-700 font-bold text-lg mb-5">
-                  Clases Matriculadas por el Alumno{" "}
+                  Clases Matriculadas{" "}
                 </p>
               </div>
               <div>
@@ -133,11 +149,11 @@ const ListadoAlumnosClass = () => {
                     <table className="w-full bg-white shadow-md table-auto">
                       <thead className="bg-blue-800 text-white">
                         <tr className="">
-                          <th className="p-2">Codigo</th>
+                          <th className="p-2">Código</th>
                           <th className="p-2">Clase</th>
-                          <th className="p-2">Seccion</th>
+                          <th className="p-2">Sección</th>
                           <th className="p-2">UV</th>
-                          <th className="p-2">Dias</th>
+                          <th className="p-2">Días</th>
                         </tr>
                       </thead>
                       <tbody>

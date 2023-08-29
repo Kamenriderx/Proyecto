@@ -51,6 +51,8 @@ exports.createContactRequest = async function(req, res) {
   try {
     const { senderId, recipientId } = req.body;
 
+    console.log({senderId, recipientId})
+    
     // Verifica si el remitente y el destinatario son el mismo usuario
     if (senderId === recipientId) {
       return res.status(400).json({ message: 'No puedes enviar una solicitud de contacto a ti mismo' });
@@ -103,6 +105,11 @@ exports.createContactRequest = async function(req, res) {
       } else if (mutualRequest && mutualRequest.STATUS === 'pending') {
         return res.status(400).json({ message: 'Ya existe una solicitud de contacto mutua entre estos usuarios' });
       } else if (mutualRequest && mutualRequest.STATUS !== 'pending') {
+        const updatedMutualRequest = await mutualRequest.update({
+          SENDER_ID: mutualRequest.RECIPIENT_ID,
+          RECIPIENT_ID: mutualRequest.SENDER_ID,
+          STATUS: 'pending'
+        });
         // Actualiza el estado de la solicitud mutua a "pending"
         await mutualRequest.update({ STATUS: 'pending' });
         // Envia un correo electrónico al destinatario

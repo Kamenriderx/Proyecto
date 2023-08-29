@@ -4,6 +4,8 @@ import PeriodForm from "./components/PeriodTable";
 import Swal from "sweetalert2";
 import Modal from "../../components/Modal";
 import { httpRequests } from "../../utils/helpers/httpRequests";
+import { BiArrowBack } from "react-icons/Bi";
+import { useNavigate } from "react-router-dom";
 
 const Period = () => {
   const [visible, setVisible] = useState(false);
@@ -12,6 +14,11 @@ const Period = () => {
     finalDate: "",
     selectedYear: "I",
   });
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -28,6 +35,16 @@ const Period = () => {
 
   return (
     <div className="flex w-full justify-center p-3 m-3">
+      <div className="flex justify-start">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div>
       <div className="w-2/3">
         <PeriodTable />
 

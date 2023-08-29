@@ -1,78 +1,98 @@
 import { useContext, useEffect, useState } from "react";
 import TableRow from "./components/TableRow";
 import { httpRequests } from "../../utils/helpers/httpRequests";
-import {AiOutlineSearch} from "react-icons/ai"
+import { AiOutlineSearch } from "react-icons/ai";
 import StudentCard from "./components/StudentCard";
 import { StoreContext } from "../../store/ContextExample";
+//import { BiArrowBack } from "react-icons/Bi";
+//import { useNavigate } from "react-router-dom";
 const History = () => {
-    
+  /*   const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  }; */
 
   const [enrollments, setEnrollments] = useState([]);
   const [proms, setProms] = useState({
-    global:0,
-    period:0
+    global: 0,
+    period: 0,
   });
-  
+
   const [basicInformation, setBasicInformation] = useState({
-    CENTER:""
+    CENTER: "",
   });
 
-  const [searchValue,setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
-  const onChange = (e) =>{
+  const onChange = (e) => {
     const value = e.target.value;
     setSearchValue(value);
-
-  }
-  const handdleSubmit = () =>{
+  };
+  const handdleSubmit = () => {
     httpRequests()
       ["post"]("http://localhost:3000/registro/history/searchHistory", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: { user_account:searchValue },
-    })
+        body: { user_account: searchValue },
+      })
       .then((res) => {
         let globalProm;
         let periodProm;
-        let totalUV=0;
-        let totalSum=0;
-        
-        let totalLastPeriodUV=0;
-        let totalLastPeriodSum=0;
-        res.data.data.forEach(enrollment=>{
-            if(enrollment.calification!==0){
+        let totalUV = 0;
+        let totalSum = 0;
 
-            
-            totalUV += enrollment.uv ;
-            totalSum += enrollment.uv*enrollment.calification
-            
-            if(enrollment.ID_PERIOD === res.data.lastPeriod ){
-                totalLastPeriodUV += enrollment.uv;
-                totalLastPeriodSum += enrollment.uv*enrollment.calification
+        let totalLastPeriodUV = 0;
+        let totalLastPeriodSum = 0;
+        res.data.data.forEach((enrollment) => {
+          if (enrollment.calification !== 0) {
+            totalUV += enrollment.uv;
+            totalSum += enrollment.uv * enrollment.calification;
+
+            if (enrollment.ID_PERIOD === res.data.lastPeriod) {
+              totalLastPeriodUV += enrollment.uv;
+              totalLastPeriodSum += enrollment.uv * enrollment.calification;
             }
-        }
+          }
         });
-        console.log("Suma total:",totalUV);
-        globalProm = totalSum  /totalUV;
-        periodProm = totalLastPeriodSum /totalLastPeriodUV;
-        setProms({global:globalProm,period:periodProm});
+        console.log("Suma total:", totalUV);
+        globalProm = totalSum / totalUV;
+        periodProm = totalLastPeriodSum / totalLastPeriodUV;
+        setProms({ global: globalProm, period: periodProm });
 
         setEnrollments(res.data.data);
         setBasicInformation(res.data.basicInformation);
       });
-  }
-
+  };
 
   return (
     <div className="w-10/12">
+      {/*     <div className="flex justify-start mx-5 mb-5">
+        <div className="mt-5">
+          <button
+            onClick={handleBack}
+            className="py-2 px-3 bg-sky-600 hover:bg-sky-700 rounded "
+          >
+            <BiArrowBack color="#F7F9F7" size={20} />
+          </button>
+        </div>
+      </div> */}
       <div className="w-full flex items-center justify-center ">
         <div className="flex items-center justify-center border w-2/5 h-[150px] border-none  border-r-black">
-            <input className=" h-8" type="text" placeholder="Buscar" value={searchValue} onChange={ (e)=>onChange(e)} />
-            <button onClick={()=>handdleSubmit()} className="rounde bg-slate-300 w-8 h-8 flex items-center justify-center outline-none focus:outline-none "  ><AiOutlineSearch/></button>
-
+          <input
+            className=" h-8"
+            type="text"
+            placeholder="Buscar"
+            value={searchValue}
+            onChange={(e) => onChange(e)}
+          />
+          <button
+            onClick={() => handdleSubmit()}
+            className="rounde bg-slate-300 w-8 h-8 flex items-center justify-center outline-none focus:outline-none "
+          >
+            <AiOutlineSearch />
+          </button>
         </div>
-
       </div>
       <div className=" ">
         <div className=" border m-2 p-4 mb-10">
@@ -108,7 +128,7 @@ const History = () => {
                 <ul>
                   <li>{basicInformation.CENTER}</li>
                   <li>{isNaN(proms.global) ? "0" : proms.global}</li>
-                  <li>{isNaN(proms.period)?"0":proms.period}</li>
+                  <li>{isNaN(proms.period) ? "0" : proms.period}</li>
                 </ul>
               </div>
             </div>
@@ -142,15 +162,10 @@ const History = () => {
               <li className="border border-blue-100 w-1/12 text-center">OBS</li>
             </ul>
             {enrollments.map((note) => {
-                if(note.calification>0){
-                    return (
-                        <TableRow {...note} />
-                    );
-                }
-                
-            }
-              
-            )}
+              if (note.calification > 0) {
+                return <TableRow {...note} />;
+              }
+            })}
 
             <nav className="flex justify-center mt-6">
               <ul className="flex h-10 border justify-center items-center">

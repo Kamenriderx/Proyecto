@@ -11,7 +11,7 @@ import AlertTwo from "../../components/AlertTwo";
 
 const AddSections = () => {
   const [showModal, setShowModal] = useState(false);
-  const { state, dispatch } = useContext(StoreContext);
+  const { state, dispatch, periodo } = useContext(StoreContext);
   const [listCourses, setListCourses] = useState([]);
   const [listAulas, setListAulas] = useState([]);
   const [docentes, setDocentes] = useState([]);
@@ -155,9 +155,9 @@ const AddSections = () => {
     setIsEditMode(true);
     setSTART_TIME(section.START_TIME);
     setEND_TIME(section.END_TIME);
-    setID_CLASSROOM(section.ID_CLASSROOM);
+    setID_CLASSROOM(section.classroom.ID_CLASSROOM);
     setID_COURSE(section.course.ID_COURSE);
-    setID_PROFFERSSOR(section.Proffessor.user.NAME);
+    setID_PROFFERSSOR(section.Proffessor.ID_PROFFERSSOR);
     setSPACE_AVAILABLE(section.SPACE_AVAILABLE);
     setDAYS(section.DAYS);
     setID_PERIOD(section.period.ID_PERIOD);
@@ -644,12 +644,12 @@ const AddSections = () => {
       </Modal>
       <div className="bg-gray-100 p-3">
         <div className="w-full py-2 mt-5 mb-10 text-center">
-          <span className="text-3xl font-bold text-sky-700">
-            Planificacion Academica
+          <span className="text-3xl font-bold text-black">
+            Planificación Academica
           </span>
-          <span className="text-3xl font-bold text-gray-700">
+          <span className="text-3xl font-bold text-black">
             {" "}
-            "Carrera" - "Nombre del Periodo"
+            - {periodo.PERIOD_NAME}
           </span>
         </div>
         <div className="flex justify-around mt-5 mb-5">
@@ -720,7 +720,7 @@ const AddSections = () => {
                           <td className="text-center border px-4 py-2 text-sm font-medium r">
                             {section.Proffessor.user.NAME}
                           </td>
-                          <td className="text-center border px-4 py-2 text-sm font-medium r">
+                          <td className="text-center border px-4 py-2 text-sm font-medium r ">
                             {section.course.NAME}
                           </td>
                           <td className="text-center border px-4 py-2 text-sm font-medium r">
