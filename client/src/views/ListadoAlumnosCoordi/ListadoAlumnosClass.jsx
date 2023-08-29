@@ -140,7 +140,7 @@ const ListadoAlumnosClass = () => {
             <div className="mx-3">
               <div className="mt-4 text-center">
                 <p className="text-gray-700 font-bold text-lg mb-5">
-                  Clases Matriculadas por el Alumno{" "}
+                  Clases Matriculadas{" "}
                 </p>
               </div>
               <div>
@@ -149,11 +149,11 @@ const ListadoAlumnosClass = () => {
                     <table className="w-full bg-white shadow-md table-auto">
                       <thead className="bg-blue-800 text-white">
                         <tr className="">
-                          <th className="p-2">Codigo</th>
+                          <th className="p-2">Código</th>
                           <th className="p-2">Clase</th>
-                          <th className="p-2">Seccion</th>
+                          <th className="p-2">Sección</th>
                           <th className="p-2">UV</th>
-                          <th className="p-2">Dias</th>
+                          <th className="p-2">Días</th>
                         </tr>
                       </thead>
                       <tbody>

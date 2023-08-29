@@ -32,8 +32,8 @@ const ViewTeacherPublic = ({ ID_USER_PROFFESOR, chek}) => {
         `http://localhost:3000/registro/evaluateProffesor/video/${ID_USER_PROFFESOR}`,
         {}
       );
-      console.log("GET_VIDEO: ", res.data.imageUrl);
-      setVideo(res.data.imageUrl);
+      console.log("GET_VIDEO: ", res.data.videoURL);
+      setVideo(res.data.videoURL);
     } catch (error) {
       console.log(error);
     }

@@ -64,6 +64,8 @@ const PerfilDocentes = () => {
     setChek(!chek);
   };
 
+  console.log("PERFIL DOCENTE", secciones)
+
   return (
     <>
       <div className="mx-16 mt-28">
@@ -87,7 +89,20 @@ const PerfilDocentes = () => {
                 <>
                   {secciones.map((seccion) => (
                     <div key={seccion.ID_SECTION} className="w-60">
-                      <img
+                      {seccion.PROFILE_PHOTO ? (
+                        <>
+                        <img
+                          src={seccion.PROFILE_PHOTO}
+                          alt="fondoPerfil"
+                          className="rounded-full w-48 h-48 object-cover cursor-pointer shadow-xl
+                          border-4 
+                          active:ring-blue-500 active:border-blue-500"
+                          onClick={() => handleClick(seccion.ID_USER_PROFFESOR)}
+                        />
+                        </>
+                      ):(
+                        <>
+                          <img
                         src={fondoPerfil}
                         alt="fondoPerfil"
                         className="rounded-full w-48 h-48 object-cover cursor-pointer shadow-xl
@@ -95,6 +110,8 @@ const PerfilDocentes = () => {
                         active:ring-blue-500 active:border-blue-500"
                         onClick={() => handleClick(seccion.ID_USER_PROFFESOR)}
                       />
+                        </>
+                      )}
                       <p className="mt-2 font-bold text-lg">Docente</p>
                       <p className="font-semibold uppercase ">
                         {seccion.NAME_PROFFESOR}

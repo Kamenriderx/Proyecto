@@ -6,6 +6,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { IoIosContact } from "react-icons/io";
 import { BiArrowBack } from "react-icons/Bi";
 import { useNavigate } from "react-router-dom";
+import fondoPerfil from "../../../assets/fondoPerfil.jpg";
 
 const ListContacts = () => {
   const [listContacts, setListContacts] = useState([]);
@@ -89,11 +90,19 @@ const ListContacts = () => {
                       <tr className="border-b" key={estudiante.ID_USER}>
                         <td className="border px-4 py-2 text-base font-bold r">
                           <div className="bg-gray-300 w-20 h-20 mx-auto rounded-full mb-2">
-                            <img
+                            {estudiante.URL ? (
+                              <img
                               src={estudiante.URL}
                               alt="Foto"
                               className="w-20 h-20 mx-auto rounded-full"
                             />
+                            ):(
+                              <img
+                              src={fondoPerfil}
+                              alt="Foto"
+                              className="w-20 h-20 mx-auto rounded-full"
+                            />
+                            )}
                           </div>
                         </td>
                         <td className="border px-4 py-2 text-base font-bold r">
@@ -126,7 +135,7 @@ const ListContacts = () => {
               </>
             ) : (
               <p className="text-center text-xl text-black font-black text-cente">
-                No tienes ningun contacto.
+                No tienes ningún contacto.
               </p>
             )}
           </div>
