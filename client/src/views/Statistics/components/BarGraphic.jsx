@@ -1,4 +1,4 @@
-import { Line, Bar } from "react-chartjs-2";
+import {  Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 import { useEffect, useState } from "react";
@@ -41,6 +41,20 @@ const BarGraph = () => {
       });
   }, []);
 
+  const data = {
+    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+    datasets: [
+      {
+        label: 'Temperatura Promedio',
+        data: [10, 12, 15, 18, 22, 25, 28, 27, 24, 20, 15, 12], 
+        fill: false,
+        borderColor: '#FF6384', 
+        tension: 0.4, 
+        borderWidth: 2, 
+      },
+    ],
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -52,8 +66,8 @@ const BarGraph = () => {
   };
 
   return (
-    <div className="h-[300px] w-[300px]">
-      <Bar options={options} data={dataValues} />
+    <div className="h-full w-full box-border p-10">
+      <Bar options={options} data={data} />
     </div>
   );
 };

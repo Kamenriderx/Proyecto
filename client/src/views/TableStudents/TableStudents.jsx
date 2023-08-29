@@ -201,6 +201,7 @@ const TableStudents = ({ body, recibirDatos, mess }) => {
   };
 
   return (
+
     <>
       {
         <div className="prelative overflow-x-auto shadow-md sm:rounded-lg mx-20">
