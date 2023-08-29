@@ -26,6 +26,7 @@ const verifyPaymentChangeCenter = async (req,res, next)=>{
     try {
         const {user} = req;
         const student = await getStudent(user.ID_USER)
+        console.log(student);
         if (student.CHANGE_CENTER_PAYMENT==0) {
             res.status(400).json({messagge:"Debes realizar el pago de cambio de centro"})
             return

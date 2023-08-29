@@ -6,7 +6,7 @@ const { getPeriodicAcademicCurrent, getNextPeriodicAcademic, getDetailsDatesPeri
 const verifyAddCancelation = async(req,res,next)=>{
     try {
 
-      const hourIni = "09:00:00"
+      const hourIni = "04:00:00"
       const hourFin = "23:59:59"
       const currentHour = new Date().toTimeString().slice(0, 8);
       let currentYear = new Date().getFullYear()
@@ -49,6 +49,12 @@ const verifyAddCancelation = async(req,res,next)=>{
       if (currentDate > ADD_CAN_DATE_INI  ) {
         res.status(400).json({messagge:"El proceso de adiciones y cancelaciones ha finalizado"})
         return   
+      }
+
+      if (currentHour < hourIni &&   currentDate >= ADD_CAN_DATE_INI && currentDate <= ADD_CAN_DATE_INI ) {
+        res.status(400).json({messagge:"El proceso de adiciones y cancelaciones comienza a las 09:00:00 y finaliza a las 23:59:59 "})
+        return
+
       }
 
     } catch (error) {

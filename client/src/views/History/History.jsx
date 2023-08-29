@@ -3,11 +3,13 @@ import TableRow from "./components/TableRow";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import jsPDF from "jspdf";
 import { BiArrowBack } from "react-icons/Bi";
-import { useNavigate } from "react-router-dom";import GeneratePDF from "./components/GeneratePDF";
-import { PDFDownloadLink,PDFViewer } from "@react-pdf/renderer";
+import { useNavigate } from "react-router-dom";
+import GeneratePDF from "./components/GeneratePDF";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import Pagination from "./components/Pagination";
 
 const History = () => {
+  const [history,setHistory] = useState(undefined);
   const [viewableSections,setViewableSections] = useState([]);
   const [pagination,setPagination] = useState({
     page:1,
@@ -31,7 +33,6 @@ const History = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
-        console.log(res);
         let globalProm;
         let periodProm;
         let totalUV = 0;
@@ -39,49 +40,51 @@ const History = () => {
 
         let totalLastPeriodUV = 0;
         let totalLastPeriodSum = 0;
-        res.data.data.forEach((enrollment) => {
+        res.data.response.data.forEach((enrollment) => {
           if (enrollment.calification !== 0) {
             totalUV += enrollment.uv;
             totalSum += enrollment.uv * enrollment.calification;
 
-            if (enrollment.ID_PERIOD === res.data.lastPeriod) {
+            if (enrollment.ID_PERIOD === res.data.response.lastPeriod) {
               totalLastPeriodUV += enrollment.uv;
               totalLastPeriodSum += enrollment.uv * enrollment.calification;
             }
           }
         });
-        console.log("Suma total:", res);
         globalProm = totalSum / totalUV;
         periodProm = totalLastPeriodSum / totalLastPeriodUV;
         setProms({ global: globalProm, period: periodProm });
-        setEnrollments(res.data.data);
-        setBasicInformation(res.data.basicInformation);
+        setEnrollments(res.data.response.data);
+        setBasicInformation(res.data.response.basicInformation);
 
-        setPagination({...pagination,page:1,pages:Math.ceil(res.data.data.length/pagination.items)});
+        setPagination({...pagination,page:1,pages:Math.ceil(res.data.response.data.length/pagination.items)});
         let viewSections = [];
         for(let i = 0; i<  pagination.items;i++){
-          if( res.data.data[i] ){
-            console.log("Es indefinido?:",res.data.data[i])
-            viewSections.push( res.data.data[i]);
+          if( res.data.response.data[i] ){
+            viewSections.push( res.data.response.data[i]);
           }
         }
 
         setViewableSections(viewSections);
-
+        setHistory(res.data.history);
+        console.log("Historial",res.data.history)
       });
   }, []);
 
   useEffect(() => {
     let viewSections = [];
-        for(let i = pagination.page*pagination.pages; i<pagination.page*pagination.pages + pagination.items;i++){
-          if(enrollments[i]){
-            viewSections.push(enrollments[i]);
-          }
-        }
+    for (
+      let i = pagination.page * pagination.pages;
+      i < pagination.page * pagination.pages + pagination.items;
+      i++
+    ) {
+      if (enrollments[i]) {
+        viewSections.push(enrollments[i]);
+      }
+    }
 
     setViewableSections(viewSections);
-
-  }, [pagination.page])
+  }, [pagination.page]);
 
   return (
     <div className="m-24 mt-20">
@@ -97,7 +100,7 @@ const History = () => {
       </div>
       <div className=" border m-2 p-4 mb-10">
         <div className="text-center border rounded-t bg-blue-100 mb-3 text-2xl font-bold">
-          informacion general
+          Información General
         </div>
         <div className="flex justify-evenly">
           <div className="flex w-1/2">
@@ -121,7 +124,7 @@ const History = () => {
               <ul className="font-bold">
                 <li>CENTRO:</li>
                 <li>INDICE GLOBAL:</li>
-                <li>INDICEDE PERIODO:</li>
+                <li>INDICE DE PERIODO:</li>
               </ul>
             </div>
             <div className="w-1/2">
@@ -137,16 +140,16 @@ const History = () => {
 
     <div className="">
       <div className="text-center border p-1   bg-blue-100 text-3xl font-bold">
-        Historial academico
+        Historial Académico
       </div>
       <div className="flex justify-center">
-        <PDFDownloadLink document={<GeneratePDF enrollments={enrollments} basicInformation={basicInformation} />} fileName="Historial.pdf">
+        {history && <PDFDownloadLink document={<GeneratePDF history={history} />} fileName="Historial.pdf">
           <button
             className="bg-red-500 text-white w-40 rounded-md h-8 m-3 hover:bg-red-600"
           >
             Descargar PDF
           </button>
-        </PDFDownloadLink>
+        </PDFDownloadLink>}
       </div>
       <div>
         <ul className="flex justify-around font-bold bg-blue-100 ">
@@ -181,8 +184,7 @@ const History = () => {
         <Pagination setPagination = {setPagination} pagination={pagination}/>
       </div>
     </div>
-  </div> 
-    
+    </div>
   );
 };
 

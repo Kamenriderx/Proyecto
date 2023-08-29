@@ -66,7 +66,9 @@ const createSection = async(req,res)=>{
             return
         }
         const sectionPro = await sectionbyProffessor(body)
-        if (await validateSchedule(body) || (sectionPro && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
+        // await validateSchedule(body)
+
+        if ((sectionPro && sectionPro.START_TIME == body.START_TIME && sectionPro.END_TIME == body.END_TIME &&  (sectionPro.DAYS.includes(body.DAYS) || body.DAYS.includes(sectionPro.DAYS)))  ) {
          
             res.status(400).json({messagge:"El docente ya tiene una sección asiganada a esa hora y esos días"});
             return
@@ -126,6 +128,8 @@ const listSectionsPeriod = async (req,res)=>{
     try {
         const {user} = req
         const {id} = req.params
+
+       
        
         const sections = await getSectionsByCenterAndCareerPeriod(user,id)
         res.status(200).json({sections})

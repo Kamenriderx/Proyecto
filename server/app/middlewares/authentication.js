@@ -27,6 +27,7 @@ const authMiddleware =  async (req,res,next) =>{
         }})
         req.user = user
         req.user.multimedia = await getPhotos(user.ID_USER)
+        console.log(req.user);
         next()
 
 
