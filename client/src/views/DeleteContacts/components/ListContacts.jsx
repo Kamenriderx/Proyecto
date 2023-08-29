@@ -49,6 +49,8 @@ const ListContacts = () => {
     }
   };
 
+  console.log("LIST CONTACT", listContacts);
+
   if (loading) return <Spinner2 />;
   return (
     <>
@@ -92,16 +94,16 @@ const ListContacts = () => {
                           <div className="bg-gray-300 w-20 h-20 mx-auto rounded-full mb-2">
                             {estudiante.URL ? (
                               <img
-                              src={estudiante.URL}
-                              alt="Foto"
-                              className="w-20 h-20 mx-auto rounded-full"
-                            />
-                            ):(
+                                src={estudiante.URL}
+                                alt="Foto"
+                                className="w-20 h-20 mx-auto rounded-full"
+                              />
+                            ) : (
                               <img
-                              src={fondoPerfil}
-                              alt="Foto"
-                              className="w-20 h-20 mx-auto rounded-full"
-                            />
+                                src={fondoPerfil}
+                                alt="Foto"
+                                className="w-20 h-20 mx-auto rounded-full"
+                              />
                             )}
                           </div>
                         </td>
