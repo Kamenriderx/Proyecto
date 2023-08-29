@@ -3,9 +3,17 @@ import TableRow from "./components/TableRow";
 import { httpRequests } from "../../utils/helpers/httpRequests";
 import jsPDF from "jspdf";
 import { BiArrowBack } from "react-icons/Bi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";import GeneratePDF from "./components/GeneratePDF";
+import { PDFDownloadLink,PDFViewer } from "@react-pdf/renderer";
+import Pagination from "./components/Pagination";
 
 const History = () => {
+  const [viewableSections,setViewableSections] = useState([]);
+  const [pagination,setPagination] = useState({
+    page:1,
+    pages:0,
+    items:8
+  });
   const navigate = useNavigate();
   const handleBack = () => {
     navigate(-1);
@@ -48,454 +56,32 @@ const History = () => {
         setProms({ global: globalProm, period: periodProm });
         setEnrollments(res.data.data);
         setBasicInformation(res.data.basicInformation);
+
+        setPagination({...pagination,page:1,pages:Math.ceil(res.data.data.length/pagination.items)});
+        let viewSections = [];
+        for(let i = 0; i<  pagination.items;i++){
+          if( res.data.data[i] ){
+            console.log("Es indefinido?:",res.data.data[i])
+            viewSections.push( res.data.data[i]);
+          }
+        }
+
+        setViewableSections(viewSections);
+
       });
   }, []);
 
-  const handleDownload = () => {
-    const doc = new jsPDF();
-    const enrollmentss = [
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2020",
-        period_name: "I periodo",
-        calification: "80",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2020",
-        period_name: "I periodo",
-        calification: "80",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2021",
-        period_name: "I periodo",
-        calification: "81",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2021",
-        period_name: "I periodo",
-        calification: "81",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2021",
-        period_name: "I periodo",
-        calification: "81",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2021",
-        period_name: "I periodo",
-        calification: "81",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2022",
-        period_name: "I periodo",
-        calification: "82",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2023",
-        period_name: "I periodo",
-        calification: "83",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2023",
-        period_name: "I periodo",
-        calification: "83",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2023",
-        period_name: "I periodo",
-        calification: "83",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2023",
-        period_name: "I periodo",
-        calification: "83",
-        obs: "APR",
-      },
-      {
-        code_course: "MM110",
-        name: "Matematicas 110",
-        uv: "5",
-        section_code: "1900",
-        year: "2023",
-        period_name: "I periodo",
-        calification: "83",
-        obs: "APR",
-      },
-    ];
+  useEffect(() => {
+    let viewSections = [];
+        for(let i = pagination.page*pagination.pages; i<pagination.page*pagination.pages + pagination.items;i++){
+          if(enrollments[i]){
+            viewSections.push(enrollments[i]);
+          }
+        }
 
-    // Título más grande
-    doc.setFontSize(16);
-    doc.text(
-      "Universidad Nacional Autónoma de Honduras",
-      doc.internal.pageSize.getWidth() / 2,
-      30,
-      {
-        align: "center",
-      }
-    );
+    setViewableSections(viewSections);
 
-    // Título más pequeño
-    doc.setFontSize(12);
-    doc.text(
-      "Direccion de Ingresos Permanencia y Promoción",
-      doc.internal.pageSize.getWidth() / 2,
-      35,
-      {
-        align: "center",
-      }
-    );
-    doc.setFontSize(12);
-    doc.text("Historial Academico", doc.internal.pageSize.getWidth() / 2, 40, {
-      align: "center",
-    });
-
-    // Tamaño y posición del rectángulo
-    const rectWidth = 190;
-    const rectHeight = 30;
-    const centerX = doc.internal.pageSize.getWidth() / 2 - rectWidth / 2;
-    const centerY = 50;
-
-    // Dibuja el rectángulo
-    doc.roundedRect(centerX, centerY, rectWidth, rectHeight, 5, 5);
-
-    // Contenido para las celdas
-    const content = [
-      [
-        `Cuenta: ${basicInformation.ACCOUNT_NUMBER}`,
-        `Carrera Actual: ${basicInformation.CAREER}`,
-      ],
-      [`Nombre:${basicInformation.NAME}`, `Centro: ${basicInformation.CENTER}`],
-      [`Indice: ${isNaN(proms.global) ? "0" : proms.global}`, ``],
-    ];
-
-    // Estilos para el texto
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-
-    // Espaciado entre las celdas
-    const cellSpacingX = rectWidth / 2;
-    const cellSpacingY = rectHeight / 3;
-
-    // Posición inicial de la primera celda
-    let xPosition = centerX;
-    let yPosition = centerY + 6;
-
-    // Agrega el contenido a las celdas
-    for (const row of content) {
-      for (const cell of row) {
-        doc.text(cell, xPosition + 5, yPosition);
-        xPosition += cellSpacingX;
-      }
-      xPosition = centerX;
-      yPosition += cellSpacingY;
-    }
-
-    const rect2Width = 190;
-    const rect2Height = 8;
-    const centerX2 = doc.internal.pageSize.getWidth() / 2 - rect2Width / 2;
-    const centerY2 = 85; // Distancia desde el borde superior del primer rectángulo
-
-    // Establece el color de relleno del segundo rectángulo
-    doc.setFillColor(255, 255, 255); // Color blanco para el fondo del segundo rectángulo
-
-    // Dibuja el segundo rectángulo
-    doc.rect(centerX2, centerY2, rect2Width, rect2Height, "FD");
-
-    // Título para el segundo rectángulo
-    doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    doc.text(
-      basicInformation.CAREER,
-      doc.internal.pageSize.getWidth() / 2,
-      centerY2 + 5,
-      { align: "center" }
-    );
-    const titleLineX1 = centerX2 - 20;
-    let titleLineY = centerY2 + rect2Height + 10;
-
-    doc.setDrawColor(0, 0, 0); // Color de las líneas
-    doc.line(titleLineX1 + 10, titleLineY, 90, titleLineY);
-    doc.line(220, titleLineY, 120, titleLineY);
-
-    // Título con líneas centrado horizontalmente entre las líneas
-
-    let currentYear = enrollments[0]
-      ? enrollments[0].year
-      : new Date().getFullYear();
-
-    const titleWithLines = `${currentYear}`;
-    const titleWidth =
-      (doc.getStringUnitWidth(titleWithLines) * doc.internal.getFontSize()) /
-      doc.internal.scaleFactor;
-    const titleX = doc.internal.pageSize.getWidth() / 2 - titleWidth / 2;
-
-    doc.setFontSize(16);
-    doc.text(titleWithLines, titleX, titleLineY + 3);
-
-    let newCenterY2 = 110;
-    let acum = 0;
-    let tableData = [];
-    let tableX = 20;
-    for (const enrollment of enrollments) {
-      if (currentYear != enrollment.year) {
-        currentYear = enrollment.year;
-        newCenterY2 += acum;
-        console.log(tableData);
-        doc.autoTable({
-          head: [["CODIGO", "NOMBRE", "UV", "PERIODO", "NOTA", "OBS"]],
-          body: tableData,
-          startY: newCenterY2,
-
-          bodyStyles: {
-            textColor: [0, 0, 0],
-            halign: "center",
-            valign: "middle",
-          },
-          margin: { left: tableX },
-          tableWidth: "auto",
-          theme: "plain",
-        });
-        tableData = [];
-        acum = 0;
-      }
-
-      // Datos para la tabla
-      if (enrollment.calification > 0) {
-        let row = [
-          enrollment.section_code,
-          enrollment.name,
-          enrollment.uv,
-          enrollment.period_name.split(" ")[0],
-          enrollment.calification,
-          enrollment.obs,
-        ];
-        tableData.push(row);
-        acum += 5;
-      }
-    }
-    console.log(tableData);
-    doc.autoTable({
-      head: [["CODIGO", "NOMBRE", "UV", "PERIODO", "NOTA", "OBS"]],
-      body: tableData,
-      startY: newCenterY2,
-
-      bodyStyles: {
-        textColor: [0, 0, 0],
-        halign: "center",
-        valign: "middle",
-      },
-      margin: { left: tableX },
-      tableWidth: "auto",
-      theme: "plain",
-    });
-
-    const date = Date().split(" ");
-    const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
-    doc.save(`report_${dateStr}.pdf`);
-  };
+  }, [pagination.page])
 
   return (
     <div className="m-24 mt-20">
@@ -510,7 +96,7 @@ const History = () => {
         </div>
       </div>
       <div className=" border m-2 p-4 mb-10">
-        <div className="text-center border rounded-t bg-blue-100 mb-3">
+        <div className="text-center border rounded-t bg-blue-100 mb-3 text-2xl font-bold">
           informacion general
         </div>
         <div className="flex justify-evenly">
@@ -541,84 +127,62 @@ const History = () => {
             <div className="w-1/2">
               <ul>
                 <li>{basicInformation.CENTER}</li>
-                <li>{isNaN(proms.global) ? "0" : proms.global}</li>
-                <li>{isNaN(proms.period) ? "0" : proms.period}</li>
+                <li>{isNaN(proms.global) ? "0" : parseInt(proms.global)}</li>
+                <li>{isNaN(proms.period) ? "0" : parseInt(proms.period)}</li>
               </ul>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="">
-        <div className="text-center border p-1   bg-blue-100">
-          Historial academico
-        </div>
-        <div className="flex justify-center">
+    <div className="">
+      <div className="text-center border p-1   bg-blue-100 text-3xl font-bold">
+        Historial academico
+      </div>
+      <div className="flex justify-center">
+        <PDFDownloadLink document={<GeneratePDF enrollments={enrollments} basicInformation={basicInformation} />} fileName="Historial.pdf">
           <button
             className="bg-red-500 text-white w-40 rounded-md h-8 m-3 hover:bg-red-600"
-            onClick={handleDownload}
           >
             Descargar PDF
           </button>
-        </div>
-        <div>
-          <ul className="flex justify-around font-bold bg-blue-100 ">
-            <li className="border border-blue-100 w-1/12 text-center">
-              CODIGO
-            </li>
-            <li className="border border-blue-100 w-4/12 text-center">
-              ASIGNATURA
-            </li>
-            <li className="border border-blue-100 w-1/12 text-center">UV</li>
-            <li className="border border-blue-100 w-1/12 text-center">
-              SECCION
-            </li>
-            <li className="border border-blue-100 w-1/12 text-center">AÑO</li>
-            <li className="border border-blue-100 w-1/12 text-center">
-              PERIODO
-            </li>
-            <li className="border border-blue-100 w-2/12 text-center">
-              CALIFICAION
-            </li>
-            <li className="border border-blue-100 w-1/12 text-center">OBS</li>
-          </ul>
-          {enrollments.map((note) => {
-            if (note.calification > 0) {
-              return <TableRow {...note} />;
-            }
-          })}
-          <nav className="flex justify-center mt-6">
-            <ul className="flex h-10 border justify-center items-center">
-              <li className="hover:bg-slate-400 h-full justify-center items-center flex px-6">
-                <a className="" href="#">
-                  Anterior
-                </a>
-              </li>
-              <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex ">
-                <a className="page-link" href="#">
-                  1
-                </a>
-              </li>
-              <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex  ">
-                <a className="page-link" href="#">
-                  2
-                </a>
-              </li>
-              <li className="hover:bg-slate-400 h-full w-10 justify-center items-center flex ">
-                <a className="page-link" href="#">
-                  3
-                </a>
-              </li>
-              <li className="hover:bg-slate-400 h-full justify-center items-center flex px-6">
-                <a className="page-link" href="#">
-                  Siguiente
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+        </PDFDownloadLink>
+      </div>
+      <div>
+        <ul className="flex justify-around font-bold bg-blue-100 ">
+          <li className="border border-blue-100 w-1/12 text-center">
+            CODIGO
+          </li>
+          <li className="border border-blue-100 w-4/12 text-center">
+            ASIGNATURA
+          </li>
+          <li className="border border-blue-100 w-1/12 text-center">UV</li>
+          <li className="border border-blue-100 w-1/12 text-center">
+            SECCION
+          </li>
+          <li className="border border-blue-100 w-1/12 text-center">AÑO</li>
+          <li className="border border-blue-100 w-1/12 text-center">
+            PERIODO
+          </li>
+          <li className="border border-blue-100 w-2/12 text-center">
+            CALIFICAION
+          </li>
+          <li className="border border-blue-100 w-1/12 text-center">OBS</li>
+        </ul>
+        {viewableSections.map((note) => {
+          if (note.calification > 0) {
+            return <TableRow {...note} />;
+          }
+        })}
+
+      </div>
+      <div className="flex justify-center">
+
+        <Pagination setPagination = {setPagination} pagination={pagination}/>
       </div>
     </div>
+  </div> 
+    
   );
 };
 

@@ -7,7 +7,8 @@ import { BiArrowBack } from "react-icons/Bi";
 
 const Evaluaciones = () => {
   //contexto de usuario
-  const { state, periodo } = useContext(StoreContext);
+  const { state ,periodo} = useContext(StoreContext);
+
   const [dataEvaluacion, setdataEvaluacion] = useState(null);
 
   //modal
@@ -27,7 +28,7 @@ const Evaluaciones = () => {
           Authorization: `Bearer ${stateUser.token}`,
         },
       };
-
+      console.log("PERIODOOOO",periodo)
       const res = await httpRequests()["get"](
         `http://localhost:3000/registro/evaluateProffesor/department/${periodo.ID_PERIOD}/${stateUser.user.ID_USER}`,
         { ...config }

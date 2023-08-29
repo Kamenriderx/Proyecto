@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 
 const PeriodRow = (props) => {
   const [hover, setHover] = useState(false);
-  console.log("Las props:",props);
   const showAlert = () => {
     Swal.fire({
         title: `¿Borrar ${props.periodName}?`,

@@ -58,6 +58,12 @@ const students = [
 ];
 
 const RegisteredStudents = () => {
+  const [viewableSections,setViewableSections] = useState([]);
+  const [pagination,setPagination] = useState({
+    page:1,
+    pages:0,
+    items:8
+  });
   const navigate = useNavigate();
   const handleBack = () => {
     navigate(-1);
@@ -135,15 +141,25 @@ const RegisteredStudents = () => {
         </div>
       )}
 
-      <div className="w-full flex justify-center flex-col items-center">
-        {view === "matriculados" && (
-          <>
-            <Table />
-            <Pagination page={page} setPage={setPage} pages={pages} />
-          </>
-        )}
-        {view === "historial" && <History />}
-      </div>
+        <div className="w-full flex justify-center flex-col items-center">
+
+        {
+        view==="matriculados" &&
+        <>
+        <Table />
+       
+        </>
+    }
+      {
+        view==="historial" &&
+        <History />
+                
+
+       }
+
+
+        </div>
+      
     </div>
   );
 };

@@ -150,7 +150,7 @@ const LoginForm = () => {
           value="admins"
           onClick={handleSelect}
         >
-          Administracion
+          Administración
         </button>
       </div>
 
@@ -164,17 +164,12 @@ const LoginForm = () => {
         </h2>
       </div>
 
-      <label
-        className="block text-gray-300 text-sm font-bold mb-2 text-center"
-        htmlFor="email"
-      >
-        Ingresar
-      </label>
+    
       <input
         className="mt-3 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-2/5"
         id="email"
         name="identifier"
-        placeholder="Numero de cuenta"
+        placeholder="Número de cuenta"
         onChange={handleChange}
       />
 
