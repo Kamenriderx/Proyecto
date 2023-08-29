@@ -4,7 +4,7 @@ import "jspdf-autotable";
 import { httpRequests } from "../../../utils/helpers/httpRequests";
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
-import unidecode from 'unidecode';
+import unidecode from "unidecode";
 
 const PeriodTable = () => {
   const [pagination, setPagination] = useState({
@@ -46,9 +46,9 @@ const PeriodTable = () => {
           pages: Math.ceil(res.data.sections.length / pagination.items),
         });
         let viewSections = [];
-        for(let i = 0; i<  pagination.items;i++){
-          if( res.data.sections[i] ){
-            viewSections.push( res.data.sections[i]);
+        for (let i = 0; i < pagination.items; i++) {
+          if (res.data.sections[i]) {
+            viewSections.push(res.data.sections[i]);
           }
         }
 
@@ -57,11 +57,15 @@ const PeriodTable = () => {
   };
   useEffect(() => {
     let viewSections = [];
-        for(let i = pagination.page*pagination.items - pagination.items; i<pagination.page*pagination.items +1;i++){
-          if(state.sections[i]){
-            viewSections.push(state.sections[i]);
-          }
-        }
+    for (
+      let i = pagination.page * pagination.items - pagination.items;
+      i < pagination.page * pagination.items + 1;
+      i++
+    ) {
+      if (state.sections[i]) {
+        viewSections.push(state.sections[i]);
+      }
+    }
 
     setViewableSections(viewSections);
   }, [pagination.page]);
@@ -131,10 +135,16 @@ const PeriodTable = () => {
     const header = ["Código", "Clase", "Sección"];
     const data = state.sections.map(
       (row) =>
-        `\n${unidecode(row.course.CODE_COURSE)},${unidecode(row.course.NAME)},${unidecode(row.SECTION_CODE)}`
+        `\n${unidecode(row.course.CODE_COURSE)},${unidecode(
+          row.course.NAME
+        )},${unidecode(row.SECTION_CODE)}`
     );
     const csvContent =
-      "data:text/csv;charset=utf-8,"+`${unidecode(header[0])},${unidecode(header[1])},${unidecode(header[2])}`+`${data}`;
+      "data:text/csv;charset=utf-8," +
+      `${unidecode(header[0])},${unidecode(header[1])},${unidecode(
+        header[2]
+      )}` +
+      `${data}`;
 
     const downloadLink = document.createElement("a");
     downloadLink.href = encodeURI(csvContent);

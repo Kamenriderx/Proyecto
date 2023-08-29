@@ -1,8 +1,21 @@
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, registerables } from "chart.js";
+import { useEffect } from 'react';
+import { httpRequests } from '../../../utils/helpers/httpRequests';
 Chart.register(...registerables);
 
 const DoughnutGraphic = () => {
+
+  useEffect(() => {
+    httpRequests()["get"]("http://localhost:3000/registro/graph/dataAprSystem", {})
+      .then((res) => {
+        console.log(res.data);
+
+      });
+  }, []);
+
+
+
     const data = {
         labels: ['Alimentación', 'Transporte', 'Vivienda', 'Ocio', 'Otros'],
         datasets: [
