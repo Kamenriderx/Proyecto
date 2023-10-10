@@ -5,10 +5,7 @@ const configCors = require('./config/cors');
 const path = require('path');
 const bodyParser = require('body-parser');
 const sendMail = require('./utils/sendMail');
-const generatePDF = require('./utils/generatePDF');
-
-generatePDF();
-
+const sequelize = require('./config/database'); 
 
 app.use(configCors);
 app.use(express.static('./public'));
@@ -17,24 +14,31 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.set('view engine', 'ejs');
 
+//Conexión a la base de ddatos
+(async () => {
+  try {
+    await sequelize.authenticate();
+  } catch (error) {
+    console.error('Error al conectar a la base de datos:', error);
+  }
+})();
 
 //Configuracion para servir archivos estaticos
 const imagesPath = path.join(__dirname, 'public', 'images');
 const docsPath = path.join(__dirname, 'public', 'docs');
+
 
 app.use(express.static('./public'));
 app.use('/docs', express.static(docsPath));
 app.use('/images', express.static(imagesPath));
 
 
-
 // Rutas 
-app.use('/registro', require('./app/routes'));
-
+app.use('/fiestisimo', require('./app/routes'));
 
 
 //Levantando servidor
 http.listen(3000, () => {
-  console.log('API lista en el puerto ', 3000)
+  console.log('Servidor listo en el puerto', 3000)
 
 });
